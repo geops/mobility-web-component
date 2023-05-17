@@ -1,0 +1,8 @@
+node_modules
+
+# esbuild output files
+bundle.js
+bundle.js.map
+
+# Tailwind CSS ouput file
+output.css

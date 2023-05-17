@@ -1,0 +1,334 @@
+import { realtimeConfig } from "mobility-toolbox-js/ol";
+
+import firstStation from "./firstStation.png";
+import station from "./station.png";
+import lastStation from "./lastStation.png";
+import line from "./line.png";
+// @ts-ignore
+import style from "./style.scss";
+
+/**
+ * Returns a string representation of a number, with a zero if the number is lower than 10.
+ * @ignore
+ */
+const pad = (integer) => {
+  return integer < 10 ? `0${integer}` : integer;
+};
+
+/**
+ * Returns a 'hh:mm' string from a time in ms.
+ * @param {Number} timeInMs Time in milliseconds.
+ * @ignore
+ */
+const getHoursAndMinutes = (timeInMs) => {
+  if (!timeInMs || timeInMs <= 0) {
+    return "";
+  }
+  const date = new Date(timeInMs);
+  return `${pad(date.getHours())}:${pad(date.getMinutes())}`;
+};
+
+/**
+ * Returns a string representing a delay.
+ * @param {Number} timeInMs Delay time in milliseconds.
+ * @ignore
+ */
+export const getDelayString = (timeInMs) => {
+  const h = Math.floor(timeInMs / 3600000);
+  const m = Math.floor((timeInMs % 3600000) / 60000);
+  const s = Math.floor(((timeInMs % 3600000) % 60000) / 1000);
+
+  if (s === 0 && h === 0 && m === 0) {
+    return "0";
+  }
+  if (s === 0 && h === 0) {
+    return `${m}m`;
+  }
+  if (s === 0) {
+    return `${h}h${m}m`;
+  }
+  if (m === 0 && h === 0) {
+    return `${s}s`;
+  }
+  if (h === 0) {
+    return `${m}m${s}s`;
+  }
+  return `${h}h${m}m${s}s`;
+};
+
+const { getBgColor } = realtimeConfig;
+
+/**
+ * Returns a color class to display the delay.
+ * @param {Number} time Delay time in milliseconds.
+ */
+const getDelayColor = (time) => {
+  const secs = Math.round(((time / 1800 / 2) * 3600) / 1000);
+  if (secs >= 3600) {
+    return "dark-red";
+  }
+  if (secs >= 500) {
+    return "middle-red";
+  }
+  if (secs >= 300) {
+    return "light-red";
+  }
+  if (secs >= 180) {
+    return "orange";
+  }
+  return "green";
+};
+
+/**
+ * Returns true if the train doesn't stop to the station.
+ * @param {Object} stop Station information.
+ */
+const isNotStop = (stop) => {
+  return !stop.arrivalTime && !stop.departureTime;
+};
+
+/**
+ * Returns if the station has already been passed by the vehicule.
+ * @param {Object} stop Station information.
+ * @param {number} time The current time to test in ms.
+ * @param {Array<Object>} stops the list of all stops of the train.
+ * @param {idx} idx The index of the stop object in the stops array.
+ */
+const isPassed = (stop, time, stops, idx) => {
+  // If the train doesn't stop to the stop object, we test if the stop just before has been passed or not.
+  // if yes the current stop is considered as passed.
+  if (isNotStop(stop)) {
+    if (stops[idx - 1] && idx > 0) {
+      return isPassed(stops[idx - 1], time, stops, idx);
+    }
+    return true;
+  }
+
+  // Sometimes stop.departureDelay is undefined.
+  const timeToCompare = stop.aimedDepartureTime || stop.aimedArrivalTime || 0;
+  const delayToCompare = stop.departureDelay || stop.arrivalDelay || 0;
+  return timeToCompare + delayToCompare <= time;
+};
+
+/**
+ * Returns an image for first, middle or last stations.
+ * @param {Number} stations The stations list.
+ * @param {Number} index Index of the station in the list.
+ * @param {Boolean} isStationPassed If the train is already passed at this station.
+ * @param {Boolean} isNotStation If the train doesn't stop to this station.
+ */
+const renderStationImg = (stations, index, isStationPassed, isNotStation) => {
+  const { length } = stations;
+  let src = station;
+  if (index === 0) {
+    src = firstStation;
+  } else if (index === length - 1) {
+    src = lastStation;
+  } else if (isNotStation) {
+    src = line;
+  }
+
+  return <img src={src} alt="routeScheduleLine" className="rt-route-icon" />;
+};
+
+const renderStation = ({
+  lineInfos,
+  onStationClick,
+  trackerLayer,
+  stop,
+  idx,
+}) => {
+  const {
+    stationId,
+    arrivalDelay,
+    departureDelay,
+    arrivalTime,
+    departureTime,
+    state,
+    stationName,
+    aimedArrivalTime,
+    aimedDepartureTime,
+  } = stop;
+  const cancelled = state === "JOURNEY_CANCELLED" || state === "STOP_CANCELLED";
+  const { stations } = lineInfos;
+  const isFirstStation = idx === 0;
+  const isLastStation = idx === stations.length - 1;
+  const isStationPassed = isPassed(stop, trackerLayer.time, stations, idx);
+  const isNotStation = isNotStop(stop);
+  return (
+    <div
+      // Train line can go in circle so begin and end have the same id,
+      // using the time in the key should fix the issue.
+      key={(stationId || stationName) + arrivalTime + departureTime}
+      role="button"
+      className={[
+        "rt-route-station",
+        isStationPassed ? " rt-passed" : "",
+        isNotStation ? " rt-no-stop" : "",
+      ].join("")}
+      onClick={(e) => {
+        return onStationClick(stop, e);
+      }}
+      tabIndex={0}
+      onKeyPress={(e) => {
+        return e.which === 13 && onStationClick(stop, e);
+      }}
+    >
+      <div className="rt-route-delay">
+        {typeof arrivalDelay === "undefined" || isFirstStation || cancelled ? (
+          ""
+        ) : (
+          <span
+            className={`rt-route-delay-arrival${` ${getDelayColor(
+              arrivalDelay
+            )}`}`}
+          >
+            {`+${getDelayString(arrivalDelay)}`}
+          </span>
+        )}
+        {typeof departureDelay === "undefined" || isLastStation || cancelled ? (
+          ""
+        ) : (
+          <span
+            className={`rt-route-delay-departure${` ${getDelayColor(
+              departureDelay
+            )}`}`}
+          >
+            {`+${getDelayString(departureDelay)}`}
+          </span>
+        )}
+      </div>
+      <div className="rt-route-times">
+        <span
+          className={`rt-route-time-arrival ${
+            cancelled ? "rt-route-cancelled" : ""
+          }`}
+        >
+          {getHoursAndMinutes(aimedArrivalTime)}
+        </span>
+        <span
+          className={`rt-route-time-departure ${
+            cancelled ? "rt-route-cancelled" : ""
+          }`}
+        >
+          {getHoursAndMinutes(aimedDepartureTime)}
+        </span>
+      </div>
+      {renderStationImg(stations, idx, isStationPassed, isNotStation)}
+      <div className={cancelled ? "rt-route-cancelled" : ""}>{stationName}</div>
+    </div>
+  );
+};
+
+const renderRouteIdentifier = ({ routeIdentifier, longName }) => {
+  if (routeIdentifier) {
+    // first part of the id, without leading zeros.
+    const id = parseInt(routeIdentifier.split(".")[0], 10);
+    if (!longName.includes(id)) {
+      return ` (${id})`;
+    }
+  }
+  return null;
+};
+
+const renderHeaderButtons = (routeIdentifier) => {
+  return null;
+};
+
+const renderHeader = ({ lineInfos }) => {
+  const {
+    type,
+    vehicleType,
+    shortName,
+    longName,
+    stroke,
+    destination,
+    routeIdentifier,
+    text_color: textColor,
+  } = lineInfos;
+  return (
+    <div className="rt-route-header">
+      <span
+        className="rt-route-icon"
+        style={{
+          /* stylelint-disable-next-line value-keyword-case */
+          backgroundColor: stroke || getBgColor(type || vehicleType),
+          color: textColor || "black",
+        }}
+      >
+        {shortName}
+      </span>
+      <div className="rt-route-title">
+        <span className="rt-route-name">{destination}</span>
+        <span>
+          {longName}
+          {renderRouteIdentifier(lineInfos)}
+        </span>
+      </div>
+      <div className="rt-route-buttons">
+        {renderHeaderButtons(routeIdentifier)}
+      </div>
+    </div>
+  );
+};
+
+const renderFooter = (props) => {
+  const { lineInfos } = props;
+  if (!lineInfos.operator && !lineInfos.publisher) {
+    return null;
+  }
+  return <div className="rt-route-footer">{renderCopyright({ ...props })}</div>;
+};
+
+const defaultRenderLink = (text, url) => {
+  return (
+    <div className="rt-route-copyright-link">
+      {url ? (
+        <a href={url} target="_blank" rel="noreferrer">
+          {text}
+        </a>
+      ) : (
+        <>{text}</>
+      )}
+    </div>
+  );
+};
+
+const renderCopyright = ({ lineInfos }) => {
+  return (
+    <span className="rt-route-copyright">
+      {lineInfos.operator &&
+        defaultRenderLink(lineInfos.operator, lineInfos.operatorUrl)}
+      {lineInfos.operator && lineInfos.publisher && <span>&nbsp;-&nbsp;</span>}
+      {lineInfos.publisher &&
+        defaultRenderLink(lineInfos.publisher, lineInfos.publisherUrl)}
+      {lineInfos.license && <span>&nbsp;(</span>}
+      {lineInfos.license &&
+        defaultRenderLink(lineInfos.license, lineInfos.licenseUrl)}
+      {lineInfos.license && ")"}
+    </span>
+  );
+};
+
+export default function RouteSchedule(props) {
+  const { lineInfos } = props;
+
+  if (!lineInfos) {
+    return null;
+  }
+
+  return (
+    <>
+      <style>{style}</style>
+      <div className="rt-route-schedule">
+        {renderHeader({ ...props })}
+        <div className="rt-route-body">
+          {lineInfos.stations.map((stop, idx) => {
+            return renderStation({ ...props, stop, idx });
+          })}
+        </div>
+        {renderFooter({ ...props })}
+      </div>
+    </>
+  );
+}
