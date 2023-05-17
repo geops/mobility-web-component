@@ -71,24 +71,28 @@ function RealtimeMap({ apikey, center, mots, tenant, zoom }: Props) {
   const ref = useRef();
   const [lineInfos, setLineInfos] = useState(null);
 
-  const tracker = useMemo(
-    () =>
-      new RealtimeLayer({
-        apiKey: apikey,
-        url: "wss://api.geops.io/tracker-ws/v1/",
-        getMotsByZoom: () => mots.split(",") as RealtimeMot[],
-        fullTrajectoryStyle: null,
-        tenant,
-      }),
-    [mots, tenant]
-  );
-
   useEffect(() => {
     map.getView().setCenter(center.split(",").map((c) => parseInt(c)));
     map.getView().setZoom(parseInt(zoom));
   }, [center, zoom]);
 
+  const tracker = useMemo(() => {
+    if (apikey) {
+      return new RealtimeLayer({
+        apiKey: apikey,
+        url: "wss://api.geops.io/tracker-ws/v1/",
+        getMotsByZoom: () => mots.split(",") as RealtimeMot[],
+        fullTrajectoryStyle: null,
+        tenant,
+      });
+    }
+  }, [apikey, mots, tenant]);
+
   useEffect(() => {
+    if (!tracker) {
+      return;
+    }
+
     if (ref.current) {
       map.setTarget(ref.current);
       map.updateSize();
@@ -117,7 +121,7 @@ function RealtimeMap({ apikey, center, mots, tenant, zoom }: Props) {
     return () => {
       map.setTarget();
     };
-  }, [apikey]);
+  }, [tracker]);
 
   return (
     <>

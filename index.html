@@ -11,6 +11,15 @@
       new EventSource("/esbuild").addEventListener("change", () => {
         location.reload();
       });
+      fetch("https://backend.developer.geops.io/publickey")
+        .then((response) => response.json())
+        .then((data) => {
+          if (data && data.success) {
+            document
+              .getElementsByTagName("mobility-toolbox-map")[0]
+              .setAttribute("apikey", data.key);
+          }
+        });
     </script>
     <script type="module" src="./bundle.js"></script>
     <link rel="stylesheet" type="text/css" href="./output.css" />
@@ -33,7 +42,7 @@
 &lt;/style&gt;
 &lt;mobility-toolbox-map
   class=&quot;map&quot;
-  apikey=&quot;5cc87b12d7c5370001c1d655f8122cc140044a76964f65b559301759&quot;
+  apikey=&quot;YOUR_GEOPS_API_KEY&quot;
   center=&quot;831634,5933959&quot;
   mots=&quot;rail&quot;
   tenant=&quot;sbb&quot;
@@ -42,7 +51,6 @@
       >
       <mobility-toolbox-map
         class="max-w-2xl h-96 block"
-        apikey="5cc87b12d7c5370001c1d655f8122cc140044a76964f65b559301759"
         center="831634,5933959"
         mots="rail"
         tenant="sbb"
