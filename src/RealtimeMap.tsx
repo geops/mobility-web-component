@@ -129,7 +129,18 @@ function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
       <style>{olStyle}</style>
       <style>{style}</style>
       <div ref={ref} className="rt-map">
-        <RouteSchedule lineInfos={lineInfos} trackerLayer={tracker} />
+        <RouteSchedule
+          lineInfos={lineInfos}
+          trackerLayer={tracker}
+          onStationClick={(station) => {
+            if (station.coordinate) {
+              map.getView().animate({
+                zoom: map.getView().getZoom(),
+                center: station.coordinate,
+              });
+            }
+          }}
+        />
         <GeolocationControl />
       </div>
     </>
