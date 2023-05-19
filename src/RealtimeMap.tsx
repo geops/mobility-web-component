@@ -134,9 +134,13 @@ function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
           trackerLayer={tracker}
           onStationClick={(station) => {
             if (station.coordinate) {
+              const size = map.getSize();
+              const extent = map.getView().calculateExtent(size);
+              const offset = (extent[2] - extent[0]) / 5;
+
               map.getView().animate({
                 zoom: map.getView().getZoom(),
-                center: station.coordinate,
+                center: [station.coordinate[0] - offset, station.coordinate[1]],
               });
             }
           }}
