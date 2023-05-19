@@ -5,6 +5,6 @@ import RealtimeMap from "./RealtimeMap";
 register(
   RealtimeMap,
   "mobility-toolbox-map",
-  ["apikey", "center", "mots", "tenant", "zoom"],
+  ["apikey", "baselayer", "center", "mots", "tenant", "zoom"],
   { shadow: true }
 );

@@ -1,9 +1,9 @@
 .rt-route-schedule {
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 18px;
+    font-size: 16px;
     background-color: white;
     width: 350px;
-    overflow: scroll;
+    overflow: hidden scroll;
     position: absolute;
     top: 10px;
     left: 10px;
@@ -21,7 +21,7 @@
         flex-direction: column;
   
         .rt-route-name {
-          padding-bottom: 8px;
+          padding-bottom: 5px;
           font-weight: bold;
         }
       }
@@ -56,7 +56,7 @@
     }
   
     .rt-route-footer {
-      padding: 20px;
+      padding: 10px 20px 20px;
       display: flex;
       align-items: center;
     }
@@ -64,8 +64,9 @@
     .rt-route-copyright {
       display: flex;
       flex-wrap: wrap;
+      color: grey;
       & a {
-        font-size: 0.8em;
+        font-size: 12px;
         color: grey;
       }
     }
