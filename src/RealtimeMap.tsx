@@ -17,6 +17,7 @@ import style from "./style.scss";
 
 type Props = {
   apikey: string;
+  baselayer: string;
   center: string;
   mots?: string;
   tenant: string;
@@ -67,7 +68,7 @@ function GeolocationControl() {
 const copyrightControl = new CopyrightControl({});
 const map = new Map({ controls: [new ScaleLine()] });
 
-function RealtimeMap({ apikey, center, mots, tenant, zoom }: Props) {
+function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
   const ref = useRef();
   const [lineInfos, setLineInfos] = useState(null);
 
@@ -100,7 +101,7 @@ function RealtimeMap({ apikey, center, mots, tenant, zoom }: Props) {
 
     const layer = new MaplibreLayer({
       apiKey: apikey,
-      url: "https://maps.geops.io/styles/travic_v2/style.json",
+      url: `https://maps.geops.io/styles/${baselayer}/style.json`,
     });
     layer.attachToMap(map);
 
@@ -121,7 +122,7 @@ function RealtimeMap({ apikey, center, mots, tenant, zoom }: Props) {
     return () => {
       map.setTarget();
     };
-  }, [tracker]);
+  }, [baselayer, tracker]);
 
   return (
     <>
