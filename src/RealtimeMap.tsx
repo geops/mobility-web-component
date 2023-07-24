@@ -6,6 +6,7 @@ import {
 import { Map } from "ol";
 import Geolocation from "ol/Geolocation";
 import ScaleLine from "ol/control/ScaleLine.js";
+import { fromLonLat } from "ol/proj";
 import { useEffect, useMemo, useRef, useState } from "preact/hooks";
 import type { RealtimeMot } from "mobility-toolbox-js/types";
 
@@ -13,7 +14,7 @@ import RouteSchedule from "./RouteSchedule";
 // @ts-ignore
 import olStyle from "ol/ol.css";
 // @ts-ignore
-import style from "./style.scss";
+import style from "./style.css";
 
 type Props = {
   apikey: string;
@@ -28,7 +29,7 @@ const geolocation = new Geolocation();
 geolocation.on("change:position", () => {
   const position = geolocation.getPosition();
   if (position) {
-    map.getView().setCenter(position);
+    map.getView().setCenter(fromLonLat(position, "EPSG:3857"));
   }
 });
 geolocation.on("change:tracking", () => {
