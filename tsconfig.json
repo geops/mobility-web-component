@@ -3,5 +3,6 @@
     "jsx": "react-jsx",
     "jsxImportSource": "preact"
   },
-  "exclude": ["node_modules", "**/*.png"]
+  "exclude": ["node_modules", "**/*.png"],
+  "types": ["esbuild-style-plugin"]
 }

@@ -44,13 +44,14 @@ function GeolocationControl() {
   const [isTracking, setIsTracking] = useState(false);
   return (
     <button
-      className={`geolocation-control ${isTracking ? "tracking" : ""}`}
+      className="absolute right-4 top-4 z-10 bg-white shadow-lg rounded-full p-1"
       onClick={() => {
         setIsTracking(!isTracking);
         geolocation.setTracking(!isTracking);
       }}
     >
       <svg
+        className={isTracking ? "animate-pulse" : ""}
         stroke="currentColor"
         fill="currentColor"
         stroke-width="0"
@@ -129,7 +130,7 @@ function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
     <>
       <style>{olStyle}</style>
       <style>{style}</style>
-      <div ref={ref} className="rt-map">
+      <div ref={ref} className="w-full h-full relative">
         <RouteSchedule
           lineInfos={lineInfos}
           trackerLayer={tracker}

@@ -1,12 +1,5 @@
 import { realtimeConfig } from "mobility-toolbox-js/ol";
 
-import firstStation from "./firstStation.png";
-import station from "./station.png";
-import lastStation from "./lastStation.png";
-import line from "./line.png";
-// @ts-ignore
-import style from "./style.scss";
-
 /**
  * Returns a string representation of a number, with a zero if the number is lower than 10.
  * @ignore
@@ -65,18 +58,18 @@ const { getBgColor } = realtimeConfig;
 const getDelayColor = (time) => {
   const secs = Math.round(((time / 1800 / 2) * 3600) / 1000);
   if (secs >= 3600) {
-    return "dark-red";
+    return "text-red-600";
   }
   if (secs >= 500) {
-    return "middle-red";
+    return "text-orange-600";
   }
   if (secs >= 300) {
-    return "light-red";
+    return "text-amber-600";
   }
   if (secs >= 180) {
-    return "orange";
+    return "text-yellow-600";
   }
-  return "green";
+  return "text-green-600";
 };
 
 /**
@@ -110,27 +103,6 @@ const isPassed = (stop, time, stops, idx) => {
   return timeToCompare + delayToCompare <= time;
 };
 
-/**
- * Returns an image for first, middle or last stations.
- * @param {Number} stations The stations list.
- * @param {Number} index Index of the station in the list.
- * @param {Boolean} isStationPassed If the train is already passed at this station.
- * @param {Boolean} isNotStation If the train doesn't stop to this station.
- */
-const renderStationImg = (stations, index, isStationPassed, isNotStation) => {
-  const { length } = stations;
-  let src = station;
-  if (index === 0) {
-    src = firstStation;
-  } else if (index === length - 1) {
-    src = lastStation;
-  } else if (isNotStation) {
-    src = line;
-  }
-
-  return <img src={src} alt="routeScheduleLine" className="rt-route-icon" />;
-};
-
 const renderStation = ({
   lineInfos,
   onStationClick,
@@ -154,68 +126,105 @@ const renderStation = ({
   const isFirstStation = idx === 0;
   const isLastStation = idx === stations.length - 1;
   const isStationPassed = isPassed(stop, trackerLayer.time, stations, idx);
-  const isNotStation = isNotStop(stop);
+  const isInTransit =
+    (stations[idx - 1] &&
+      isPassed(stations[idx - 1], trackerLayer.time, stations, idx - 1) !==
+        isStationPassed) ||
+    (stations[idx + 1] &&
+      isPassed(stations[idx + 1], trackerLayer.time, stations, idx + 1) !==
+        isStationPassed)
+      ? true
+      : false;
+  const hideDelay =
+    typeof arrivalDelay === "undefined" ||
+    isFirstStation ||
+    cancelled ||
+    isNotStop(stop) ||
+    isStationPassed;
+
   return (
     <div
       // Train line can go in circle so begin and end have the same id,
       // using the time in the key should fix the issue.
       key={(stationId || stationName) + arrivalTime + departureTime}
       role="button"
-      className={[
-        "rt-route-station",
-        isStationPassed ? " rt-passed" : "",
-        isNotStation ? " rt-no-stop" : "",
-      ].join("")}
-      onClick={(e) => {
-        return onStationClick(stop, e);
-      }}
+      className={`flex hover:bg-slate-100 rounded m-1 ${
+        isStationPassed ? "text-gray-500" : "text-gray-600"
+      }`}
+      onClick={(e) => onStationClick(stop, e)}
       tabIndex={0}
-      onKeyPress={(e) => {
-        return e.which === 13 && onStationClick(stop, e);
-      }}
+      onKeyPress={(e) => e.which === 13 && onStationClick(stop, e)}
     >
-      <div className="rt-route-delay">
-        {typeof arrivalDelay === "undefined" || isFirstStation || cancelled ? (
-          ""
-        ) : (
-          <span
-            className={`rt-route-delay-arrival${` ${getDelayColor(
-              arrivalDelay
-            )}`}`}
-          >
-            {`+${getDelayString(arrivalDelay)}`}
-          </span>
-        )}
-        {typeof departureDelay === "undefined" || isLastStation || cancelled ? (
-          ""
-        ) : (
-          <span
-            className={`rt-route-delay-departure${` ${getDelayColor(
-              departureDelay
-            )}`}`}
-          >
-            {`+${getDelayString(departureDelay)}`}
-          </span>
-        )}
-      </div>
-      <div className="rt-route-times">
+      <div className="flex flex-col w-14 items-center justify-center text-xs ml-2">
         <span
-          className={`rt-route-time-arrival ${
-            cancelled ? "rt-route-cancelled" : ""
+          className={`${cancelled ? "text-red-600 line-through" : ""} ${
+            isFirstStation ? "hidden" : ""
           }`}
         >
           {getHoursAndMinutes(aimedArrivalTime)}
         </span>
         <span
-          className={`rt-route-time-departure ${
-            cancelled ? "rt-route-cancelled" : ""
+          className={`${cancelled ? "text-red-600 line-through" : ""} ${
+            isLastStation ? "hidden" : ""
           }`}
         >
           {getHoursAndMinutes(aimedDepartureTime)}
         </span>
       </div>
-      {renderStationImg(stations, idx, isStationPassed, isNotStation)}
-      <div className={cancelled ? "rt-route-cancelled" : ""}>{stationName}</div>
+      <div className="flex flex-col w-7 justify-center text-xs">
+        {hideDelay || isFirstStation ? (
+          ""
+        ) : (
+          <span className={getDelayColor(arrivalDelay)}>
+            {`+${getDelayString(arrivalDelay)}`}
+          </span>
+        )}
+        {hideDelay || isLastStation ? (
+          ""
+        ) : (
+          <span className={getDelayColor(departureDelay)}>
+            {`+${getDelayString(departureDelay)}`}
+          </span>
+        )}
+      </div>
+      <div className="flex items-center justify-center w-6 -my-1">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="14"
+          height="58"
+          viewBox="0 0 14 58"
+          fill="none"
+          className={isStationPassed ? "stroke-gray-400" : "stroke-black"}
+        >
+          <line
+            x1="7"
+            y1={
+              isFirstStation
+                ? "29"
+                : isInTransit && !isStationPassed
+                ? "3"
+                : "0"
+            }
+            x2="7"
+            y2={
+              isLastStation
+                ? "29"
+                : isInTransit && isStationPassed
+                ? "55"
+                : "58"
+            }
+            stroke-width="4"
+          />
+          <circle cx="7" cy="29" r="5" fill="white" stroke-width="4" />
+        </svg>
+      </div>
+      <div
+        className={`flex items-center text-sm font-medium pr-4 ${
+          cancelled ? "text-red-600 line-through" : ""
+        } ${isStationPassed ? "" : "text-black"}`}
+      >
+        <span>{stationName}</span>
+      </div>
     </div>
   );
 };
@@ -231,10 +240,6 @@ const renderRouteIdentifier = ({ routeIdentifier, longName }) => {
   return null;
 };
 
-const renderHeaderButtons = (routeIdentifier) => {
-  return null;
-};
-
 const renderHeader = ({ lineInfos }) => {
   const {
     type,
@@ -243,13 +248,12 @@ const renderHeader = ({ lineInfos }) => {
     longName,
     stroke,
     destination,
-    routeIdentifier,
     text_color: textColor,
   } = lineInfos;
   return (
-    <div className="rt-route-header">
+    <div className="bg-slate-100 p-4 flex space-x-4 items-center">
       <span
-        className="rt-route-icon"
+        className="p-2 border-2 border-black rounded-full font-bold text-sm"
         style={{
           /* stylelint-disable-next-line value-keyword-case */
           backgroundColor: stroke || getBgColor(type || vehicleType),
@@ -258,15 +262,12 @@ const renderHeader = ({ lineInfos }) => {
       >
         {shortName}
       </span>
-      <div className="rt-route-title">
-        <span className="rt-route-name">{destination}</span>
-        <span>
+      <div className="flex flex-col">
+        <span className="font-bold">{destination}</span>
+        <span className="text-sm">
           {longName}
           {renderRouteIdentifier(lineInfos)}
         </span>
-      </div>
-      <div className="rt-route-buttons">
-        {renderHeaderButtons(routeIdentifier)}
       </div>
     </div>
   );
@@ -277,36 +278,33 @@ const renderFooter = (props) => {
   if (!lineInfos.operator && !lineInfos.publisher) {
     return null;
   }
-  return <div className="rt-route-footer">{renderCopyright({ ...props })}</div>;
-};
-
-const defaultRenderLink = (text, url) => {
   return (
-    <div className="rt-route-copyright-link">
-      {url ? (
-        <a href={url} target="_blank" rel="noreferrer">
-          {text}
-        </a>
-      ) : (
-        <>{text}</>
-      )}
-    </div>
+    <>
+      <div className="-mb-4 text-center text-sm text-gray-500 pt-2 px-2 break-all ">
+        {lineInfos.operator &&
+          defaultRenderLink(lineInfos.operator, lineInfos.operatorUrl)}
+        {lineInfos.operator && lineInfos.publisher && (
+          <span>&nbsp;-&nbsp;</span>
+        )}
+        {lineInfos.publisher &&
+          defaultRenderLink(lineInfos.publisher, lineInfos.publisherUrl)}
+        {lineInfos.license && <span>&nbsp;(</span>}
+        {lineInfos.license &&
+          defaultRenderLink(lineInfos.license, lineInfos.licenseUrl)}
+        {lineInfos.license && ")"}
+      </div>
+      <div className="bg-gradient-to-b from-transparent to-white h-12 sticky bottom-0 w-full pointer-events-none" />
+    </>
   );
 };
 
-const renderCopyright = ({ lineInfos }) => {
-  return (
-    <span className="rt-route-copyright">
-      {lineInfos.operator &&
-        defaultRenderLink(lineInfos.operator, lineInfos.operatorUrl)}
-      {lineInfos.operator && lineInfos.publisher && <span>&nbsp;-&nbsp;</span>}
-      {lineInfos.publisher &&
-        defaultRenderLink(lineInfos.publisher, lineInfos.publisherUrl)}
-      {lineInfos.license && <span>&nbsp;(</span>}
-      {lineInfos.license &&
-        defaultRenderLink(lineInfos.license, lineInfos.licenseUrl)}
-      {lineInfos.license && ")"}
-    </span>
+const defaultRenderLink = (text, url) => {
+  return url ? (
+    <a href={url} target="_blank" rel="noreferrer" className="underline">
+      {text}
+    </a>
+  ) : (
+    <>{text}</>
   );
 };
 
@@ -319,14 +317,11 @@ export default function RouteSchedule(props) {
 
   return (
     <>
-      <style>{style}</style>
-      <div className="rt-route-schedule">
+      <div className="absolute left-4 z-20 top-4 bottom-4 overflow-x-hidden overflow-y-scroll border-2 bg-white border-gray-800">
         {renderHeader({ ...props })}
-        <div className="rt-route-body">
-          {lineInfos.stations.map((stop, idx) => {
-            return renderStation({ ...props, stop, idx });
-          })}
-        </div>
+        {lineInfos.stations.map((stop, idx) => {
+          return renderStation({ ...props, stop, idx });
+        })}
         {renderFooter({ ...props })}
       </div>
     </>

@@ -11,7 +11,9 @@
   },
   "scripts": {
     "build:js": "node scripts/build.mjs",
-    "build:css": "tailwindcss -i ./input.css -o ./output.css --minify",
+    "build:css": "npm run tailwind:component && npm run tailwind:website",
+    "tailwind:component": "tailwindcss --output=src/style.css --content=src/**/*.tsx",
+    "tailwind:website": "tailwindcss --output=output.css --content=index.html --minify",
     "dev": "node scripts/dev.mjs"
   },
   "type": "module"
