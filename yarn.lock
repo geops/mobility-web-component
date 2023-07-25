@@ -213,10 +213,10 @@
   resolved "https://registry.yarnpkg.com/@mapbox/whoots-js/-/whoots-js-3.1.0.tgz#497c67a1cef50d1a2459ba60f315e448d2ad87fe"
   integrity sha512-Es6WcD0nO5l+2BOQS4uLfNPYQaNDfbot3X1XUoloz+x0mPDS3eeORZJl06HXjwBG1fOGwCRnzK88LMdxKRrd6Q==
 
-"@maplibre/maplibre-gl-style-spec@^19.2.1":
-  version "19.2.2"
-  resolved "https://registry.yarnpkg.com/@maplibre/maplibre-gl-style-spec/-/maplibre-gl-style-spec-19.2.2.tgz#60bb5087329b0c29f8ff5da63d4383256aeeedd1"
-  integrity sha512-FbIm5WppbIFKeMQVE1xm4eawBPdlC5GcOCMz491Ip6kXTqe0pxp25rep60D69ioh8gTAAwS4up5MhI6vwMqsLg==
+"@maplibre/maplibre-gl-style-spec@^19.2.2":
+  version "19.3.0"
+  resolved "https://registry.yarnpkg.com/@maplibre/maplibre-gl-style-spec/-/maplibre-gl-style-spec-19.3.0.tgz#00a1dde3d389313b0b9805b57fc0b3d023cfcf19"
+  integrity sha512-ZbhX9CTV+Z7vHwkRIasDOwTSzr76e8Q6a55RMsAibjyX6+P0ZNL1qAKNzOjjBDP3+aEfNMl7hHo5knuY6pTAUQ==
   dependencies:
     "@mapbox/jsonlint-lines-primitives" "~2.0.2"
     "@mapbox/unitbezier" "^0.0.1"
@@ -346,6 +346,13 @@
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/@types/pbf/-/pbf-3.0.2.tgz#8d291ad68b4b8c533e96c174a2e3e6399a59ed61"
   integrity sha512-EDrLIPaPXOZqDjrkzxxbX7UlJSeQVgah3i0aA4pOSzmK9zq3BIh7/MZIQxED7slJByvKM4Gc6Hypyu2lJzh3SQ==
+
+"@types/supercluster@^7.1.0":
+  version "7.1.0"
+  resolved "https://registry.yarnpkg.com/@types/supercluster/-/supercluster-7.1.0.tgz#67b7466c93a7d25b6e79a3c7cad885a79420aeb4"
+  integrity sha512-6JapQ2GmEkH66r23BK49I+u6zczVDGTtiJEVvKDYZVSm/vepWaJuTq6BXzJ6I4agG5s8vA1KM7m/gXWDg03O4Q==
+  dependencies:
+    "@types/geojson" "*"
 
 any-promise@^1.0.0:
   version "1.3.0"
@@ -779,10 +786,10 @@ mapbox-to-css-font@^2.4.1:
   resolved "https://registry.yarnpkg.com/mapbox-to-css-font/-/mapbox-to-css-font-2.4.2.tgz#a9e31b363ad8ca881cd339ca99f2d2a6b02ea5dd"
   integrity sha512-f+NBjJJY4T3dHtlEz1wCG7YFlkODEjFIYlxDdLIDMNpkSksqTt+l/d4rjuwItxuzkuMFvPyrjzV2lxRM4ePcIA==
 
-maplibre-gl@^3.2.0:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/maplibre-gl/-/maplibre-gl-3.2.0.tgz#4b1d8c286e2d52be3b63ea64fea03a6ba097c1f2"
-  integrity sha512-TOo/cV9r8Xy3ngbJtY6JUC7rpjpObrsdO5pt14l5OIw4gY1v5XnxWP16VDSe0zRoncFfDCEBDmRwhfEFwtlbvw==
+maplibre-gl@^3.2.1:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/maplibre-gl/-/maplibre-gl-3.2.1.tgz#de8be5f765bcee004cafe9ad7287adcf670bbe87"
+  integrity sha512-7INNVNJGKKPslU4DmSSMldreOEqsMYY4m62WaHQVmD95D5VlS7BiY4HKlYiNsmKI9onWk7Xd5c/JWmXLa025dA==
   dependencies:
     "@mapbox/geojson-rewind" "^0.5.2"
     "@mapbox/jsonlint-lines-primitives" "^2.0.2"
@@ -791,11 +798,12 @@ maplibre-gl@^3.2.0:
     "@mapbox/unitbezier" "^0.0.1"
     "@mapbox/vector-tile" "^1.3.1"
     "@mapbox/whoots-js" "^3.1.0"
-    "@maplibre/maplibre-gl-style-spec" "^19.2.1"
+    "@maplibre/maplibre-gl-style-spec" "^19.2.2"
     "@types/geojson" "^7946.0.10"
     "@types/mapbox__point-geometry" "^0.1.2"
     "@types/mapbox__vector-tile" "^1.3.0"
     "@types/pbf" "^3.0.2"
+    "@types/supercluster" "^7.1.0"
     earcut "^2.2.4"
     geojson-vt "^3.2.1"
     gl-matrix "^3.4.3"

@@ -2,7 +2,7 @@
   "devDependencies": {
     "esbuild": "^0.18.16",
     "esbuild-sass-plugin": "^2.10.0",
-    "maplibre-gl": "^3.2.0",
+    "maplibre-gl": "^3.2.1",
     "mobility-toolbox-js": "^2.0.0-beta.79",
     "ol": "^7.4.0",
     "preact": "^10.16.0",
