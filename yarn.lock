@@ -1111,6 +1111,14 @@ reusify@^1.0.4:
   resolved "https://registry.yarnpkg.com/reusify/-/reusify-1.0.4.tgz#90da382b1e126efc02146e90845a88db12925d76"
   integrity sha512-U9nH88a3fc/ekCF1l0/UP1IosiuIjyTh7hBvXVMHYgVcfGvt897Xguj2UOLDeI5BG2m7/uwyaLVT6fbtCwTyzw==
 
+rosetta@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/rosetta/-/rosetta-1.1.0.tgz#41ecc0f3cb38ce34b981b0dcfca2f4c94721738c"
+  integrity sha512-3jQaCo2ySoDqLIPjy7+AvN3rluLfkG8A27hg0virL0gRAB5BJ3V35IBdkL/t6k1dGK0TVTyUEwXVUJsygyx4pA==
+  dependencies:
+    dlv "^1.1.3"
+    templite "^1.1.0"
+
 run-parallel@^1.1.9:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/run-parallel/-/run-parallel-1.2.0.tgz#66d1368da7bdf921eb9d95bd1a9229e7f21a43ee"
@@ -1246,6 +1254,11 @@ tailwindcss@^3.3.3:
     postcss-selector-parser "^6.0.11"
     resolve "^1.22.2"
     sucrase "^3.32.0"
+
+templite@^1.1.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/templite/-/templite-1.2.0.tgz#ac1781cfc46e3bed3b2c17297b3ce3b129d4a590"
+  integrity sha512-O9BpPXF44a9Pg84Be6mjzlrqOtbP2I/B5PNLWu5hb1n9UQ1GTLsjdMg1z5ROCkF6NFXsO5LQfRXEpgTGrZ7Q0Q==
 
 thenify-all@^1.0.0:
   version "1.6.0"

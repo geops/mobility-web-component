@@ -16,5 +16,8 @@
     "tailwind:website": "tailwindcss --output=output.css --content=index.html --minify",
     "dev": "node scripts/dev.mjs"
   },
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "rosetta": "^1.1.0"
+  }
 }

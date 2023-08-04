@@ -7,14 +7,48 @@ import { Map } from "ol";
 import Geolocation from "ol/Geolocation";
 import ScaleLine from "ol/control/ScaleLine.js";
 import { fromLonLat } from "ol/proj";
+import { createContext } from "preact";
 import { useEffect, useMemo, useRef, useState } from "preact/hooks";
 import type { RealtimeMot } from "mobility-toolbox-js/types";
+import rosetta from "rosetta";
 
 import RouteSchedule from "./RouteSchedule";
 // @ts-ignore
 import olStyle from "ol/ol.css";
 // @ts-ignore
 import style from "./style.css";
+
+const i18n = rosetta({
+  de: {
+    depature_rail: "Gleis",
+    depature_ferry: "Steg",
+    depature_other: "Kante",
+  },
+  en: {
+    depature_rail: "platform",
+    depature_ferry: "pier",
+    depature_other: "stand",
+  },
+  fr: {
+    depature_rail: "voie",
+    depature_ferry: "quai",
+    depature_other: "quai",
+  },
+  it: {
+    depature_rail: "binario",
+    depature_ferry: "imbarcadero",
+    depature_other: "corsia",
+  },
+});
+
+// Set current language to preferred browser language with fallback to english
+i18n.locale(
+  navigator.languages // @ts-ignore
+    .find((l) => i18n.table(l.split("-")[0]) !== undefined)
+    ?.split("-")[0] || "en"
+);
+
+export const I18nContext = createContext(i18n);
 
 type Props = {
   apikey: string;
@@ -83,8 +117,10 @@ function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
     if (apikey) {
       return new RealtimeLayer({
         apiKey: apikey,
-        url: "wss://api.geops.io/tracker-ws/v1/",
-        getMotsByZoom: () => mots.split(",") as RealtimeMot[],
+        url: "wss://tralis-tracker-api.dev.geops.io/ws",
+        getMotsByZoom: mots
+          ? () => mots.split(",") as RealtimeMot[]
+          : undefined,
         fullTrajectoryStyle: null,
         tenant,
       });
@@ -127,7 +163,7 @@ function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
   }, [baselayer, tracker]);
 
   return (
-    <>
+    <I18nContext.Provider value={i18n}>
       <style>{olStyle}</style>
       <style>{style}</style>
       <div ref={ref} className="w-full h-full relative">
@@ -149,7 +185,7 @@ function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
         />
         <GeolocationControl />
       </div>
-    </>
+    </I18nContext.Provider>
   );
 }
 
