@@ -83,7 +83,7 @@ const isNotStop = (stop) => {
 };
 
 /**
- * Returns if the station has already been passed by the vehicule.
+ * Returns if the station has already been passed by the vehicle.
  * @param {Object} stop Station information.
  * @param {number} time The current time to test in ms.
  * @param {Array<Object>} stops the list of all stops of the train.
@@ -335,7 +335,7 @@ const renderStation = ({
             </span>
           ) : null}
         </div>
-        {isInTransit && (
+        {/* {isInTransit && (
           <a
             href="#"
             className="bg-slate-200 hover:bg-slate-300 rounded-sm"
@@ -343,7 +343,7 @@ const renderStation = ({
           >
             <SEVIcon />
           </a>
-        )}
+        )} */}
       </div>
     </div>
   );
