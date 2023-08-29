@@ -1,18 +1,18 @@
 import {
   CopyrightControl,
   RealtimeLayer,
-  MaplibreLayer,
 } from "mobility-toolbox-js/ol";
 import { Map } from "ol";
 import Geolocation from "ol/Geolocation";
 import ScaleLine from "ol/control/ScaleLine.js";
 import { fromLonLat } from "ol/proj";
 import { createContext } from "preact";
-import { useEffect, useMemo, useRef, useState } from "preact/hooks";
+import { useEffect, useMemo, useState } from "preact/hooks";
 import type { RealtimeMot } from "mobility-toolbox-js/types";
 import rosetta from "rosetta";
 
 import RouteSchedule from "./RouteSchedule";
+import BasicMap from "./BasicMap";
 // @ts-ignore
 import olStyle from "ol/ol.css";
 // @ts-ignore
@@ -101,11 +101,9 @@ function GeolocationControl() {
   );
 }
 
-const copyrightControl = new CopyrightControl({});
 const map = new Map({ controls: [new ScaleLine()] });
 
 function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
-  const ref = useRef();
   const [lineInfos, setLineInfos] = useState(null);
 
   useEffect(() => {
@@ -132,17 +130,6 @@ function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
       return;
     }
 
-    if (ref.current) {
-      map.setTarget(ref.current);
-      map.updateSize();
-    }
-
-    const layer = new MaplibreLayer({
-      apiKey: apikey,
-      url: `https://maps.geops.io/styles/${baselayer}/style.json`,
-    });
-    layer.attachToMap(map);
-
     tracker.attachToMap(map);
     tracker.onClick(([feature]) => {
       if (feature) {
@@ -155,8 +142,6 @@ function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
       }
     });
 
-    copyrightControl.attachToMap(map);
-
     return () => {
       map.setTarget();
     };
@@ -166,7 +151,7 @@ function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
     <I18nContext.Provider value={i18n}>
       <style>{olStyle}</style>
       <style>{style}</style>
-      <div ref={ref} className="w-full h-full relative">
+      <BasicMap apikey={apikey} baselayer={baselayer} center={center} zoom={zoom} map={map}>
         <RouteSchedule
           lineInfos={lineInfos}
           trackerLayer={tracker}
@@ -184,7 +169,7 @@ function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
           }}
         />
         <GeolocationControl />
-      </div>
+      </BasicMap>
     </I18nContext.Provider>
   );
 }

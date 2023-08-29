@@ -3,6 +3,7 @@ node_modules
 # esbuild output files
 bundle.js
 bundle.js.map
+src/style.css
 
 # Tailwind CSS ouput file
 output.css
