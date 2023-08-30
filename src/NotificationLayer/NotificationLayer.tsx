@@ -33,7 +33,7 @@ const useNotifications = (map: Map, mode: string, baseLayer: MaplibreLayer) => {
     // Fetch the main MOCO notifications
     const fetchNotifications = async () => {
       const response = await fetch(
-        "https://moco.dev.geops.io/api/v1/export/notification/?graph=sbahnm&public_at=2023-08-30T09:49:51.322Z&sso_config=sob",
+        "https://moco.dev.geops.io/api/v1/export/notification/?graph=np_5&public_at=2023-08-30T09:49:51.322Z&sso_config=sob",
       );
       const data = await response.json();
       setNotifications(getNotificationsWithStatus(data, now));
