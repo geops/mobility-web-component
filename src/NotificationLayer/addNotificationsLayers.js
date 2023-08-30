@@ -7,8 +7,6 @@ const addNotificationsLayers = (
   mapboxLayer,
   notifications,
   beforeLayerId,
-  beforeLayerIdForDeviation,
-  { lineWidth, lineWidthBackground },
 ) => {
   if (!mapboxLayer) {
     console.log(mapboxLayer);
@@ -28,28 +26,13 @@ const addNotificationsLayers = (
     },
     [
       {
-        id: "notificationsActiveBackground",
-        source: "notifications",
-        type: "line",
-        paint: {
-          "line-color": "#eaa1aa",
-          "line-width": lineWidthBackground,
-        },
-        layout: { visibility: "visible" },
-        filter: [
-          "all",
-          ["==", ["get", "isActive"], true],
-          ["==", ["get", "disruption_type"], "DISRUPTION"],
-        ],
-      },
-      {
         id: "notificationsActive",
         source: "notifications",
         type: "line",
         paint: {
-          "line-color": "#fc0009",
-          "line-dasharray": [1, 1],
-          "line-width": lineWidth,
+          "line-width": 2.5,
+          "line-color": "rgba(255,0,0,1)",
+          "line-dasharray": [2, 2],
         },
         layout: { visibility: "visible" },
         filter: [
@@ -58,104 +41,8 @@ const addNotificationsLayers = (
           ["==", ["get", "disruption_type"], "DISRUPTION"],
         ],
       },
-      {
-        id: "notificationsActiveRailReplacementBackground",
-        source: "notifications",
-        type: "line",
-        paint: {
-          "line-color": "#c688be",
-          "line-width": lineWidthBackground,
-        },
-        layout: { visibility: "visible" },
-        filter: [
-          "all",
-          ["==", ["get", "isActive"], true],
-          ["==", ["get", "disruption_type"], "DISRUPTION_RAIL_REPLACEMENT"],
-        ],
-      },
-      {
-        id: "notificationsActiveRailReplacement",
-        source: "notifications",
-        type: "line",
-        paint: {
-          "line-color": "#8400a8",
-          "line-dasharray": [1, 1],
-          "line-width": lineWidth,
-        },
-        layout: { visibility: "visible" },
-        filter: [
-          "all",
-          ["==", ["get", "isActive"], true],
-          ["==", ["get", "disruption_type"], "DISRUPTION_RAIL_REPLACEMENT"],
-        ],
-      },
-      {
-        id: "notificationsActiveDeviation",
-        source: "notifications",
-        type: "line",
-        paint: {
-          "line-color": "#FFFFFF",
-          "line-opacity": 0.5,
-          "line-dasharray": [1, 1],
-          "line-width": lineWidth,
-        },
-        layout: { visibility: "visible" },
-        filter: [
-          "all",
-          ["==", ["get", "isActive"], true],
-          ["==", ["get", "disruption_type"], "DEVIATION"],
-        ],
-      },
-      {
-        id: "notificationsActiveDeviationStops",
-        source: "notifications",
-        type: "line",
-        paint: {
-          "line-color": "#FFFFFF",
-          "line-opacity": 0.5,
-          "line-dasharray": [1, 1],
-          "line-width": lineWidth,
-        },
-        layout: { visibility: "visible" },
-        filter: [
-          "all",
-          ["==", ["get", "isActive"], true],
-          ["==", ["get", "disruption_type"], "DEVIATION_STOPS"],
-        ],
-      },
-      {
-        id: "notificationsFuture",
-        source: "notifications",
-        type: "line",
-        paint: { "line-width": 0 },
-        filter: ["==", ["get", "isActive"], false],
-      },
     ],
     beforeLayerId,
-  );
-
-  addSourceAndLayers(
-    mapboxLayer,
-    null,
-    null,
-    [
-      {
-        id: "notificationsActiveDeviationBackground",
-        source: "notifications",
-        type: "line",
-        paint: {
-          "line-color": "#eaa1aa",
-          "line-width": lineWidthBackground,
-        },
-        layout: { visibility: "visible" },
-        filter: [
-          "all",
-          ["==", ["get", "isActive"], true],
-          ["==", ["get", "disruption_type"], "DEVIATION"],
-        ],
-      },
-    ],
-    beforeLayerIdForDeviation,
   );
 };
 

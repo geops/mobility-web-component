@@ -59,51 +59,13 @@ const useNotifications = (map: Map, mode: string, baseLayer: MaplibreLayer) => {
     }
   }, [previewNotification, mode, shouldAddPreviewNotifications])
   
-  useEffect(() => {    
+  useEffect(() => {
     // Add the notifications to the map
     if (notifications?.length) {
-      const lineWidth =
-        mode === "schematic"
-          ? {
-              stops: [
-                [9, 2],
-                [10.5, 4],
-                [11.5, 6],
-              ],
-            }
-          : {
-              stops: [
-                [9, 2],
-                [10.5, 4],
-                [11.5, 6],
-              ],
-            };
-      const lineWidthBackground =
-        mode === "schematic"
-          ? {
-              stops: [
-                [9, 5],
-                [9.5, 10],
-                [10, 12],
-                [11.5, 18],
-              ],
-            }
-          : {
-              stops: [
-                [9, 3],
-                [10, 12],
-                [11.5, 18],
-              ],
-            };
       addNotificationsLayers(
         baseLayer,
         notifications,
         'netzplan_line',
-        'netzplan_line',
-        {
-          lineWidth,
-          lineWidthBackground,
-        },
       );      
     } 
   }, [notifications])

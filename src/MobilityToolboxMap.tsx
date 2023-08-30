@@ -15,6 +15,7 @@ import NotificationLayer from "./NotificationLayer/NotificationLayer";
 
 
 type Props = {
+  class: string;
   type: "basic"|"realtime"|"notification";
   apikey: string;
   baselayer: string;
