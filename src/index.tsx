@@ -1,27 +1,10 @@
 import register from "preact-custom-element";
 
-import RealtimeMap from "./RealtimeMap";
-import BasicMap from "./BasicMap";
-import NotificationMap from "./NotificationMap";
+import MobilityToolboxMap from "./MobilityToolboxMap";
 
 register(
-  RealtimeMap,
-  "mobility-toolbox-realtime-map",
-  ["apikey", "baselayer", "center", "mots", "tenant", "zoom"],
+  MobilityToolboxMap,
+  "mobility-toolbox-map",
+  ["apikey", "baselayer", "center", "mots", "tenant", "zoom", "type"],
   { shadow: true }
 );
-
-register(
-  BasicMap,
-  "mobility-toolbox-basic-map",
-  ["apikey", "baselayer", "center", "zoom", "map"],
-  { shadow: true }
-);
-
-register(
-  NotificationMap,
-  "mobility-toolbox-notification-map",
-  ["apikey", "baselayer", "center", "zoom", "map"],
-  { shadow: true }
-);
-

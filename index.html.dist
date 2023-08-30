@@ -55,7 +55,6 @@
         center="831634,5933959"
         mots="rail"
         zoom="13"
-        realtime="false"
       ></mobility-toolbox-map>
     </div>
   </body>

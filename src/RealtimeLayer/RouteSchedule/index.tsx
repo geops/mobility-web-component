@@ -1,6 +1,6 @@
 import { realtimeConfig } from "mobility-toolbox-js/ol";
 import { useContext } from "preact/hooks";
-import { I18nContext } from "../RealtimeMap";
+import { I18nContext } from "../RealtimeLayer";
 
 /**
  * Returns a string representation of a number, with a zero if the number is lower than 10.

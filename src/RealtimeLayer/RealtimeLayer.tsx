@@ -1,22 +1,13 @@
-import {
-  CopyrightControl,
-  RealtimeLayer,
-} from "mobility-toolbox-js/ol";
-import { Map } from "ol";
+import { RealtimeLayer as MtbRealtimeLayer } from "mobility-toolbox-js/ol";
 import Geolocation from "ol/Geolocation";
-import ScaleLine from "ol/control/ScaleLine.js";
 import { fromLonLat } from "ol/proj";
 import { createContext } from "preact";
-import { useEffect, useMemo, useState } from "preact/hooks";
+import { useContext, useEffect, useMemo, useState } from "preact/hooks";
 import type { RealtimeMot } from "mobility-toolbox-js/types";
 import rosetta from "rosetta";
 
 import RouteSchedule from "./RouteSchedule";
-import BasicMap from "./BasicMap";
-// @ts-ignore
-import olStyle from "ol/ol.css";
-// @ts-ignore
-import style from "./style.css";
+import { MapContext } from "../MobilityToolboxMap";
 
 const i18n = rosetta({
   de: {
@@ -52,30 +43,33 @@ export const I18nContext = createContext(i18n);
 
 type Props = {
   apikey: string;
-  baselayer: string;
-  center: string;
   mots?: string;
   tenant: string;
-  zoom: string;
 };
 
 const geolocation = new Geolocation();
-geolocation.on("change:position", () => {
-  const position = geolocation.getPosition();
-  if (position) {
-    map.getView().setCenter(fromLonLat(position, "EPSG:3857"));
-  }
-});
-geolocation.on("change:tracking", () => {
-  const position = geolocation.getPosition();
-  const tracking = geolocation.getTracking();
-  if (position && tracking) {
-    map.getView().setZoom(16);
-  }
-});
 
 function GeolocationControl() {
   const [isTracking, setIsTracking] = useState(false);
+  const { map } = useContext(MapContext);
+
+  useEffect(() => {
+    geolocation.on("change:position", () => {
+      const position = geolocation.getPosition();
+      console.log(position);
+      if (position) {
+        map.getView().setCenter(fromLonLat(position, "EPSG:3857"));
+      }
+    });
+    geolocation.on("change:tracking", () => {
+      const position = geolocation.getPosition();
+      const tracking = geolocation.getTracking();
+      if (position && tracking) {
+        map.getView().setZoom(16);
+      }
+    });
+  }, []);
+
   return (
     <button
       className="absolute right-4 top-4 z-10 bg-white shadow-lg rounded-full p-1"
@@ -101,19 +95,14 @@ function GeolocationControl() {
   );
 }
 
-const map = new Map({ controls: [new ScaleLine()] });
 
-function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
+function RealtimeLayer({ apikey, mots, tenant }: Props) {
   const [lineInfos, setLineInfos] = useState(null);
-
-  useEffect(() => {
-    map.getView().setCenter(center.split(",").map((c) => parseInt(c)));
-    map.getView().setZoom(parseInt(zoom));
-  }, [center, zoom]);
+  const { map } = useContext(MapContext);
 
   const tracker = useMemo(() => {
     if (apikey) {
-      return new RealtimeLayer({
+      return new MtbRealtimeLayer({
         apiKey: apikey,
         url: "wss://tralis-tracker-api.geops.io/ws",
         getMotsByZoom: mots
@@ -145,13 +134,10 @@ function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
     return () => {
       map.setTarget();
     };
-  }, [baselayer, tracker]);
+  }, [ tracker]);
 
   return (
-    <I18nContext.Provider value={i18n}>
-      <style>{olStyle}</style>
-      <style>{style}</style>
-      <BasicMap apikey={apikey} baselayer={baselayer} center={center} zoom={zoom} map={map}>
+      <I18nContext.Provider value={i18n}>
         <RouteSchedule
           lineInfos={lineInfos}
           trackerLayer={tracker}
@@ -169,9 +155,8 @@ function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
           }}
         />
         <GeolocationControl />
-      </BasicMap>
-    </I18nContext.Provider>
+      </I18nContext.Provider>
   );
 }
 
-export default RealtimeMap;
+export default RealtimeLayer;

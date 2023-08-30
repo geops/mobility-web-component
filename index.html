@@ -16,14 +16,8 @@
         .then((data) => {
           if (data && data.success) {
             document
-              .getElementsByTagName("mobility-toolbox-notification-map")[0]
+              .getElementsByTagName("mobility-toolbox-map")[0]
               .setAttribute("apikey", data.key);
-
-            // document
-            // .getElementsByTagName("mobility-toolbox-realtime-map")[0]
-            // .setAttribute("apikey", data.key);
-
-            console.dir(document.getElementsByTagName("mobility-toolbox-notification-map")[0]);
           }
         });
     </script>
@@ -32,20 +26,13 @@
   </head>
   <body>
     <div class="w-screen h-screen block">
-      <iframe>
-        <mobility-toolbox-notification-map
-          class="w-full h-full block"
-          baselayer="travic_v2"
-          center="831634,5933959"
-          zoom="13"
-        ></mobility-toolbox-notification-map>
-      </iframe>
-      <!-- <mobility-toolbox-realtime-map
+      <mobility-toolbox-map
         class="w-full h-full block"
-        baselayer="travic_v2"
-        center="831634,5933959"
-        zoom="13"
-      ></mobility-toolbox-realtime-map> -->
+        baselayer="travic_v2_network_plans"
+        center="955768,5922646"
+        zoom="10"
+        type="notification"
+      ></mobility-toolbox-map>
     </div>
   </body>
 </html>
