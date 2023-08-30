@@ -46,7 +46,7 @@ const testNotification = {
       external_id: "",
       title: "Daniel MÜ Test 12",
       long_description: "Test für Milan",
-      replacement_description: "sdfsdsd",
+      replacement_description: "sdfsdssssd",
       rail_replacement: false
     },
     features: [
