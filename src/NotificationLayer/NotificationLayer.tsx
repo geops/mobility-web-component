@@ -1,23 +1,22 @@
-import { useContext, useEffect, useState } from "preact/hooks";
+import { useContext, useEffect, useState, useMemo } from "preact/hooks";
 import { MaplibreLayer } from "mobility-toolbox-js/ol";
-import { Map } from "ol";
 import { MapContext } from "../MobilityToolboxMap";
 import addNotificationsLayers from "./addNotificationsLayers";
 import getNotificationsWithStatus from "./getNotificationsWithStatus";
 
-type Props = {
-  mode: string;
-};
-
 const params = new URLSearchParams(window.location.search);
 
-const useNotifications = (map: Map, mode: string, baseLayer: MaplibreLayer) => {
+const useNotifications = (baseLayer: MaplibreLayer) => {
   const [notifications, setNotifications] = useState([]);
   const [previewNotification, setPreviewNotification] = useState(null);
   const [shouldAddPreviewNotifications, setShouldAddPreviewNotifications] = useState(false);
-  const now = params.get("notificationat")
-    ? new Date(params.get("notificationat"))
-    : new Date();
+  const notificationsUrl = useMemo(() => params.get("notificationurl"), []);
+  const mode = useMemo(() => params.get("mode") || "topographic", []);
+  const now = useMemo(() => {
+    return params.get("notificationat")
+      ? new Date(params.get("notificationat"))
+      : new Date()
+  }, []);    
 
   useEffect(() => {
     // Listen for imcoming messages through the MOCO iframe
@@ -32,14 +31,16 @@ const useNotifications = (map: Map, mode: string, baseLayer: MaplibreLayer) => {
   useEffect(() => {
     // Fetch the main MOCO notifications
     const fetchNotifications = async () => {
-      const response = await fetch(
-        "https://moco.dev.geops.io/api/v1/export/notification/?graph=np_5&public_at=2023-08-30T09:49:51.322Z&sso_config=sob",
-      );
+      const response = await fetch(notificationsUrl);
       const data = await response.json();
       setNotifications(getNotificationsWithStatus(data, now));
     }
-    fetchNotifications()
-  }, [])
+    console.log(mode, now, notificationsUrl);
+    
+    if (notificationsUrl) {
+      fetchNotifications()
+    }
+  }, [notificationsUrl, mode, now]);
 
   useEffect(() => {
     // Merge notifications with the previewNotification
@@ -57,7 +58,7 @@ const useNotifications = (map: Map, mode: string, baseLayer: MaplibreLayer) => {
       }
       setNotifications(getNotificationsWithStatus(newNotifications, now));
     }
-  }, [previewNotification, mode, shouldAddPreviewNotifications])
+  }, [previewNotification, mode, shouldAddPreviewNotifications]);
   
   useEffect(() => {
     // Add the notifications to the map
@@ -68,15 +69,13 @@ const useNotifications = (map: Map, mode: string, baseLayer: MaplibreLayer) => {
         'netzplan_line',
       );      
     } 
-  }, [notifications])
-
-  
+  }, [notifications]);
   
   return { notifications };
 }
 
-export default function NotificationLayer({ mode }: Props) {
-  const { map, baseLayer } = useContext(MapContext);
-  useNotifications(map, mode, baseLayer);
+export default function NotificationLayer() {
+  const { baseLayer } = useContext(MapContext);
+  useNotifications(baseLayer);
   return null;
 }

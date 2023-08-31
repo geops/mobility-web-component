@@ -23,13 +23,12 @@ type Props = {
   zoom: string;
   mots: string;
   tenant: string;
-  mode: "schematic"|"topographic";
 };
 
 const copyrightControl = new CopyrightControl({});
 const map = new Map({ controls: [new ScaleLine()] });
 
-export const MapContext = createContext(null); 
+export const MapContext = createContext(null);
 
 const useSetBaseLayer = (baselayer: string, apikey: string, map: Map, target: HTMLDivElement ) => {
   const [baseLayer, setBaseLayer] = useState(null);
@@ -54,7 +53,7 @@ const useSetBaseLayer = (baselayer: string, apikey: string, map: Map, target: HT
   return baseLayer;
 }
 
-function MobilityToolboxMap({ type = "basic", apikey, baselayer, center, mots, tenant, zoom, mode = "topographic" }: Props) {
+function MobilityToolboxMap({ type = "basic", apikey, baselayer, center, mots, tenant, zoom }: Props) {
   const [ref, setRef] = useState<HTMLDivElement>();
   const baseLayer = useSetBaseLayer(baselayer, apikey, map, ref);
 
@@ -72,7 +71,7 @@ function MobilityToolboxMap({ type = "basic", apikey, baselayer, center, mots, t
           <RealtimeLayer apikey={apikey} mots={mots} tenant={tenant} />
         ) : null}
         {baseLayer && type === "notification" ? (
-          <NotificationLayer mode={mode}/>
+          <NotificationLayer />
         ) : null}
       </div>
     </MapContext.Provider>

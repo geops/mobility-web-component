@@ -24,39 +24,13 @@
     <script type="module" src="./bundle.js"></script>
     <link rel="stylesheet" type="text/css" href="./output.css" />
   </head>
-  <body class="p-8">
-    <div class="mx-auto max-w-3xl space-y-4">
-      <h1 class="text-3xl font-bold">Mobility Web Component</h1>
-      <p>This is a demo of the Mobility Web Component.</p>
-      <h2 class="text-xl font-bold">Usage example</h2>
-      <pre class="bg-slate-800 text-slate-200 p-4 rounded">
-        &lt;script type=&quot;module&quot;
-          src=&quot;https://mobility-web-component.geops.io/bundle.js&quot;&gt;
-        &lt;/script&gt;
-        &lt;style&gt;
-        .map {
-          width: 400px;
-          height: 800px;
-          display: block;
-        }
-        &lt;/style&gt;
-        &lt;mobility-toolbox-map
-          class=&quot;map&quot;
-          apikey=&quot;YOUR_GEOPS_API_KEY&quot;
-          baselayer=&quot;travic_v2&quot;
-          center=&quot;831634,5933959&quot;
-          mots=&quot;rail&quot;
-          zoom=&quot;13&quot;
-        &gt;&lt;/mobility-toolbox-map&gt;
-      </pre>
-      <mobility-toolbox-map
-        class="max-w-3xl h-96 block"
-        baselayer="travic_v2"
-        center="831634,5933959"
-        mots="rail"
-        zoom="13"
-        type="realtime"
+  <body>
+    <mobility-toolbox-map
+        class="w-screen h-screen block"
+        baselayer="travic_v2_network_plans"
+        center="955768,5922646"
+        zoom="10"
+        type="notification"
       ></mobility-toolbox-map>
-    </div>
   </body>
 </html>
