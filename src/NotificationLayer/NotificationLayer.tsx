@@ -63,6 +63,7 @@ const useNotifications = (baseLayer: MaplibreLayer) => {
   useEffect(() => {
     // Add the notifications to the map
     if (notifications?.length) {
+      // TODO: Make the beforeLayerId configurable
       addNotificationsLayers(
         baseLayer,
         notifications,
