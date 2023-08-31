@@ -3,13 +3,14 @@ import { MaplibreLayer } from "mobility-toolbox-js/ol";
 import { MapContext } from "../MobilityToolboxMap";
 import addNotificationsLayers from "./addNotificationsLayers";
 import getNotificationsWithStatus from "./getNotificationsWithStatus";
+import testNotification from "../../testNotification.js";
 
 const params = new URLSearchParams(window.location.search);
 
 const useNotifications = (baseLayer: MaplibreLayer) => {
   const [notifications, setNotifications] = useState([]);
-  const [previewNotification, setPreviewNotification] = useState(null);
-  const [shouldAddPreviewNotifications, setShouldAddPreviewNotifications] = useState(false);
+  const [previewNotification, setPreviewNotification] = useState(testNotification);
+  const [shouldAddPreviewNotifications, setShouldAddPreviewNotifications] = useState(true);
   const notificationsUrl = useMemo(() => params.get("notificationurl"), []);
   const mode = useMemo(() => params.get("mode") || "topographic", []);
   const now = useMemo(() => {
@@ -42,6 +43,8 @@ const useNotifications = (baseLayer: MaplibreLayer) => {
   }, [notificationsUrl, mode, now]);
 
   useEffect(() => {
+    console.log(previewNotification);
+    
     // Merge notifications with the previewNotification
     const newNotifications = [...notifications];
     if (shouldAddPreviewNotifications && previewNotification?.[mode]) {
@@ -61,6 +64,8 @@ const useNotifications = (baseLayer: MaplibreLayer) => {
   }, [previewNotification, mode, notifications, shouldAddPreviewNotifications]);
   
   useEffect(() => {
+    console.log(notifications);
+    
     // Add the notifications to the map
     if (notifications?.length) {
       // TODO: Make the beforeLayerId configurable
@@ -76,7 +81,7 @@ const useNotifications = (baseLayer: MaplibreLayer) => {
 }
 
 export default function NotificationLayer() {
-  const { baseLayer } = useContext(MapContext);
-  useNotifications(baseLayer);
+  const { map, baseLayer } = useContext(MapContext);
+  useNotifications(baseLayer, map);
   return null;
 }
