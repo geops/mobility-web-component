@@ -37,13 +37,13 @@ const useNotifications = (baseLayer: MaplibreLayer) => {
     }
     
     if (notificationsUrl) {
-      fetchNotifications()
+      fetchNotifications();
     }
   }, [notificationsUrl, mode, now]);
 
   useEffect(() => {
     // Merge notifications with the previewNotification
-    const newNotifications = [...notifications]
+    const newNotifications = [...notifications];
     if (shouldAddPreviewNotifications && previewNotification?.[mode]) {
       const index = newNotifications.findIndex(
         (n) =>
