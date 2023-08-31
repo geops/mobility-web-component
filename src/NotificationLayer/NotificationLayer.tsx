@@ -19,7 +19,7 @@ const useNotifications = (baseLayer: MaplibreLayer) => {
   }, []);    
 
   useEffect(() => {
-    // Listen for imcoming messages through the MOCO iframe
+    // Listen for incoming messages through the MOCO iframe
     window.addEventListener("message", (event) => {
       if (event.data.notification) {
         setPreviewNotification(event.data.notification);
@@ -56,8 +56,9 @@ const useNotifications = (baseLayer: MaplibreLayer) => {
         newNotifications.push(previewNotification[mode]);
       }
       setNotifications(getNotificationsWithStatus(newNotifications, now));
+      setShouldAddPreviewNotifications(false);
     }
-  }, [previewNotification, mode, shouldAddPreviewNotifications]);
+  }, [previewNotification, mode, notifications, shouldAddPreviewNotifications]);
   
   useEffect(() => {
     // Add the notifications to the map
@@ -68,7 +69,7 @@ const useNotifications = (baseLayer: MaplibreLayer) => {
         'netzplan_line',
       );      
     } 
-  }, [notifications]);
+  }, [notifications]);  
   
   return { notifications };
 }
