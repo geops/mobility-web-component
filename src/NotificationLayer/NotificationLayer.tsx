@@ -35,7 +35,6 @@ const useNotifications = (baseLayer: MaplibreLayer) => {
       const data = await response.json();
       setNotifications(getNotificationsWithStatus(data, now));
     }
-    console.log(mode, now, notificationsUrl);
     
     if (notificationsUrl) {
       fetchNotifications()
