@@ -12,10 +12,7 @@ export const getTime = (str) =>
  * @param {Date} now The date to compare with the affected_time_intervals
  * @returns {Array.<Object>}
  */
-const getNotificationsWithStatus = (notifications, now, mapZoom) => {
-  const reduced = notifications.reduce((allNotifications, current) => {
-    
-  })
+const getNotificationsWithStatus = (notifications, now) => {
   return notifications
     .filter((n) => {
       // TODO: The backend should be responsible to returns only good notifications.
