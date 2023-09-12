@@ -117,7 +117,8 @@ function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
     if (apikey) {
       return new RealtimeLayer({
         apiKey: apikey,
-        url: "wss://tralis-tracker-api.geops.io/ws",
+        // url: "wss://tralis-tracker-api.geops.io/ws",
+        url: "wss://api.geops.io/tracker-ws/dev",
         getMotsByZoom: mots
           ? () => mots.split(",") as RealtimeMot[]
           : undefined,
