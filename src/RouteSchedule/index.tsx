@@ -235,8 +235,9 @@ const renderStation = ({
         isStationPassed)
       ? true
       : false;
+      console.log(arrivalDelay);
   const hideDelay =
-    typeof arrivalDelay === "undefined" ||
+    arrivalDelay === null || // When no realtime data provided, arrivalDelay = null
     isFirstStation ||
     cancelled ||
     isNotStop(stop) ||
