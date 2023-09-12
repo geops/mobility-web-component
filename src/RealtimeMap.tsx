@@ -175,12 +175,13 @@ function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
             if (station.coordinate) {
               const size = map.getSize();
               const extent = map.getView().calculateExtent(size);
-              const offset = (extent[2] - extent[0]) / 5;
+              // const offset = (extent[2] - extent[0]) / 5;
 
               map.getView().animate({
                 zoom: map.getView().getZoom(),
-                center: [station.coordinate[0] - offset, station.coordinate[1]],
+                center: [station.coordinate[0], station.coordinate[1]],
               });
+              console.log(station.coordinate);
             }
           }}
         />
