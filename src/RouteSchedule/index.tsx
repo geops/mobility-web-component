@@ -222,8 +222,8 @@ const renderStation = ({
     aimedDepartureTime,
   } = stop;
   const cancelled = state === "JOURNEY_CANCELLED" || state === "STOP_CANCELLED";
-  const { stations, type, stroke,vehicleType } = lineInfos;
-  const color =  stroke || getBgColor(type || vehicleType);
+  const { stations, type, stroke, vehicleType } = lineInfos;
+  const color = stroke || getBgColor(type || vehicleType);
   const isFirstStation = idx === 0;
   const isLastStation = idx === stations.length - 1;
   const isStationPassed = isPassed(stop, trackerLayer.time, stations, idx);
@@ -243,7 +243,7 @@ const renderStation = ({
     cancelled ||
     isNotStop(stop) ||
     isStationPassed;
-    
+
   return (
     <div
       // Train line can go in circle so begin and end have the same id,
