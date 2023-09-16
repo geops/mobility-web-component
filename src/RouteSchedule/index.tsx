@@ -222,7 +222,8 @@ const renderStation = ({
     aimedDepartureTime,
   } = stop;
   const cancelled = state === "JOURNEY_CANCELLED" || state === "STOP_CANCELLED";
-  const { stations, type } = lineInfos;
+  const { stations, type, stroke, vehicleType } = lineInfos;
+  const color = stroke || getBgColor(type || vehicleType);
   const isFirstStation = idx === 0;
   const isLastStation = idx === stations.length - 1;
   const isStationPassed = isPassed(stop, trackerLayer.time, stations, idx);
@@ -295,7 +296,9 @@ const renderStation = ({
           height="58"
           viewBox="0 0 14 58"
           fill="none"
-          className={isStationPassed ? "stroke-gray-400" : "stroke-black"}
+          className={isStationPassed ? "stroke-gray-400" : `stroke-[${color}]`}
+          // The tailwind css class stroke-[${color}] does not work
+          stroke={isStationPassed ? undefined : color}
         >
           <line
             x1="7"

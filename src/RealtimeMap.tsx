@@ -45,7 +45,7 @@ const i18n = rosetta({
 i18n.locale(
   navigator.languages // @ts-ignore
     .find((l) => i18n.table(l.split("-")[0]) !== undefined)
-    ?.split("-")[0] || "en"
+    ?.split("-")[0] || "en",
 );
 
 export const I18nContext = createContext(i18n);
