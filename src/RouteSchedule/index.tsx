@@ -282,9 +282,9 @@ const renderHeader = (props) => {
   const backgroundColor = stroke || getBgColor(type || vehicleType);
   const color = textColor || "black";
   return (
-    <div className="bg-slate-100 p-4 flex space-x-4 items-center">
+    <div className="bg-slate-100 py-4 px-4 gap-x-4 flex items-center">
       <span
-        className="border-2 border-black rounded-full font-bold text-sm h-9 min-w-[2.25rem] px-1 flex items-center justify-center"
+        className="flex-none  border-2 border-black rounded-full font-bold text-sm h-9 min-w-[2.25rem] px-1 flex items-center justify-center"
         style={{
           backgroundColor,
           color,
@@ -300,7 +300,7 @@ const renderHeader = (props) => {
         </span>
       </div>
       <button
-        className={`flex bg-white shadow-lg rounded-full p-1 w-[40px] h-[40px] items-center justify-center ${
+        className={`flex flex-none bg-white shadow-lg rounded-full w-[38px] h-[38px] items-center justify-center ${
           isFollowing ? "animate-pulse" : ""
         }`}
         style={{

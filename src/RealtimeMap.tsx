@@ -79,6 +79,9 @@ geolocation.on("change:tracking", () => {
 });
 
 function GeolocationControl({ isTracking, onClick }) {
+  useEffect(() => {
+    geolocation.setTracking(isTracking);
+  });
   return (
     <button
       className="absolute right-4 top-4 z-10 bg-white shadow-lg rounded-full p-1"
@@ -208,7 +211,7 @@ function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
       return;
     }
 
-    geolocation.setTracking(false);
+    setIsTracking(false);
 
     onMovestartKey = map.getView().on("change:center", (evt) => {
       if (evt.target.getInteracting()) {
@@ -258,7 +261,6 @@ function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
           isTracking={isTracking}
           onClick={() => {
             setIsTracking(!isTracking);
-            geolocation.setTracking(!isTracking);
           }}
         />
       </div>
