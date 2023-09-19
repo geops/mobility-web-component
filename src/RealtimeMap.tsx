@@ -3,6 +3,7 @@ import {
   RealtimeLayer,
   MaplibreLayer,
 } from "mobility-toolbox-js/ol";
+import { linear } from "ol/easing";
 import { Map } from "ol";
 import Geolocation from "ol/Geolocation";
 import ScaleLine from "ol/control/ScaleLine.js";
@@ -10,6 +11,7 @@ import { fromLonLat } from "ol/proj";
 import { createContext } from "preact";
 import { useEffect, useMemo, useRef, useState } from "preact/hooks";
 import type { RealtimeMot } from "mobility-toolbox-js/types";
+import { Point } from "ol/geom";
 import rosetta from "rosetta";
 
 import RouteSchedule from "./RouteSchedule";
@@ -147,8 +149,36 @@ function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
     tracker.onClick(([feature]) => {
       if (feature) {
         const vehicleId = feature.get("train_id");
+        const vehicle = vehicleId && tracker.trajectories?.[vehicleId];
+        let center = vehicle?.properties.coordinate;
+        if (vehicle && !center) {
+          // If the vehicle is not on the intial extent (vehicle is null), we try to zoom first on its raw_coordinates property
+          // then the layer will set the coordinate property after the first render.
+          center = vehicle?.properties.raw_coordinates;
+          if (center) {
+            center = fromLonLat(center);
+          }
+        }
+
+        if (!center) {
+          return;
+        }
+
         tracker.api.getStopSequence(vehicleId).then((stopSequence) => {
           setLineInfos(stopSequence.content[0]);
+
+          const view = map.getView();
+          const pt = new Point(center);
+          // HACK: how do we get the Routeinfos width?
+          pt.translate(-150 * view.getResolution(), 0);
+          center = pt
+            .getCoordinates()
+            .map((coord: number) => Math.floor(coord));
+          view.animate({
+            center,
+            duration: 500,
+            easing: linear,
+          });
         });
       } else {
         setLineInfos(null);
@@ -168,6 +198,7 @@ function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
       <style>{style}</style>
       <div ref={ref} className="w-full h-full relative">
         <RouteSchedule
+          map={map}
           lineInfos={lineInfos}
           trackerLayer={tracker}
           onStationClick={(station) => {
@@ -180,6 +211,48 @@ function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
                 zoom: map.getView().getZoom(),
                 center: [station.coordinate[0] - offset, station.coordinate[1]],
               });
+            }
+          }}
+          onFollow={(vehicle, animate) => {
+            let center = vehicle?.properties.coordinate;
+            if (vehicle && !center) {
+              // If the vehicle is not on the intial extent (vehicle is null), we try to zoom first on its raw_coordinates property
+              // then the layer will set the coordinate property after the first render.
+              center = vehicle?.properties.raw_coordinates;
+              if (center) {
+                center = fromLonLat(center);
+              }
+            }
+
+            if (!center) {
+              return;
+            }
+
+            const view = map.getView();
+            const pt = new Point(center);
+            // HACK: how do we get the Routeinfos width?
+            pt.translate(-150 * map.getView().getResolution(), 0);
+            center = pt
+              .getCoordinates()
+              .map((coord: number) => Math.floor(coord));
+            if (view && animate) {
+              const options = {
+                center,
+                duration: 500,
+                easing: linear,
+              };
+
+              view.animate(options);
+            } else if (view) {
+              // wait for map to render the vehicle
+              // setTimeout(() => {
+              view.cancelAnimations();
+              view.animate({
+                center,
+                duration: 1000,
+                easing: linear,
+              });
+              // }, 500);
             }
           }}
         />
