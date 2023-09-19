@@ -19,6 +19,8 @@ import RouteSchedule from "./RouteSchedule";
 import olStyle from "ol/ol.css";
 // @ts-ignore
 import style from "./style.css";
+import { unByKey } from "ol/Observable";
+import centerOnVehicle from "./utils/centerOnVehicle";
 
 const i18n = rosetta({
   de: {
@@ -76,15 +78,11 @@ geolocation.on("change:tracking", () => {
   }
 });
 
-function GeolocationControl() {
-  const [isTracking, setIsTracking] = useState(false);
+function GeolocationControl({ isTracking, onClick }) {
   return (
     <button
       className="absolute right-4 top-4 z-10 bg-white shadow-lg rounded-full p-1"
-      onClick={() => {
-        setIsTracking(!isTracking);
-        geolocation.setTracking(!isTracking);
-      }}
+      onClick={onClick}
     >
       <svg
         className={isTracking ? "animate-pulse" : ""}
@@ -109,6 +107,8 @@ const map = new Map({ controls: [new ScaleLine()] });
 function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
   const ref = useRef();
   const [lineInfos, setLineInfos] = useState(null);
+  const [isTracking, setIsTracking] = useState(false);
+  const [isFollowing, setIsFollowing] = useState(false);
 
   useEffect(() => {
     map.getView().setCenter(center.split(",").map((c) => parseInt(c)));
@@ -192,6 +192,42 @@ function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
     };
   }, [baselayer, tracker]);
 
+  useEffect(() => {
+    if (isTracking) {
+      setIsFollowing(false);
+    }
+  }, [isTracking]);
+
+  useEffect(() => {
+    let interval = null;
+    let onMovestartKey = null;
+
+    tracker.allowRenderWhenAnimating = !!isFollowing;
+
+    if (!isFollowing) {
+      return;
+    }
+
+    geolocation.setTracking(false);
+
+    onMovestartKey = map.getView().on("change:center", (evt) => {
+      if (evt.target.getInteracting()) {
+        setIsFollowing(false);
+      }
+    });
+
+    centerOnVehicle(map, tracker, lineInfos.id, true);
+
+    interval = setInterval(() => {
+      centerOnVehicle(map, tracker, lineInfos.id, false);
+    }, 1000);
+
+    return () => {
+      unByKey(onMovestartKey);
+      clearInterval(interval);
+    };
+  }, [isFollowing, map, tracker, lineInfos]);
+
   return (
     <I18nContext.Provider value={i18n}>
       <style>{olStyle}</style>
@@ -213,50 +249,18 @@ function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
               });
             }
           }}
-          onFollow={(vehicle, animate) => {
-            let center = vehicle?.properties.coordinate;
-            if (vehicle && !center) {
-              // If the vehicle is not on the intial extent (vehicle is null), we try to zoom first on its raw_coordinates property
-              // then the layer will set the coordinate property after the first render.
-              center = vehicle?.properties.raw_coordinates;
-              if (center) {
-                center = fromLonLat(center);
-              }
-            }
-
-            if (!center) {
-              return;
-            }
-
-            const view = map.getView();
-            const pt = new Point(center);
-            // HACK: how do we get the Routeinfos width?
-            pt.translate(-150 * map.getView().getResolution(), 0);
-            center = pt
-              .getCoordinates()
-              .map((coord: number) => Math.floor(coord));
-            if (view && animate) {
-              const options = {
-                center,
-                duration: 500,
-                easing: linear,
-              };
-
-              view.animate(options);
-            } else if (view) {
-              // wait for map to render the vehicle
-              // setTimeout(() => {
-              view.cancelAnimations();
-              view.animate({
-                center,
-                duration: 1000,
-                easing: linear,
-              });
-              // }, 500);
-            }
+          isFollowing={isFollowing}
+          onFollowButtonClick={() => {
+            setIsFollowing(!isFollowing);
           }}
         />
-        <GeolocationControl />
+        <GeolocationControl
+          isTracking={isTracking}
+          onClick={() => {
+            setIsTracking(!isTracking);
+            geolocation.setTracking(!isTracking);
+          }}
+        />
       </div>
     </I18nContext.Provider>
   );
