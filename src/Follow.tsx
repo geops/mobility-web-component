@@ -20,12 +20,11 @@ function Follow({ map, lineInfos, trackerLayer, onFollow }) {
   useEffect(() => {
     let interval = null;
 
+    trackerLayer.allowRenderWhenAnimating = !!isTracking;
     if (!isTracking) {
       return;
     }
-    console.log(lineInfos, trackerLayer.trajectories);
 
-    trackerLayer.allowRenderWhenAnimating = !!isTracking;
     const trainId = lineInfos.id;
     const vehicle = trainId && trackerLayer.trajectories?.[trainId];
 
