@@ -122,13 +122,12 @@ const RouteStop = ({
     aimedArrivalTime,
     aimedDepartureTime,
   } = stop;
-  const { stations, type } = lineInfos;
+  const { stations, type, stroke, vehicleType } = lineInfos;
   const [isStationPassed, setIsStationPassed] = useState(
     isPassed(stop, trackerLayer.time, stations, idx),
   );
-
-
   const cancelled = state === "JOURNEY_CANCELLED" || state === "STOP_CANCELLED";
+  const color = stroke || getBgColor(type || vehicleType);
   const isFirstStation = idx === 0;
   const isLastStation = idx === stations.length - 1;
   const isInTransit =
@@ -151,7 +150,7 @@ const RouteStop = ({
   useEffect(() => {
     let timeout = null;
     // We have to refresh the stop when the state it's time_based
-    if (!isStationPassed && stop.state === 'TIME_BASED') {
+    if (!isStationPassed && stop.state === "TIME_BASED") {
       timeout = setInterval(() => {
         setIsStationPassed(isPassed(stop, trackerLayer.time, stations, idx));
       }, 20000);
@@ -210,7 +209,9 @@ const RouteStop = ({
           height="58"
           viewBox="0 0 14 58"
           fill="none"
-          className={isStationPassed ? "stroke-gray-400" : "stroke-black"}
+          className={isStationPassed ? "stroke-gray-400" : `stroke-[${color}]`}
+          // The tailwind css class stroke-[${color}] does not work
+          stroke={isStationPassed ? undefined : color}
         >
           <line
             x1="7"

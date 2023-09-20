@@ -6,5 +6,5 @@ register(
   RealtimeMap,
   "mobility-toolbox-map",
   ["apikey", "baselayer", "center", "mots", "tenant", "zoom"],
-  { shadow: true }
+  { shadow: true },
 );
