@@ -5,15 +5,18 @@ import { fromLonLat } from "ol/proj";
 import { Vector } from "ol/source";
 import { GeoJSON } from "ol/format";
 import { Extent, getCenter } from "ol/extent";
+import { Coordinate } from "ol/coordinate";
+import { Map } from "ol";
+import { RealtimeTrainId } from "mobility-toolbox-js/types";
 
 const centerOnVehicle = async (
-  map,
+  map: Map,
   tracker: RealtimeLayer,
-  trainId,
-  animate,
+  trainId: RealtimeTrainId,
+  animate: boolean = false,
 ) => {
   const vehicle = trainId && tracker?.trajectories?.[trainId];
-  let center = null;
+  let center: Coordinate | null = null;
 
   if (vehicle) {
     center = vehicle?.properties.coordinate;
@@ -27,13 +30,14 @@ const centerOnVehicle = async (
       }
     }
   } else if (tracker) {
+    // TO IMPROVE:
     // We should be able to get a trajectory directly but it does not work because the trajectory is outside the bbox
     // see /BAHNMW-805 and TGSRVI-1126
     // So we get the full trajectory then zoom on it.
     const fullTrajectory = await tracker.api.getFullTrajectory(
       trainId,
       tracker.mode,
-      tracker.generalizationLevelByZoom[map.getView().getZoom()],
+      tracker.generalizationLevelByZoom[map.getView().getZoom() || 0],
     );
     if (fullTrajectory?.content?.features?.length) {
       const extent = new Vector({
@@ -51,7 +55,7 @@ const centerOnVehicle = async (
   const view = map.getView();
   const pt = new Point(center);
   // HACK: how do we get the Routeinfos width?
-  pt.translate(-150 * map.getView().getResolution(), 0);
+  pt.translate(-150 * (map.getView().getResolution() || 0), 0);
   center = pt.getCoordinates().map((coord: number) => Math.floor(coord));
   if (view && animate) {
     const options = {
