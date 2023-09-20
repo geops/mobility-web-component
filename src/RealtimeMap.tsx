@@ -205,8 +205,9 @@ function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
     let interval = null;
     let onMovestartKey = null;
 
-    tracker.allowRenderWhenAnimating = !!isFollowing;
-
+    if (tracker) {
+      tracker.allowRenderWhenAnimating = !!isFollowing;
+    }
     if (!isFollowing) {
       return;
     }

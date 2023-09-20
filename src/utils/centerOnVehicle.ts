@@ -1,23 +1,46 @@
+import { RealtimeLayer } from "mobility-toolbox-js/ol";
 import { linear } from "ol/easing";
 import { Point } from "ol/geom";
 import { fromLonLat } from "ol/proj";
+import { Vector } from "ol/source";
+import { GeoJSON } from "ol/format";
+import { Extent, getCenter } from "ol/extent";
 
-const centerOnVehicle = (map, tracker, trainId, animate) => {
+const centerOnVehicle = async (
+  map,
+  tracker: RealtimeLayer,
+  trainId,
+  animate,
+) => {
   const vehicle = trainId && tracker?.trajectories?.[trainId];
+  let center = null;
 
-  if (!vehicle) {
-    console.warn("No vehicle with id " + trainId + "found.");
-    return false;
-  }
+  if (vehicle) {
+    center = vehicle?.properties.coordinate;
 
-  let center = vehicle?.properties.coordinate;
-
-  if (!center) {
-    // If the vehicle is not on the intial extent (vehicle is null), we try to zoom first on its raw_coordinates property
-    // then the layer will set the coordinate property after the first render.
-    center = vehicle?.properties.raw_coordinates;
-    if (center) {
-      center = fromLonLat(center);
+    if (!center) {
+      // If the vehicle is not on the intial extent (vehicle is null), we try to zoom first on its raw_coordinates property
+      // then the layer will set the coordinate property after the first render.
+      center = vehicle?.properties.raw_coordinates;
+      if (center) {
+        center = fromLonLat(center);
+      }
+    }
+  } else if (tracker) {
+    // We should be able to get a trajectory directly but it does not work because the trajectory is outside the bbox
+    // see /BAHNMW-805 and TGSRVI-1126
+    // So we get the full trajectory then zoom on it.
+    const fullTrajectory = await tracker.api.getFullTrajectory(
+      trainId,
+      tracker.mode,
+      tracker.generalizationLevelByZoom[map.getView().getZoom()],
+    );
+    if (fullTrajectory?.content?.features?.length) {
+      const extent = new Vector({
+        features: new GeoJSON().readFeatures(fullTrajectory.content),
+      }).getExtent();
+      map.getView().fit(extent, { duration: 500 });
+      return;
     }
   }
 
