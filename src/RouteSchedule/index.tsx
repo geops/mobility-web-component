@@ -1,5 +1,5 @@
 import { realtimeConfig } from "mobility-toolbox-js/ol";
-import { useContext } from "preact/hooks";
+import { useContext, useEffect, useState } from "preact/hooks";
 import { I18nContext } from "../RealtimeMap";
 
 /**
@@ -105,7 +105,7 @@ const isPassed = (stop, time, stops, idx) => {
   return timeToCompare + delayToCompare <= time;
 };
 
-const renderStation = ({
+const RouteStop = ({
   lineInfos,
   onStationClick,
   trackerLayer,
@@ -114,23 +114,22 @@ const renderStation = ({
   t,
 }) => {
   const {
-    stationId,
     arrivalDelay,
     departureDelay,
-    arrivalTime,
-    departureTime,
     platform,
     state,
     stationName,
     aimedArrivalTime,
     aimedDepartureTime,
   } = stop;
-  const cancelled = state === "JOURNEY_CANCELLED" || state === "STOP_CANCELLED";
   const { stations, type, stroke, vehicleType } = lineInfos;
+  const [isStationPassed, setIsStationPassed] = useState(
+    isPassed(stop, trackerLayer.time, stations, idx),
+  );
+  const cancelled = state === "JOURNEY_CANCELLED" || state === "STOP_CANCELLED";
   const color = stroke || getBgColor(type || vehicleType);
   const isFirstStation = idx === 0;
   const isLastStation = idx === stations.length - 1;
-  const isStationPassed = isPassed(stop, trackerLayer.time, stations, idx);
   const isInTransit =
     (stations[idx - 1] &&
       isPassed(stations[idx - 1], trackerLayer.time, stations, idx - 1) !==
@@ -148,11 +147,21 @@ const renderStation = ({
     isNotStop(stop) ||
     isStationPassed;
 
+  useEffect(() => {
+    let timeout: number | null = null;
+    // We have to refresh the stop when the state it's time_based
+    if (!isStationPassed && stop.state === "TIME_BASED") {
+      timeout = setInterval(() => {
+        setIsStationPassed(isPassed(stop, trackerLayer.time, stations, idx));
+      }, 20000);
+    }
+    return () => {
+      clearInterval(timeout);
+    };
+  }, [stop, isStationPassed, trackerLayer, stations, idx]);
+
   return (
     <div
-      // Train line can go in circle so begin and end have the same id,
-      // using the time in the key should fix the issue.
-      key={(stationId || stationName) + arrivalTime + departureTime}
       role="button"
       className={`group flex hover:bg-slate-100 rounded m-1 ${
         isStationPassed ? "text-gray-500" : "text-gray-600"
@@ -254,6 +263,20 @@ const renderStation = ({
         )} */}
       </div>
     </div>
+  );
+};
+
+const renderStation = (props) => {
+  const { stationId, arrivalTime, departureTime, stationName } = props.stop;
+  // eslint-disable-next-line react/jsx-props-no-spreading
+  return (
+    <RouteStop
+      // Train line can go in circle so begin and end have the same id,
+      // using the time in the key should fix the issue.
+      key={(stationId || stationName) + arrivalTime + departureTime}
+      // eslint-disable-next-line react/jsx-props-no-spreading
+      {...props}
+    />
   );
 };
 
