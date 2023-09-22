@@ -123,9 +123,7 @@ const RouteStop = ({
     aimedDepartureTime,
   } = stop;
   const { stations, type, stroke, vehicleType } = lineInfos;
-  const [isStationPassed, setIsStationPassed] = useState(
-    isPassed(stop, trackerLayer.time, stations, idx),
-  );
+  const [isStationPassed, setIsStationPassed] = useState(false);
   const cancelled = state === "JOURNEY_CANCELLED" || state === "STOP_CANCELLED";
   const color = stroke || getBgColor(type || vehicleType);
   const isFirstStation = idx === 0;
@@ -149,8 +147,12 @@ const RouteStop = ({
 
   useEffect(() => {
     let timeout = null;
+
+    const isStopPassed = isPassed(stop, trackerLayer.time, stations, idx);
+    setIsStationPassed(isStopPassed);
+
     // We have to refresh the stop when the state it's time_based
-    if (!isStationPassed && stop.state === "TIME_BASED") {
+    if (stop.state === "TIME_BASED" && !isStopPassed) {
       timeout = setInterval(() => {
         setIsStationPassed(isPassed(stop, trackerLayer.time, stations, idx));
       }, 20000);
@@ -158,7 +160,7 @@ const RouteStop = ({
     return () => {
       clearInterval(timeout);
     };
-  }, [stop, isStationPassed, trackerLayer, stations, idx]);
+  }, [stop, trackerLayer, stations, idx]);
 
   return (
     <div

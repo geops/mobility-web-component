@@ -107,6 +107,7 @@ const map = new Map({ controls: [new ScaleLine()] });
 function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
   const ref = useRef();
   const [lineInfos, setLineInfos] = useState(null);
+  const [feature, setFeature] = useState(null);
 
   useEffect(() => {
     map.getView().setCenter(center.split(",").map((c) => parseInt(c)));
@@ -146,14 +147,7 @@ function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
 
     tracker.attachToMap(map);
     tracker.onClick(([feature]) => {
-      if (feature) {
-        const vehicleId = feature.get("train_id");
-        tracker.api.getStopSequence(vehicleId).then((stopSequence) => {
-          setLineInfos(stopSequence.content[0]);
-        });
-      } else {
-        setLineInfos(null);
-      }
+      setFeature(feature);
     });
 
     copyrightControl.attachToMap(map);
@@ -162,6 +156,28 @@ function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
       map.setTarget();
     };
   }, [baselayer, tracker]);
+
+  useEffect(() => {
+    let vehicleId = null;
+    if (feature) {
+      vehicleId = feature.get("train_id");
+      tracker.api.subscribeStopSequence(
+        vehicleId,
+        ({ content: [stopSequence] }) => {
+          if (stopSequence) {
+            setLineInfos(stopSequence);
+          }
+        },
+      );
+    } else {
+      setLineInfos(null);
+    }
+    return () => {
+      if (vehicleId) {
+        tracker.api.unsubscribeStopSequence(vehicleId);
+      }
+    };
+  }, [feature]);
 
   return (
     <I18nContext.Provider value={i18n}>
