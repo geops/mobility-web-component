@@ -21,6 +21,7 @@ import olStyle from "ol/ol.css";
 import style from "./style.css";
 import { unByKey } from "ol/Observable";
 import centerOnVehicle from "./utils/centerOnVehicle";
+import getFullTrajectoryAndFit from "./utils/getFullTrajectoryAndFit";
 
 const i18n = rosetta({
   de: {
@@ -63,25 +64,15 @@ type Props = {
   zoom: string;
 };
 
+const TRACKING_ZOOM = 16;
+
 const geolocation = new Geolocation();
-geolocation.on("change:position", () => {
-  const position = geolocation.getPosition();
-  if (position) {
-    map.getView().setCenter(fromLonLat(position, "EPSG:3857"));
-  }
-});
-geolocation.on("change:tracking", () => {
-  const position = geolocation.getPosition();
-  const tracking = geolocation.getTracking();
-  if (position && tracking) {
-    map.getView().setZoom(16);
-  }
-});
 
 function GeolocationControl({ isTracking, onClick }) {
   useEffect(() => {
     geolocation.setTracking(isTracking);
-  });
+  }, [isTracking]);
+
   return (
     <button
       className="absolute right-4 top-4 z-10 bg-white shadow-lg rounded-full p-1"
@@ -110,8 +101,8 @@ const map = new Map({ controls: [new ScaleLine()] });
 function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
   const ref = useRef();
   const [lineInfos, setLineInfos] = useState(null);
-  const [isTracking, setIsTracking] = useState(false);
-  const [isFollowing, setIsFollowing] = useState(false);
+  const [isTracking, setIsTracking] = useState(false); // user position tracking
+  const [isFollowing, setIsFollowing] = useState(false); // vehicle position tracking
 
   useEffect(() => {
     map.getView().setCenter(center.split(",").map((c) => parseInt(c)));
@@ -195,39 +186,103 @@ function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
     };
   }, [baselayer, tracker]);
 
+  // Behavior when vehicle is selected or not.
   useEffect(() => {
+    if (!lineInfos) {
+      setIsFollowing(false);
+    } else {
+    }
+  }, [lineInfos]);
+
+  // Behavior when user tracking is activated or not.
+  useEffect(() => {
+    let olKeys = [];
     if (isTracking) {
       setIsFollowing(false);
+      olKeys = [
+        // First time we zoom and center on the position
+        geolocation.once("change:position", (evt) => {
+          const position = evt.target.getPosition();
+          if (evt.target.getPosition()) {
+            map.getView().setZoom(TRACKING_ZOOM);
+            map.getView().setCenter(fromLonLat(position, "EPSG:3857"));
+          }
+        }),
+        // then we only center the map.
+        geolocation.on("change:position", (evt) => {
+          const position = evt.target.getPosition();
+          if (evt.target.getPosition()) {
+            map.getView().setCenter(fromLonLat(position, "EPSG:3857"));
+          }
+        }),
+      ];
     }
+    return () => {
+      unByKey(olKeys);
+    };
   }, [isTracking]);
+
+  // Deactive auto zooming when the user pans the map
+  useEffect(() => {
+    let onMovestartKey = null;
+    onMovestartKey = map.getView().on("change:center", (evt) => {
+      if (evt.target.getInteracting()) {
+        setIsFollowing(false);
+        setIsTracking(false);
+      }
+    });
+    return () => {
+      unByKey(onMovestartKey);
+    };
+  }, []);
 
   useEffect(() => {
     let interval = null;
-    let onMovestartKey = null;
+    let interval2 = null;
 
     if (tracker) {
       tracker.allowRenderWhenAnimating = !!isFollowing;
     }
-    if (!isFollowing) {
+    if (!isFollowing || !lineInfos || !map || !tracker) {
       return;
     }
 
     setIsTracking(false);
 
-    onMovestartKey = map.getView().on("change:center", (evt) => {
-      if (evt.target.getInteracting()) {
-        setIsFollowing(false);
-      }
-    });
+    const vehicle = lineInfos.id && tracker?.trajectories?.[lineInfos.id];
+    const promise = vehicle
+      ? Promise.resolve(true)
+      : getFullTrajectoryAndFit(map, tracker, lineInfos.id);
 
-    centerOnVehicle(map, tracker, lineInfos.id, true);
-
-    interval = setInterval(() => {
-      centerOnVehicle(map, tracker, lineInfos.id, false);
-    }, 1000);
+    promise
+      .then((success) => {
+        // We wait that the vehicle is on the map, the we zoom on it
+        const promise = new Promise((resolve) => {
+          interval2 = setInterval(() => {
+            const vehicle =
+              lineInfos.id && tracker?.trajectories?.[lineInfos.id];
+            if (vehicle) {
+              clearInterval(interval2);
+              resolve(
+                centerOnVehicle(map, tracker, lineInfos.id, TRACKING_ZOOM),
+              );
+            }
+          }, 300);
+        });
+        return promise;
+      })
+      .then((success) => {
+        // Once the map is zoomed on the vehicle we follow him, on ly recenter , no zoom chnages.
+        if (success) {
+          clearInterval(interval2);
+          interval = setInterval(() => {
+            centerOnVehicle(map, tracker, lineInfos.id);
+          }, 1000);
+        }
+      });
 
     return () => {
-      unByKey(onMovestartKey);
+      clearInterval(interval2);
       clearInterval(interval);
     };
   }, [isFollowing, map, tracker, lineInfos]);

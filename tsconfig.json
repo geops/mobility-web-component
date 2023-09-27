@@ -2,7 +2,8 @@
   "compilerOptions": {
     "esModuleInterop": true,
     "jsx": "react-jsx",
-    "jsxImportSource": "preact"
+    "jsxImportSource": "preact",
+    "lib": ["ES2015"]
   },
   "exclude": ["node_modules", "**/*.png"],
   "types": ["esbuild-style-plugin"]

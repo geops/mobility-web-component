@@ -18,6 +18,7 @@
     "tailwind:component": "tailwindcss --output=src/style.css --content=src/**/*.tsx",
     "tailwind:website": "tailwindcss --output=output.css --content=index.html --minify",
     "dev": "node scripts/dev.mjs",
+    "start": "yarn dev",
     "up": "yarn upgrade-interactive --latest"
   },
   "type": "module",

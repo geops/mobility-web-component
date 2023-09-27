@@ -13,10 +13,13 @@ const centerOnVehicle = async (
   map: Map,
   tracker: RealtimeLayer,
   trainId: RealtimeTrainId,
-  animate: boolean = false,
+  targetZoom: number = 0,
 ) => {
   const vehicle = trainId && tracker?.trajectories?.[trainId];
   let center: Coordinate | null = null;
+  const view = map.getView();
+  const zoom = targetZoom || view.getZoom();
+  const resolution = zoom > 0 ? view.getResolutionForZoom(zoom) : undefined;
 
   if (vehicle) {
     center = vehicle?.properties.coordinate;
@@ -29,51 +32,32 @@ const centerOnVehicle = async (
         center = fromLonLat(center);
       }
     }
-  } else if (tracker) {
-    // TO IMPROVE:
-    // We should be able to get a trajectory directly but it does not work because the trajectory is outside the bbox
-    // see /BAHNMW-805 and TGSRVI-1126
-    // So we get the full trajectory then zoom on it.
-    const fullTrajectory = await tracker.api.getFullTrajectory(
-      trainId,
-      tracker.mode,
-      tracker.generalizationLevelByZoom[map.getView().getZoom() || 0],
-    );
-    if (fullTrajectory?.content?.features?.length) {
-      const extent = new Vector({
-        features: new GeoJSON().readFeatures(fullTrajectory.content),
-      }).getExtent();
-      map.getView().fit(extent, { duration: 500 });
-      return;
-    }
   }
 
   if (!center) {
-    return;
+    return Promise.reject();
   }
 
-  const view = map.getView();
-  const pt = new Point(center);
+  view.cancelAnimations();
+  map.renderSync(); // Rrrender the full trajectory feature, otherwise the line is cut after some time.
+
   // HACK: how do we get the Routeinfos width?
-  pt.translate(-150 * (map.getView().getResolution() || 0), 0);
+  const pt = new Point(center);
+  pt.translate(-150 * resolution, 0);
   center = pt.getCoordinates().map((coord: number) => Math.floor(coord));
-  if (view && animate) {
-    const options = {
-      center,
-      duration: 500,
-      easing: linear,
-    };
 
-    view.animate(options);
-  } else if (view) {
-    // wait for map to render th
-    view.cancelAnimations();
-    view.animate({
-      center,
-      duration: 1000,
-      easing: linear,
-    });
-  }
+  const promise = new Promise((resolve) => {
+    view.animate(
+      {
+        center,
+        resolution,
+        duration: 1000,
+        easing: linear,
+      },
+      (...args) => resolve(...args),
+    );
+  });
+  return promise;
 };
 
 export default centerOnVehicle;
