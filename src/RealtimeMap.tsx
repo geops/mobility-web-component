@@ -262,12 +262,15 @@ function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
             const vehicle =
               lineInfos.id && tracker?.trajectories?.[lineInfos.id];
             if (vehicle) {
-              clearInterval(interval2);
-              resolve(
-                centerOnVehicle(map, tracker, lineInfos.id, TRACKING_ZOOM),
-              );
+              centerOnVehicle(map, tracker, lineInfos.id, TRACKING_ZOOM)
+                .then(() => {
+                  resolve(true);
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
             }
-          }, 300);
+          }, 1000);
         });
         return promise;
       })
@@ -279,6 +282,9 @@ function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
             centerOnVehicle(map, tracker, lineInfos.id);
           }, 1000);
         }
+      })
+      .catch((err) => {
+        console.log(err);
       });
 
     return () => {

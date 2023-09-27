@@ -24,14 +24,14 @@ const centerOnVehicle = async (
   if (vehicle) {
     center = vehicle?.properties.coordinate;
 
-    if (!center) {
-      // If the vehicle is not on the intial extent (vehicle is null), we try to zoom first on its raw_coordinates property
-      // then the layer will set the coordinate property after the first render.
-      center = vehicle?.properties.raw_coordinates;
-      if (center) {
-        center = fromLonLat(center);
-      }
-    }
+    // if (!center) {
+    //   // If the vehicle is not on the intial extent (vehicle is null), we try to zoom first on its raw_coordinates property
+    //   // then the layer will set the coordinate property after the first render.
+    //   center = vehicle?.properties.raw_coordinates;
+    //   if (center) {
+    //     center = fromLonLat(center);
+    //   }
+    // }
   }
 
   if (!center) {
@@ -54,7 +54,9 @@ const centerOnVehicle = async (
         duration: 1000,
         easing: linear,
       },
-      (...args) => resolve(...args),
+      (success) => {
+        resolve(success);
+      },
     );
   });
   return promise;
