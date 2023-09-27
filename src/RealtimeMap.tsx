@@ -103,6 +103,7 @@ function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
   const [lineInfos, setLineInfos] = useState(null);
   const [isTracking, setIsTracking] = useState(false); // user position tracking
   const [isFollowing, setIsFollowing] = useState(false); // vehicle position tracking
+  const [feature, setFeature] = useState(null);
 
   useEffect(() => {
     map.getView().setCenter(center.split(",").map((c) => parseInt(c)));
@@ -141,42 +142,7 @@ function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
 
     tracker.attachToMap(map);
     tracker.onClick(([feature]) => {
-      if (feature) {
-        const vehicleId = feature.get("train_id");
-        const vehicle = vehicleId && tracker.trajectories?.[vehicleId];
-        let center = vehicle?.properties.coordinate;
-        if (vehicle && !center) {
-          // If the vehicle is not on the intial extent (vehicle is null), we try to zoom first on its raw_coordinates property
-          // then the layer will set the coordinate property after the first render.
-          center = vehicle?.properties.raw_coordinates;
-          if (center) {
-            center = fromLonLat(center);
-          }
-        }
-
-        if (!center) {
-          return;
-        }
-
-        tracker.api.getStopSequence(vehicleId).then((stopSequence) => {
-          setLineInfos(stopSequence.content[0]);
-
-          const view = map.getView();
-          const pt = new Point(center);
-          // HACK: how do we get the Routeinfos width?
-          pt.translate(-150 * view.getResolution(), 0);
-          center = pt
-            .getCoordinates()
-            .map((coord: number) => Math.floor(coord));
-          view.animate({
-            center,
-            duration: 500,
-            easing: linear,
-          });
-        });
-      } else {
-        setLineInfos(null);
-      }
+      setFeature(feature);
     });
 
     copyrightControl.attachToMap(map);
@@ -292,6 +258,52 @@ function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
       clearInterval(interval);
     };
   }, [isFollowing, map, tracker, lineInfos]);
+
+  useEffect(() => {
+    let vehicleId = null;
+    if (feature) {
+      vehicleId = feature.get("train_id");
+      tracker.api.subscribeStopSequence(
+        vehicleId,
+        ({ content: [stopSequence] }) => {
+          if (stopSequence) {
+            setLineInfos(stopSequence);
+          }
+        },
+      );
+      const vehicle = vehicleId && tracker.trajectories?.[vehicleId];
+      let center = vehicle?.properties.coordinate;
+      if (vehicle && !center) {
+        // If the vehicle is not on the intial extent (vehicle is null), we try to zoom first on its raw_coordinates property
+        // then the layer will set the coordinate property after the first render.
+        center = vehicle?.properties.raw_coordinates;
+        if (center) {
+          center = fromLonLat(center);
+        }
+      }
+
+      if (!center) {
+        return;
+      }
+      const view = map.getView();
+      const pt = new Point(center);
+      // HACK: how do we get the Routeinfos width?
+      pt.translate(-150 * view.getResolution(), 0);
+      center = pt.getCoordinates().map((coord: number) => Math.floor(coord));
+      view.animate({
+        center,
+        duration: 500,
+        easing: linear,
+      });
+    } else {
+      setLineInfos(null);
+    }
+    return () => {
+      if (vehicleId) {
+        tracker.api.unsubscribeStopSequence(vehicleId);
+      }
+    };
+  }, [feature]);
 
   return (
     <I18nContext.Provider value={i18n}>
