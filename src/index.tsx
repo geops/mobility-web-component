@@ -5,6 +5,6 @@ import MobilityToolboxMap from "./MobilityToolboxMap";
 register(
   MobilityToolboxMap,
   "mobility-toolbox-map",
-  ["apikey", "baselayer", "center", "mots", "tenant", "zoom", "type"],
+  ["apikey", "baselayer", "center", "mots", "tenant", "zoom", "type", "notificationurl", "notificationgraphs", "realtimeurl"],
   { shadow: true }
 );

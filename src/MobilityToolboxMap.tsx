@@ -19,6 +19,9 @@ type Props = {
   zoom: string;
   mots: string;
   tenant: string;
+  notificationurl: string;
+  notificationgraphs: string;
+  realtimeurl: string;
 };
 
 const copyrightControl = new CopyrightControl({});
@@ -62,6 +65,9 @@ function MobilityToolboxMap({
   mots,
   tenant,
   zoom,
+  notificationurl,
+  notificationgraphs,
+  realtimeurl,
 }: Props) {
   const [ref, setRef] = useState<HTMLDivElement>();
   const baseLayer = useSetBaseLayer(baselayer, apikey, map, ref);
@@ -80,9 +86,11 @@ function MobilityToolboxMap({
         className="w-full h-full relative"
       >
         {baseLayer && type === "realtime" ? (
-          <RealtimeLayer apikey={apikey} mots={mots} tenant={tenant} />
+          <RealtimeLayer apikey={apikey} mots={mots} tenant={tenant} realtimeUrl={realtimeurl} />
         ) : null}
-        {baseLayer && type === "notification" ? <NotificationLayer /> : null}
+        {baseLayer && type === "notification" ? (
+          <NotificationLayer notificationUrl={notificationurl} notificationGraphs={notificationgraphs} />
+        ) : null}
       </div>
     </MapContext.Provider>
   );

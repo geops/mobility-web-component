@@ -45,6 +45,7 @@ type Props = {
   apikey: string;
   mots?: string;
   tenant: string;
+  realtimeUrl: string;
 };
 
 const geolocation = new Geolocation();
@@ -96,7 +97,7 @@ function GeolocationControl() {
 }
 
 
-function RealtimeLayer({ apikey, mots, tenant }: Props) {
+function RealtimeLayer({ apikey, mots, tenant, realtimeUrl = "wss://tralis-tracker-api.geops.io/ws" }: Props) {
   const [lineInfos, setLineInfos] = useState(null);
   const { map } = useContext(MapContext);
   const [feature, setFeature] = useState(null);
@@ -105,7 +106,7 @@ function RealtimeLayer({ apikey, mots, tenant }: Props) {
     if (apikey) {
       return new MtbRealtimeLayer({
         apiKey: apikey,
-        url: "wss://tralis-tracker-api.geops.io/ws",
+        url: realtimeUrl,
         getMotsByZoom: mots
           ? () => mots.split(",") as RealtimeMot[]
           : undefined,
