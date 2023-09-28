@@ -106,10 +106,7 @@ const useNotifications = (
         mode,
       );      
     } 
-  }, [notifications, zoom]);
-
-  console.log(previewNotification);
-  
+  }, [notifications, zoom]);  
   
   return { notifications };
 }
