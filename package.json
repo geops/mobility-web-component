@@ -1,20 +1,24 @@
 {
   "devDependencies": {
-    "esbuild": "^0.18.16",
-    "esbuild-sass-plugin": "^2.10.0",
-    "maplibre-gl": "^3.2.1",
-    "mobility-toolbox-js": "^2.0.0-beta.79",
-    "ol": "^7.4.0",
-    "preact": "^10.16.0",
+    "esbuild": "^0.19.3",
+    "esbuild-sass-plugin": "^2.15.0",
+    "maplibre-gl": "^3.3.1",
+    "mobility-toolbox-js": "^2.1.0",
+    "ol": "^8.1.0",
+    "preact": "^10.17.1",
     "preact-custom-element": "^4.2.1",
+    "prettier": "^3.0.3",
     "tailwindcss": "^3.3.3"
   },
   "scripts": {
+    "build": "yarn build:css && yarn build:js",
     "build:js": "node scripts/build.mjs",
     "build:css": "npm run tailwind:component && npm run tailwind:website",
+    "format": "prettier --write 'src/**/*.tsx'",
     "tailwind:component": "tailwindcss --output=src/style.css --content=src/**/*.tsx",
-    "tailwind:website": "tailwindcss --output=output.css --content=*.html --minify",
-    "dev": "node scripts/dev.mjs"
+    "tailwind:website": "tailwindcss --output=output.css --content=index.html --minify",
+    "dev": "node scripts/dev.mjs",
+    "up": "yarn upgrade-interactive --latest"
   },
   "type": "module",
   "dependencies": {

@@ -36,7 +36,7 @@ const i18n = rosetta({
 i18n.locale(
   navigator.languages // @ts-ignore
     .find((l) => i18n.table(l.split("-")[0]) !== undefined)
-    ?.split("-")[0] || "en"
+    ?.split("-")[0] || "en",
 );
 
 export const I18nContext = createContext(i18n);
@@ -99,6 +99,7 @@ function GeolocationControl() {
 function RealtimeLayer({ apikey, mots, tenant }: Props) {
   const [lineInfos, setLineInfos] = useState(null);
   const { map } = useContext(MapContext);
+  const [feature, setFeature] = useState(null);
 
   const tracker = useMemo(() => {
     if (apikey) {
@@ -121,20 +122,35 @@ function RealtimeLayer({ apikey, mots, tenant }: Props) {
 
     tracker.attachToMap(map);
     tracker.onClick(([feature]) => {
-      if (feature) {
-        const vehicleId = feature.get("train_id");
-        tracker.api.getStopSequence(vehicleId).then((stopSequence) => {
-          setLineInfos(stopSequence.content[0]);
-        });
-      } else {
-        setLineInfos(null);
-      }
+      setFeature(feature);
     });
 
     return () => {
       map.setTarget();
     };
   }, [ tracker]);
+
+  useEffect(() => {
+    let vehicleId = null;
+    if (feature) {
+      vehicleId = feature.get("train_id");
+      tracker.api.subscribeStopSequence(
+        vehicleId,
+        ({ content: [stopSequence] }) => {
+          if (stopSequence) {
+            setLineInfos(stopSequence);
+          }
+        },
+      );
+    } else {
+      setLineInfos(null);
+    }
+    return () => {
+      if (vehicleId) {
+        tracker.api.unsubscribeStopSequence(vehicleId);
+      }
+    };
+  }, [feature]);
 
   return (
       <I18nContext.Provider value={i18n}>
