@@ -165,7 +165,7 @@ const RouteStop = ({
   return (
     <div
       role="button"
-      className={`group flex hover:bg-slate-100 rounded m-1 scroll-mt-[130px] ${
+      className={`group flex hover:bg-slate-100 rounded m-1 scroll-mt-[50px] ${
         isStationPassed ? "text-gray-500" : "text-gray-600"
       }`}
       data-station-passed={isStationPassed} // Use for auto scroll
@@ -305,7 +305,7 @@ const renderHeader = ({ lineInfos }) => {
     text_color: textColor,
   } = lineInfos;
   return (
-    <div className="bg-slate-100 p-4 flex space-x-4 items-center sticky top-0">
+    <div className="bg-slate-100 p-4 flex space-x-4 items-center">
       <span
         className="border-2 border-black rounded-full font-bold text-sm h-9 min-w-[2.25rem] px-1 flex items-center justify-center"
         style={{
@@ -395,12 +395,15 @@ export default function RouteSchedule(props) {
   }, [props.lineInfos]);
 
   return (
-    <div ref={ref} className={props.className}>
+    <>
       {renderHeader({ ...props })}
-      {props.lineInfos.stations.map((stop, idx) => {
-        return renderStation({ ...props, stop, idx, t });
-      })}
-      {renderFooter({ ...props })}
-    </div>
+      <div ref={ref} className={props.className}>
+        {/* {renderHeader({ ...props })} */}
+        {props.lineInfos.stations.map((stop, idx) => {
+          return renderStation({ ...props, stop, idx, t });
+        })}
+        {renderFooter({ ...props })}
+      </div>
+    </>
   );
 }

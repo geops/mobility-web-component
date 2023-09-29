@@ -4,11 +4,11 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #616161;
+  background: lightgray;
   z-index: 5;
 }
 
 ::-webkit-scrollbar-track {
-  background: #fff;
+  background: transparent;
 }
 
