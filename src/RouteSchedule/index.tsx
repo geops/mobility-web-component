@@ -372,7 +372,12 @@ const renderFooter = (props) => {
 
 const defaultRenderLink = (text, url) => {
   return url ? (
-    <a href={url} target="_blank" rel="noreferrer" className="underline">
+    <a
+      href={url}
+      target="_blank"
+      rel="noreferrer"
+      className="underline whitespace-normal"
+    >
       {text}
     </a>
   ) : (
