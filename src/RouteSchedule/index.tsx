@@ -269,12 +269,13 @@ const RouteStop = ({
             }
             stroke-width="4"
           />
+          <circle cx="7" cy="29" r="5" fill="white" stroke-width="4" />
           <circle
             cx="7"
             cy="29"
-            r="5"
+            r="3"
             fill="white"
-            stroke-width=""
+            stroke-width="1"
             stroke="black"
           />
         </svg>
