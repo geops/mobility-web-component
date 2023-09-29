@@ -352,7 +352,7 @@ const renderFooter = (props) => {
   }
   return (
     <>
-      <div className="m-4 mb-0 text-center text-sm text-gray-500  break-all ">
+      <div className="m-4 mb-0 text-sm text-gray-500  flex flex-wrap ">
         {lineInfos.operator &&
           defaultRenderLink(lineInfos.operator, lineInfos.operatorUrl)}
         {lineInfos.operator && lineInfos.publisher && (
