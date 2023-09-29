@@ -269,7 +269,15 @@ const RouteStop = ({
             }
             stroke-width="4"
           />
-          <circle cx="7" cy="29" r="5" fill="white" stroke-width="" stroke="black"/>
+          <circle
+            cx="7"
+            cy="29"
+            r="5"
+            fill="white"
+            stroke-width=""
+            stroke="black"
+          />
+        </svg>
       </div>
       <div
         className={`flex items-center text-sm font-medium pr-2 justify-between flex-grow ${
