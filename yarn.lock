@@ -232,6 +232,11 @@
   resolved "https://registry.yarnpkg.com/@petamoriken/float16/-/float16-3.8.0.tgz#3a48b7938e1a62188a61ec02d5b12630f671401f"
   integrity sha512-AhVAm6SQ+zgxIiOzwVdUcDmKlu/qU39FiYD2UD6kQQaVenrn0dGZewIghWAENGQsvC+1avLCuT+T2/3Gsp/W3w==
 
+"@tailwindcss/container-queries@^0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@tailwindcss/container-queries/-/container-queries-0.1.1.tgz#9a759ce2cb8736a4c6a0cb93aeb740573a731974"
+  integrity sha512-p18dswChx6WnTSaJCSGx6lTmrGzNNvm2FtXmiO6AuA1V4U5REyoqwmT6kgAsIMdjo07QdAfYXHJ4hnMtfHzWgA==
+
 "@turf/centroid@^6.5.0":
   version "6.5.0"
   resolved "https://registry.yarnpkg.com/@turf/centroid/-/centroid-6.5.0.tgz#ecaa365412e5a4d595bb448e7dcdacfb49eb0009"

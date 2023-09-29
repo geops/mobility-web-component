@@ -1,12 +1,5 @@
-import {
-  CopyrightControl,
-  RealtimeLayer,
-  MaplibreLayer,
-} from "mobility-toolbox-js/ol";
+import { RealtimeLayer, MaplibreLayer } from "mobility-toolbox-js/ol";
 import { Map } from "ol";
-import Geolocation from "ol/Geolocation";
-import ScaleLine from "ol/control/ScaleLine.js";
-import { fromLonLat } from "ol/proj";
 import { createContext } from "preact";
 import { useEffect, useMemo, useRef, useState } from "preact/hooks";
 import type { RealtimeMot } from "mobility-toolbox-js/types";
@@ -17,6 +10,12 @@ import RouteSchedule from "./RouteSchedule";
 import olStyle from "ol/ol.css";
 // @ts-ignore
 import style from "./style.css";
+// @ts-ignore
+import style2 from "./RealtimeMap.css";
+import GeolocationButton from "./GeolocationButton";
+import ScaleLine from "./ScaleLine";
+import Copyright from "./Copyright";
+import ScrollableHandler from "./ScrollableHandler";
 
 const i18n = rosetta({
   de: {
@@ -59,53 +58,32 @@ type Props = {
   zoom: string;
 };
 
-const geolocation = new Geolocation();
-geolocation.on("change:position", () => {
-  const position = geolocation.getPosition();
-  if (position) {
-    map.getView().setCenter(fromLonLat(position, "EPSG:3857"));
-  }
-});
-geolocation.on("change:tracking", () => {
-  const position = geolocation.getPosition();
-  const tracking = geolocation.getTracking();
-  if (position && tracking) {
-    map.getView().setZoom(16);
-  }
-});
+let deltaToTop = 0;
 
-function GeolocationControl() {
-  const [isTracking, setIsTracking] = useState(false);
-  return (
-    <button
-      className="absolute right-4 top-4 z-10 bg-white shadow-lg rounded-full p-1"
-      onClick={() => {
-        setIsTracking(!isTracking);
-        geolocation.setTracking(!isTracking);
-      }}
-    >
-      <svg
-        className={isTracking ? "animate-pulse" : ""}
-        stroke="currentColor"
-        fill="currentColor"
-        stroke-width="0"
-        viewBox="0 0 512 512"
-        focusable="false"
-        height="1.5em"
-        width="1.5em"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path d="M256 56c110.532 0 200 89.451 200 200 0 110.532-89.451 200-200 200-110.532 0-200-89.451-200-200 0-110.532 89.451-200 200-200m0-48C119.033 8 8 119.033 8 256s111.033 248 248 248 248-111.033 248-248S392.967 8 256 8zm0 168c-44.183 0-80 35.817-80 80s35.817 80 80 80 80-35.817 80-80-35.817-80-80-80z"></path>
-      </svg>
-    </button>
-  );
+function onDragg(evt: PointerEvent) {
+  this.style.maxHeight = `calc(100% - ${evt.y - deltaToTop}px)`;
+  evt.stopPropagation();
+  evt.preventDefault();
 }
 
-const copyrightControl = new CopyrightControl({});
-const map = new Map({ controls: [new ScaleLine()] });
+function onDragStop(evt: PointerEvent) {
+  this.style.transitionDuration = ".5s";
+  if (this.clientHeight < 62) {
+    this.isMinimized = true;
+  }
+  (evt.target as HTMLElement).releasePointerCapture(evt.pointerId);
+
+  document.removeEventListener("pointermove", this.onDragg);
+  document.removeEventListener("pointerup", this.onDragStop);
+  evt.stopPropagation();
+  evt.preventDefault();
+}
+
+const map = new Map({ controls: [] });
 
 function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
   const ref = useRef();
+  const mapRef = useRef();
   const [lineInfos, setLineInfos] = useState(null);
   const [feature, setFeature] = useState(null);
 
@@ -133,8 +111,8 @@ function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
       return;
     }
 
-    if (ref.current) {
-      map.setTarget(ref.current);
+    if (mapRef.current) {
+      map.setTarget(mapRef.current);
       map.updateSize();
     }
 
@@ -148,8 +126,6 @@ function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
     tracker.onClick(([feature]) => {
       setFeature(feature);
     });
-
-    copyrightControl.attachToMap(map);
 
     return () => {
       map.setTarget();
@@ -182,24 +158,50 @@ function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
     <I18nContext.Provider value={i18n}>
       <style>{olStyle}</style>
       <style>{style}</style>
-      <div ref={ref} className="w-full h-full relative">
-        <RouteSchedule
-          lineInfos={lineInfos}
-          trackerLayer={tracker}
-          onStationClick={(station) => {
-            if (station.coordinate) {
-              const size = map.getSize();
-              const extent = map.getView().calculateExtent(size);
-              const offset = (extent[2] - extent[0]) / 5;
-
-              map.getView().animate({
-                zoom: map.getView().getZoom(),
-                center: [station.coordinate[0] - offset, station.coordinate[1]],
-              });
-            }
-          }}
-        />
-        <GeolocationControl />
+      <style>{style2}</style>
+      <div ref={ref} className="@container/main w-full h-full relative border">
+        <div className="w-full h-full relative flex flex-col @lg/main:flex-row-reverse">
+          <div ref={mapRef} className="flex-1 relative overflow-hidden ">
+            <div className="z-20 absolute right-2 top-2 flex flex-col gap-2">
+              <GeolocationButton map={map} />
+            </div>
+            <div className="z-10 absolute left-2 right-2 text-[10px] bottom-2 flex justify-between items-end gap-2">
+              <ScaleLine
+                map={map}
+                className={"bg-slate-50 bg-opacity-70"}
+              ></ScaleLine>
+              <Copyright
+                map={map}
+                className={"bg-slate-50 bg-opacity-70"}
+              ></Copyright>
+            </div>
+          </div>
+          <div
+            className={`flex-0 relative overflow-hidden border-t @lg:border-t-0 @lg:border-r flex flex-col ${
+              lineInfos
+                ? "w-full min-h-[75px] max-h-[70%] @lg:w-[350px] @lg:max-h-full @lg:h-[100%!important]"
+                : "hidden"
+            }`}
+            // style={{ maxHeight: "calc(100% - 150px)" }}
+          >
+            {!!lineInfos && (
+              <ScrollableHandler className="z-10 absolute inset-0 w-full h-[60px] touch-none @lg:hidden" />
+            )}
+            <RouteSchedule
+              className="overflow-x-hidden overflow-y-auto"
+              lineInfos={lineInfos}
+              trackerLayer={tracker}
+              onStationClick={(station) => {
+                if (station.coordinate) {
+                  map.getView().animate({
+                    zoom: map.getView().getZoom(),
+                    center: [station.coordinate[0], station.coordinate[1]],
+                  });
+                }
+              }}
+            />
+          </div>
+        </div>
       </div>
     </I18nContext.Provider>
   );

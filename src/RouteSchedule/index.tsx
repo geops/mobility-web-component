@@ -1,5 +1,5 @@
 import { realtimeConfig } from "mobility-toolbox-js/ol";
-import { useContext, useEffect, useState } from "preact/hooks";
+import { useContext, useEffect, useRef, useState } from "preact/hooks";
 import { I18nContext } from "../RealtimeMap";
 
 /**
@@ -165,9 +165,10 @@ const RouteStop = ({
   return (
     <div
       role="button"
-      className={`group flex hover:bg-slate-100 rounded m-1 ${
+      className={`group flex hover:bg-slate-100 rounded m-1 scroll-mt-[130px] ${
         isStationPassed ? "text-gray-500" : "text-gray-600"
       }`}
+      data-station-passed={isStationPassed} // Use for auto scroll
       onClick={(e) => onStationClick(stop, e)}
       tabIndex={0}
       onKeyPress={(e) => e.which === 13 && onStationClick(stop, e)}
@@ -211,7 +212,7 @@ const RouteStop = ({
           height="58"
           viewBox="0 0 14 58"
           fill="none"
-          className={isStationPassed ? "stroke-gray-400" : `stroke-[${color}]`}
+          className={isStationPassed ? "stroke-gray-400" : null}
           // The tailwind css class stroke-[${color}] does not work
           stroke={isStationPassed ? undefined : color}
         >
@@ -304,7 +305,7 @@ const renderHeader = ({ lineInfos }) => {
     text_color: textColor,
   } = lineInfos;
   return (
-    <div className="bg-slate-100 p-4 flex space-x-4 items-center">
+    <div className="bg-slate-100 p-4 flex space-x-4 items-center sticky top-0">
       <span
         className="border-2 border-black rounded-full font-bold text-sm h-9 min-w-[2.25rem] px-1 flex items-center justify-center"
         style={{
@@ -363,20 +364,43 @@ const defaultRenderLink = (text, url) => {
 
 export default function RouteSchedule(props) {
   const { t } = useContext(I18nContext);
+  const ref = useRef();
 
   if (!props.lineInfos) {
     return null;
   }
 
+  useEffect(() => {
+    let timeout = null;
+    const interval = window.setInterval(() => {
+      const elt = ref.current as HTMLDivElement;
+      if (!elt) {
+        return;
+      }
+
+      const nextStation = elt.querySelector(
+        "[role=button][data-station-passed=false]",
+      );
+      if (nextStation) {
+        nextStation.scrollIntoView({
+          behavior: "smooth",
+        });
+      }
+      clearInterval(interval);
+    }, 1000);
+    return () => {
+      clearTimeout(interval);
+    };
+    // Scroll automatically when a new scroll infos is set.
+  }, [props.lineInfos]);
+
   return (
-    <>
-      <div className="absolute left-4 z-20 top-4 bottom-4 overflow-x-hidden overflow-y-scroll border-2 bg-white border-gray-800">
-        {renderHeader({ ...props })}
-        {props.lineInfos.stations.map((stop, idx) => {
-          return renderStation({ ...props, stop, idx, t });
-        })}
-        {renderFooter({ ...props })}
-      </div>
-    </>
+    <div ref={ref} className={props.className}>
+      {renderHeader({ ...props })}
+      {props.lineInfos.stations.map((stop, idx) => {
+        return renderStation({ ...props, stop, idx, t });
+      })}
+      {renderFooter({ ...props })}
+    </div>
   );
 }
