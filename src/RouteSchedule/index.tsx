@@ -28,7 +28,11 @@ const getHoursAndMinutes = (timeInMs) => {
  * @param {Number} timeInMs Delay time in milliseconds.
  * @ignore
  */
-export const getDelayString = (timeInMs) => {
+export const getDelayString = (delayInMs) => {
+  let timeInMs = delayInMs;
+  if (timeInMs < 0) {
+    timeInMs = 0;
+  }
   const h = Math.floor(timeInMs / 3600000);
   const m = Math.floor((timeInMs % 3600000) / 60000);
   const s = Math.floor(((timeInMs % 3600000) % 60000) / 1000);
@@ -165,7 +169,7 @@ const RouteStop = ({
   return (
     <div
       role="button"
-      className={`group flex hover:bg-slate-100 rounded m-1 scroll-mt-[50px] ${
+      className={`group flex hover:bg-slate-100 rounded scroll-mt-[50px] ${
         isStationPassed ? "text-gray-500" : "text-gray-600"
       }`}
       data-station-passed={isStationPassed} // Use for auto scroll
@@ -173,7 +177,7 @@ const RouteStop = ({
       tabIndex={0}
       onKeyPress={(e) => e.which === 13 && onStationClick(stop, e)}
     >
-      <div className="flex flex-col w-14 items-center justify-center text-xs ml-2">
+      <div className="flex flex-col w-10 flex-shrink-0 items-start justify-center text-xs ml-4">
         <span
           className={`${cancelled ? "text-red-600 line-through" : ""} ${
             isFirstStation ? "hidden" : ""
@@ -189,7 +193,7 @@ const RouteStop = ({
           {getHoursAndMinutes(aimedDepartureTime)}
         </span>
       </div>
-      <div className="flex flex-col w-7 justify-center text-xs">
+      <div className="flex flex-col w-7 flex-shrink-0 justify-center text-xs">
         {hideDelay || isFirstStation ? (
           ""
         ) : (
@@ -205,7 +209,7 @@ const RouteStop = ({
           </span>
         )}
       </div>
-      <div className="flex items-center justify-center w-6 -my-1">
+      <div className="flex flex-shrink-0 items-center justify-center w-6 -my-1">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="14"
@@ -239,7 +243,7 @@ const RouteStop = ({
         </svg>
       </div>
       <div
-        className={`flex items-center text-sm font-medium pr-2 justify-between space-x-2 flex-grow ${
+        className={`flex items-center text-sm font-medium pr-2 justify-between flex-grow ${
           cancelled ? "text-red-600 line-through" : ""
         } ${isStationPassed ? "" : "text-black"}`}
       >
@@ -286,7 +290,21 @@ const renderStation = (props) => {
 const renderRouteIdentifier = ({ routeIdentifier, longName }) => {
   if (routeIdentifier) {
     // first part of the id, without leading zeros.
-    const id = parseInt(routeIdentifier.split(".")[0], 10);
+    console.log(routeIdentifier, longName);
+    let id = routeIdentifier;
+
+    if (/\./.test(routeIdentifier)) {
+      id = routeIdentifier.split(".")[0];
+    } else if (/\_/.test(routeIdentifier)) {
+      id = routeIdentifier.split("_")[0];
+    } else if (/\:/.test(routeIdentifier)) {
+      id = routeIdentifier.split(":")[0];
+    }
+
+    if (/^\d*$/.test(id)) {
+      id = parseInt(id, 10) + "";
+    }
+
     if (!longName.includes(id)) {
       return ` (${id})`;
     }
@@ -334,7 +352,7 @@ const renderFooter = (props) => {
   }
   return (
     <>
-      <div className="-mb-4 text-center text-sm text-gray-500 pt-2 px-2 break-all ">
+      <div className="m-4 mb-0 text-center text-sm text-gray-500  break-all ">
         {lineInfos.operator &&
           defaultRenderLink(lineInfos.operator, lineInfos.operatorUrl)}
         {lineInfos.operator && lineInfos.publisher && (
@@ -347,7 +365,7 @@ const renderFooter = (props) => {
           defaultRenderLink(lineInfos.license, lineInfos.licenseUrl)}
         {lineInfos.license && ")"}
       </div>
-      <div className="bg-gradient-to-b from-transparent to-white h-12 sticky bottom-0 w-full pointer-events-none" />
+      <div className="bg-gradient-to-b from-transparent to-white h-8 sticky bottom-0 w-full pointer-events-none" />
     </>
   );
 };
