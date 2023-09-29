@@ -166,6 +166,8 @@ const RouteStop = ({
     };
   }, [stop, trackerLayer, stations, idx]);
 
+  console.log(lineInfos);
+
   return (
     <div
       role="button"
@@ -209,10 +211,10 @@ const RouteStop = ({
           </span>
         )}
       </div>
-      <div className="flex flex-shrink-0 items-center justify-center w-6 -my-1">
+      <div className="flex flex-shrink-0 items-center justify-center w-8 -my-1">
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="14"
+          width="16"
           height="58"
           viewBox="0 0 14 58"
           fill="none"
@@ -220,6 +222,34 @@ const RouteStop = ({
           // The tailwind css class stroke-[${color}] does not work
           stroke={isStationPassed ? undefined : color}
         >
+          <circle
+            cx="7"
+            cy="29"
+            r="5"
+            fill="white"
+            stroke-width="6"
+            stroke="black"
+          />
+          <line
+            x1="7"
+            y1={
+              isFirstStation
+                ? "29"
+                : isInTransit && !isStationPassed
+                ? "3"
+                : "0"
+            }
+            x2="7"
+            y2={
+              isLastStation
+                ? "29"
+                : isInTransit && isStationPassed
+                ? "55"
+                : "58"
+            }
+            stroke-width="6"
+            stroke="black"
+          />
           <line
             x1="7"
             y1={
@@ -239,8 +269,7 @@ const RouteStop = ({
             }
             stroke-width="4"
           />
-          <circle cx="7" cy="29" r="5" fill="white" stroke-width="4" />
-        </svg>
+          <circle cx="7" cy="29" r="5" fill="white" stroke-width="" stroke="black"/>
       </div>
       <div
         className={`flex items-center text-sm font-medium pr-2 justify-between flex-grow ${
