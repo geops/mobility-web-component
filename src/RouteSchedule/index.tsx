@@ -448,7 +448,7 @@ export default function RouteSchedule(props) {
         });
       }
       clearInterval(interval);
-    }, 1000);
+    }, 300);
     return () => {
       clearTimeout(interval);
     };
