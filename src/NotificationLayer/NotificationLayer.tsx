@@ -124,7 +124,7 @@ const useNotifications = (
 
   useEffect(() => {
     // Add the notifications to the map
-    if (notifications?.length) {
+    if (styleMetadata && notifications?.length) {
       addNotificationsLayers(
         baseLayer,
         notifications,
@@ -133,7 +133,7 @@ const useNotifications = (
         graphMapping,
       );
     }
-  }, [notifications, zoom]);
+  }, [notifications, styleMetadata, zoom]);
 
   return notifications;
 };

@@ -65,7 +65,7 @@ const useBaseLayer = (
 function MobilityToolboxMap({
   type = 'basic',
   apikey,
-  baselayer,
+  baselayer = 'travic_v2',
   center = '831634,5933959',
   mots = 'rail',
   tenant,
@@ -77,6 +77,8 @@ function MobilityToolboxMap({
   minzoom,
 }: Props) {
   const [ref, setRef] = useState<HTMLDivElement>();
+  const mapType = params.get('type') || type;
+  center = params.get('center') || center;
   const baseLayerStyle = params.get('baselayer') || baselayer;
   const baseLayer = useBaseLayer(baseLayerStyle, apikey, map, ref);
   const maximumZoom =
@@ -102,7 +104,7 @@ function MobilityToolboxMap({
         className="w-full h-full relative"
       >
         {false}
-        {baseLayer && type === 'realtime' ? (
+        {baseLayer && mapType === 'realtime' ? (
           <RealtimeLayer
             apikey={apikey}
             mots={mots}
@@ -110,7 +112,7 @@ function MobilityToolboxMap({
             realtimeUrl={realtimeurl}
           />
         ) : null}
-        {baseLayer && type === 'notification' ? (
+        {baseLayer && mapType === 'notification' ? (
           <NotificationLayer
             notificationUrl={notificationurl}
             notificationBeforeLayerId={notificationbeforelayerid}
