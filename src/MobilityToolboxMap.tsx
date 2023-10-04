@@ -20,7 +20,7 @@ type Props = {
   mots: string;
   tenant: string;
   notificationurl: string;
-  notificationgraphs: string;
+  notificationbeforelayerid: string;
   realtimeurl: string;
   maxzoom: string;
   minzoom: string;
@@ -33,7 +33,7 @@ const map = new Map({ controls: [new ScaleLine()] });
 export const MapContext = createContext(null);
 
 const useBaseLayer = (
-  baselayer: string,
+  style: string,
   apikey: string,
   map: Map,
   target: HTMLDivElement,
@@ -46,8 +46,10 @@ const useBaseLayer = (
 
       const layer = new MaplibreLayer({
         apiKey: apikey,
-        url: `https://maps.style-dev.geops.io/styles/${baselayer}/style.json`,
-        name: `mwc.baselayer.${baselayer}`,
+        url: `${
+          params.get('tileurl') || 'https://maps.geops.io'
+        }/styles/${style}/style.json`,
+        name: `mwc.baselayer.${style}`,
       });
       layer.attachToMap(map);
       copyrightControl.attachToMap(map);
@@ -56,7 +58,7 @@ const useBaseLayer = (
     return () => {
       map.setTarget();
     };
-  }, [baselayer, target, apikey]);
+  }, [style, target, apikey]);
   return baseLayer;
 };
 
@@ -64,17 +66,19 @@ function MobilityToolboxMap({
   type = 'basic',
   apikey,
   baselayer,
-  center,
-  mots,
+  center = '831634,5933959',
+  mots = 'rail',
   tenant,
-  zoom,
+  zoom = '10',
   notificationurl,
+  notificationbeforelayerid,
   realtimeurl,
   maxzoom,
   minzoom,
 }: Props) {
   const [ref, setRef] = useState<HTMLDivElement>();
-  const baseLayer = useBaseLayer(baselayer, apikey, map, ref);
+  const baseLayerStyle = params.get('baselayer') || baselayer;
+  const baseLayer = useBaseLayer(baseLayerStyle, apikey, map, ref);
   const maximumZoom =
     (params.get('maxzoom') || maxzoom) &&
     parseFloat(params.get('maxzoom') || maxzoom);
@@ -97,6 +101,7 @@ function MobilityToolboxMap({
         ref={(el) => setRef(el as HTMLDivElement)}
         className="w-full h-full relative"
       >
+        {false}
         {baseLayer && type === 'realtime' ? (
           <RealtimeLayer
             apikey={apikey}
@@ -106,7 +111,10 @@ function MobilityToolboxMap({
           />
         ) : null}
         {baseLayer && type === 'notification' ? (
-          <NotificationLayer notificationUrl={notificationurl} />
+          <NotificationLayer
+            notificationUrl={notificationurl}
+            notificationBeforeLayerId={notificationbeforelayerid}
+          />
         ) : null}
       </div>
     </MapContext.Provider>

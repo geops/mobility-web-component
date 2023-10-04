@@ -34,7 +34,10 @@ const useZoom = () => {
   return zoom;
 };
 
-const useNotifications = (notificationUrl: string | undefined) => {
+const useNotifications = (
+  notificationUrl: string | undefined,
+  notificationBeforeLayerId: string,
+) => {
   const { baseLayer } = useContext(MapContext);
   const [notifications, setNotifications] = useState([]);
   const [previewNotification, setPreviewNotification] = useState(null);
@@ -52,7 +55,8 @@ const useNotifications = (notificationUrl: string | undefined) => {
   }
 
   const notificationsUrl = params.get('notificationurl') || notificationUrl;
-  const mode = params.get('mode') || 'topographic';
+  const beforeLayerId =
+    params.get('notificationbeforelayerid') || notificationBeforeLayerId;
   const now = params.get('notificationat')
     ? new Date(params.get('notificationat'))
     : new Date();
@@ -83,9 +87,10 @@ const useNotifications = (notificationUrl: string | undefined) => {
       const response = await fetch(url, { signal: abortCtrl.signal });
       const data = await response.json();
       setNotifications(getNotificationsWithStatus(data, now));
+      setShouldAddPreviewNotifications(true);
     };
 
-    if (notificationsUrl && now && graphsString) {
+    if (notificationsUrl && graphsString) {
       fetchNotifications();
     }
   }, [notificationsUrl, graphsString]);
@@ -120,11 +125,10 @@ const useNotifications = (notificationUrl: string | undefined) => {
   useEffect(() => {
     // Add the notifications to the map
     if (notifications?.length) {
-      // TODO: Make the beforeLayerId configurable
       addNotificationsLayers(
         baseLayer,
         notifications,
-        'netzplan_line_lable',
+        beforeLayerId,
         zoom,
         graphMapping,
       );
@@ -136,9 +140,13 @@ const useNotifications = (notificationUrl: string | undefined) => {
 
 type Props = {
   notificationUrl: string;
+  notificationBeforeLayerId: string;
 };
 
-export default function NotificationLayer({ notificationUrl }: Props) {
-  useNotifications(notificationUrl);
+export default function NotificationLayer({
+  notificationUrl,
+  notificationBeforeLayerId,
+}: Props) {
+  useNotifications(notificationUrl, notificationBeforeLayerId);
   return null;
 }

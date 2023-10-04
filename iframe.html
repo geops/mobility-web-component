@@ -19,7 +19,7 @@
         <iframe id="iframe" src="https://moco-sob-client.vercel.app/" frameborder="0"></iframe>
     </body>
     <script type="module">
-        import testNotification from "./testNotification.json";
+        import testNotification from "./testNotification.json" assert { type: "json" };
         const iframe = document.getElementById("iframe");
         iframe.addEventListener("load", function() {
             setTimeout(() => {

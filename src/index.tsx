@@ -14,6 +14,7 @@ register(
     'zoom',
     'type',
     'notificationurl',
+    'notificationbeforelayerid',
     'realtimeurl',
     'maxZoom',
     'minZoom',
