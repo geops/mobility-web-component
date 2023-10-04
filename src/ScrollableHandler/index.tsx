@@ -1,6 +1,7 @@
 import { useEffect, useState } from "preact/hooks";
 
 function ScrollableHandler(props) {
+  const [elt, setElt] = useState<HTMLElement>();
   const [overlayElt, setOverlayElt] = useState<HTMLElement>();
 
   useEffect(() => {
@@ -9,6 +10,19 @@ function ScrollableHandler(props) {
       if (overlayElt) {
         overlayElt.style.height = "";
         overlayElt.style.maxHeight = "";
+
+        // document.addEventListener("wheel", (evt) => {
+        //   console.log("wheel");
+
+        //   const mapRect = overlayElt.parentElement.getBoundingClientRect();
+        //   const eltRect = elt.getBoundingClientRect();
+        //   const deltaToTop = mapRect.top + (evt.clientY - eltRect.top);
+        //   // elt.setPointerCapture(evt.pointerId);
+        //   overlayElt.style.height = `calc(100% - ${
+        //     evt.clientY - deltaToTop
+        //   }px)`;
+        //   overlayElt.style.maxHeight = `100%`;
+        // });
       }
     };
   }, [overlayElt]);
@@ -17,56 +31,90 @@ function ScrollableHandler(props) {
     <div
       ref={(node) => {
         if (node) {
+          setElt(node);
           setOverlayElt(node.parentElement);
         }
       }}
       {...props}
       onPointerDown={(evt) => {
-        const elt = evt.target as HTMLElement;
-
-        if (!elt) {
-          return;
-        }
-        setOverlayElt(overlayElt);
-
-        elt.setPointerCapture(evt.pointerId);
+        const innerElt = overlayElt.querySelector(".scrollable-inner");
+        // elt.setPointerCapture(evt.pointerId);
 
         overlayElt.style.transitionDuration = "0s";
 
-        const deltaToTop =
-          overlayElt.parentElement.getBoundingClientRect().top +
-          elt.offsetTop +
-          evt.offsetY;
+        const mapRect = overlayElt.parentElement.getBoundingClientRect();
+        const eltRect = elt.getBoundingClientRect();
+        const deltaToTop = mapRect.top + (evt.clientY - eltRect.top);
 
         function onDragg(evt: PointerEvent) {
-          overlayElt.style.height = `calc(100% - ${evt.y - deltaToTop}px)`;
+          console.log("onDrag");
+          elt.setPointerCapture(evt.pointerId);
+          overlayElt.style.height = `calc(100% - ${
+            evt.clientY - deltaToTop
+          }px)`;
           overlayElt.style.maxHeight = `100%`;
-          evt.stopPropagation();
-          evt.preventDefault();
         }
 
         function onDragStop(evt: PointerEvent) {
           overlayElt.style.transitionDuration = ".5s";
 
           (evt.target as HTMLElement).releasePointerCapture(evt.pointerId);
+          console.log("onDragStop");
+          // innerElt.style.touchAction = "auto";
 
           document.removeEventListener("pointermove", onDragg);
           document.removeEventListener("pointerup", onDragStop);
-          evt.stopPropagation();
-          evt.preventDefault();
+
+          const overlayAtTop = overlayElt.offsetTop === 0;
+          const innerAtTop = innerElt.scrollTop === 0;
+          const innerAtBottom =
+            innerElt.offsetHeight + innerElt.scrollTop >= innerElt.scrollHeight;
+          const overlayAtBottom =
+            elt.offsetTop + elt.offsetHeight === elt.parentElement.offsetHeight;
+
+          console.log(
+            "innerAtBottom",
+            innerElt.offsetHeight + innerElt.scrollTop,
+            innerElt.scrollHeight,
+          );
+          console.log("overlayAtTop", overlayElt.offsetTop);
+          console.log(
+            "Overlay pos",
+            overlayAtTop,
+            overlayAtBottom,
+            innerAtTop,
+            innerAtBottom,
+          );
+
+          if (overlayAtTop && !innerAtTop && !innerAtBottom) {
+            innerElt.style.touchAction = "pan-y";
+          } else if (overlayAtTop && !innerAtBottom) {
+            console.log("PAN DOEWN");
+            innerElt.style.touchAction = "pan-down";
+          } else if (overlayAtTop && !innerAtTop && innerAtBottom) {
+            console.log("PAN UP");
+            innerElt.style.touchAction = "pan-up";
+          } else {
+            console.log("NONE");
+            innerElt.style.touchAction = "none";
+          }
+
+          if (innerAtBottom && !overlayAtTop) {
+          }
         }
         document.addEventListener("pointerup", onDragStop);
         document.addEventListener("pointermove", onDragg);
         document.addEventListener("pointercancel", (evt) => {
+          console.log("pointercancel");
           document.removeEventListener("pointermove", onDragg);
           document.removeEventListener("pointerup", onDragStop);
           evt.stopPropagation();
           evt.preventDefault();
         });
-        evt.stopPropagation();
-        evt.preventDefault();
       }}
-    ></div>
+    >
+      {props.children}
+    </div>
   );
 }
 

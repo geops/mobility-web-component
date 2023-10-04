@@ -1,6 +1,7 @@
 import { realtimeConfig } from "mobility-toolbox-js/ol";
 import { useContext, useEffect, useRef, useState } from "preact/hooks";
 import { I18nContext } from "../RealtimeMap";
+import ScrollableHandler from "../ScrollableHandler";
 
 /**
  * Returns a string representation of a number, with a zero if the number is lower than 10.
@@ -175,7 +176,7 @@ const RouteStop = ({
         isStationPassed ? "text-gray-500" : "text-gray-600"
       }`}
       data-station-passed={isStationPassed} // Use for auto scroll
-      onClick={(e) => onStationClick(stop, e)}
+      // onClick={(e) => onStationClick(stop, e)}
       tabIndex={0}
       onKeyPress={(e) => e.which === 13 && onStationClick(stop, e)}
     >
@@ -458,8 +459,46 @@ export default function RouteSchedule(props) {
   return (
     <>
       {renderHeader({ ...props })}
-      <div ref={ref} className={props.className}>
-        {/* {renderHeader({ ...props })} */}
+      <div
+        ref={ref}
+        className={props.className}
+        style={{
+          touchAction: "none",
+        }}
+        onScroll={(evt) => {
+          const scrollableElt = evt.target as HTMLDivElement;
+          // When the element is at the beginning or at the end we active the overlay dnd movement in the opposite direction.
+          if (scrollableElt.scrollTop == 0) {
+            scrollableElt.style.touchAction = "pan-down";
+          } else if (
+            scrollableElt.offsetHeight + scrollableElt.scrollTop >=
+            scrollableElt.scrollHeight
+          ) {
+            scrollableElt.style.touchAction = "pan-up";
+          }
+        }}
+        onPointerMove={(evt) => {
+          // We don't trigger the overlay dnd movement depending on the css.
+          if (
+            evt.movementY > 0 &&
+            (ref.current?.style.touchAction === "pan-up" ||
+              ref.current?.style.touchAction === "pan-y")
+          ) {
+            evt.stopPropagation();
+          } else if (
+            evt.movementY < 0 &&
+            (ref.current?.style.touchAction === "pan-down" ||
+              ref.current?.style.touchAction === "pan-y")
+          ) {
+            evt.stopPropagation();
+          }
+        }}
+        onPointerCancel={(evt) => {
+          console.log("pointercancel");
+          evt.preventDefault();
+          evt.stopImmediatePropagation();
+        }}
+      >
         {props.lineInfos.stations.map((stop, idx) => {
           return renderStation({ ...props, stop, idx, t });
         })}

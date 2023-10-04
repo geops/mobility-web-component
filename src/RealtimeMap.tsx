@@ -177,29 +177,33 @@ function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
             </div>
           </div>
           <div
-            className={`flex-0 relative overflow-hidden border-t @lg:border-t-0 @lg:border-r flex flex-col ${
+            className={`flex-0 relative overflow-hidden border-t @lg:border-t-0 @lg:border-r ${
               lineInfos
                 ? "w-full min-h-[75px] max-h-[70%] @lg:w-[350px] @lg:max-h-full @lg:h-[100%!important]"
                 : "hidden"
             }`}
+            onScroll={(evt) => console.log("scroll")}
+            onScrollCapture={(evt) => console.log("scrollcapture")}
             // style={{ maxHeight: "calc(100% - 150px)" }}
           >
             {!!lineInfos && (
-              <ScrollableHandler className="z-10 absolute inset-0 w-full h-[60px] touch-none @lg:hidden" />
+              <ScrollableHandler className="z-10 relative inset-0 w-full h-full touch-none @lg:hidden flex flex-col">
+                <RouteSchedule
+                  className="z-5 relative overflow-x-hidden overflow-y-auto  scrollable-inner"
+                  lineInfos={lineInfos}
+                  trackerLayer={tracker}
+                  onStationClick={(station) => {
+                    console.log("station click");
+                    if (station.coordinate) {
+                      map.getView().animate({
+                        zoom: map.getView().getZoom(),
+                        center: [station.coordinate[0], station.coordinate[1]],
+                      });
+                    }
+                  }}
+                />
+              </ScrollableHandler>
             )}
-            <RouteSchedule
-              className="overflow-x-hidden overflow-y-auto"
-              lineInfos={lineInfos}
-              trackerLayer={tracker}
-              onStationClick={(station) => {
-                if (station.coordinate) {
-                  map.getView().animate({
-                    zoom: map.getView().getZoom(),
-                    center: [station.coordinate[0], station.coordinate[1]],
-                  });
-                }
-              }}
-            />
           </div>
         </div>
       </div>

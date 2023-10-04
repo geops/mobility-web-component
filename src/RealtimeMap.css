@@ -12,3 +12,8 @@
   background: transparent;
 }
 
+* {
+
+  touch-action: none,
+}
+
