@@ -1,52 +1,70 @@
-import { useContext, useEffect, useState, useMemo } from "preact/hooks";
-import { Map } from "ol";
-import { MaplibreLayer } from "mobility-toolbox-js/ol";
-import { MapContext } from "../MobilityToolboxMap";
-import addNotificationsLayers from "./addNotificationsLayers";
-import getNotificationsWithStatus from "./getNotificationsWithStatus";
-import parsePreviewNotification from "./parsePreviewNotification";
-import { unByKey } from "ol/Observable";
+import { useContext, useEffect, useState, useMemo } from 'preact/hooks';
+import { Map } from 'ol';
+import { MaplibreLayer } from 'mobility-toolbox-js/ol';
+import { MapContext } from '../MobilityToolboxMap';
+import addNotificationsLayers from './addNotificationsLayers';
+import getNotificationsWithStatus from './getNotificationsWithStatus';
+import parsePreviewNotification from './parsePreviewNotification';
+import { unByKey } from 'ol/Observable';
+
+interface Graphs {
+  [key: string]: string;
+}
+
+interface Metadata {
+  graphs?: Graphs;
+}
 
 const params = new URLSearchParams(window.location.search);
 let zoomTimeout = null;
 let abortCtrl = new AbortController();
 
-const useNotifications = (
-  baseLayer: MaplibreLayer,
-  map: Map,
-  notificationUrl: string | undefined,
-  graphs: string | undefined
-) => {
-  const [notifications, setNotifications] = useState([]);
-  const [previewNotification, setPreviewNotification] = useState(null);
-  const [shouldAddPreviewNotifications, setShouldAddPreviewNotifications] = useState(true);
+const useZoom = () => {
   const [zoom, setZoom] = useState(10);
-  const notificationGraphs = useMemo(() => {
-    const graphParam = params.get("notificationgraphs") ;
-    return (graphParam || graphs) ? (graphParam || graphs).split(",") : ["osm"];
-  }, []);
-  const notificationsUrl = useMemo(
-    () => params.get("notificationurl") || notificationUrl, [notificationUrl]
-  );
-  const mode = useMemo(() => params.get("mode") || "topographic", []);
-  const now = useMemo(() => {
-    return params.get("notificationat")
-      ? new Date(params.get("notificationat"))
-      : new Date()
-  }, []);
-
+  const { map } = useContext(MapContext);
   useEffect(() => {
     const view = map.getView();
-    const zoomListener = view.on("change:resolution", () => {
+    const zoomListener = view.on('change:resolution', () => {
       clearTimeout(zoomTimeout);
       zoomTimeout = setTimeout(() => setZoom(view.getZoom()), 150);
     });
     return () => unByKey(zoomListener);
-  }), [map];  
+  }),
+    [map];
+  return zoom;
+};
+
+const useNotifications = (notificationUrl: string | undefined) => {
+  const { baseLayer } = useContext(MapContext);
+  const [notifications, setNotifications] = useState([]);
+  const [previewNotification, setPreviewNotification] = useState(null);
+  const [shouldAddPreviewNotifications, setShouldAddPreviewNotifications] =
+    useState(true);
+  const zoom = useZoom();
+  const [styleMetadata, setStyleMetadata] = useState<Metadata>(
+    baseLayer.mbMap?.getStyle()?.metadata,
+  );
+  if (!styleMetadata || !baseLayer.loaded) {
+    // @ts-ignore
+    baseLayer.once('load', () =>
+      setStyleMetadata(baseLayer.mbMap?.getStyle()?.metadata),
+    );
+  }
+
+  const notificationsUrl = params.get('notificationurl') || notificationUrl;
+  const mode = params.get('mode') || 'topographic';
+  const now = params.get('notificationat')
+    ? new Date(params.get('notificationat'))
+    : new Date();
+  const style = baseLayer.name.split('mwc.baselayer.')[1];
+  const graphMapping = styleMetadata?.graphs || { 1: 'osm' };
+  const graphsString = [
+    ...new Set(Object.keys(graphMapping || []).map((key) => graphMapping[key])),
+  ].join(',');
 
   useEffect(() => {
     // Listen for incoming messages through the MOCO iframe
-    window.addEventListener("message", (event) => {
+    window.addEventListener('message', (event) => {
       if (event.data.notification) {
         setPreviewNotification(event.data.notification);
         setShouldAddPreviewNotifications(true);
@@ -57,43 +75,48 @@ const useNotifications = (
   useEffect(() => {
     // Fetch the main MOCO notifications
     const fetchNotifications = async () => {
-      const suffix = /\?/.test(notificationsUrl) ? "&" : "?";
-      const url = `${notificationsUrl}${suffix}graph=${notificationGraphs.join(',')}`;
+      const suffix = /\?/.test(notificationsUrl) ? '&' : '?';
+      const url = `${notificationsUrl}${suffix}graph=${graphsString}`;
 
       abortCtrl.abort();
       abortCtrl = new AbortController();
-      const response = await fetch(url, { signal: abortCtrl.signal});
+      const response = await fetch(url, { signal: abortCtrl.signal });
       const data = await response.json();
-
       setNotifications(getNotificationsWithStatus(data, now));
-    }
+    };
 
-    if (notificationsUrl && now && notificationGraphs.length) {
+    if (notificationsUrl && now && graphsString) {
       fetchNotifications();
     }
-  }, [notificationsUrl, mode, now, notificationGraphs]);
+  }, [notificationsUrl, graphsString]);
 
-  useEffect(() => {    
+  useEffect(() => {
     // Merge notifications with the previewNotification
     const newNotifications = [...notifications];
-    if (shouldAddPreviewNotifications && previewNotification?.[mode]) {
-      const parsedPreviewNotification = parsePreviewNotification(previewNotification?.[mode])
+    if (shouldAddPreviewNotifications && previewNotification?.[style]) {
+      const parsedPreviewNotification = parsePreviewNotification(
+        previewNotification?.[style],
+      );
       const index = newNotifications.findIndex(
-        (n) =>
-        n.properties.id ===
-        previewNotification[mode].id,
-        );
-        if (index > -1) {
-          newNotifications[index] = parsedPreviewNotification;
-        } else {
-          newNotifications.push(parsedPreviewNotification);
-        }
-        console.log('previewNotification: ', newNotifications);
-        setNotifications(getNotificationsWithStatus(newNotifications, now));
-        setShouldAddPreviewNotifications(false);
+        (n) => n.properties.id === previewNotification[style].id,
+      );
+
+      if (index > -1) {
+        newNotifications[index] = parsedPreviewNotification;
+      } else {
+        newNotifications.push(parsedPreviewNotification);
       }
-  }, [previewNotification, mode, notifications, shouldAddPreviewNotifications]);
-  
+
+      setNotifications(getNotificationsWithStatus(newNotifications, now));
+      setShouldAddPreviewNotifications(false);
+    }
+  }, [
+    previewNotification,
+    notifications,
+    shouldAddPreviewNotifications,
+    style,
+  ]);
+
   useEffect(() => {
     // Add the notifications to the map
     if (notifications?.length) {
@@ -103,26 +126,19 @@ const useNotifications = (
         notifications,
         'netzplan_line_lable',
         zoom,
-        mode,
-      );      
-    } 
-  }, [notifications, zoom]);  
-  
-  return { notifications };
-}
+        graphMapping,
+      );
+    }
+  }, [notifications, zoom]);
+
+  return notifications;
+};
 
 type Props = {
   notificationUrl: string;
-  notificationGraphs: string;
-}
+};
 
-export default function NotificationLayer({ notificationUrl, notificationGraphs }: Props) {
-  const { map, baseLayer } = useContext(MapContext);
-  useNotifications(baseLayer, map, notificationUrl, notificationGraphs);
-  useEffect(() => {
-    // zoom > 12 makes no sense with network plans
-    // TODO: make this configurable
-    map.getView().setMaxZoom(12)
-  }, [])
+export default function NotificationLayer({ notificationUrl }: Props) {
+  useNotifications(notificationUrl);
   return null;
 }

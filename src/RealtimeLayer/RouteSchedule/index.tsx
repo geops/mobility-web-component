@@ -1,6 +1,6 @@
-import { realtimeConfig } from "mobility-toolbox-js/ol";
-import { I18nContext } from "../RealtimeLayer";
-import { useContext, useEffect, useState } from "preact/hooks";
+import { realtimeConfig } from 'mobility-toolbox-js/ol';
+import { I18nContext } from '../RealtimeLayer';
+import { useContext, useEffect, useState } from 'preact/hooks';
 
 /**
  * Returns a string representation of a number, with a zero if the number is lower than 10.
@@ -17,7 +17,7 @@ const pad = (integer) => {
  */
 const getHoursAndMinutes = (timeInMs) => {
   if (!timeInMs || timeInMs <= 0) {
-    return "";
+    return '';
   }
   const date = new Date(timeInMs);
   return `${pad(date.getHours())}:${pad(date.getMinutes())}`;
@@ -34,7 +34,7 @@ export const getDelayString = (timeInMs) => {
   const s = Math.floor(((timeInMs % 3600000) % 60000) / 1000);
 
   if (s === 0 && h === 0 && m === 0) {
-    return "0";
+    return '0';
   }
   if (s === 0 && h === 0) {
     return `${m}m`;
@@ -60,18 +60,18 @@ const { getBgColor } = realtimeConfig;
 const getDelayColor = (time) => {
   const secs = Math.round(((time / 1800 / 2) * 3600) / 1000);
   if (secs >= 3600) {
-    return "text-red-600";
+    return 'text-red-600';
   }
   if (secs >= 500) {
-    return "text-orange-600";
+    return 'text-orange-600';
   }
   if (secs >= 300) {
-    return "text-amber-600";
+    return 'text-amber-600';
   }
   if (secs >= 180) {
-    return "text-yellow-600";
+    return 'text-yellow-600';
   }
-  return "text-green-600";
+  return 'text-green-600';
 };
 
 /**
@@ -124,7 +124,7 @@ const RouteStop = ({
   } = stop;
   const { stations, type, stroke, vehicleType } = lineInfos;
   const [isStationPassed, setIsStationPassed] = useState(false);
-  const cancelled = state === "JOURNEY_CANCELLED" || state === "STOP_CANCELLED";
+  const cancelled = state === 'JOURNEY_CANCELLED' || state === 'STOP_CANCELLED';
   const color = stroke || getBgColor(type || vehicleType);
   const isFirstStation = idx === 0;
   const isLastStation = idx === stations.length - 1;
@@ -152,7 +152,7 @@ const RouteStop = ({
     setIsStationPassed(isStopPassed);
 
     // We have to refresh the stop when the state it's time_based
-    if (stop.state === "TIME_BASED" && !isStopPassed) {
+    if (stop.state === 'TIME_BASED' && !isStopPassed) {
       timeout = setInterval(() => {
         setIsStationPassed(isPassed(stop, trackerLayer.time, stations, idx));
       }, 20000);
@@ -166,7 +166,7 @@ const RouteStop = ({
     <div
       role="button"
       className={`group flex hover:bg-slate-100 rounded m-1 ${
-        isStationPassed ? "text-gray-500" : "text-gray-600"
+        isStationPassed ? 'text-gray-500' : 'text-gray-600'
       }`}
       onClick={(e) => onStationClick(stop, e)}
       tabIndex={0}
@@ -174,15 +174,15 @@ const RouteStop = ({
     >
       <div className="flex flex-col w-14 items-center justify-center text-xs ml-2">
         <span
-          className={`${cancelled ? "text-red-600 line-through" : ""} ${
-            isFirstStation ? "hidden" : ""
+          className={`${cancelled ? 'text-red-600 line-through' : ''} ${
+            isFirstStation ? 'hidden' : ''
           }`}
         >
           {getHoursAndMinutes(aimedArrivalTime)}
         </span>
         <span
-          className={`${cancelled ? "text-red-600 line-through" : ""} ${
-            isLastStation ? "hidden" : ""
+          className={`${cancelled ? 'text-red-600 line-through' : ''} ${
+            isLastStation ? 'hidden' : ''
           }`}
         >
           {getHoursAndMinutes(aimedDepartureTime)}
@@ -190,14 +190,14 @@ const RouteStop = ({
       </div>
       <div className="flex flex-col w-7 justify-center text-xs">
         {hideDelay || isFirstStation ? (
-          ""
+          ''
         ) : (
           <span className={getDelayColor(arrivalDelay)}>
             {`+${getDelayString(arrivalDelay)}`}
           </span>
         )}
         {hideDelay || isLastStation ? (
-          ""
+          ''
         ) : (
           <span className={getDelayColor(departureDelay)}>
             {`+${getDelayString(departureDelay)}`}
@@ -211,7 +211,7 @@ const RouteStop = ({
           height="58"
           viewBox="0 0 14 58"
           fill="none"
-          className={isStationPassed ? "stroke-gray-400" : `stroke-[${color}]`}
+          className={isStationPassed ? 'stroke-gray-400' : `stroke-[${color}]`}
           // The tailwind css class stroke-[${color}] does not work
           stroke={isStationPassed ? undefined : color}
         >
@@ -219,18 +219,18 @@ const RouteStop = ({
             x1="7"
             y1={
               isFirstStation
-                ? "29"
+                ? '29'
                 : isInTransit && !isStationPassed
-                ? "3"
-                : "0"
+                ? '3'
+                : '0'
             }
             x2="7"
             y2={
               isLastStation
-                ? "29"
+                ? '29'
                 : isInTransit && isStationPassed
-                ? "55"
-                : "58"
+                ? '55'
+                : '58'
             }
             stroke-width="4"
           />
@@ -239,15 +239,15 @@ const RouteStop = ({
       </div>
       <div
         className={`flex items-center text-sm font-medium pr-2 justify-between space-x-2 flex-grow ${
-          cancelled ? "text-red-600 line-through" : ""
-        } ${isStationPassed ? "" : "text-black"}`}
+          cancelled ? 'text-red-600 line-through' : ''
+        } ${isStationPassed ? '' : 'text-black'}`}
       >
         <div className="">
           <div>{stationName}</div>
           {platform ? (
             <span
               className={`${
-                isStationPassed ? "bg-slate-100" : "bg-slate-200"
+                isStationPassed ? 'bg-slate-100' : 'bg-slate-200'
               } rounded-sm text-xs py-px px-0.5 group-hover:bg-slate-50`}
             >
               {t(`depature_${type}`)} {platform}
@@ -285,7 +285,7 @@ const renderStation = (props) => {
 const renderRouteIdentifier = ({ routeIdentifier, longName }) => {
   if (routeIdentifier) {
     // first part of the id, without leading zeros.
-    const id = parseInt(routeIdentifier.split(".")[0], 10);
+    const id = parseInt(routeIdentifier.split('.')[0], 10);
     if (!longName.includes(id)) {
       return ` (${id})`;
     }
@@ -310,7 +310,7 @@ const renderHeader = ({ lineInfos }) => {
         style={{
           /* stylelint-disable-next-line value-keyword-case */
           backgroundColor: stroke || getBgColor(type || vehicleType),
-          color: textColor || "black",
+          color: textColor || 'black',
         }}
       >
         {shortName}
@@ -344,7 +344,7 @@ const renderFooter = (props) => {
         {lineInfos.license && <span>&nbsp;(</span>}
         {lineInfos.license &&
           defaultRenderLink(lineInfos.license, lineInfos.licenseUrl)}
-        {lineInfos.license && ")"}
+        {lineInfos.license && ')'}
       </div>
       <div className="bg-gradient-to-b from-transparent to-white h-12 sticky bottom-0 w-full pointer-events-none" />
     </>

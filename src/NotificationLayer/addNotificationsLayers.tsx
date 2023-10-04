@@ -1,15 +1,10 @@
-import addSourceAndLayers from "./addSourceAndLayers";
+import addSourceAndLayers from './addSourceAndLayers';
 
-const getCurrentGraph = (zoom: number, mode: string) => {
-  const modePrefix = mode === 'schematic' ? 'schema' : 'topo'
-  if (zoom > 12) {
-    return 'osm'
-  }
-  if (zoom < 5) {
-    return `np_${modePrefix}5`
-  }
-  return `np_${modePrefix}${parseInt(`${zoom}`, 10) - 1}`
-}
+const getCurrentGraph = (mapping, zoom) => {
+  const breakPoints = Object.keys(mapping).map((k) => parseFloat(k));
+  const closest = breakPoints.reverse().find((bp) => bp <= Math.floor(zoom)  - 1); // - 1 due to ol zoom !== mapbox zoom
+  return mapping[closest || Math.min(...breakPoints)];
+};
 
 /**
  * This function add layers in the mapbox style to show notifications lines.
@@ -19,42 +14,38 @@ const addNotificationsLayers = (
   notifications,
   beforeLayerId,
   zoom,
-  mode,
+  graphMapping,
 ) => {
   if (!mapboxLayer) {
-    console.log(mapboxLayer);
     return;
   }
-
-  
   const features = notifications.map((n) => n.features).flat();
-  const currentGraph = getCurrentGraph(zoom, mode);
   addSourceAndLayers(
     mapboxLayer,
-    "notifications",
+    'notifications',
     {
-      type: "geojson",
+      type: 'geojson',
       data: {
-        type: "FeatureCollection",
+        type: 'FeatureCollection',
         features,
       },
     },
     [
       {
-        id: "notificationsActive",
-        source: "notifications",
-        type: "line",
+        id: 'notificationsActive',
+        source: 'notifications',
+        type: 'line',
         paint: {
-          "line-width": 5,
-          "line-color": "rgba(255,0,0,1)",
-          "line-dasharray": [2, 2],
+          'line-width': 5,
+          'line-color': 'rgba(255,0,0,1)',
+          'line-dasharray': [2, 2],
         },
-        layout: { visibility: "visible" },
+        layout: { visibility: 'visible' },
         filter: [
-          "all",
-          ["==", ["get", "isActive"], true],
-          ["==", ["get", "graph"], currentGraph],
-          ["==", ["get", "disruption_type"], "DISRUPTION"],
+          'all',
+          ['==', ['get', 'isActive'], true],
+          ['==', ['get', 'graph'], getCurrentGraph(graphMapping, zoom)],
+          ['==', ['get', 'disruption_type'], 'DISRUPTION'],
         ],
       },
     ],
