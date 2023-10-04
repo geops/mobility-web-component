@@ -11,9 +11,3 @@
 ::-webkit-scrollbar-track {
   background: transparent;
 }
-
-* {
-
-  touch-action: none,
-}
-
