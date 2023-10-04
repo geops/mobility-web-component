@@ -1,10 +1,10 @@
-import GeoJSON from "ol/format/GeoJSON";
-import { getCenter } from "ol/extent";
+import GeoJSON from 'ol/format/GeoJSON';
+import { getCenter } from 'ol/extent';
 
 const format = new GeoJSON();
 
 export const getTime = (str) =>
-  parseInt(str?.substr(0, 8).replace(/:/g, ""), 10);
+  parseInt(str?.substr(0, 8).replace(/:/g, ''), 10);
 
 /**
  *
@@ -53,16 +53,16 @@ const getNotificationsWithStatus = (notifications, now) => {
         if (next.time_of_day_start) {
           starts = `ab ${next.time_of_day_start.substr(0, 5)}`;
         } else {
-          starts = `ab ${nextStartDate.toLocaleTimeString(["de"], {
-            hour: "2-digit",
-            minute: "2-digit",
+          starts = `ab ${nextStartDate.toLocaleTimeString(['de'], {
+            hour: '2-digit',
+            minute: '2-digit',
             hour12: false,
           })}`;
         }
       } else {
-        starts = `ab ${nextStartDate.toLocaleDateString(["de-DE"], {
-          month: "short",
-          day: "numeric",
+        starts = `ab ${nextStartDate.toLocaleDateString(['de-DE'], {
+          month: 'short',
+          day: 'numeric',
         })}`;
       }
 
@@ -70,8 +70,8 @@ const getNotificationsWithStatus = (notifications, now) => {
       const iconRef = n.features.find((f) => f.properties.is_icon_ref);
       if (iconRef) {
         const iconRefFeature = format.readFeature(iconRef, {
-          dataProjection: "EPSG:4326",
-          featureProjection: "EPSG:3857",
+          dataProjection: 'EPSG:4326',
+          featureProjection: 'EPSG:3857',
         });
         const center = getCenter(iconRefFeature.getGeometry().getExtent());
         iconRefPoint = iconRefFeature.getGeometry().getClosestPoint(center);

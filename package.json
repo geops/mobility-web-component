@@ -14,8 +14,8 @@
     "build": "yarn build:css && yarn build:js",
     "build:js": "node scripts/build.mjs",
     "build:css": "npm run tailwind:component && npm run tailwind:website",
-    "format": "prettier --write 'src/**/*.tsx'",
-    "tailwind:component": "tailwindcss --output=src/style.css --content=src/**/*.(tsx|js)",
+    "format": "prettier --write 'src/**/*.(tsx|js)'",
+    "tailwind:component": "tailwindcss --output=src/style.css --content=src/**/*.tsx",
     "tailwind:website": "tailwindcss --output=output.css --content=index.html --minify",
     "dev": "node scripts/dev.mjs",
     "up": "yarn upgrade-interactive --latest"

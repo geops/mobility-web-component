@@ -75,8 +75,12 @@ function MobilityToolboxMap({
 }: Props) {
   const [ref, setRef] = useState<HTMLDivElement>();
   const baseLayer = useBaseLayer(baselayer, apikey, map, ref);
-  const maximumZoom = (params.get('maxzoom') || maxzoom) && parseFloat(params.get('maxzoom') || maxzoom);
-  const minimumZoom = (params.get('minzoom') || minzoom) && parseFloat(params.get('minzoom') || minzoom);
+  const maximumZoom =
+    (params.get('maxzoom') || maxzoom) &&
+    parseFloat(params.get('maxzoom') || maxzoom);
+  const minimumZoom =
+    (params.get('minzoom') || minzoom) &&
+    parseFloat(params.get('minzoom') || minzoom);
 
   useEffect(() => {
     map.getView().setCenter(center.split(',').map((c) => parseInt(c)));
@@ -102,9 +106,7 @@ function MobilityToolboxMap({
           />
         ) : null}
         {baseLayer && type === 'notification' ? (
-          <NotificationLayer
-            notificationUrl={notificationurl}
-          />
+          <NotificationLayer notificationUrl={notificationurl} />
         ) : null}
       </div>
     </MapContext.Provider>

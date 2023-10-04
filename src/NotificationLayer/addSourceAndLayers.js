@@ -7,7 +7,7 @@ const addSourceAndLayers = (
   beforeLayerId,
 ) => {
   if (!mapboxLayer.loaded) {
-    mapboxLayer.once("load", () => {
+    mapboxLayer.once('load', () => {
       addSourceAndLayers(
         mapboxLayer,
         sourceId,

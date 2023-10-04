@@ -2,7 +2,9 @@ import addSourceAndLayers from './addSourceAndLayers';
 
 const getCurrentGraph = (mapping, zoom) => {
   const breakPoints = Object.keys(mapping).map((k) => parseFloat(k));
-  const closest = breakPoints.reverse().find((bp) => bp <= Math.floor(zoom)  - 1); // - 1 due to ol zoom !== mapbox zoom
+  const closest = breakPoints
+    .reverse()
+    .find((bp) => bp <= Math.floor(zoom) - 1); // - 1 due to ol zoom !== mapbox zoom
   return mapping[closest || Math.min(...breakPoints)];
 };
 
