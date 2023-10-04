@@ -170,15 +170,12 @@ const RouteStop = ({
   console.log(lineInfos);
 
   return (
-    <div
-      role="button"
-      className={`group flex hover:bg-slate-100 rounded scroll-mt-[50px] ${
+    <button
+      className={`w-full flex items-center hover:bg-slate-100 rounded scroll-mt-[50px] text-left ${
         isStationPassed ? "text-gray-500" : "text-gray-600"
       }`}
       data-station-passed={isStationPassed} // Use for auto scroll
-      // onClick={(e) => onStationClick(stop, e)}
-      tabIndex={0}
-      onKeyPress={(e) => e.which === 13 && onStationClick(stop, e)}
+      onClick={(e) => onStationClick(stop, e)}
     >
       <div className="flex flex-col w-10 flex-shrink-0 items-start justify-center text-xs ml-4">
         <span
@@ -212,7 +209,7 @@ const RouteStop = ({
           </span>
         )}
       </div>
-      <div className="flex flex-shrink-0 items-center justify-center w-8 -my-1">
+      <div className="flex flex-shrink-0 items-center justify-center w-8">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="16"
@@ -237,7 +234,7 @@ const RouteStop = ({
               isFirstStation
                 ? "29"
                 : isInTransit && !isStationPassed
-                ? "3"
+                ? "0"
                 : "0"
             }
             x2="7"
@@ -245,7 +242,7 @@ const RouteStop = ({
               isLastStation
                 ? "29"
                 : isInTransit && isStationPassed
-                ? "55"
+                ? "58"
                 : "58"
             }
             stroke-width="6"
@@ -257,7 +254,7 @@ const RouteStop = ({
               isFirstStation
                 ? "29"
                 : isInTransit && !isStationPassed
-                ? "3"
+                ? "0"
                 : "0"
             }
             x2="7"
@@ -265,7 +262,7 @@ const RouteStop = ({
               isLastStation
                 ? "29"
                 : isInTransit && isStationPassed
-                ? "55"
+                ? "58"
                 : "58"
             }
             stroke-width="4"
@@ -282,7 +279,7 @@ const RouteStop = ({
         </svg>
       </div>
       <div
-        className={`flex items-center text-sm font-medium pr-2 justify-between flex-grow ${
+        className={`flex text-sm font-medium pr-2 justify-between flex-grow ${
           cancelled ? "text-red-600 line-through" : ""
         } ${isStationPassed ? "" : "text-black"}`}
       >
@@ -308,7 +305,7 @@ const RouteStop = ({
           </a>
         )} */}
       </div>
-    </div>
+    </button>
   );
 };
 
@@ -479,16 +476,17 @@ export default function RouteSchedule(props) {
         }}
         onPointerMove={(evt) => {
           // We don't trigger the overlay dnd movement depending on the css.
+          const scrollableElt = ref.current as HTMLDivElement;
           if (
             evt.movementY > 0 &&
-            (ref.current?.style.touchAction === "pan-up" ||
-              ref.current?.style.touchAction === "pan-y")
+            (scrollableElt.style.touchAction === "pan-up" ||
+              scrollableElt.style.touchAction === "pan-y")
           ) {
             evt.stopPropagation();
           } else if (
             evt.movementY < 0 &&
-            (ref.current?.style.touchAction === "pan-down" ||
-              ref.current?.style.touchAction === "pan-y")
+            (scrollableElt.style.touchAction === "pan-down" ||
+              scrollableElt.style.touchAction === "pan-y")
           ) {
             evt.stopPropagation();
           }

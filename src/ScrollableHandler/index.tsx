@@ -37,7 +37,9 @@ function ScrollableHandler(props) {
       }}
       {...props}
       onPointerDown={(evt) => {
-        const innerElt = overlayElt.querySelector(".scrollable-inner");
+        const innerElt = overlayElt.querySelector(
+          ".scrollable-inner",
+        ) as HTMLDivElement;
         // elt.setPointerCapture(evt.pointerId);
 
         overlayElt.style.transitionDuration = "0s";
@@ -48,7 +50,7 @@ function ScrollableHandler(props) {
 
         function onDragg(evt: PointerEvent) {
           console.log("onDrag");
-          elt.setPointerCapture(evt.pointerId);
+          // elt.setPointerCapture(evt.pointerId);
           overlayElt.style.height = `calc(100% - ${
             evt.clientY - deltaToTop
           }px)`;
@@ -72,34 +74,28 @@ function ScrollableHandler(props) {
           const overlayAtBottom =
             elt.offsetTop + elt.offsetHeight === elt.parentElement.offsetHeight;
 
-          console.log(
-            "innerAtBottom",
-            innerElt.offsetHeight + innerElt.scrollTop,
-            innerElt.scrollHeight,
-          );
-          console.log("overlayAtTop", overlayElt.offsetTop);
-          console.log(
-            "Overlay pos",
-            overlayAtTop,
-            overlayAtBottom,
-            innerAtTop,
-            innerAtBottom,
-          );
+          // console.log(
+          //   "innerAtBottom",
+          //   innerElt.offsetHeight + innerElt.scrollTop,
+          //   innerElt.scrollHeight,
+          // );
+          // console.log("overlayAtTop", overlayElt.offsetTop);
+          // console.log(
+          //   "Overlay pos",
+          //   overlayAtTop,
+          //   overlayAtBottom,
+          //   innerAtTop,
+          //   innerAtBottom,
+          // );
 
           if (overlayAtTop && !innerAtTop && !innerAtBottom) {
             innerElt.style.touchAction = "pan-y";
           } else if (overlayAtTop && !innerAtBottom) {
-            console.log("PAN DOEWN");
             innerElt.style.touchAction = "pan-down";
           } else if (overlayAtTop && !innerAtTop && innerAtBottom) {
-            console.log("PAN UP");
             innerElt.style.touchAction = "pan-up";
           } else {
-            console.log("NONE");
             innerElt.style.touchAction = "none";
-          }
-
-          if (innerAtBottom && !overlayAtTop) {
           }
         }
         document.addEventListener("pointerup", onDragStop);

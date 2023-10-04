@@ -136,14 +136,14 @@ function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
     let vehicleId = null;
     if (feature) {
       vehicleId = feature.get("train_id");
-      tracker.api.subscribeStopSequence(
-        vehicleId,
-        ({ content: [stopSequence] }) => {
+      tracker.api.subscribeStopSequence(vehicleId, ({ content }) => {
+        if (content) {
+          const [stopSequence] = content;
           if (stopSequence) {
             setLineInfos(stopSequence);
           }
-        },
-      );
+        }
+      });
     } else {
       setLineInfos(null);
     }
@@ -177,7 +177,7 @@ function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
             </div>
           </div>
           <div
-            className={`flex-0 relative overflow-hidden border-t @lg:border-t-0 @lg:border-r ${
+            className={`flex-0 relative overflow-hidden border-t @lg:borderstopSequence-t-0 @lg:border-r ${
               lineInfos
                 ? "w-full min-h-[75px] max-h-[70%] @lg:w-[350px] @lg:max-h-full @lg:h-[100%!important]"
                 : "hidden"
