@@ -437,9 +437,7 @@ export default function RouteSchedule(props) {
         return;
       }
 
-      const nextStation = elt.querySelector(
-        "[role=button][data-station-passed=false]",
-      );
+      const nextStation = elt.querySelector("[data-station-passed=false]");
       if (nextStation) {
         nextStation.scrollIntoView({
           behavior: "smooth",
