@@ -173,7 +173,7 @@ const parsePreviewNotification = (mocoPreviewObject: {
 };
 
 export {
+  getNotificationsWithStatus,
   addNotificationsLayers,
   parsePreviewNotification,
-  getNotificationsWithStatus,
 };

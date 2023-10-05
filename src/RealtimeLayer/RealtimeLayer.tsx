@@ -99,26 +99,30 @@ function GeolocationControl() {
 
 function RealtimeLayer({
   apikey,
-  mots,
+  mots: propMots,
   tenant,
   realtimeUrl = 'wss://tralis-tracker-api.geops.io/ws',
 }: Props) {
   const { map } = useMapContext();
-  const { realtimeurl: paramsRtUrl } = useParams();
+  const {
+    realtimeurl: paramsRealtimeUrl,
+    tenant: paramsTenant,
+    mots: paramsMots,
+  } = useParams();
   const [lineInfos, setLineInfos] = useState(null);
   const [feature, setFeature] = useState(null);
-  const rtUrl = paramsRtUrl || realtimeUrl;
+  const mots = paramsMots || propMots;
 
   const tracker = useMemo(() => {
     if (apikey) {
       return new MtbRealtimeLayer({
         apiKey: apikey,
-        url: realtimeUrl,
+        url: paramsRealtimeUrl || realtimeUrl,
         getMotsByZoom: mots
           ? () => mots.split(',') as RealtimeMot[]
           : undefined,
         fullTrajectoryStyle: null,
-        tenant,
+        tenant: paramsTenant || tenant,
       });
     }
   }, [apikey, mots, tenant]);

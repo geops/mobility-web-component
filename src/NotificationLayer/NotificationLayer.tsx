@@ -21,8 +21,8 @@ let zoomTimeout = null;
 let abortCtrl = new AbortController();
 
 const useZoom = () => {
-  const [zoom, setZoom] = useState(10);
   const { map } = useMapContext();
+  const [zoom, setZoom] = useState(map.getView().getZoom());
   useEffect(() => {
     const view = map.getView();
     const zoomListener = view.on('change:resolution', () => {

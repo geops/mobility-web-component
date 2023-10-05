@@ -78,6 +78,7 @@ function MobilityToolboxMap({
     type: paramsType,
     center: paramsCenter,
     baselayer: paramsBaseLayer,
+    zoom: paramsZoom,
     maxzoom: paramsMaxZoom,
     minzoom: paramsMinZoom,
   } = useParams();
@@ -93,10 +94,10 @@ function MobilityToolboxMap({
 
   useEffect(() => {
     map.getView().setCenter(mapCenter.split(',').map((c) => parseInt(c)));
-    map.getView().setZoom(parseInt(zoom));
+    map.getView().setZoom(parseFloat(paramsZoom || zoom));
     map.getView().setMaxZoom(maximumZoom);
     map.getView().setMinZoom(minimumZoom);
-  }, [mapCenter, zoom, minimumZoom, maximumZoom]);
+  }, []);
 
   return (
     <MapContext.Provider value={{ map, baseLayer }}>
