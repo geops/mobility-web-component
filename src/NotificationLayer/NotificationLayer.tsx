@@ -75,8 +75,6 @@ const useNotifications = (
     // Listen for incoming messages through the MOCO iframe
     window.addEventListener('message', (event) => {
       if (event.data.notification) {
-        console.log(event.data.notification);
-
         setPreviewNotification(event.data.notification);
         setShouldAddPreviewNotifications(true);
       }

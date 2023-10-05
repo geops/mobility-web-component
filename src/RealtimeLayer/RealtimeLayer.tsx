@@ -58,7 +58,6 @@ function GeolocationControl() {
   useEffect(() => {
     geolocation.on('change:position', () => {
       const position = geolocation.getPosition();
-      console.log(position);
       if (position) {
         map.getView().setCenter(fromLonLat(position, 'EPSG:3857'));
       }
