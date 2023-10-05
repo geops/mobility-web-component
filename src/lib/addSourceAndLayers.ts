@@ -1,4 +1,4 @@
-// Ad a source and styleLayer using the id in parameter.
+// Add a source and styleLayer using the id in parameter.
 const addSourceAndLayers = (
   mapboxLayer,
   sourceId,

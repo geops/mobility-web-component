@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'preact/hooks';
-import addNotificationsLayers from './addNotificationsLayers';
-import getNotificationsWithStatus from './getNotificationsWithStatus';
-import parsePreviewNotification from './parsePreviewNotification';
+import {
+  addNotificationsLayers,
+  parsePreviewNotification,
+  getNotificationsWithStatus,
+} from './notificationUtils';
 import { unByKey } from 'ol/Observable';
 
 import useMapContext from '../lib/hooks/useMapContext';
+import useParams from '../lib/hooks/useParams';
 
 interface Graphs {
   [key: string]: string;
@@ -14,7 +17,6 @@ interface Metadata {
   graphs?: Graphs;
 }
 
-const params = new URLSearchParams(window.location.search);
 let zoomTimeout = null;
 let abortCtrl = new AbortController();
 
@@ -37,12 +39,17 @@ const useNotifications = (
   notificationUrl: string | undefined,
   notificationBeforeLayerId: string,
 ) => {
+  const {
+    notificationurl: paramsNotificationUrl,
+    notificationbeforelayerid: paramsNotificationBeforeLayerId,
+    notificationat: paramsNotificationAt,
+  } = useParams();
   const { baseLayer } = useMapContext();
+  const zoom = useZoom();
   const [notifications, setNotifications] = useState([]);
   const [previewNotification, setPreviewNotification] = useState(null);
   const [shouldAddPreviewNotifications, setShouldAddPreviewNotifications] =
-    useState(true);
-  const zoom = useZoom();
+    useState<boolean>(true);
   const [styleMetadata, setStyleMetadata] = useState<Metadata>(
     baseLayer.mbMap?.getStyle()?.metadata,
   );
@@ -52,12 +59,11 @@ const useNotifications = (
       setStyleMetadata(baseLayer.mbMap?.getStyle()?.metadata),
     );
   }
-
-  const notificationsUrl = params.get('notificationurl') || notificationUrl;
+  const notificationsUrl = paramsNotificationUrl || notificationUrl;
   const beforeLayerId =
-    params.get('notificationbeforelayerid') || notificationBeforeLayerId;
-  const now = params.get('notificationat')
-    ? new Date(params.get('notificationat'))
+    paramsNotificationBeforeLayerId || notificationBeforeLayerId;
+  const now = paramsNotificationAt
+    ? new Date(paramsNotificationAt)
     : new Date();
   const style = baseLayer.name.split('mwc.baselayer.')[1];
   const graphMapping = styleMetadata?.graphs || { 1: 'osm' };
@@ -69,6 +75,8 @@ const useNotifications = (
     // Listen for incoming messages through the MOCO iframe
     window.addEventListener('message', (event) => {
       if (event.data.notification) {
+        console.log(event.data.notification);
+
         setPreviewNotification(event.data.notification);
         setShouldAddPreviewNotifications(true);
       }

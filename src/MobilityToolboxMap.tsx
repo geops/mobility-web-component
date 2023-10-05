@@ -2,7 +2,6 @@ import { CopyrightControl, MaplibreLayer } from 'mobility-toolbox-js/ol';
 import { Map } from 'ol';
 import ScaleLine from 'ol/control/ScaleLine.js';
 import { useEffect, useState } from 'preact/hooks';
-import { createContext } from 'preact';
 // @ts-ignore
 import olStyle from 'ol/ol.css';
 // @ts-ignore
@@ -10,6 +9,7 @@ import style from './style.css';
 import RealtimeLayer from './RealtimeLayer/RealtimeLayer';
 import NotificationLayer from './NotificationLayer/NotificationLayer';
 import { MapContext } from './lib/hooks/useMapContext';
+import useParams from './lib/hooks/useParams';
 
 type Props = {
   class: string;
@@ -26,8 +26,6 @@ type Props = {
   maxzoom: string;
   minzoom: string;
 };
-
-const params = new URLSearchParams(window.location.search);
 const copyrightControl = new CopyrightControl({});
 const map = new Map({ controls: [new ScaleLine()] });
 
@@ -37,6 +35,7 @@ const useBaseLayer = (
   map: Map,
   target: HTMLDivElement,
 ) => {
+  const { tilesurl } = useParams();
   const [baseLayer, setBaseLayer] = useState(null);
   useEffect(() => {
     if (apikey && target) {
@@ -46,7 +45,7 @@ const useBaseLayer = (
       const layer = new MaplibreLayer({
         apiKey: apikey,
         url: `${
-          params.get('tileurl') || 'https://maps.geops.io'
+          tilesurl || 'https://maps.geops.io'
         }/styles/${style}/style.json`,
         name: `mwc.baselayer.${style}`,
       });
@@ -75,24 +74,29 @@ function MobilityToolboxMap({
   maxzoom,
   minzoom,
 }: Props) {
+  const {
+    type: paramsType,
+    center: paramsCenter,
+    baselayer: paramsBaseLayer,
+    maxzoom: paramsMaxZoom,
+    minzoom: paramsMinZoom,
+  } = useParams();
   const [ref, setRef] = useState<HTMLDivElement>();
-  const mapType = params.get('type') || type;
-  center = params.get('center') || center;
-  const baseLayerStyle = params.get('baselayer') || baselayer;
+  const mapType = paramsType || type;
+  const mapCenter = paramsCenter || center;
+  const baseLayerStyle = paramsBaseLayer || baselayer;
   const baseLayer = useBaseLayer(baseLayerStyle, apikey, map, ref);
   const maximumZoom =
-    (params.get('maxzoom') || maxzoom) &&
-    parseFloat(params.get('maxzoom') || maxzoom);
+    (paramsMaxZoom || maxzoom) && parseFloat(paramsMaxZoom || maxzoom);
   const minimumZoom =
-    (params.get('minzoom') || minzoom) &&
-    parseFloat(params.get('minzoom') || minzoom);
+    (paramsMinZoom || minzoom) && parseFloat(paramsMinZoom || minzoom);
 
   useEffect(() => {
-    map.getView().setCenter(center.split(',').map((c) => parseInt(c)));
+    map.getView().setCenter(mapCenter.split(',').map((c) => parseInt(c)));
     map.getView().setZoom(parseInt(zoom));
     map.getView().setMaxZoom(maximumZoom);
     map.getView().setMinZoom(minimumZoom);
-  }, [center, zoom, minimumZoom, maximumZoom]);
+  }, [mapCenter, zoom, minimumZoom, maximumZoom]);
 
   return (
     <MapContext.Provider value={{ map, baseLayer }}>

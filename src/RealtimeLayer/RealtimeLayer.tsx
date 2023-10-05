@@ -8,6 +8,7 @@ import rosetta from 'rosetta';
 
 import RouteSchedule from './RouteSchedule';
 import useMapContext from '../lib/hooks/useMapContext';
+import useParams from '../lib/hooks/useParams';
 
 const i18n = rosetta({
   de: {
@@ -102,9 +103,11 @@ function RealtimeLayer({
   tenant,
   realtimeUrl = 'wss://tralis-tracker-api.geops.io/ws',
 }: Props) {
-  const [lineInfos, setLineInfos] = useState(null);
   const { map } = useMapContext();
+  const { realtimeurl: paramsRtUrl } = useParams();
+  const [lineInfos, setLineInfos] = useState(null);
   const [feature, setFeature] = useState(null);
+  const rtUrl = paramsRtUrl || realtimeUrl;
 
   const tracker = useMemo(() => {
     if (apikey) {

@@ -1,5 +1,8 @@
+import { FeatureCollection } from 'geojson';
 import GeoJSON from 'ol/format/GeoJSON';
 import { getCenter } from 'ol/extent';
+
+import addSourceAndLayers from '../lib/addSourceAndLayers';
 
 const format = new GeoJSON();
 
@@ -97,4 +100,80 @@ const getNotificationsWithStatus = (notifications, now) => {
     });
 };
 
-export default getNotificationsWithStatus;
+const getCurrentGraph = (mapping: object, zoom: number) => {
+  const breakPoints = Object.keys(mapping).map((k) => parseFloat(k));
+  const closest = breakPoints
+    .reverse()
+    .find((bp) => bp <= Math.floor(zoom) - 1); // - 1 due to ol zoom !== mapbox zoom
+  return mapping[closest || Math.min(...breakPoints)];
+};
+
+/**
+ * This function add layers in the mapbox style to show notifications lines.
+ */
+const addNotificationsLayers = (
+  mapboxLayer: object,
+  notifications: FeatureCollection[],
+  beforeLayerId: string,
+  zoom: number,
+  graphMapping: object,
+) => {
+  if (!mapboxLayer) {
+    return;
+  }
+  const features = notifications.map((n) => n.features).flat();
+  addSourceAndLayers(
+    mapboxLayer,
+    'notifications',
+    {
+      type: 'geojson',
+      data: {
+        type: 'FeatureCollection',
+        features,
+      },
+    },
+    [
+      {
+        id: 'notificationsActive',
+        source: 'notifications',
+        type: 'line',
+        paint: {
+          'line-width': 5,
+          'line-color': 'rgba(255,0,0,1)',
+          'line-dasharray': [2, 2],
+        },
+        layout: { visibility: 'visible' },
+        filter: [
+          'all',
+          ['==', ['get', 'isActive'], true],
+          ['==', ['get', 'graph'], getCurrentGraph(graphMapping, zoom)],
+          ['==', ['get', 'disruption_type'], 'DISRUPTION'],
+        ],
+      },
+    ],
+    beforeLayerId,
+  );
+};
+
+const parsePreviewNotification = (mocoPreviewObject: {
+  id: number;
+  graphs: object;
+}) => {
+  let properties = {};
+  const features = Object.keys(mocoPreviewObject.graphs).map((graph) => {
+    const feature = mocoPreviewObject.graphs[graph].features[0];
+    properties = mocoPreviewObject.graphs[graph].properties;
+    return { ...feature, properties: { ...feature.properties, graph } };
+  });
+  return {
+    type: 'FeatureCollection',
+    properties,
+    features,
+  };
+};
+
+export {
+  addNotificationsLayers,
+  parsePreviewNotification,
+  getNotificationsWithStatus,
+};
