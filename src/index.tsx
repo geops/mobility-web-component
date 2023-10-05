@@ -16,8 +16,8 @@ register(
     'notificationurl',
     'notificationbeforelayerid',
     'realtimeurl',
-    'maxZoom',
-    'minZoom',
+    'maxzoom',
+    'minzoom',
   ],
   { shadow: true },
 );
