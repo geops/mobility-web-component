@@ -1,11 +1,10 @@
-import { useContext, useEffect, useState, useMemo } from 'preact/hooks';
-import { Map } from 'ol';
-import { MaplibreLayer } from 'mobility-toolbox-js/ol';
-import { MapContext } from '../MobilityToolboxMap';
+import { useEffect, useState } from 'preact/hooks';
 import addNotificationsLayers from './addNotificationsLayers';
 import getNotificationsWithStatus from './getNotificationsWithStatus';
 import parsePreviewNotification from './parsePreviewNotification';
 import { unByKey } from 'ol/Observable';
+
+import useMapContext from '../lib/hooks/useMapContext';
 
 interface Graphs {
   [key: string]: string;
@@ -21,7 +20,7 @@ let abortCtrl = new AbortController();
 
 const useZoom = () => {
   const [zoom, setZoom] = useState(10);
-  const { map } = useContext(MapContext);
+  const { map } = useMapContext();
   useEffect(() => {
     const view = map.getView();
     const zoomListener = view.on('change:resolution', () => {
@@ -38,7 +37,7 @@ const useNotifications = (
   notificationUrl: string | undefined,
   notificationBeforeLayerId: string,
 ) => {
-  const { baseLayer } = useContext(MapContext);
+  const { baseLayer } = useMapContext();
   const [notifications, setNotifications] = useState([]);
   const [previewNotification, setPreviewNotification] = useState(null);
   const [shouldAddPreviewNotifications, setShouldAddPreviewNotifications] =

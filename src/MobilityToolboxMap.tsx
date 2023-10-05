@@ -9,6 +9,7 @@ import olStyle from 'ol/ol.css';
 import style from './style.css';
 import RealtimeLayer from './RealtimeLayer/RealtimeLayer';
 import NotificationLayer from './NotificationLayer/NotificationLayer';
+import { MapContext } from './lib/hooks/useMapContext';
 
 type Props = {
   class: string;
@@ -29,8 +30,6 @@ type Props = {
 const params = new URLSearchParams(window.location.search);
 const copyrightControl = new CopyrightControl({});
 const map = new Map({ controls: [new ScaleLine()] });
-
-export const MapContext = createContext(null);
 
 const useBaseLayer = (
   style: string,

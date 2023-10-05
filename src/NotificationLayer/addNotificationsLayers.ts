@@ -1,6 +1,8 @@
+import { FeatureCollection } from 'geojson';
+
 import addSourceAndLayers from './addSourceAndLayers';
 
-const getCurrentGraph = (mapping, zoom) => {
+const getCurrentGraph = (mapping: object, zoom: number) => {
   const breakPoints = Object.keys(mapping).map((k) => parseFloat(k));
   const closest = breakPoints
     .reverse()
@@ -12,11 +14,11 @@ const getCurrentGraph = (mapping, zoom) => {
  * This function add layers in the mapbox style to show notifications lines.
  */
 const addNotificationsLayers = (
-  mapboxLayer,
-  notifications,
-  beforeLayerId,
-  zoom,
-  graphMapping,
+  mapboxLayer: object,
+  notifications: FeatureCollection[],
+  beforeLayerId: string,
+  zoom: number,
+  graphMapping: object,
 ) => {
   if (!mapboxLayer) {
     return;

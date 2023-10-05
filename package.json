@@ -22,6 +22,7 @@
   },
   "type": "module",
   "dependencies": {
+    "@types/geojson": "^7946.0.11",
     "rosetta": "^1.1.0"
   }
 }

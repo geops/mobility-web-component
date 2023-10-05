@@ -2,12 +2,12 @@ import { RealtimeLayer as MtbRealtimeLayer } from 'mobility-toolbox-js/ol';
 import Geolocation from 'ol/Geolocation';
 import { fromLonLat } from 'ol/proj';
 import { createContext } from 'preact';
-import { useContext, useEffect, useMemo, useState } from 'preact/hooks';
+import { useEffect, useMemo, useState } from 'preact/hooks';
 import type { RealtimeMot } from 'mobility-toolbox-js/types';
 import rosetta from 'rosetta';
 
 import RouteSchedule from './RouteSchedule';
-import { MapContext } from '../MobilityToolboxMap';
+import useMapContext from '../lib/hooks/useMapContext';
 
 const i18n = rosetta({
   de: {
@@ -52,7 +52,7 @@ const geolocation = new Geolocation();
 
 function GeolocationControl() {
   const [isTracking, setIsTracking] = useState(false);
-  const { map } = useContext(MapContext);
+  const { map } = useMapContext();
 
   useEffect(() => {
     geolocation.on('change:position', () => {
@@ -103,7 +103,7 @@ function RealtimeLayer({
   realtimeUrl = 'wss://tralis-tracker-api.geops.io/ws',
 }: Props) {
   const [lineInfos, setLineInfos] = useState(null);
-  const { map } = useContext(MapContext);
+  const { map } = useMapContext();
   const [feature, setFeature] = useState(null);
 
   const tracker = useMemo(() => {

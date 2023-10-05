@@ -1,4 +1,4 @@
-const parsePreviewNotification = (mocoPreviewObject: { id: number, graphs: Object }) => {
+const parsePreviewNotification = (mocoPreviewObject: { id: number, graphs: object }) => {
     let properties = {};
     const features = Object.keys(mocoPreviewObject.graphs).map((graph) => {
         const feature = mocoPreviewObject.graphs[graph].features[0];
