@@ -186,7 +186,7 @@ function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
           >
             {!!lineInfos && (
               <>
-                <ScrollableHandler className="z-10 absolute inset-0 w-full h-[80px] touch-none @lg:hidden" />
+                <ScrollableHandler className="z-10 absolute inset-0 w-full h-[60px] touch-none @lg:hidden" />
                 <RouteSchedule
                   className="z-5 relative overflow-x-hidden overflow-y-auto  scrollable-inner"
                   lineInfos={lineInfos}
