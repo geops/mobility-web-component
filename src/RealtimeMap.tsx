@@ -2,7 +2,11 @@ import { RealtimeLayer, MaplibreLayer } from "mobility-toolbox-js/ol";
 import { Map } from "ol";
 import { createContext } from "preact";
 import { useEffect, useMemo, useRef, useState } from "preact/hooks";
-import type { RealtimeMot } from "mobility-toolbox-js/types";
+import type {
+  RealtimeMot,
+  RealtimeStation,
+  RealtimeStationproperties,
+} from "mobility-toolbox-js/types";
 import rosetta from "rosetta";
 
 import RouteSchedule from "./RouteSchedule";
@@ -186,13 +190,22 @@ function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
           >
             {!!lineInfos && (
               <>
-                <ScrollableHandler className="z-10 absolute inset-0 w-full h-[60px] touch-none @lg:hidden" />
+                <ScrollableHandler className="z-10 absolute inset-0 w-full h-[60px] touch-none @lg:hidden flex justify-center ">
+                  <div
+                    className="bg-gray-300"
+                    style={{
+                      width: 32,
+                      height: 4,
+                      borderRadius: 2,
+                      margin: 6,
+                    }}
+                  ></div>
+                </ScrollableHandler>
                 <RouteSchedule
                   className="z-5 relative overflow-x-hidden overflow-y-auto  scrollable-inner"
                   lineInfos={lineInfos}
                   trackerLayer={tracker}
                   onStationClick={(station) => {
-                    console.log("station click");
                     if (station.coordinate) {
                       map.getView().animate({
                         zoom: map.getView().getZoom(),
