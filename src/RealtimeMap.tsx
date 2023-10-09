@@ -177,17 +177,16 @@ function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
             </div>
           </div>
           <div
-            className={`flex-0 relative overflow-hidden border-t @lg:borderstopSequence-t-0 @lg:border-r ${
+            className={`flex-0 relative overflow-hidden border-t @lg:borderstopSequence-t-0 @lg:border-r flex flex-col ${
               lineInfos
                 ? "w-full min-h-[75px] max-h-[70%] @lg:w-[350px] @lg:max-h-full @lg:h-[100%!important]"
                 : "hidden"
             }`}
-            onScroll={(evt) => console.log("scroll")}
-            onScrollCapture={(evt) => console.log("scrollcapture")}
             // style={{ maxHeight: "calc(100% - 150px)" }}
           >
             {!!lineInfos && (
-              <ScrollableHandler className="z-10 relative inset-0 w-full h-full touch-none @lg:hidden flex flex-col">
+              <>
+                <ScrollableHandler className="z-10 absolute inset-0 w-full h-[80px] touch-none @lg:hidden" />
                 <RouteSchedule
                   className="z-5 relative overflow-x-hidden overflow-y-auto  scrollable-inner"
                   lineInfos={lineInfos}
@@ -202,7 +201,7 @@ function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
                     }
                   }}
                 />
-              </ScrollableHandler>
+              </>
             )}
           </div>
         </div>

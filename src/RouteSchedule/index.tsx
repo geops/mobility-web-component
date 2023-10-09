@@ -454,47 +454,7 @@ export default function RouteSchedule(props) {
   return (
     <>
       {renderHeader({ ...props })}
-      <div
-        ref={ref}
-        className={props.className}
-        style={{
-          touchAction: "none",
-        }}
-        onScroll={(evt) => {
-          const scrollableElt = evt.target as HTMLDivElement;
-          // When the element is at the beginning or at the end we active the overlay dnd movement in the opposite direction.
-          if (scrollableElt.scrollTop == 0) {
-            scrollableElt.style.touchAction = "pan-down";
-          } else if (
-            scrollableElt.offsetHeight + scrollableElt.scrollTop >=
-            scrollableElt.scrollHeight
-          ) {
-            scrollableElt.style.touchAction = "pan-up";
-          }
-        }}
-        onPointerMove={(evt) => {
-          // We don't trigger the overlay dnd movement depending on the css.
-          const scrollableElt = ref.current as HTMLDivElement;
-          if (
-            evt.movementY > 0 &&
-            (scrollableElt.style.touchAction === "pan-up" ||
-              scrollableElt.style.touchAction === "pan-y")
-          ) {
-            evt.stopPropagation();
-          } else if (
-            evt.movementY < 0 &&
-            (scrollableElt.style.touchAction === "pan-down" ||
-              scrollableElt.style.touchAction === "pan-y")
-          ) {
-            evt.stopPropagation();
-          }
-        }}
-        onPointerCancel={(evt) => {
-          console.log("pointercancel");
-          evt.preventDefault();
-          evt.stopImmediatePropagation();
-        }}
-      >
+      <div ref={ref} className={props.className}>
         {props.lineInfos.stations.map((stop, idx) => {
           return renderStation({ ...props, stop, idx, t });
         })}
