@@ -186,7 +186,6 @@ function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
                 ? "w-full min-h-[75px] max-h-[70%] @lg:w-[350px] @lg:max-h-full @lg:h-[100%!important]"
                 : "hidden"
             }`}
-            // style={{ maxHeight: "calc(100% - 150px)" }}
           >
             {!!lineInfos && (
               <>
