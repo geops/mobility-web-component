@@ -774,10 +774,10 @@ lodash.throttle@4.1.1:
   resolved "https://registry.yarnpkg.com/lodash.throttle/-/lodash.throttle-4.1.1.tgz#c23e91b710242ac70c37f1e1cda9274cc39bf2f4"
   integrity sha512-wIkUCfVKpVsWo3JSZlc+8MB5it+2AN5W8J7YVMST30UrvcQNZ1Okbj+rbVniijTWE6FGYy4XJq/rHkas8qJMLQ==
 
-maplibre-gl@^3.4.0:
-  version "3.4.0"
-  resolved "https://registry.yarnpkg.com/maplibre-gl/-/maplibre-gl-3.4.0.tgz#e0f48b658a983a0339a4f85eb4c41c95df2d33a2"
-  integrity sha512-5Q36HD2mJoPcd85O2wIDq2t6kl9KMBpITO12A9wPKpQ6ieYKKf5Dp4U/XNjmZWtSTIX2hnx+OwlInkAVLdav6Q==
+maplibre-gl@^3.4.1:
+  version "3.4.1"
+  resolved "https://registry.yarnpkg.com/maplibre-gl/-/maplibre-gl-3.4.1.tgz#a22487f981e07d5b04bb525a1927ead2ef1bdb69"
+  integrity sha512-RPcdaiZ52G3X+PaHQxqQ1d4I8iTIPRl4OXhPU/3o37kDf+ImLXpUVZj4p0qBCGm71n79daVzaCMG9QxfSSQbnQ==
   dependencies:
     "@mapbox/geojson-rewind" "^0.5.2"
     "@mapbox/jsonlint-lines-primitives" "^2.0.2"
