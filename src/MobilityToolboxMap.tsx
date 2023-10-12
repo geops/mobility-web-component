@@ -107,7 +107,6 @@ function MobilityToolboxMap({
         ref={(el) => setRef(el as HTMLDivElement)}
         className="w-full h-full relative"
       >
-        {false}
         {baseLayer && mapType === 'realtime' ? (
           <RealtimeLayer
             apikey={apikey}
