@@ -1,27 +1,30 @@
-import {
-  CopyrightControl,
-  RealtimeLayer,
-  MaplibreLayer,
-} from "mobility-toolbox-js/ol";
+import { RealtimeLayer, MaplibreLayer } from "mobility-toolbox-js/ol";
 import { linear } from "ol/easing";
 import { Map } from "ol";
-import Geolocation from "ol/Geolocation";
-import ScaleLine from "ol/control/ScaleLine.js";
-import { fromLonLat } from "ol/proj";
 import { createContext } from "preact";
 import { useEffect, useMemo, useRef, useState } from "preact/hooks";
-import type { RealtimeMot } from "mobility-toolbox-js/types";
+import type {
+  RealtimeMot,
+  RealtimeStation,
+  RealtimeStationproperties,
+} from "mobility-toolbox-js/types";
 import { Point } from "ol/geom";
 import rosetta from "rosetta";
-
 import RouteSchedule from "./RouteSchedule";
+import { unByKey } from "ol/Observable";
+import centerOnVehicle from "./utils/centerOnVehicle";
+import getFullTrajectoryAndFit from "./utils/getFullTrajectoryAndFit";
+import GeolocationButton from "./GeolocationButton";
+import ScaleLine from "./ScaleLine";
+import Copyright from "./Copyright";
+import ScrollableHandler from "./ScrollableHandler";
 // @ts-ignore
 import olStyle from "ol/ol.css";
 // @ts-ignore
 import style from "./style.css";
-import { unByKey } from "ol/Observable";
-import centerOnVehicle from "./utils/centerOnVehicle";
-import getFullTrajectoryAndFit from "./utils/getFullTrajectoryAndFit";
+// @ts-ignore
+import realtimeMapCss from "./RealtimeMap.css";
+import { fromLonLat } from "ol/proj";
 
 const i18n = rosetta({
   de: {
@@ -66,40 +69,11 @@ type Props = {
 
 const TRACKING_ZOOM = 16;
 
-const geolocation = new Geolocation();
-
-function GeolocationControl({ isTracking, onClick }) {
-  useEffect(() => {
-    geolocation.setTracking(isTracking);
-  }, [isTracking]);
-
-  return (
-    <button
-      className="absolute right-4 top-4 z-10 bg-white shadow-lg rounded-full p-1"
-      onClick={onClick}
-    >
-      <svg
-        className={isTracking ? "animate-pulse" : ""}
-        stroke="currentColor"
-        fill="currentColor"
-        stroke-width="0"
-        viewBox="0 0 512 512"
-        focusable="false"
-        height="1.5em"
-        width="1.5em"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path d="M256 56c110.532 0 200 89.451 200 200 0 110.532-89.451 200-200 200-110.532 0-200-89.451-200-200 0-110.532 89.451-200 200-200m0-48C119.033 8 8 119.033 8 256s111.033 248 248 248 248-111.033 248-248S392.967 8 256 8zm0 168c-44.183 0-80 35.817-80 80s35.817 80 80 80 80-35.817 80-80-35.817-80-80-80z"></path>
-      </svg>
-    </button>
-  );
-}
-
-const copyrightControl = new CopyrightControl({});
-const map = new Map({ controls: [new ScaleLine()] });
+const map = new Map({ controls: [] });
 
 function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
   const ref = useRef();
+  const mapRef = useRef();
   const [lineInfos, setLineInfos] = useState(null);
   const [isTracking, setIsTracking] = useState(false); // user position tracking
   const [isFollowing, setIsFollowing] = useState(false); // vehicle position tracking
@@ -114,7 +88,7 @@ function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
     if (apikey) {
       return new RealtimeLayer({
         apiKey: apikey,
-        url: "wss://tralis-tracker-api.geops.io/ws",
+        url: "wss://api.geops.io/tracker-ws/v1/ws",
         getMotsByZoom: mots
           ? () => mots.split(",") as RealtimeMot[]
           : undefined,
@@ -129,8 +103,8 @@ function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
       return;
     }
 
-    if (ref.current) {
-      map.setTarget(ref.current);
+    if (mapRef.current) {
+      map.setTarget(mapRef.current);
       map.updateSize();
     }
 
@@ -144,8 +118,6 @@ function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
     tracker.onClick(([feature]) => {
       setFeature(feature);
     });
-
-    copyrightControl.attachToMap(map);
 
     return () => {
       map.setTarget();
@@ -165,23 +137,6 @@ function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
     let olKeys = [];
     if (isTracking) {
       setIsFollowing(false);
-      olKeys = [
-        // First time we zoom and center on the position
-        geolocation.once("change:position", (evt) => {
-          const position = evt.target.getPosition();
-          if (evt.target.getPosition()) {
-            map.getView().setZoom(TRACKING_ZOOM);
-            map.getView().setCenter(fromLonLat(position, "EPSG:3857"));
-          }
-        }),
-        // then we only center the map.
-        geolocation.on("change:position", (evt) => {
-          const position = evt.target.getPosition();
-          if (evt.target.getPosition()) {
-            map.getView().setCenter(fromLonLat(position, "EPSG:3857"));
-          }
-        }),
-      ];
     }
     return () => {
       unByKey(olKeys);
@@ -263,14 +218,14 @@ function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
     let vehicleId = null;
     if (feature) {
       vehicleId = feature.get("train_id");
-      tracker.api.subscribeStopSequence(
-        vehicleId,
-        ({ content: [stopSequence] }) => {
+      tracker.api.subscribeStopSequence(vehicleId, ({ content }) => {
+        if (content) {
+          const [stopSequence] = content;
           if (stopSequence) {
             setLineInfos(stopSequence);
           }
-        },
-      );
+        }
+      });
       const vehicle = vehicleId && tracker.trajectories?.[vehicleId];
       let center = vehicle?.properties.coordinate;
       if (vehicle && !center) {
@@ -309,34 +264,71 @@ function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
     <I18nContext.Provider value={i18n}>
       <style>{olStyle}</style>
       <style>{style}</style>
-      <div ref={ref} className="w-full h-full relative">
-        <RouteSchedule
-          map={map}
-          lineInfos={lineInfos}
-          trackerLayer={tracker}
-          onStationClick={(station) => {
-            if (station.coordinate) {
-              const size = map.getSize();
-              const extent = map.getView().calculateExtent(size);
-              const offset = (extent[2] - extent[0]) / 5;
-
-              map.getView().animate({
-                zoom: map.getView().getZoom(),
-                center: [station.coordinate[0] - offset, station.coordinate[1]],
-              });
-            }
-          }}
-          isFollowing={isFollowing}
-          onFollowButtonClick={() => {
-            setIsFollowing(!isFollowing);
-          }}
-        />
-        <GeolocationControl
-          isTracking={isTracking}
-          onClick={() => {
-            setIsTracking(!isTracking);
-          }}
-        />
+      <style>{realtimeMapCss}</style>
+      <div ref={ref} className="@container/main w-full h-full relative border">
+        <div className="w-full h-full relative flex flex-col @lg/main:flex-row-reverse">
+          <div ref={mapRef} className="flex-1 relative overflow-hidden ">
+            <div className="z-20 absolute right-2 top-2 flex flex-col gap-2">
+              <GeolocationButton
+                map={map}
+                isTracking={isTracking}
+                onClick={() => {
+                  setIsTracking(!isTracking);
+                }}
+              />
+            </div>
+            <div className="z-10 absolute left-2 right-2 text-[10px] bottom-2 flex justify-between items-end gap-2">
+              <ScaleLine
+                map={map}
+                className={"bg-slate-50 bg-opacity-70"}
+              ></ScaleLine>
+              <Copyright
+                map={map}
+                className={"bg-slate-50 bg-opacity-70"}
+              ></Copyright>
+            </div>
+          </div>
+          <div
+            className={`flex-0 relative overflow-hidden border-t @lg:borderstopSequence-t-0 @lg:border-r flex flex-col ${
+              lineInfos
+                ? "w-full min-h-[75px] max-h-[70%] @lg:w-[350px] @lg:max-h-full @lg:h-[100%!important]"
+                : "hidden"
+            }`}
+          >
+            {!!lineInfos && (
+              <>
+                <ScrollableHandler className="z-10 absolute inset-0 w-full h-[60px] touch-none @lg:hidden flex justify-center ">
+                  <div
+                    className="bg-gray-300"
+                    style={{
+                      width: 32,
+                      height: 4,
+                      borderRadius: 2,
+                      margin: 6,
+                    }}
+                  ></div>
+                </ScrollableHandler>
+                <RouteSchedule
+                  className="z-5 relative overflow-x-hidden overflow-y-auto  scrollable-inner"
+                  lineInfos={lineInfos}
+                  trackerLayer={tracker}
+                  onStationClick={(station) => {
+                    if (station.coordinate) {
+                      map.getView().animate({
+                        zoom: map.getView().getZoom(),
+                        center: [station.coordinate[0], station.coordinate[1]],
+                      });
+                    }
+                  }}
+                  isFollowing={isFollowing}
+                  onFollowButtonClick={() => {
+                    setIsFollowing(!isFollowing);
+                  }}
+                />
+              </>
+            )}
+          </div>
+        </div>
       </div>
     </I18nContext.Provider>
   );

@@ -1,1 +1,9 @@
-module.exports = {};
+module.exports = {
+  // theme: {
+  //   // ...
+  // },
+  plugins: [
+    require("@tailwindcss/container-queries"),
+    // ...
+  ],
+};
