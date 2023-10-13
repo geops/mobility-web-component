@@ -774,10 +774,10 @@ lodash.throttle@4.1.1:
   resolved "https://registry.yarnpkg.com/lodash.throttle/-/lodash.throttle-4.1.1.tgz#c23e91b710242ac70c37f1e1cda9274cc39bf2f4"
   integrity sha512-wIkUCfVKpVsWo3JSZlc+8MB5it+2AN5W8J7YVMST30UrvcQNZ1Okbj+rbVniijTWE6FGYy4XJq/rHkas8qJMLQ==
 
-maplibre-gl@^3.4.1:
-  version "3.4.1"
-  resolved "https://registry.yarnpkg.com/maplibre-gl/-/maplibre-gl-3.4.1.tgz#a22487f981e07d5b04bb525a1927ead2ef1bdb69"
-  integrity sha512-RPcdaiZ52G3X+PaHQxqQ1d4I8iTIPRl4OXhPU/3o37kDf+ImLXpUVZj4p0qBCGm71n79daVzaCMG9QxfSSQbnQ==
+maplibre-gl@^3.5.0:
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/maplibre-gl/-/maplibre-gl-3.5.0.tgz#063dabd438474a4c9ec30f16aec6c65ff2aa3291"
+  integrity sha512-kPEBz6r1LBOZjUpFy+4wZU5Nvnkr60wBtYN/JD6N7oaA4Prpe21afYKxi1oWzSPSfspS1tWNF18GlpF2XcmNSA==
   dependencies:
     "@mapbox/geojson-rewind" "^0.5.2"
     "@mapbox/jsonlint-lines-primitives" "^2.0.2"
@@ -830,10 +830,10 @@ minimist@^1.2.6, minimist@^1.2.8:
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.8.tgz#c1a464e7693302e082a075cee0c057741ac4772c"
   integrity sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA==
 
-mobility-toolbox-js@^2.1.1:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/mobility-toolbox-js/-/mobility-toolbox-js-2.1.1.tgz#d8550093d0b7f25c874d57c326dcad8a7054e991"
-  integrity sha512-IYwLnRnGGJH0IfPw2XIDHiM5k0uHykTXP3YmDyefNYfh4cOue7ZhNGOskOpJtL32BtNA7JYJ4zT5YTzS5Re/yA==
+mobility-toolbox-js@^2.2.0-beta.3:
+  version "2.2.0-beta.3"
+  resolved "https://registry.yarnpkg.com/mobility-toolbox-js/-/mobility-toolbox-js-2.2.0-beta.3.tgz#58836004f0713c718433a96baa7207c593aff110"
+  integrity sha512-YtMNGSN7iqaQocCteSaWZFH9TCljDxzxMxc3YXn071Q9GbkaWypfjTVbvgXhJ4NI5vjo7ds1QYuPlesEyC32lQ==
   dependencies:
     "@turf/helpers" "6.5.0"
     "@turf/transform-rotate" "6.5.0"
@@ -998,10 +998,10 @@ potpack@^2.0.0:
   resolved "https://registry.yarnpkg.com/potpack/-/potpack-2.0.0.tgz#61f4dd2dc4b3d5e996e3698c0ec9426d0e169104"
   integrity sha512-Q+/tYsFU9r7xoOJ+y/ZTtdVQwTWfzjbiXBDMM/JKUux3+QPP02iUuIoeBQ+Ot6oEDlC+/PGjB/5A3K7KKb7hcw==
 
-preact-custom-element@^4.2.1:
-  version "4.2.1"
-  resolved "https://registry.yarnpkg.com/preact-custom-element/-/preact-custom-element-4.2.1.tgz#a18752ef60823ea61199d9cdc1866e51139b3f46"
-  integrity sha512-/fiEEAyC+MXRlCBRmv/owoN5BLpO2nF/MF3YBHLtp4C2lNqlhV+a4he74A5DhfDoRmxDHm0sYVgQzWFEyzTDsw==
+preact-custom-element@^4.3.0:
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/preact-custom-element/-/preact-custom-element-4.3.0.tgz#0404a0759f797a133adf246ec25eb179256fc55a"
+  integrity sha512-5hG7nQhU4e7RNfCEQklaUqYQiiyibLuJ2wbhR+E2v1m8m9NDsJok5MykW/Nx0YLLBcXr8xnkap6DwByGy2TzDA==
 
 preact@^10.18.1:
   version "10.18.1"

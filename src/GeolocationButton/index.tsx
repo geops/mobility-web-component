@@ -46,7 +46,7 @@ function GeolocationButton({ map, isTracking, ...props }: Props) {
   }, [map, geolocation]);
 
   useEffect(() => {
-    geolocation.setTracking(!isTracking);
+    geolocation.setTracking(isTracking);
   }, [geolocation, isTracking]);
 
   return (

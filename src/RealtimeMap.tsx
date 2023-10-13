@@ -3,12 +3,7 @@ import { linear } from "ol/easing";
 import { Map } from "ol";
 import { createContext } from "preact";
 import { useEffect, useMemo, useRef, useState } from "preact/hooks";
-import type {
-  RealtimeMot,
-  RealtimeStation,
-  RealtimeStationproperties,
-} from "mobility-toolbox-js/types";
-import { Point } from "ol/geom";
+import type { RealtimeMot, RealtimeTrainId } from "mobility-toolbox-js/types";
 import rosetta from "rosetta";
 import RouteSchedule from "./RouteSchedule";
 import { unByKey } from "ol/Observable";
@@ -88,7 +83,7 @@ function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
     if (apikey) {
       return new RealtimeLayer({
         apiKey: apikey,
-        url: "wss://api.geops.io/tracker-ws/v1/ws",
+        url: "wss://api.geops.io/tracker-ws/dev/ws",
         getMotsByZoom: mots
           ? () => mots.split(",") as RealtimeMot[]
           : undefined,
@@ -162,6 +157,8 @@ function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
     let interval2 = null;
 
     if (tracker) {
+      tracker.useThrottle = !isFollowing;
+      // tracker.useRequestAnimationFrame = isFollowing;
       tracker.allowRenderWhenAnimating = !!isFollowing;
     }
     if (!isFollowing || !lineInfos || !map || !tracker) {
@@ -170,46 +167,29 @@ function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
 
     setIsTracking(false);
 
-    const vehicle = lineInfos.id && tracker?.trajectories?.[lineInfos.id];
-    const promise = vehicle
-      ? Promise.resolve(true)
-      : getFullTrajectoryAndFit(map, tracker, lineInfos.id);
+    const followVehicle = async (id: RealtimeTrainId) => {
+      let vehicle = id && tracker?.trajectories?.[id];
 
-    promise
-      .then((success) => {
-        // We wait that the vehicle is on the map, the we zoom on it
-        const promise = new Promise((resolve) => {
-          interval2 = setInterval(() => {
-            const vehicle =
-              lineInfos.id && tracker?.trajectories?.[lineInfos.id];
-            if (vehicle) {
-              centerOnVehicle(map, tracker, lineInfos.id, TRACKING_ZOOM)
-                .then(() => {
-                  resolve(true);
-                })
-                .catch((err) => {
-                  console.log(err);
-                });
-            }
-          }, 1000);
-        });
-        return promise;
-      })
-      .then((success) => {
-        // Once the map is zoomed on the vehicle we follow him, on ly recenter , no zoom chnages.
-        if (success) {
-          clearInterval(interval2);
-          interval = setInterval(() => {
-            centerOnVehicle(map, tracker, lineInfos.id);
-          }, 1000);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      if (!vehicle) {
+        vehicle = await tracker.api
+          .get("partial_trajectory_" + lineInfos.id)
+          .then((message) => message.content);
+      }
+
+      // tracker.useThrottle = false;
+      // tracker.allowRenderWhenAnimating = true;
+      const success = await centerOnVehicle(vehicle, map, TRACKING_ZOOM);
+
+      // Once the map is zoomed on the vehicle we follow him, only recenter , no zoom changes.
+      if (success === true) {
+        interval = setInterval(() => {
+          centerOnVehicle(tracker?.trajectories?.[lineInfos.id], map);
+        }, 1000);
+      }
+    };
+    followVehicle(lineInfos.id);
 
     return () => {
-      clearInterval(interval2);
       clearInterval(interval);
     };
   }, [isFollowing, map, tracker, lineInfos]);
@@ -226,30 +206,11 @@ function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
           }
         }
       });
-      const vehicle = vehicleId && tracker.trajectories?.[vehicleId];
-      let center = vehicle?.properties.coordinate;
-      if (vehicle && !center) {
-        // If the vehicle is not on the intial extent (vehicle is null), we try to zoom first on its raw_coordinates property
-        // then the layer will set the coordinate property after the first render.
-        center = vehicle?.properties.raw_coordinates;
-        if (center) {
-          center = fromLonLat(center);
-        }
+      // No animation, it's nicer for the user.
+      const center = tracker?.trajectories?.[vehicleId]?.properties?.coordinate;
+      if (center) {
+        map.getView().setCenter(center);
       }
-
-      if (!center) {
-        return;
-      }
-      const view = map.getView();
-      const pt = new Point(center);
-      // HACK: how do we get the Routeinfos width?
-      pt.translate(-150 * view.getResolution(), 0);
-      center = pt.getCoordinates().map((coord: number) => Math.floor(coord));
-      view.animate({
-        center,
-        duration: 500,
-        easing: linear,
-      });
     } else {
       setLineInfos(null);
     }
@@ -289,10 +250,10 @@ function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
             </div>
           </div>
           <div
-            className={`flex-0 relative overflow-hidden border-t @lg:borderstopSequence-t-0 @lg:border-r flex flex-col ${
+            className={`flex-0 relative overflow-hidden flex flex-col transition-[width] ${
               lineInfos
-                ? "w-full min-h-[75px] max-h-[70%] @lg:w-[350px] @lg:max-h-full @lg:h-[100%!important]"
-                : "hidden"
+                ? "w-full min-h-[75px] max-h-[70%] @lg:w-[350px] @lg:max-h-full @lg:h-[100%!important] border-t @lg:border-t-0 @lg:border-r"
+                : "w-0"
             }`}
           >
             {!!lineInfos && (
