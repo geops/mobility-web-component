@@ -1,6 +1,7 @@
 {
   "name": "mobility-web-component",
   "version": "0.0.1",
+  "homepage": "https://mobility-web-component.geops.io/",
   "dependencies": {
     "maplibre-gl": "^3.5.0",
     "mobility-toolbox-js": "^2.2.0",
