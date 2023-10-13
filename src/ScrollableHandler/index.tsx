@@ -29,8 +29,6 @@ function ScrollableHandler(props) {
         ) as HTMLDivElement;
         elt.setPointerCapture(evt.pointerId);
 
-        overlayElt.style.transitionDuration = "0s";
-
         const mapRect = overlayElt.parentElement.getBoundingClientRect();
         const eltRect = elt.getBoundingClientRect();
         const deltaToTop = mapRect.top + (evt.clientY - eltRect.top);
@@ -43,7 +41,6 @@ function ScrollableHandler(props) {
         }
 
         function onDragStop(evt: PointerEvent) {
-          overlayElt.style.transitionDuration = ".5s";
           (evt.target as HTMLElement).releasePointerCapture(evt.pointerId);
           document.removeEventListener("pointermove", onDragg);
           document.removeEventListener("pointerup", onDragStop);

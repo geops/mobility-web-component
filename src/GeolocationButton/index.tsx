@@ -1,14 +1,18 @@
 import { Geolocation, Map } from "ol";
 import { unByKey } from "ol/Observable";
 import { fromLonLat } from "ol/proj";
-import { PreactDOMAttributes } from "preact";
+import type { PreactDOMAttributes, JSX } from "preact";
 import { useEffect, useMemo, useState } from "preact/hooks";
 
-type Props = { map: Map } & PreactDOMAttributes;
+type Props = {
+  map: Map;
+  isTracking: boolean;
+} & JSX.HTMLAttributes<HTMLButtonElement> &
+  PreactDOMAttributes;
 
-function GeolocationButton({ map, ...props }: Props) {
-  const [isTracking, setIsTracking] = useState(false);
+const TRACKING_ZOOM = 16;
 
+function GeolocationButton({ map, isTracking, ...props }: Props) {
   const geolocation = useMemo(() => {
     return new Geolocation();
   }, []);
@@ -19,17 +23,19 @@ function GeolocationButton({ map, ...props }: Props) {
       return;
     }
     keys = [
-      geolocation.on("change:position", () => {
-        const position = geolocation.getPosition();
-        if (position) {
+      // First time we zoom and center on the position
+      geolocation.once("change:position", (evt) => {
+        const position = evt.target.getPosition();
+        if (evt.target.getPosition()) {
+          map.getView().setZoom(TRACKING_ZOOM);
           map.getView().setCenter(fromLonLat(position, "EPSG:3857"));
         }
       }),
-      geolocation.on("change:tracking", () => {
-        const position = geolocation.getPosition();
-        const tracking = geolocation.getTracking();
-        if (position && tracking) {
-          map.getView().setZoom(16);
+      // then we only center the map.
+      geolocation.on("change:position", (evt) => {
+        const position = evt.target.getPosition();
+        if (evt.target.getPosition()) {
+          map.getView().setCenter(fromLonLat(position, "EPSG:3857"));
         }
       }),
     ];
@@ -39,15 +45,12 @@ function GeolocationButton({ map, ...props }: Props) {
     };
   }, [map, geolocation]);
 
+  useEffect(() => {
+    geolocation.setTracking(isTracking);
+  }, [geolocation, isTracking]);
+
   return (
-    <button
-      className="bg-white shadow-lg rounded-full p-1"
-      onClick={() => {
-        setIsTracking(!isTracking);
-        geolocation.setTracking(!isTracking);
-      }}
-      {...props}
-    >
+    <button className="bg-white shadow-lg rounded-full p-1" {...props}>
       <svg
         className={isTracking ? "animate-pulse" : ""}
         stroke="currentColor"

@@ -1,28 +1,35 @@
 {
+  "name": "mobility-web-component",
+  "version": "0.0.1",
+  "homepage": "https://mobility-web-component.geops.io/",
+  "dependencies": {
+    "maplibre-gl": "^3.5.0",
+    "mobility-toolbox-js": "^2.2.0",
+    "ol": "^8.1.0",
+    "preact": "^10.18.1",
+    "preact-custom-element": "^4.3.0",
+    "rosetta": "^1.1.0"
+  },
   "devDependencies": {
     "@tailwindcss/container-queries": "^0.1.1",
     "esbuild": "^0.19.4",
     "esbuild-sass-plugin": "^2.16.0",
-    "maplibre-gl": "^3.4.1",
-    "mobility-toolbox-js": "^2.1.1",
-    "ol": "^8.1.0",
-    "preact": "^10.18.1",
-    "preact-custom-element": "^4.2.1",
+    "fixpack": "^4.0.0",
+    "husky": "^7.0.0",
     "prettier": "^3.0.3",
     "tailwindcss": "^3.3.3"
   },
   "scripts": {
     "build": "yarn build:css && yarn build:js",
+    "build:css": "yarn tailwind:component && yarn tailwind:website",
     "build:js": "node scripts/build.mjs",
-    "build:css": "npm run tailwind:component && npm run tailwind:website",
+    "dev": "node scripts/dev.mjs",
     "format": "prettier --write 'src/**/*.tsx'",
+    "prepare": "husky install",
+    "start": "yarn dev",
     "tailwind:component": "tailwindcss --output=src/style.css --content=src/**/*.tsx",
     "tailwind:website": "tailwindcss --output=output.css --content=index.html --minify",
-    "dev": "node scripts/dev.mjs",
     "up": "yarn upgrade-interactive --latest"
   },
-  "type": "module",
-  "dependencies": {
-    "rosetta": "^1.1.0"
-  }
+  "type": "module"
 }
