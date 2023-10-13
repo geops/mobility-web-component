@@ -246,22 +246,24 @@ function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
             </div>
           </div>
           <div
-            className={`flex-0 relative overflow-hidden flex flex-col transition-[width] ${
+            className={`flex-0 relative overflow-hidden flex flex-col transition-[min-height,max-height] @lg:transition-[width]  ${
               lineInfos
                 ? "w-full min-h-[75px] max-h-[70%] @lg:w-[350px] @lg:max-h-full @lg:h-[100%!important] border-t @lg:border-t-0 @lg:border-r"
-                : "w-0"
+                : "min-h-0 max-h-0 @lg:w-0"
             }`}
           >
             {!!lineInfos && (
               <>
-                <ScrollableHandler className="z-10 absolute inset-0 w-full h-[60px] touch-none @lg:hidden flex justify-center ">
+                <ScrollableHandler
+                  className="z-10 absolute inset-0 h-[65px] touch-none @lg:hidden flex justify-center"
+                  style={{ width: "calc(100% - 60px)" }}
+                >
                   <div
-                    className="bg-gray-300"
+                    className="bg-gray-300 m-2 -mr-[60px]"
                     style={{
                       width: 32,
                       height: 4,
                       borderRadius: 2,
-                      margin: 6,
                     }}
                   ></div>
                 </ScrollableHandler>
