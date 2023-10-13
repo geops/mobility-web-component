@@ -1,5 +1,4 @@
 import { RealtimeLayer, MaplibreLayer } from "mobility-toolbox-js/ol";
-import { linear } from "ol/easing";
 import { Map } from "ol";
 import { createContext } from "preact";
 import { useEffect, useMemo, useRef, useState } from "preact/hooks";
@@ -8,7 +7,6 @@ import rosetta from "rosetta";
 import RouteSchedule from "./RouteSchedule";
 import { unByKey } from "ol/Observable";
 import centerOnVehicle from "./utils/centerOnVehicle";
-import getFullTrajectoryAndFit from "./utils/getFullTrajectoryAndFit";
 import GeolocationButton from "./GeolocationButton";
 import ScaleLine from "./ScaleLine";
 import Copyright from "./Copyright";
@@ -172,12 +170,10 @@ function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
 
       if (!vehicle) {
         vehicle = await tracker.api
-          .get("partial_trajectory_" + lineInfos.id)
+          .getTrajectory(lineInfos.id, tracker.mode)
           .then((message) => message.content);
       }
 
-      // tracker.useThrottle = false;
-      // tracker.allowRenderWhenAnimating = true;
       const success = await centerOnVehicle(vehicle, map, TRACKING_ZOOM);
 
       // Once the map is zoomed on the vehicle we follow him, only recenter , no zoom changes.

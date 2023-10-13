@@ -11,8 +11,3 @@
 ::-webkit-scrollbar-track {
   background: transparent;
 }
-
-.hidden {
-  width:0;
-  /* // transition: all 1s ease; */
-}
