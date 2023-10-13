@@ -14,8 +14,7 @@
     "esbuild": "^0.19.4",
     "esbuild-sass-plugin": "^2.16.0",
     "fixpack": "^4.0.0",
-    "husky": "^8.0.3",
-    "is-ci": "^3.0.1",
+    "husky": "^7.0.0",
     "prettier": "^3.0.3",
     "tailwindcss": "^3.3.3"
   },
@@ -25,7 +24,7 @@
     "build:js": "node scripts/build.mjs",
     "dev": "node scripts/dev.mjs",
     "format": "prettier --write 'src/**/*.tsx'",
-    "prepare": "is-ci || husky install",
+    "prepare": "husky install",
     "start": "yarn dev",
     "tailwind:component": "tailwindcss --output=src/style.css --content=src/**/*.tsx",
     "tailwind:website": "tailwindcss --output=output.css --content=index.html --minify",
