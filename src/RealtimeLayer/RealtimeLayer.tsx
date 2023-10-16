@@ -1,14 +1,17 @@
 import { RealtimeLayer as MtbRealtimeLayer } from 'mobility-toolbox-js/ol';
-import Geolocation from 'ol/Geolocation';
-import { fromLonLat } from 'ol/proj';
 import { createContext } from 'preact';
 import { useEffect, useMemo, useState } from 'preact/hooks';
 import type { RealtimeMot } from 'mobility-toolbox-js/types';
 import rosetta from 'rosetta';
 
+import GeolocationButton from "../GeolocationButton";
+import ScrollableHandler from "../ScrollableHandler";
 import RouteSchedule from './RouteSchedule';
 import useMapContext from '../lib/hooks/useMapContext';
 import useParams from '../lib/hooks/useParams';
+import rsStyle from "./RealtimeLayer.css";
+
+
 
 const i18n = rosetta({
   de: {
@@ -49,51 +52,25 @@ type Props = {
   realtimeUrl: string;
 };
 
-const geolocation = new Geolocation();
+let deltaToTop = 0;
 
-function GeolocationControl() {
-  const [isTracking, setIsTracking] = useState(false);
-  const { map } = useMapContext();
+function onDragg(evt: PointerEvent) {
+  this.style.maxHeight = `calc(100% - ${evt.y - deltaToTop}px)`;
+  evt.stopPropagation();
+  evt.preventDefault();
+}
 
-  useEffect(() => {
-    geolocation.on('change:position', () => {
-      const position = geolocation.getPosition();
-      if (position) {
-        map.getView().setCenter(fromLonLat(position, 'EPSG:3857'));
-      }
-    });
-    geolocation.on('change:tracking', () => {
-      const position = geolocation.getPosition();
-      const tracking = geolocation.getTracking();
-      if (position && tracking) {
-        map.getView().setZoom(16);
-      }
-    });
-  }, []);
+function onDragStop(evt: PointerEvent) {
+  this.style.transitionDuration = ".5s";
+  if (this.clientHeight < 62) {
+    this.isMinimized = true;
+  }
+  (evt.target as HTMLElement).releasePointerCapture(evt.pointerId);
 
-  return (
-    <button
-      className="absolute right-4 top-4 z-10 bg-white shadow-lg rounded-full p-1"
-      onClick={() => {
-        setIsTracking(!isTracking);
-        geolocation.setTracking(!isTracking);
-      }}
-    >
-      <svg
-        className={isTracking ? 'animate-pulse' : ''}
-        stroke="currentColor"
-        fill="currentColor"
-        stroke-width="0"
-        viewBox="0 0 512 512"
-        focusable="false"
-        height="1.5em"
-        width="1.5em"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path d="M256 56c110.532 0 200 89.451 200 200 0 110.532-89.451 200-200 200-110.532 0-200-89.451-200-200 0-110.532 89.451-200 200-200m0-48C119.033 8 8 119.033 8 256s111.033 248 248 248 248-111.033 248-248S392.967 8 256 8zm0 168c-44.183 0-80 35.817-80 80s35.817 80 80 80 80-35.817 80-80-35.817-80-80-80z"></path>
-      </svg>
-    </button>
-  );
+  document.removeEventListener("pointermove", this.onDragg);
+  document.removeEventListener("pointerup", this.onDragStop);
+  evt.stopPropagation();
+  evt.preventDefault();
 }
 
 function RealtimeLayer({
@@ -165,23 +142,50 @@ function RealtimeLayer({
 
   return (
     <I18nContext.Provider value={i18n}>
-      <RouteSchedule
-        lineInfos={lineInfos}
-        trackerLayer={tracker}
-        onStationClick={(station) => {
-          if (station.coordinate) {
-            const size = map.getSize();
-            const extent = map.getView().calculateExtent(size);
-            const offset = (extent[2] - extent[0]) / 5;
+      <style>{rsStyle}</style>
+      <div className="z-20 absolute right-2 top-2 flex flex-col gap-2">
+        <GeolocationButton map={map} />
+      </div>
+      <div
+        className={`flex-0 relative overflow-hidden border-t @lg:borderstopSequence-t-0 @lg:border-r flex flex-col ${
+          lineInfos
+            ? "w-full min-h-[75px] max-h-[70%] @lg:w-[350px] @lg:max-h-full @lg:h-[100%!important]"
+            : "hidden"
+        }`}
+      >
+        {!!lineInfos && (
+          <>
+            <ScrollableHandler className="z-10 absolute inset-0 w-full h-[60px] touch-none @lg:hidden flex justify-center ">
+              <div
+                className="bg-gray-300"
+                style={{
+                  width: 32,
+                  height: 4,
+                  borderRadius: 2,
+                  margin: 6,
+                }}
+              ></div>
+            </ScrollableHandler>
+            <RouteSchedule
+              className="z-5 relative overflow-x-hidden overflow-y-auto  scrollable-inner"
+              lineInfos={lineInfos}
+              trackerLayer={tracker}
+              onStationClick={(station) => {
+                if (station.coordinate) {
+                  const size = map.getSize();
+                  const extent = map.getView().calculateExtent(size);
+                  const offset = (extent[2] - extent[0]) / 5;
 
-            map.getView().animate({
-              zoom: map.getView().getZoom(),
-              center: [station.coordinate[0] - offset, station.coordinate[1]],
-            });
-          }
-        }}
-      />
-      <GeolocationControl />
+                  map.getView().animate({
+                    zoom: map.getView().getZoom(),
+                    center: [station.coordinate[0] - offset, station.coordinate[1]],
+                  });
+                }
+              }}
+            />
+          </>
+        )}
+      </div>
     </I18nContext.Provider>
   );
 }
