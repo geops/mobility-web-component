@@ -1,13 +1,13 @@
-import { FeatureCollection } from 'geojson';
-import GeoJSON from 'ol/format/GeoJSON';
-import { getCenter } from 'ol/extent';
+import { FeatureCollection } from "geojson";
+import GeoJSON from "ol/format/GeoJSON";
+import { getCenter } from "ol/extent";
 
-import addSourceAndLayers from '../lib/addSourceAndLayers';
+import addSourceAndLayers from "../utils/addSourceAndLayers";
 
 const format = new GeoJSON();
 
 export const getTime = (str) =>
-  parseInt(str?.substr(0, 8).replace(/:/g, ''), 10);
+  parseInt(str?.substr(0, 8).replace(/:/g, ""), 10);
 
 /**
  *
@@ -56,16 +56,16 @@ const getNotificationsWithStatus = (notifications, now) => {
         if (next.time_of_day_start) {
           starts = `ab ${next.time_of_day_start.substr(0, 5)}`;
         } else {
-          starts = `ab ${nextStartDate.toLocaleTimeString(['de'], {
-            hour: '2-digit',
-            minute: '2-digit',
+          starts = `ab ${nextStartDate.toLocaleTimeString(["de"], {
+            hour: "2-digit",
+            minute: "2-digit",
             hour12: false,
           })}`;
         }
       } else {
-        starts = `ab ${nextStartDate.toLocaleDateString(['de-DE'], {
-          month: 'short',
-          day: 'numeric',
+        starts = `ab ${nextStartDate.toLocaleDateString(["de-DE"], {
+          month: "short",
+          day: "numeric",
         })}`;
       }
 
@@ -73,8 +73,8 @@ const getNotificationsWithStatus = (notifications, now) => {
       const iconRef = n.features.find((f) => f.properties.is_icon_ref);
       if (iconRef) {
         const iconRefFeature = format.readFeature(iconRef, {
-          dataProjection: 'EPSG:4326',
-          featureProjection: 'EPSG:3857',
+          dataProjection: "EPSG:4326",
+          featureProjection: "EPSG:3857",
         });
         const center = getCenter(iconRefFeature.getGeometry().getExtent());
         iconRefPoint = iconRefFeature.getGeometry().getClosestPoint(center);
@@ -124,30 +124,30 @@ const addNotificationsLayers = (
   const features = notifications.map((n) => n.features).flat();
   addSourceAndLayers(
     mapboxLayer,
-    'notifications',
+    "notifications",
     {
-      type: 'geojson',
+      type: "geojson",
       data: {
-        type: 'FeatureCollection',
+        type: "FeatureCollection",
         features,
       },
     },
     [
       {
-        id: 'notificationsActive',
-        source: 'notifications',
-        type: 'line',
+        id: "notificationsActive",
+        source: "notifications",
+        type: "line",
         paint: {
-          'line-width': 5,
-          'line-color': 'rgba(255,0,0,1)',
-          'line-dasharray': [2, 2],
+          "line-width": 5,
+          "line-color": "rgba(255,0,0,1)",
+          "line-dasharray": [2, 2],
         },
-        layout: { visibility: 'visible' },
+        layout: { visibility: "visible" },
         filter: [
-          'all',
-          ['==', ['get', 'isActive'], true],
-          ['==', ['get', 'graph'], getCurrentGraph(graphMapping, zoom)],
-          ['==', ['get', 'disruption_type'], 'DISRUPTION'],
+          "all",
+          ["==", ["get", "isActive"], true],
+          ["==", ["get", "graph"], getCurrentGraph(graphMapping, zoom)],
+          ["==", ["get", "disruption_type"], "DISRUPTION"],
         ],
       },
     ],
@@ -166,7 +166,7 @@ const parsePreviewNotification = (mocoPreviewObject: {
     return { ...feature, properties: { ...feature.properties, graph } };
   });
   return {
-    type: 'FeatureCollection',
+    type: "FeatureCollection",
     properties,
     features,
   };

@@ -4,7 +4,8 @@
     "jsx": "react-jsx",
     "jsxImportSource": "preact",
     "resolveJsonModule": true,
-    "downlevelIteration": true
+    "downlevelIteration": true,
+    "lib": ["ES2015"],
   },
   "exclude": ["node_modules", "**/*.png"],
   "types": ["esbuild-style-plugin"]

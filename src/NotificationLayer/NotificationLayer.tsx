@@ -1,13 +1,13 @@
-import { useEffect, useState } from 'preact/hooks';
+import { useEffect, useState } from "preact/hooks";
 import {
   addNotificationsLayers,
   parsePreviewNotification,
   getNotificationsWithStatus,
-} from './notificationUtils';
-import { unByKey } from 'ol/Observable';
+} from "./notificationUtils";
+import { unByKey } from "ol/Observable";
 
-import useMapContext from '../lib/hooks/useMapContext';
-import useParams from '../lib/hooks/useParams';
+import useMapContext from "../utils/hooks/useMapContext";
+import useParams from "../utils/hooks/useParams";
 
 interface Graphs {
   [key: string]: string;
@@ -25,7 +25,7 @@ const useZoom = () => {
   const [zoom, setZoom] = useState(map.getView().getZoom());
   useEffect(() => {
     const view = map.getView();
-    const zoomListener = view.on('change:resolution', () => {
+    const zoomListener = view.on("change:resolution", () => {
       clearTimeout(zoomTimeout);
       zoomTimeout = setTimeout(() => setZoom(view.getZoom()), 150);
     });
@@ -55,7 +55,7 @@ const useNotifications = (
   );
   if (!styleMetadata || !baseLayer.loaded) {
     // @ts-ignore
-    baseLayer.once('load', () =>
+    baseLayer.once("load", () =>
       setStyleMetadata(baseLayer.mbMap?.getStyle()?.metadata),
     );
   }
@@ -65,15 +65,15 @@ const useNotifications = (
   const now = paramsNotificationAt
     ? new Date(paramsNotificationAt)
     : new Date();
-  const style = baseLayer.name.split('mwc.baselayer.')[1];
-  const graphMapping = styleMetadata?.graphs || { 1: 'osm' };
+  const style = baseLayer.name.split("mwc.baselayer.")[1];
+  const graphMapping = styleMetadata?.graphs || { 1: "osm" };
   const graphsString = [
     ...new Set(Object.keys(graphMapping || []).map((key) => graphMapping[key])),
-  ].join(',');
+  ].join(",");
 
   useEffect(() => {
     // Listen for incoming messages through the MOCO iframe
-    window.addEventListener('message', (event) => {
+    window.addEventListener("message", (event) => {
       if (event.data.notification) {
         setPreviewNotification(event.data.notification);
         setShouldAddPreviewNotifications(true);
@@ -84,7 +84,7 @@ const useNotifications = (
   useEffect(() => {
     // Fetch the main MOCO notifications
     const fetchNotifications = async () => {
-      const suffix = /\?/.test(notificationsUrl) ? '&' : '?';
+      const suffix = /\?/.test(notificationsUrl) ? "&" : "?";
       const url = `${notificationsUrl}${suffix}graph=${graphsString}`;
 
       abortCtrl.abort();

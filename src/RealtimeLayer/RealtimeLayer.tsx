@@ -1,46 +1,45 @@
-import { RealtimeLayer as MtbRealtimeLayer } from 'mobility-toolbox-js/ol';
-import { createContext } from 'preact';
-import { useEffect, useMemo, useState } from 'preact/hooks';
-import type { RealtimeMot } from 'mobility-toolbox-js/types';
-import rosetta from 'rosetta';
+import { RealtimeLayer as MtbRealtimeLayer } from "mobility-toolbox-js/ol";
+import { createContext } from "preact";
+import { useEffect, useMemo, useState } from "preact/hooks";
+import type { RealtimeMot, RealtimeTrainId } from "mobility-toolbox-js/types";
+import { unByKey } from "ol/Observable";
+import rosetta from "rosetta";
 
 import GeolocationButton from "../GeolocationButton";
 import ScrollableHandler from "../ScrollableHandler";
-import RouteSchedule from './RouteSchedule';
-import useMapContext from '../lib/hooks/useMapContext';
-import useParams from '../lib/hooks/useParams';
-import rsStyle from "./RealtimeLayer.css";
-
-
+import RouteSchedule from "./RouteSchedule";
+import useMapContext from "../utils/hooks/useMapContext";
+import useParams from "../utils/hooks/useParams";
+import centerOnVehicle from "../utils/centerOnVehicle";
 
 const i18n = rosetta({
   de: {
-    depature_rail: 'Gleis',
-    depature_ferry: 'Steg',
-    depature_other: 'Kante',
+    depature_rail: "Gleis",
+    depature_ferry: "Steg",
+    depature_other: "Kante",
   },
   en: {
-    depature_rail: 'platform',
-    depature_ferry: 'pier',
-    depature_other: 'stand',
+    depature_rail: "platform",
+    depature_ferry: "pier",
+    depature_other: "stand",
   },
   fr: {
-    depature_rail: 'voie',
-    depature_ferry: 'quai',
-    depature_other: 'quai',
+    depature_rail: "voie",
+    depature_ferry: "quai",
+    depature_other: "quai",
   },
   it: {
-    depature_rail: 'binario',
-    depature_ferry: 'imbarcadero',
-    depature_other: 'corsia',
+    depature_rail: "binario",
+    depature_ferry: "imbarcadero",
+    depature_other: "corsia",
   },
 });
 
 // Set current language to preferred browser language with fallback to english
 i18n.locale(
   navigator.languages // @ts-ignore
-    .find((l) => i18n.table(l.split('-')[0]) !== undefined)
-    ?.split('-')[0] || 'en',
+    .find((l) => i18n.table(l.split("-")[0]) !== undefined)
+    ?.split("-")[0] || "en",
 );
 
 export const I18nContext = createContext(i18n);
@@ -51,6 +50,8 @@ type Props = {
   tenant: string;
   realtimeUrl: string;
 };
+
+const TRACKING_ZOOM = 16;
 
 let deltaToTop = 0;
 
@@ -77,7 +78,7 @@ function RealtimeLayer({
   apikey,
   mots: propMots,
   tenant,
-  realtimeUrl = 'wss://tralis-tracker-api.geops.io/ws',
+  realtimeUrl = "wss://tralis-tracker-api.geops.io/ws",
 }: Props) {
   const { map } = useMapContext();
   const {
@@ -86,6 +87,8 @@ function RealtimeLayer({
     mots: paramsMots,
   } = useParams();
   const [lineInfos, setLineInfos] = useState(null);
+  const [isTracking, setIsTracking] = useState(false); // user position tracking
+  const [isFollowing, setIsFollowing] = useState(false); // vehicle position tracking
   const [feature, setFeature] = useState(null);
   const mots = paramsMots || propMots;
 
@@ -95,7 +98,7 @@ function RealtimeLayer({
         apiKey: apikey,
         url: paramsRealtimeUrl || realtimeUrl,
         getMotsByZoom: mots
-          ? () => mots.split(',') as RealtimeMot[]
+          ? () => mots.split(",") as RealtimeMot[]
           : undefined,
         fullTrajectoryStyle: null,
         tenant: paramsTenant || tenant,
@@ -121,7 +124,7 @@ function RealtimeLayer({
   useEffect(() => {
     let vehicleId = null;
     if (feature) {
-      vehicleId = feature.get('train_id');
+      vehicleId = feature.get("train_id");
       tracker.api.subscribeStopSequence(
         vehicleId,
         ({ content: [stopSequence] }) => {
@@ -140,11 +143,89 @@ function RealtimeLayer({
     };
   }, [feature]);
 
+  // Behavior when vehicle is selected or not.
+  useEffect(() => {
+    if (!lineInfos) {
+      setIsFollowing(false);
+    } else {
+    }
+  }, [lineInfos]);
+
+  // Behavior when user tracking is activated or not.
+  useEffect(() => {
+    let olKeys = [];
+    if (isTracking) {
+      setIsFollowing(false);
+    }
+    return () => {
+      unByKey(olKeys);
+    };
+  }, [isTracking]);
+
+  // Deactive auto zooming when the user pans the map
+  useEffect(() => {
+    let onMovestartKey = null;
+    onMovestartKey = map.getView().on("change:center", (evt) => {
+      if (evt.target.getInteracting()) {
+        setIsFollowing(false);
+        setIsTracking(false);
+      }
+    });
+    return () => {
+      unByKey(onMovestartKey);
+    };
+  }, []);
+
+  useEffect(() => {
+    let interval = null;
+    let interval2 = null;
+
+    if (tracker) {
+      tracker.useThrottle = !isFollowing;
+      // tracker.useRequestAnimationFrame = isFollowing;
+      tracker.allowRenderWhenAnimating = !!isFollowing;
+    }
+    if (!isFollowing || !lineInfos || !map || !tracker) {
+      return;
+    }
+
+    setIsTracking(false);
+
+    const followVehicle = async (id: RealtimeTrainId) => {
+      let vehicle = id && tracker?.trajectories?.[id];
+
+      if (!vehicle) {
+        vehicle = await tracker.api
+          .getTrajectory(lineInfos.id, tracker.mode)
+          .then((message) => message.content);
+      }
+
+      const success = await centerOnVehicle(vehicle, map, TRACKING_ZOOM);
+
+      // Once the map is zoomed on the vehicle we follow him, only recenter , no zoom changes.
+      if (success === true) {
+        interval = setInterval(() => {
+          centerOnVehicle(tracker?.trajectories?.[lineInfos.id], map);
+        }, 1000);
+      }
+    };
+    followVehicle(lineInfos.id);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [isFollowing, map, tracker, lineInfos]);
+
   return (
     <I18nContext.Provider value={i18n}>
-      <style>{rsStyle}</style>
       <div className="z-20 absolute right-2 top-2 flex flex-col gap-2">
-        <GeolocationButton map={map} />
+        <GeolocationButton
+          map={map}
+          isTracking={isTracking}
+          onClick={() => {
+            setIsTracking(!isTracking);
+          }}
+        />
       </div>
       <div
         className={`flex-0 relative overflow-hidden border-t @lg:borderstopSequence-t-0 @lg:border-r flex flex-col ${
@@ -178,9 +259,16 @@ function RealtimeLayer({
 
                   map.getView().animate({
                     zoom: map.getView().getZoom(),
-                    center: [station.coordinate[0] - offset, station.coordinate[1]],
+                    center: [
+                      station.coordinate[0] - offset,
+                      station.coordinate[1],
+                    ],
                   });
                 }
+              }}
+              isFollowing={isFollowing}
+              onFollowButtonClick={() => {
+                setIsFollowing(!isFollowing);
               }}
             />
           </>

@@ -2,6 +2,7 @@ import { realtimeConfig } from "mobility-toolbox-js/ol";
 import { useContext, useEffect, useRef, useState } from "preact/hooks";
 import { I18nContext } from "../RealtimeLayer";
 import ScrollableHandler from "../../ScrollableHandler";
+import rsStyle from "./RouteSchedule.css";
 
 /**
  * Returns a string representation of a number, with a zero if the number is lower than 10.
@@ -380,7 +381,7 @@ const renderHeader = (props) => {
         </span>
       </div>
       <button
-        className={`flex flex-none bg-white shadow-lg rounded-full w-[38px] h-[38px] items-center justify-center ${
+        className={`flex flex-none bg-white shadow-lg rounded-full w-[38px] h-[38px] items-center justify-center p-1.5 ${
           isFollowing ? "animate-pulse" : ""
         }`}
         style={{
@@ -491,6 +492,7 @@ export default function RouteSchedule(props) {
     <>
       {renderHeader({ ...props })}
       <div ref={ref} className={props.className}>
+        <style>{rsStyle}</style>
         {props.lineInfos.stations.map((stop, idx) => {
           return renderStation({ ...props, stop, idx, t });
         })}

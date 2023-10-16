@@ -1,20 +1,20 @@
-import { CopyrightControl, MaplibreLayer } from 'mobility-toolbox-js/ol';
-import { Map } from 'ol';
-import { useEffect, useState } from 'preact/hooks';
+import { CopyrightControl, MaplibreLayer } from "mobility-toolbox-js/ol";
+import { Map } from "ol";
+import { useEffect, useState } from "preact/hooks";
 // @ts-ignore
-import olStyle from 'ol/ol.css';
+import olStyle from "ol/ol.css";
 // @ts-ignore
-import style from './style.css';
+import style from "./style.css";
 import ScaleLine from "./ScaleLine";
 import Copyright from "./Copyright";
-import RealtimeLayer from './RealtimeLayer/RealtimeLayer';
-import NotificationLayer from './NotificationLayer/NotificationLayer';
-import { MapContext } from './lib/hooks/useMapContext';
-import useParams from './lib/hooks/useParams';
+import RealtimeLayer from "./RealtimeLayer/RealtimeLayer";
+import NotificationLayer from "./NotificationLayer/NotificationLayer";
+import { MapContext } from "./utils/hooks/useMapContext";
+import useParams from "./utils/hooks/useParams";
 
 type Props = {
   class: string;
-  type: 'basic' | 'realtime' | 'notification';
+  type: "basic" | "realtime" | "notification";
   apikey: string;
   baselayer: string;
   center: string;
@@ -46,7 +46,7 @@ const useBaseLayer = (
       const layer = new MaplibreLayer({
         apiKey: apikey,
         url: `${
-          tilesurl || 'https://maps.geops.io'
+          tilesurl || "https://maps.geops.io"
         }/styles/${style}/style.json`,
         name: `mwc.baselayer.${style}`,
       });
@@ -61,13 +61,13 @@ const useBaseLayer = (
 };
 
 function MobilityToolboxMap({
-  type = 'basic',
+  type = "basic",
   apikey,
-  baselayer = 'travic_v2',
-  center = '831634,5933959',
-  mots = 'rail',
+  baselayer = "travic_v2",
+  center = "831634,5933959",
+  mots = "rail",
   tenant,
-  zoom = '10',
+  zoom = "10",
   notificationurl,
   notificationbeforelayerid,
   realtimeurl,
@@ -93,7 +93,7 @@ function MobilityToolboxMap({
     (paramsMinZoom || minzoom) && parseFloat(paramsMinZoom || minzoom);
 
   useEffect(() => {
-    map.getView().setCenter(mapCenter.split(',').map((c) => parseInt(c)));
+    map.getView().setCenter(mapCenter.split(",").map((c) => parseInt(c)));
     map.getView().setZoom(parseFloat(paramsZoom || zoom));
     map.getView().setMaxZoom(maximumZoom);
     map.getView().setMinZoom(minimumZoom);
@@ -105,7 +105,10 @@ function MobilityToolboxMap({
       <style>{style}</style>
       <div className="@container/main w-full h-full relative border">
         <div className="w-full h-full relative flex flex-col @lg/main:flex-row-reverse">
-          <div ref={(el) => setRef(el as HTMLDivElement)} className="flex-1 relative overflow-hidden">
+          <div
+            ref={(el) => setRef(el as HTMLDivElement)}
+            className="flex-1 relative overflow-hidden"
+          >
             <div className="z-10 absolute left-2 right-2 text-[10px] bottom-2 flex justify-between items-end gap-2">
               <ScaleLine
                 map={map}
@@ -117,7 +120,7 @@ function MobilityToolboxMap({
               ></Copyright>
             </div>
           </div>
-          {baseLayer && mapType === 'realtime' ? (
+          {baseLayer && mapType === "realtime" ? (
             <RealtimeLayer
               apikey={apikey}
               mots={mots}
@@ -125,7 +128,7 @@ function MobilityToolboxMap({
               realtimeUrl={realtimeurl}
             />
           ) : null}
-          {baseLayer && mapType === 'notification' ? (
+          {baseLayer && mapType === "notification" ? (
             <NotificationLayer
               notificationUrl={notificationurl}
               notificationBeforeLayerId={notificationbeforelayerid}
