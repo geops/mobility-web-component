@@ -1,7 +1,7 @@
 {
   "name": "mobility-web-component",
   "description": "Web components in the domains of mobility and logistics.",
-  "version": "0.0.1-beta.2",
+  "version": "0.0.1-beta.3",
   "homepage": "https://mobility-web-component.geops.io/",
   "dependencies": {
     "maplibre-gl": "^3.5.0",
