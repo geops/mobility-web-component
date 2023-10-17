@@ -1,10 +1,10 @@
 node_modules
 
 # esbuild output files
-bundle.js
-bundle.js.map
-bundle.css
-bundle.css.map
+index.js
+index.js.map
+index.css
+index.css.map
 
 # Tailwind CSS ouput file
 output.css

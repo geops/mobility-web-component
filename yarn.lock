@@ -2065,6 +2065,18 @@ mobility-toolbox-js@^2.2.0:
     lodash.throttle "4.1.1"
     uuid "9.0.1"
 
+mobility-web-component@^0.0.1-beta.5:
+  version "0.0.1-beta.5"
+  resolved "https://registry.yarnpkg.com/mobility-web-component/-/mobility-web-component-0.0.1-beta.5.tgz#56655ebb5f2a47ee112a5ee60426b51fe95d027f"
+  integrity sha512-0IDUOmNi6/cwKM+7D9BkRbsX92R/S31iaIFU4iOgx8StvuGaZNhdUsl0sOfqLcMVu9fauSkpM8/EXonqWOFP6w==
+  dependencies:
+    maplibre-gl "^3.5.0"
+    mobility-toolbox-js "^2.2.0"
+    ol "^8.1.0"
+    preact "^10.18.1"
+    preact-custom-element "^4.3.0"
+    rosetta "^1.1.0"
+
 modify-values@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/modify-values/-/modify-values-1.0.1.tgz#b3939fa605546474e3e3e3c63d64bd43b4ee6022"
