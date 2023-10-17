@@ -18,4 +18,8 @@ let { host, port } = await ctx.serve({
 });
 
 await ctx.watch();
-console.log(`watching... and running at ${host}:${port}`);
+console.log(
+  `watching... and running at ${
+    host === "0.0.0.0" ? "http://localhost" : host
+  }:${port}`,
+);
