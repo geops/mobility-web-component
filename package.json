@@ -35,5 +35,6 @@
     "tailwind:website": "tailwindcss --output=output.css --content=index.html --minify",
     "up": "yarn upgrade-interactive --latest"
   },
+  "private": "true",
   "type": "module"
 }
