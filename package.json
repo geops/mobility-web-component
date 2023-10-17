@@ -2,7 +2,7 @@
   "name": "mobility-web-component",
   "license": "UNLICENSED",
   "description": "Web components in the domains of mobility and logistics.",
-  "version": "0.0.1-beta.4",
+  "version": "0.0.1-beta.5",
   "homepage": "https://mobility-web-component.geops.io/",
   "dependencies": {
     "maplibre-gl": "^3.5.0",
