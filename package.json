@@ -1,7 +1,7 @@
 {
   "name": "mobility-web-component",
   "description": "Web components in the domains of mobility and logistics.",
-  "version": "0.0.1",
+  "version": "0.0.1-beta.0",
   "homepage": "https://mobility-web-component.geops.io/",
   "dependencies": {
     "maplibre-gl": "^3.5.0",
@@ -21,6 +21,7 @@
     "fixpack": "^4.0.0",
     "husky": "^8.0.3",
     "prettier": "^3.0.3",
+    "standard-version": "^9.5.0",
     "tailwindcss": "^3.3.3"
   },
   "scripts": {
@@ -30,6 +31,9 @@
     "dev": "node scripts/dev.mjs",
     "format": "prettier --write 'src/**/*.tsx'",
     "prepare": "husky install",
+    "publish:beta": "HUSKY=0 yarn release -- --prerelease beta --skip.changelog && git push origin HEAD && yarn run build && cd build && HUSKY=0 yarn publish --tag beta && git push --tags ",
+    "publish:beta:dryrun": "yarn release -- --prerelease beta --dry-run --skip.changelog",
+    "release": "standard-version",
     "start": "concurrently \"yarn tailwind:component --watch\" \"yarn tailwind:website --watch\" \"yarn dev\"",
     "tailwind:component": "tailwindcss --output=src/style.css --content=src/**/*.tsx",
     "tailwind:website": "tailwindcss --output=output.css --content=index.html --minify",
