@@ -30,7 +30,7 @@
     "prepare": "husky install",
     "start": "yarn dev",
     "tailwind:component": "tailwindcss --output=src/style.css --content=src/**/*.tsx",
-    "tailwind:website": "tailwindcss --output=output.css --content=index.html --minify",
+    "tailwind:website": "tailwindcss --output=output.css --content=*.html --minify",
     "up": "yarn upgrade-interactive --latest"
   },
   "type": "module"
