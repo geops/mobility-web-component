@@ -1,5 +1,6 @@
 {
   "name": "mobility-web-component",
+  "license": "UNLICENSED",
   "description": "Web components in the domains of mobility and logistics.",
   "version": "0.0.1-beta.3",
   "homepage": "https://mobility-web-component.geops.io/",
@@ -39,6 +40,5 @@
     "tailwind:website": "tailwindcss --output=output.css --content=index.html --minify",
     "up": "yarn upgrade-interactive --latest"
   },
-  "private": "true",
   "type": "module"
 }
