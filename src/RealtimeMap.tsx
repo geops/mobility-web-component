@@ -64,7 +64,14 @@ const TRACKING_ZOOM = 16;
 
 const map = new Map({ controls: [] });
 
-function RealtimeMap({ apikey, baselayer, center, mots, tenant, zoom }: Props) {
+function RealtimeMap({
+  apikey,
+  baselayer = "travic_v2",
+  center = "831634,5933959",
+  zoom = "13",
+  mots,
+  tenant,
+}: Props) {
   const ref = useRef();
   const mapRef = useRef();
   const [lineInfos, setLineInfos] = useState(null);

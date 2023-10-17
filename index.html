@@ -39,30 +39,16 @@
 &lt;script type=&quot;module&quot;
   src=&quot;https://mobility-web-component.geops.io/bundle.js&quot;&gt;
 &lt;/script&gt;
-&lt;style&gt;
-.map {
-  width: 400px;
-  height: 800px;
-  display: block;
-}
-&lt;/style&gt;
 &lt;mobility-toolbox-map
-  class=&quot;map&quot;
   apikey=&quot;YOUR_GEOPS_API_KEY&quot;
   baselayer=&quot;travic_v2&quot;
   center=&quot;831634,5933959&quot;
   mots=&quot;rail&quot;
   zoom=&quot;13&quot;
+  style=&quot;display: block;width: 800px;height: 800px;&quot;
 &gt;&lt;/mobility-toolbox-map&gt;</pre
       >
-      <mobility-toolbox-map
-        class="max-w-3xl h-96 block"
-        baselayer="travic_v2"
-        center="831634,5933959"
-        mots="rail"
-        zoom="13"
-        style="resize: horizontal; overflow: auto"
-      ></mobility-toolbox-map>
+      <mobility-toolbox-map class="max-w-3xl h-96 block"></mobility-toolbox-map>
     </div>
   </body>
 </html>
