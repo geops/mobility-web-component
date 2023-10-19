@@ -1,11 +1,11 @@
 node_modules
 
 # esbuild output files
-index.js
-index.js.map
-index.css
+/index.js
+/index.js.map
+/index.css
 index.css.map
 
 # Tailwind CSS ouput file
-output.css
-style.css
+/output.css
+/src/style.css
