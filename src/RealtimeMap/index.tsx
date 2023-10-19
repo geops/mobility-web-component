@@ -214,11 +214,11 @@ function RealtimeMap({
                 className="z-5 relative overflow-x-hidden overflow-y-auto  scrollable-inner"
                 lineInfos={lineInfos}
                 trackerLayer={tracker}
-                onStationClick={(station) => {
-                  if (station.coordinate) {
+                onStationClick={(stop) => {
+                  if (stop.coordinate) {
                     map.getView().animate({
                       zoom: map.getView().getZoom(),
-                      center: [station.coordinate[0], station.coordinate[1]],
+                      center: [stop.coordinate[0], stop.coordinate[1]],
                     });
                   }
                 }}

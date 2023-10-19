@@ -1,9 +1,8 @@
-import { PreactDOMAttributes, JSX } from "preact";
+import type { PreactDOMAttributes, JSX } from "preact";
 import { RealtimeLayer, realtimeConfig } from "mobility-toolbox-js/ol";
 import { useContext, useEffect, useRef, useState } from "preact/hooks";
 import { I18nContext } from "../MobilityMap";
-import { StopSequence } from "mobility-toolbox-js/api/typedefs";
-import {
+import type {
   RealtimeStation,
   RealtimeStop,
   RealtimeStopSequence,
@@ -468,7 +467,7 @@ export type RouteScheduleProps = PreactDOMAttributes &
     isFollowing: boolean;
     lineInfos: RealtimeStopSequence;
     onFollowButtonClick: (event: MouseEvent) => void;
-    onStationClick: (station: RealtimeStation, event: MouseEvent) => void;
+    onStationClick: (station: RealtimeStop, event: MouseEvent) => void;
     trackerLayer: RealtimeLayer;
   };
 
