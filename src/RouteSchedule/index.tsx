@@ -1,9 +1,13 @@
 import { PreactDOMAttributes, JSX } from "preact";
-import { realtimeConfig } from "mobility-toolbox-js/ol";
+import { RealtimeLayer, realtimeConfig } from "mobility-toolbox-js/ol";
 import { useContext, useEffect, useRef, useState } from "preact/hooks";
 import { I18nContext } from "../MobilityMap";
 import { StopSequence } from "mobility-toolbox-js/api/typedefs";
-import { RealtimeStop, RealtimeStopSequence } from "mobility-toolbox-js/types";
+import {
+  RealtimeStation,
+  RealtimeStop,
+  RealtimeStopSequence,
+} from "mobility-toolbox-js/types";
 
 /**
  * Returns a string representation of a number, with a zero if the number is lower than 10.
@@ -461,7 +465,11 @@ const defaultRenderLink = (text, url) => {
 
 export type RouteScheduleProps = PreactDOMAttributes &
   JSX.HTMLAttributes<HTMLDivElement> & {
+    isFollowing: boolean;
     lineInfos: RealtimeStopSequence;
+    onFollowButtonClick: (event: MouseEvent) => void;
+    onStationClick: (station: RealtimeStation, event: MouseEvent) => void;
+    trackerLayer: RealtimeLayer;
   };
 
 export default function RouteSchedule(props: RouteScheduleProps) {
