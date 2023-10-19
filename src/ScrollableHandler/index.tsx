@@ -1,8 +1,8 @@
-import { PreactDOMAttributes } from "preact";
+import { PreactDOMAttributes, JSX } from "preact";
 import { useEffect, useState } from "preact/hooks";
 
 export type ScrollableHandlerProps = PreactDOMAttributes &
-  preact.JSX.HTMLAttributes;
+  JSX.HTMLAttributes<HTMLDivElement>;
 
 function ScrollableHandler(props: ScrollableHandlerProps) {
   const [elt, setElt] = useState<HTMLElement>();

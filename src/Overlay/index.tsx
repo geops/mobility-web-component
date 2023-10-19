@@ -1,10 +1,10 @@
-import { PreactDOMAttributes } from "preact";
+import { PreactDOMAttributes, JSX } from "preact";
 import ScrollableHandler, {
   ScrollableHandlerProps,
 } from "../ScrollableHandler";
 
 export type OverlayProps = PreactDOMAttributes &
-  preact.JSX.HTMLAttributes & {
+  JSX.HTMLAttributes<HTMLDivElement> & {
     ScrollableHandlerProps?: ScrollableHandlerProps;
   };
 

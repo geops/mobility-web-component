@@ -12,15 +12,9 @@ import Copyright from "../Copyright";
 import olStyle from "ol/ol.css";
 // @ts-ignore
 import Overlay from "../Overlay";
+import type { MobilityMapProps } from "../MobilityMap";
 
-type Props = {
-  apikey: string;
-  baselayer: string;
-  center: string;
-  mots?: string;
-  tenant: string;
-  zoom: string;
-};
+export type RealtimeMapProps = MobilityMapProps;
 
 const TRACKING_ZOOM = 16;
 
@@ -33,7 +27,7 @@ function RealtimeMap({
   zoom = "13",
   mots,
   tenant,
-}: Props) {
+}: RealtimeMapProps) {
   const ref = useRef();
   const mapRef = useRef();
   const [lineInfos, setLineInfos] = useState(null);

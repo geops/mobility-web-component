@@ -1,18 +1,22 @@
 import { Geolocation, Map } from "ol";
 import { unByKey } from "ol/Observable";
 import { fromLonLat } from "ol/proj";
-import type { PreactDOMAttributes, JSX } from "preact";
 import { useEffect, useMemo, useState } from "preact/hooks";
+import type { PreactDOMAttributes, JSX } from "preact";
 
-type Props = {
-  map: Map;
-  isTracking: boolean;
-} & JSX.HTMLAttributes<HTMLButtonElement> &
-  PreactDOMAttributes;
+export type GeolocationButtonProps = PreactDOMAttributes &
+  JSX.HTMLAttributes<HTMLButtonElement> & {
+    map: Map;
+    isTracking: boolean;
+  };
 
 const TRACKING_ZOOM = 16;
 
-function GeolocationButton({ map, isTracking, ...props }: Props) {
+function GeolocationButton({
+  map,
+  isTracking,
+  ...props
+}: GeolocationButtonProps) {
   const geolocation = useMemo(() => {
     return new Geolocation();
   }, []);

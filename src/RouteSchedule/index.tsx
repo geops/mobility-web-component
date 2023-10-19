@@ -1,6 +1,9 @@
+import { PreactDOMAttributes, JSX } from "preact";
 import { realtimeConfig } from "mobility-toolbox-js/ol";
 import { useContext, useEffect, useRef, useState } from "preact/hooks";
 import { I18nContext } from "../MobilityMap";
+import { StopSequence } from "mobility-toolbox-js/api/typedefs";
+import { RealtimeStop, RealtimeStopSequence } from "mobility-toolbox-js/types";
 
 /**
  * Returns a string representation of a number, with a zero if the number is lower than 10.
@@ -456,7 +459,12 @@ const defaultRenderLink = (text, url) => {
   );
 };
 
-export default function RouteSchedule(props) {
+export type RouteScheduleProps = PreactDOMAttributes &
+  JSX.HTMLAttributes<HTMLDivElement> & {
+    lineInfos: RealtimeStopSequence;
+  };
+
+export default function RouteSchedule(props: RouteScheduleProps) {
   const { t } = useContext(I18nContext);
   const ref = useRef();
 
@@ -490,7 +498,7 @@ export default function RouteSchedule(props) {
     <>
       {renderHeader({ ...props })}
       <div ref={ref} className={props.className}>
-        {props.lineInfos.stations.map((stop, idx) => {
+        {props.lineInfos.stations.map((stop: RealtimeStop, idx) => {
           return renderStation({ ...props, stop, idx, t });
         })}
         {renderFooter({ ...props })}
