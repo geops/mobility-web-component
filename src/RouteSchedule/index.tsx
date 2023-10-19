@@ -1,7 +1,6 @@
 import { realtimeConfig } from "mobility-toolbox-js/ol";
 import { useContext, useEffect, useRef, useState } from "preact/hooks";
-import { I18nContext } from "../RealtimeMap";
-import ScrollableHandler from "../ScrollableHandler";
+import { I18nContext } from "../MobilityMap";
 
 /**
  * Returns a string representation of a number, with a zero if the number is lower than 10.

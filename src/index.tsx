@@ -1,9 +1,9 @@
 import register from "preact-custom-element";
 
-import RealtimeMap from "./RealtimeMap";
+import MobilityMap from "./MobilityMap";
 
 register(
-  RealtimeMap,
+  MobilityMap,
   "mobility-toolbox-map",
   ["apikey", "baselayer", "center", "mots", "tenant", "zoom"],
   { shadow: true },

@@ -1,55 +1,17 @@
 import { RealtimeLayer, MaplibreLayer } from "mobility-toolbox-js/ol";
 import { Map } from "ol";
-import { createContext } from "preact";
 import { useEffect, useMemo, useRef, useState } from "preact/hooks";
 import type { RealtimeMot, RealtimeTrainId } from "mobility-toolbox-js/types";
-import rosetta from "rosetta";
-import RouteSchedule from "./RouteSchedule";
+import RouteSchedule from "../RouteSchedule";
 import { unByKey } from "ol/Observable";
-import centerOnVehicle from "./utils/centerOnVehicle";
-import GeolocationButton from "./GeolocationButton";
-import ScaleLine from "./ScaleLine";
-import Copyright from "./Copyright";
-import ScrollableHandler from "./ScrollableHandler";
+import centerOnVehicle from "../utils/centerOnVehicle";
+import GeolocationButton from "../GeolocationButton";
+import ScaleLine from "../ScaleLine";
+import Copyright from "../Copyright";
 // @ts-ignore
 import olStyle from "ol/ol.css";
 // @ts-ignore
-import style from "./style.css";
-// @ts-ignore
-import realtimeMapCss from "./RealtimeMap.css";
-import { fromLonLat } from "ol/proj";
-
-const i18n = rosetta({
-  de: {
-    depature_rail: "Gleis",
-    depature_ferry: "Steg",
-    depature_other: "Kante",
-  },
-  en: {
-    depature_rail: "platform",
-    depature_ferry: "pier",
-    depature_other: "stand",
-  },
-  fr: {
-    depature_rail: "voie",
-    depature_ferry: "quai",
-    depature_other: "quai",
-  },
-  it: {
-    depature_rail: "binario",
-    depature_ferry: "imbarcadero",
-    depature_other: "corsia",
-  },
-});
-
-// Set current language to preferred browser language with fallback to english
-i18n.locale(
-  navigator.languages // @ts-ignore
-    .find((l) => i18n.table(l.split("-")[0]) !== undefined)
-    ?.split("-")[0] || "en",
-);
-
-export const I18nContext = createContext(i18n);
+import Overlay from "../Overlay";
 
 type Props = {
   apikey: string;
@@ -225,10 +187,8 @@ function RealtimeMap({
   }, [feature]);
 
   return (
-    <I18nContext.Provider value={i18n}>
+    <>
       <style>{olStyle}</style>
-      <style>{style}</style>
-      <style>{realtimeMapCss}</style>
       <div ref={ref} className="@container/main w-full h-full relative border">
         <div className="w-full h-full relative flex flex-col @lg/main:flex-row-reverse">
           <div ref={mapRef} className="flex-1 relative overflow-hidden ">
@@ -252,51 +212,32 @@ function RealtimeMap({
               ></Copyright>
             </div>
           </div>
-          <div
-            className={`flex-0 relative overflow-hidden flex flex-col transition-[min-height,max-height] @lg:transition-[width]  ${
-              lineInfos
-                ? "w-full min-h-[75px] max-h-[70%] @lg:w-[350px] @lg:max-h-full @lg:h-[100%!important] border-t @lg:border-t-0 @lg:border-r"
-                : "min-h-0 max-h-0 @lg:w-0"
-            }`}
+          <Overlay
+            ScrollableHandlerProps={{ style: { width: "calc(100% - 60px)" } }}
           >
             {!!lineInfos && (
-              <>
-                <ScrollableHandler
-                  className="z-10 absolute inset-0 h-[65px] touch-none @lg:hidden flex justify-center"
-                  style={{ width: "calc(100% - 60px)" }}
-                >
-                  <div
-                    className="bg-gray-300 m-2 -mr-[60px]"
-                    style={{
-                      width: 32,
-                      height: 4,
-                      borderRadius: 2,
-                    }}
-                  ></div>
-                </ScrollableHandler>
-                <RouteSchedule
-                  className="z-5 relative overflow-x-hidden overflow-y-auto  scrollable-inner"
-                  lineInfos={lineInfos}
-                  trackerLayer={tracker}
-                  onStationClick={(station) => {
-                    if (station.coordinate) {
-                      map.getView().animate({
-                        zoom: map.getView().getZoom(),
-                        center: [station.coordinate[0], station.coordinate[1]],
-                      });
-                    }
-                  }}
-                  isFollowing={isFollowing}
-                  onFollowButtonClick={() => {
-                    setIsFollowing(!isFollowing);
-                  }}
-                />
-              </>
+              <RouteSchedule
+                className="z-5 relative overflow-x-hidden overflow-y-auto  scrollable-inner"
+                lineInfos={lineInfos}
+                trackerLayer={tracker}
+                onStationClick={(station) => {
+                  if (station.coordinate) {
+                    map.getView().animate({
+                      zoom: map.getView().getZoom(),
+                      center: [station.coordinate[0], station.coordinate[1]],
+                    });
+                  }
+                }}
+                isFollowing={isFollowing}
+                onFollowButtonClick={() => {
+                  setIsFollowing(!isFollowing);
+                }}
+              />
             )}
-          </div>
+          </Overlay>
         </div>
       </div>
-    </I18nContext.Provider>
+    </>
   );
 }
 
