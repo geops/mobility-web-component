@@ -10,8 +10,8 @@ The map displays realtime vehicles, and allow to click on them to display their 
 ```html
 <html>
   <body>
-    <script type="module" src="https://mobility-web-component.geops.io/index.js"></script>
-    <mobility-toolbox-map apikey="YOUR_GEOPS_API_KEY" style="display: block;width: 400px;height: 800px;"></mobility-toolbox-map>
+    <script type="module" src="https://www.unpkg.com/@geops/mobility-web-component)"></script>
+    <geops-mobility apikey="YOUR_GEOPS_API_KEY" style="display: block;width: 400px;height: 800px;"></geops-mobility>
   </body>
 </html>
 ```
