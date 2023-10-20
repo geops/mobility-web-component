@@ -17,7 +17,7 @@
         .then((data) => {
           if (data && data.success) {
             document
-              .getElementsByTagName("mobility-toolbox-map")[0]
+              .getElementsByTagName("geops-mobility")[0]
               .setAttribute("apikey", data.key);
           }
         });
@@ -36,21 +36,21 @@
       <p>This is a demo of the Mobility Web Component.</p>
       <h2 class="text-xl font-bold">Usage example</h2>
       <pre class="bg-slate-800 text-slate-200 p-4 rounded">
-&lt;script type=&quot;module&quot;
-  src=&quot;https://mobility-web-component.geops.io/index.js&quot;&gt;
+&lt;script
+  type=&quot;module&quot;
+  src=&quot;https://www.unpkg.com/@geops/mobility-web-component&quot;&gt;
 &lt;/script&gt;
-&lt;mobility-toolbox-map
+&lt;geops-mobility
   apikey=&quot;YOUR_GEOPS_API_KEY&quot;
   baselayer=&quot;travic_v2&quot;
   center=&quot;831634,5933959&quot;
   mots=&quot;rail&quot;
   zoom=&quot;13&quot;
-  style=&quot;display: block;width: 800px;height: 800px;&quot;
-&gt;&lt;/mobility-toolbox-map&gt;</pre
+  style=&quot;display: block;width: 800px;height: 800px;&quot;&gt;
+&lt;/geops-mobility&gt;</pre
       >
-      <mobility-toolbox-map
-        class="max-w-3xl h-96 block resize-x overflow-auto"
-      ></mobility-toolbox-map>
+      <geops-mobility class="max-w-3xl h-96 block resize-x overflow-auto">
+      </geops-mobility>
     </div>
   </body>
 </html>
