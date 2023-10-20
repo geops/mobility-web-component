@@ -4,7 +4,7 @@ import MobilityMap from "./MobilityMap";
 
 register(
   MobilityMap,
-  "mobility-toolbox-map",
+  "geops-mobility",
   ["apikey", "baselayer", "center", "mots", "tenant", "zoom"],
   { shadow: true },
 );
