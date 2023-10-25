@@ -199,14 +199,14 @@ const RouteStop = ({
         </span>
       </div>
       <div className="flex flex-col w-7 flex-shrink-0 justify-center text-xs">
-        {hideDelay || isFirstStation ? (
+        {arrivalDelay === null || hideDelay || isFirstStation ? (
           ""
         ) : (
           <span className={getDelayColor(arrivalDelay)}>
             {`+${getDelayString(arrivalDelay)}`}
           </span>
         )}
-        {hideDelay || isLastStation ? (
+        {departureDelay === null || hideDelay || isLastStation ? (
           ""
         ) : (
           <span className={getDelayColor(departureDelay)}>

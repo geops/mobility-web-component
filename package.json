@@ -6,26 +6,26 @@
   "homepage": "https://mobility-web-component.geops.io/",
   "main": "index.js",
   "dependencies": {
-    "maplibre-gl": "^3.5.0",
-    "mobility-toolbox-js": "^2.2.0",
+    "maplibre-gl": "^3.5.2",
+    "mobility-toolbox-js": "^2.2.1",
     "ol": "^8.1.0",
     "preact": "^10.18.1",
     "preact-custom-element": "^4.3.0",
     "rosetta": "^1.1.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "^17.8.0",
-    "@commitlint/config-conventional": "^17.8.0",
+    "@commitlint/cli": "^18.1.0",
+    "@commitlint/config-conventional": "^18.1.0",
     "@tailwindcss/container-queries": "^0.1.1",
     "@types/preact-custom-element": "^4.0.3",
-    "concurrently": "^8.2.1",
+    "concurrently": "^8.2.2",
     "esbuild": "^0.19.5",
     "esbuild-sass-plugin": "^2.16.0",
     "fixpack": "^4.0.0",
     "husky": "^8.0.3",
     "prettier": "^3.0.3",
     "standard-version": "^9.5.0",
-    "tailwindcss": "^3.3.3"
+    "tailwindcss": "^3.3.5"
   },
   "scripts": {
     "build": "yarn build:css && yarn build:js",
