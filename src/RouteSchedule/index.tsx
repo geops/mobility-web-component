@@ -505,12 +505,7 @@ export default function RouteSchedule(props: RouteScheduleProps) {
     <>
       {renderHeader({ ...props })}
       <div ref={ref} className={props.className}>
-<<<<<<< HEAD:src/RealtimeLayer/RouteSchedule/index.tsx
-        <style>{rsStyle}</style>
-        {props.lineInfos.stations.map((stop, idx) => {
-=======
         {props.lineInfos.stations.map((stop: RealtimeStop, idx) => {
->>>>>>> main:src/RouteSchedule/index.tsx
           return renderStation({ ...props, stop, idx, t });
         })}
         {renderFooter({ ...props })}
