@@ -17,12 +17,12 @@
         .then((data) => {
           if (data && data.success) {
             document
-              .getElementsByTagName("mobility-toolbox-map")[0]
+              .getElementsByTagName("geops-mobility")[0]
               .setAttribute("apikey", data.key);
           }
         });
     </script>
-    <script type="module" src="./bundle.js"></script>
+    <script type="module" src="./index.js"></script>
     <link rel="stylesheet" type="text/css" href="./output.css" />
     <style>
       ::-webkit-scrollbar {
@@ -30,9 +30,27 @@
       }
     </style>
   </head>
-  <body>
-    <div class="w-screen h-screen block">
-      <mobility-toolbox-map class="w-full h-full block"></mobility-toolbox-map>
+  <body class="p-8">
+    <div class="mx-auto max-w-3xl space-y-4">
+      <h1 class="text-3xl font-bold">Mobility Web Component</h1>
+      <p>This is a demo of the Mobility Web Component.</p>
+      <h2 class="text-xl font-bold">Usage example</h2>
+      <pre class="bg-slate-800 text-slate-200 p-4 rounded">
+&lt;script
+  type=&quot;module&quot;
+  src=&quot;https://www.unpkg.com/@geops/mobility-web-component&quot;&gt;
+&lt;/script&gt;
+&lt;geops-mobility
+  apikey=&quot;YOUR_GEOPS_API_KEY&quot;
+  baselayer=&quot;travic_v2&quot;
+  center=&quot;831634,5933959&quot;
+  mots=&quot;rail&quot;
+  zoom=&quot;13&quot;
+  style=&quot;display: block;width: 800px;height: 800px;&quot;&gt;
+&lt;/geops-mobility&gt;</pre
+      >
+      <geops-mobility class="max-w-3xl h-96 block resize-x overflow-auto">
+      </geops-mobility>
     </div>
   </body>
 </html>

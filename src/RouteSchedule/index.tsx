@@ -1,8 +1,12 @@
-import { realtimeConfig } from "mobility-toolbox-js/ol";
+import type { PreactDOMAttributes, JSX } from "preact";
+import { RealtimeLayer, realtimeConfig } from "mobility-toolbox-js/ol";
 import { useContext, useEffect, useRef, useState } from "preact/hooks";
-import { I18nContext } from "../RealtimeLayer";
-import ScrollableHandler from "../../ScrollableHandler";
-import rsStyle from "./RouteSchedule.css";
+import { I18nContext } from "../MobilityMap";
+import type {
+  RealtimeStation,
+  RealtimeStop,
+  RealtimeStopSequence,
+} from "mobility-toolbox-js/types";
 
 /**
  * Returns a string representation of a number, with a zero if the number is lower than 10.
@@ -195,14 +199,14 @@ const RouteStop = ({
         </span>
       </div>
       <div className="flex flex-col w-7 flex-shrink-0 justify-center text-xs">
-        {hideDelay || isFirstStation ? (
+        {arrivalDelay === null || hideDelay || isFirstStation ? (
           ""
         ) : (
           <span className={getDelayColor(arrivalDelay)}>
             {`+${getDelayString(arrivalDelay)}`}
           </span>
         )}
-        {hideDelay || isLastStation ? (
+        {departureDelay === null || hideDelay || isLastStation ? (
           ""
         ) : (
           <span className={getDelayColor(departureDelay)}>
@@ -458,7 +462,16 @@ const defaultRenderLink = (text, url) => {
   );
 };
 
-export default function RouteSchedule(props) {
+export type RouteScheduleProps = PreactDOMAttributes &
+  JSX.HTMLAttributes<HTMLDivElement> & {
+    isFollowing: boolean;
+    lineInfos: RealtimeStopSequence;
+    onFollowButtonClick: (event: MouseEvent) => void;
+    onStationClick: (station: RealtimeStop, event: MouseEvent) => void;
+    trackerLayer: RealtimeLayer;
+  };
+
+export default function RouteSchedule(props: RouteScheduleProps) {
   const { t } = useContext(I18nContext);
   const ref = useRef();
 
@@ -492,8 +505,12 @@ export default function RouteSchedule(props) {
     <>
       {renderHeader({ ...props })}
       <div ref={ref} className={props.className}>
+<<<<<<< HEAD:src/RealtimeLayer/RouteSchedule/index.tsx
         <style>{rsStyle}</style>
         {props.lineInfos.stations.map((stop, idx) => {
+=======
+        {props.lineInfos.stations.map((stop: RealtimeStop, idx) => {
+>>>>>>> main:src/RouteSchedule/index.tsx
           return renderStation({ ...props, stop, idx, t });
         })}
         {renderFooter({ ...props })}

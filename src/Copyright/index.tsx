@@ -6,13 +6,13 @@ import style from "./index.css";
 import { CopyrightControl } from "mobility-toolbox-js/ol";
 import { ControlCommonOptions } from "mobility-toolbox-js/common/controls/ControlCommon";
 
-type Props = {
-  map: Map;
-  options?: ControlCommonOptions;
-} & PreactDOMAttributes &
-  JSX.IntrinsicElements["div"];
+export type CopyrightProps = PreactDOMAttributes &
+  JSX.HTMLAttributes<HTMLDivElement> & {
+    map: Map;
+    options?: ControlCommonOptions;
+  };
 
-function Copyright({ map, options, ...props }: Props) {
+function Copyright({ map, options, ...props }: CopyrightProps) {
   const [target, setTarget] = useState<HTMLElement>();
   const control = useMemo(() => {
     if (!target) {

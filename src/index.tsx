@@ -1,23 +1,10 @@
 import register from "preact-custom-element";
 
-import MobilityToolboxMap from "./MobilityToolboxMap";
+import MobilityMap from "./MobilityMap";
 
 register(
-  MobilityToolboxMap,
-  "mobility-toolbox-map",
-  [
-    "apikey",
-    "baselayer",
-    "center",
-    "mots",
-    "tenant",
-    "zoom",
-    "type",
-    "notificationurl",
-    "notificationbeforelayerid",
-    "realtimeurl",
-    "maxzoom",
-    "minzoom",
-  ],
+  MobilityMap,
+  "geops-mobility",
+  ["apikey", "baselayer", "center", "mots", "tenant", "zoom"],
   { shadow: true },
 );

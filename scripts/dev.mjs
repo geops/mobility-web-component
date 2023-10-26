@@ -8,7 +8,7 @@ let ctx = await esbuild.context({
   loader: {
     ".png": "dataurl",
   },
-  outfile: "bundle.js",
+  outfile: "index.js",
   plugins: [sassPlugin({ type: "css-text" })],
   sourcemap: true,
 });

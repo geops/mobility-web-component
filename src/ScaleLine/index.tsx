@@ -1,14 +1,16 @@
 import { Map } from "ol";
-import ScaleLineControl, { Options } from "ol/control/ScaleLine";
+import ScaleLineControl, {
+  Options as ScaleLineOptions,
+} from "ol/control/ScaleLine";
 import { PreactDOMAttributes, JSX } from "preact";
 import { useEffect, useMemo, useState } from "preact/hooks";
 // @ts-ignore
 import style from "./index.css";
 
-type Props = { map: Map; options?: Options } & PreactDOMAttributes &
-  JSX.IntrinsicElements["div"];
+type ScaleLineProps = PreactDOMAttributes &
+  JSX.HTMLAttributes<HTMLDivElement> & { map: Map; options?: ScaleLineOptions };
 
-function ScaleLine({ map, options, ...props }: Props) {
+function ScaleLine({ map, options, ...props }: ScaleLineProps) {
   const [target, setTarget] = useState<HTMLElement>();
   const control = useMemo(() => {
     if (!target) {
