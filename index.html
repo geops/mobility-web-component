@@ -51,12 +51,12 @@
       >
 
       <!-- Default -->
-      <geops-mobility
+      <!-- <geops-mobility
         class="max-w-3xl h-96 block resize-x overflow-auto"
-      ></geops-mobility>
+      ></geops-mobility> -->
 
       <!--SOB-->
-      <!-- <geops-mobility
+      <geops-mobility
         class="max-w-3xl h-96 block resize-x overflow-auto"
         center="955768,5922646"
         baselayer="travic_v2_network_plans"
@@ -66,7 +66,7 @@
         notificationbeforelayerid="netzplan_line_lable"
         notificationurl="https://moco.dev.geops.io/api/v1/export/notification/?sso_config=sob"
       >
-      </geops-mobility> -->
+      </geops-mobility>
     </div>
 
     <geops-mobility
@@ -76,6 +76,9 @@
 
     <script type="text/javascript">
       const params = new URLSearchParams(window.location.search);
+
+      // SOB fullscreen by default
+      params.set('fullscreen','true');
 
       // Display only the map fullscreen and remove documentation
       const doc = document.getElementById("doc");
