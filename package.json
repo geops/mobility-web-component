@@ -7,7 +7,7 @@
   "main": "index.js",
   "dependencies": {
     "maplibre-gl": "^3.5.2",
-    "mobility-toolbox-js": "^2.2.1",
+    "mobility-toolbox-js": "^2.3.0",
     "ol": "^8.1.0",
     "preact": "^10.18.1",
     "preact-custom-element": "^4.3.0",
