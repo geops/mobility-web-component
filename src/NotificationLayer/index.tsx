@@ -1,14 +1,12 @@
 import { useEffect, useMemo, useState } from "preact/hooks";
+import useMapContext from "../utils/hooks/useMapContext";
+import { MobilityMapProps } from "../MobilityMap";
+import useZoom from "../utils/hooks/useZoom";
 import {
   addNotificationsLayers,
   parsePreviewNotification,
   getNotificationsWithStatus,
 } from "./notificationUtils";
-import { unByKey } from "ol/Observable";
-
-import useMapContext from "../utils/hooks/useMapContext";
-import useParams from "../utils/hooks/useParams";
-import { MobilityMapProps } from "../MobilityMap";
 
 interface Graphs {
   [key: string]: string;
@@ -17,24 +15,6 @@ interface Graphs {
 interface Metadata {
   graphs?: Graphs;
 }
-
-let zoomTimeout = null;
-let abortCtrl = new AbortController();
-
-const useZoom = () => {
-  const { map } = useMapContext();
-  const [zoom, setZoom] = useState(map.getView().getZoom());
-  useEffect(() => {
-    const view = map.getView();
-    const zoomListener = view.on("change:resolution", () => {
-      clearTimeout(zoomTimeout);
-      zoomTimeout = setTimeout(() => setZoom(view.getZoom()), 150);
-    });
-    return () => unByKey(zoomListener);
-  }),
-    [map];
-  return zoom;
-};
 
 const useNotifications = ({
   notificationurl,
@@ -95,12 +75,14 @@ const useNotifications = ({
   }, []);
 
   useEffect(() => {
+    let abortCtrl: AbortController;
+
     // Fetch the main MOCO notifications
     const fetchNotifications = async () => {
       const suffix = /\?/.test(notificationurl) ? "&" : "?";
       const url = `${notificationurl}${suffix}graph=${graphsString}`;
 
-      abortCtrl.abort();
+      abortCtrl?.abort();
       abortCtrl = new AbortController();
       const response = await fetch(url, { signal: abortCtrl.signal });
       const data = await response.json();
@@ -111,6 +93,10 @@ const useNotifications = ({
     if (notificationurl && graphsString) {
       fetchNotifications();
     }
+
+    return () => {
+      abortCtrl?.abort();
+    };
   }, [notificationurl, graphsString, now]);
 
   useEffect(() => {

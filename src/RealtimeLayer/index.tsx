@@ -1,13 +1,10 @@
 import { RealtimeLayer as MtbRealtimeLayer } from "mobility-toolbox-js/ol";
-import { createContext } from "preact";
 import { useEffect, useMemo, useState } from "preact/hooks";
 import type { RealtimeMot, RealtimeTrainId } from "mobility-toolbox-js/types";
 import { unByKey } from "ol/Observable";
 import { memo } from "preact/compat";
-import rosetta from "rosetta";
 
 import useMapContext from "../utils/hooks/useMapContext";
-import useParams from "../utils/hooks/useParams";
 import centerOnVehicle from "../utils/centerOnVehicle";
 import { MobilityMapProps } from "../MobilityMap";
 import { Feature } from "ol";
@@ -37,7 +34,6 @@ function RealtimeLayer({
     if (!apikey || !realtimeurl) {
       return null;
     }
-    console.log("ici");
     return new MtbRealtimeLayer({
       apiKey: apikey,
       url: realtimeurl,

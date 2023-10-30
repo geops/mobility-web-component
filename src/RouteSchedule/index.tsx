@@ -1,18 +1,16 @@
 import type { PreactDOMAttributes, JSX } from "preact";
-import { RealtimeLayer, realtimeConfig } from "mobility-toolbox-js/ol";
+import { realtimeConfig } from "mobility-toolbox-js/ol";
 import { useContext, useEffect, useRef, useState } from "preact/hooks";
-import { I18nContext } from "../MobilityMap";
-import type {
-  RealtimeStation,
-  RealtimeStop,
-  RealtimeStopSequence,
-} from "mobility-toolbox-js/types";
+import { I18nContext, MobilityMapProps } from "../MobilityMap";
+import { memo } from "preact/compat";
+import type { RealtimeStop } from "mobility-toolbox-js/types";
+import useMapContext from "../utils/hooks/useMapContext";
 
 /**
  * Returns a string representation of a number, with a zero if the number is lower than 10.
  * @ignore
  */
-const pad = (integer) => {
+const pad = (integer: number) => {
   return integer < 10 ? `0${integer}` : integer;
 };
 
@@ -21,7 +19,7 @@ const pad = (integer) => {
  * @param {Number} timeInMs Time in milliseconds.
  * @ignore
  */
-const getHoursAndMinutes = (timeInMs) => {
+const getHoursAndMinutes = (timeInMs: number) => {
   if (!timeInMs || timeInMs <= 0) {
     return "";
   }
@@ -34,7 +32,7 @@ const getHoursAndMinutes = (timeInMs) => {
  * @param {Number} timeInMs Delay time in milliseconds.
  * @ignore
  */
-export const getDelayString = (delayInMs) => {
+export const getDelayString = (delayInMs: number) => {
   let timeInMs = delayInMs;
   if (timeInMs < 0) {
     timeInMs = 0;
@@ -463,19 +461,16 @@ const defaultRenderLink = (text, url) => {
 };
 
 export type RouteScheduleProps = PreactDOMAttributes &
-  JSX.HTMLAttributes<HTMLDivElement> & {
-    isFollowing: boolean;
-    lineInfos: RealtimeStopSequence;
-    onFollowButtonClick: (event: MouseEvent) => void;
-    onStationClick: (station: RealtimeStop, event: MouseEvent) => void;
-    trackerLayer: RealtimeLayer;
-  };
+  JSX.HTMLAttributes<HTMLDivElement> &
+  MobilityMapProps;
 
-export default function RouteSchedule(props: RouteScheduleProps) {
+function RouteSchedule(props: RouteScheduleProps) {
   const { t } = useContext(I18nContext);
+  const { lineInfos, isFollowing, map, realtimeLayer, setIsFollowing } =
+    useMapContext();
   const ref = useRef();
 
-  if (!props.lineInfos) {
+  if (!lineInfos) {
     return null;
   }
 
@@ -486,7 +481,6 @@ export default function RouteSchedule(props: RouteScheduleProps) {
       if (!elt) {
         return;
       }
-
       const nextStation = elt.querySelector("[data-station-passed=false]");
       if (nextStation) {
         nextStation.scrollIntoView({
@@ -499,17 +493,48 @@ export default function RouteSchedule(props: RouteScheduleProps) {
       clearTimeout(interval);
     };
     // Scroll automatically when a new scroll infos is set.
-  }, [props.lineInfos]);
+  }, [lineInfos]);
 
   return (
     <>
-      {renderHeader({ ...props })}
+      {renderHeader({
+        isFollowing,
+        lineInfos,
+        trackerLayer: realtimeLayer,
+        onFollowButtonClick: () => {
+          setIsFollowing(!isFollowing);
+        },
+        ...props,
+      })}
       <div ref={ref} className={props.className}>
-        {props.lineInfos.stations.map((stop: RealtimeStop, idx) => {
-          return renderStation({ ...props, stop, idx, t });
+        {lineInfos.stations.map((stop: RealtimeStop, idx) => {
+          return renderStation({
+            isFollowing,
+            lineInfos,
+            trackerLayer: realtimeLayer,
+            onStationClick: (stop) => {
+              if (stop.coordinate) {
+                map.getView().animate({
+                  zoom: map.getView().getZoom(),
+                  center: [stop.coordinate[0], stop.coordinate[1]],
+                });
+              }
+            },
+            ...props,
+            stop,
+            idx,
+            t,
+          });
         })}
-        {renderFooter({ ...props })}
+        {renderFooter({
+          isFollowing,
+          lineInfos,
+          trackerLayer: realtimeLayer,
+          ...props,
+        })}
       </div>
     </>
   );
 }
+
+export default memo(RouteSchedule);
