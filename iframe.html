@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title></title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" type="text/css" href="./output.css" />
+    <script type="module" src="./bundle.js"></script>
+    <style>
+      iframe {
+        width: 100vw;
+        height: 100vh;
+      }
+    </style>
+  </head>
+  <body>
+    <iframe
+      id="iframe"
+      src="/?realtime=false&baselayer=travic_v2_network_plans&type=notification&notificationurl=https%3A%2F%2Fmoco.dev.geops.io%2Fapi%2Fv1%2Fexport%2Fnotification%2F%3Fsso_config%3Dsob&notificationbeforelayerid=netzplan_line_lable&maxzoom=12&center=955768,5922646"
+      frameborder="0"
+    ></iframe>
+  </body>
+  <script type="module">
+    import testNotification from "./testNotification.json" assert { type: "json" };
+    const iframe = document.getElementById("iframe");
+    iframe.addEventListener("load", function () {
+      setTimeout(() => {
+        this.contentWindow.postMessage({ notification: testNotification }, "*");
+      }, 500);
+    });
+  </script>
+</html>

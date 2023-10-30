@@ -7,7 +7,7 @@
   "main": "index.js",
   "dependencies": {
     "maplibre-gl": "^3.5.2",
-    "mobility-toolbox-js": "^2.2.1",
+    "mobility-toolbox-js": "^2.3.0",
     "ol": "^8.1.0",
     "preact": "^10.18.1",
     "preact-custom-element": "^4.3.0",
@@ -17,6 +17,7 @@
     "@commitlint/cli": "^18.2.0",
     "@commitlint/config-conventional": "^18.1.0",
     "@tailwindcss/container-queries": "^0.1.1",
+    "@types/geojson": "^7946.0.11",
     "@types/preact-custom-element": "^4.0.3",
     "concurrently": "^8.2.2",
     "esbuild": "^0.19.5",
@@ -32,7 +33,7 @@
     "build:css": "yarn tailwind:component && yarn tailwind:website",
     "build:js": "node scripts/build.mjs",
     "dev": "node scripts/dev.mjs",
-    "format": "prettier --write 'src/**/*.tsx'",
+    "format": "prettier --write 'src/**/*.(tsx|ts|js)'",
     "prepare": "husky install",
     "publish:beta": "HUSKY=0 yarn release -- --prerelease beta --skip.changelog && yarn run build && HUSKY=0 yarn publish --access public --tag beta && git push origin HEAD && git push --tags ",
     "publish:beta:dryrun": "yarn release -- --prerelease beta --dry-run --skip.changelog",
@@ -41,7 +42,7 @@
     "release": "standard-version",
     "start": "concurrently \"yarn tailwind:component --watch\" \"yarn tailwind:website --watch\" \"yarn dev\"",
     "tailwind:component": "tailwindcss --output=src/style.css --content=src/**/*.tsx",
-    "tailwind:website": "tailwindcss --output=output.css --content=index.html --minify",
+    "tailwind:website": "tailwindcss --output=output.css --content=*.html --minify",
     "up": "yarn upgrade-interactive --latest"
   },
   "type": "module"
