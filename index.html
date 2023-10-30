@@ -49,7 +49,7 @@
   notificationbeforelayerid=&quot;netzplan_line_lable&quot;
   notificationurl=&quot;https://moco.dev.geops.io/api/v1/export/notification/?sso_config=sob&quot;
   realtime=&quot;false&quot;
-  zoom=&quot;10&quot;
+  zoom=&quot;9&quot;
   maxzoom=&quot;12&quot;
   style=&quot;display: block;width: 800px;height: 800px;&quot;&gt;
 &lt;/geops-mobility&gt;</pre
@@ -66,7 +66,7 @@
         center="994522.1750,5952839.3258"
         baselayer="travic_v2_network_plans"
         realtime="false"
-        zoom="10"
+        zoom="9"
         maxzoom="12"
         notification="true"
         notificationbeforelayerid="netzplan_line_lable"
@@ -92,12 +92,15 @@
       const params = new URLSearchParams(window.location.search);
 
       // SOB fullscreen by default
-      params.set('fullscreen','true');
+      console.log(params.get('fullscreen'));
+      if (params.get('fullscreen') !== 'false') {
+        // params.set('fullscreen','true');
+      }
 
       // Display only the map fullscreen and remove documentation
       const doc = document.getElementById("doc");
       const fullscreen = document.getElementById("fullscreen");
-      if (params.get("fullscreen")) {
+      if (params.get("fullscreen") === "true") {
         document.body.removeChild(doc);
         document.body.style = "padding:0;";
       } else {

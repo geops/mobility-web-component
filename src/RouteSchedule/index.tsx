@@ -170,8 +170,6 @@ const RouteStop = ({
     };
   }, [stop, trackerLayer, stations, idx]);
 
-  console.log(lineInfos);
-
   return (
     <button
       className={`w-full flex items-center hover:bg-slate-100 rounded scroll-mt-[50px] text-left ${
@@ -329,7 +327,6 @@ const renderStation = (props) => {
 const renderRouteIdentifier = ({ routeIdentifier, longName }) => {
   if (routeIdentifier) {
     // first part of the id, without leading zeros.
-    console.log(routeIdentifier, longName);
     let id = routeIdentifier;
 
     if (/\./.test(routeIdentifier)) {

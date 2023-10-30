@@ -52,7 +52,6 @@ const useNotifications = ({
   }, [notificationat]);
 
   const graphMapping = useMemo(() => {
-    console.log(styleMetadata?.graphs);
     return styleMetadata?.graphs || { 1: "osm" };
   }, [styleMetadata]);
 
