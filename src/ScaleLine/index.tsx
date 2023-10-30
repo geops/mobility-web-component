@@ -6,11 +6,14 @@ import { PreactDOMAttributes, JSX } from "preact";
 import { useEffect, useMemo, useState } from "preact/hooks";
 // @ts-ignore
 import style from "./index.css";
+import useMapContext from "../utils/hooks/useMapContext";
+import { MobilityMapProps } from "../MobilityMap";
 
 type ScaleLineProps = PreactDOMAttributes &
-  JSX.HTMLAttributes<HTMLDivElement> & { map: Map; options?: ScaleLineOptions };
+  JSX.HTMLAttributes<HTMLDivElement> & { options?: ScaleLineOptions };
 
-function ScaleLine({ map, options, ...props }: ScaleLineProps) {
+function ScaleLine({ options, ...props }: ScaleLineProps) {
+  const { map } = useMapContext();
   const [target, setTarget] = useState<HTMLElement>();
   const control = useMemo(() => {
     if (!target) {
