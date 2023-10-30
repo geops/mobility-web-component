@@ -92,9 +92,8 @@
       const params = new URLSearchParams(window.location.search);
 
       // SOB fullscreen by default
-      console.log(params.get('fullscreen'));
       if (params.get('fullscreen') !== 'false') {
-        // params.set('fullscreen','true');
+        params.set('fullscreen','true');
       }
 
       // Display only the map fullscreen and remove documentation
