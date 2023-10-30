@@ -23,3 +23,26 @@ yarn install
 yarn start
 ```
 
+## URL parameters
+
+You can specify all the web component attributes as url parameters to customize easily the map.
+
+- apikey: string;
+- baselayer?: string;
+- center: string;
+- geolocation?: string;
+- maxzoom?: string;
+- minzoom?: string;
+- mots?: string;
+- notification?: string;
+- notificationat?: string;
+- notificationurl?: string;
+- notificationbeforelayerid?: string;
+- realtime?: string;
+- realtimeurl?: string;
+- tenant?: string;
+- zoom: string;
+
+Another url parameter is used to get a full screen map instead of the documentation:
+
+- fullscreen=true
