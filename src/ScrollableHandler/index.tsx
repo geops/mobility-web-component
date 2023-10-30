@@ -52,7 +52,6 @@ function ScrollableHandler(props: ScrollableHandlerProps) {
         document.addEventListener("pointerup", onDragStop);
         document.addEventListener("pointermove", onDragg);
         document.addEventListener("pointercancel", (evt) => {
-          console.log("pointercancel");
           document.removeEventListener("pointermove", onDragg);
           document.removeEventListener("pointerup", onDragStop);
           evt.stopPropagation();
