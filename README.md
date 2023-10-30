@@ -3,7 +3,7 @@
 A web component used to display a map using different [geOps apis](https://developer.geops.io/).
 
 The map displays realtime vehicles, and allow to click on them to display their schedule plan.
-
+You can also display MOCO notifications.
 
 ## Usage Example
 
