@@ -42,10 +42,15 @@
 &lt;/script&gt;
 &lt;geops-mobility
   apikey=&quot;YOUR_GEOPS_API_KEY&quot;
-  baselayer=&quot;travic_v2&quot;
-  center=&quot;831634,5933959&quot;
+  baselayer=&quot;travic_v2_network_plans&quot;
+  center=&quot;994522.1750,5952839.3258&quot;
   mots=&quot;rail&quot;
-  zoom=&quot;13&quot;
+  notification=&quot;true&quot;
+  notificationbeforelayerid=&quot;netzplan_line_lable&quot;
+  notificationurl=&quot;https://moco.dev.geops.io/api/v1/export/notification/?sso_config=sob&quot;
+  realtime=&quot;false&quot;
+  zoom=&quot;10&quot;
+  maxzoom=&quot;12&quot;
   style=&quot;display: block;width: 800px;height: 800px;&quot;&gt;
 &lt;/geops-mobility&gt;</pre
       >
@@ -58,9 +63,10 @@
       <!--SOB-->
       <geops-mobility
         class="max-w-3xl h-96 block resize-x overflow-auto"
-        center="955768,5922646"
+        center="994522.1750,5952839.3258"
         baselayer="travic_v2_network_plans"
         realtime="false"
+        zoom="10"
         maxzoom="12"
         notification="true"
         notificationbeforelayerid="netzplan_line_lable"
@@ -72,9 +78,10 @@
     <geops-mobility
       id="fullscreen"
       class="absolute w-full h-full"
-      center="955768,5922646"
+      center="994522.1750,5952839.3258"
       baselayer="travic_v2_network_plans"
       realtime="false"
+      zoom="10"
       maxzoom="12"
       notification="true"
       notificationbeforelayerid="netzplan_line_lable"
