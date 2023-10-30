@@ -9,7 +9,7 @@ await esbuild.build({
   loader: {
     ".png": "dataurl",
   },
-  outfile: "bundle.js",
+  outfile: "index.js",
   plugins: [sassPlugin({ type: "css-text" })],
   sourcemap: false,
 });

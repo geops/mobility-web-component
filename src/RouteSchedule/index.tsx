@@ -1,14 +1,16 @@
+import type { PreactDOMAttributes, JSX } from "preact";
 import { realtimeConfig } from "mobility-toolbox-js/ol";
 import { useContext, useEffect, useRef, useState } from "preact/hooks";
-import { I18nContext } from "../RealtimeLayer";
-import ScrollableHandler from "../../ScrollableHandler";
-import rsStyle from "./RouteSchedule.css";
+import { I18nContext, MobilityMapProps } from "../MobilityMap";
+import { memo } from "preact/compat";
+import type { RealtimeStop } from "mobility-toolbox-js/types";
+import useMapContext from "../utils/hooks/useMapContext";
 
 /**
  * Returns a string representation of a number, with a zero if the number is lower than 10.
  * @ignore
  */
-const pad = (integer) => {
+const pad = (integer: number) => {
   return integer < 10 ? `0${integer}` : integer;
 };
 
@@ -17,7 +19,7 @@ const pad = (integer) => {
  * @param {Number} timeInMs Time in milliseconds.
  * @ignore
  */
-const getHoursAndMinutes = (timeInMs) => {
+const getHoursAndMinutes = (timeInMs: number) => {
   if (!timeInMs || timeInMs <= 0) {
     return "";
   }
@@ -30,7 +32,7 @@ const getHoursAndMinutes = (timeInMs) => {
  * @param {Number} timeInMs Delay time in milliseconds.
  * @ignore
  */
-export const getDelayString = (delayInMs) => {
+export const getDelayString = (delayInMs: number) => {
   let timeInMs = delayInMs;
   if (timeInMs < 0) {
     timeInMs = 0;
@@ -195,14 +197,14 @@ const RouteStop = ({
         </span>
       </div>
       <div className="flex flex-col w-7 flex-shrink-0 justify-center text-xs">
-        {hideDelay || isFirstStation ? (
+        {arrivalDelay === null || hideDelay || isFirstStation ? (
           ""
         ) : (
           <span className={getDelayColor(arrivalDelay)}>
             {`+${getDelayString(arrivalDelay)}`}
           </span>
         )}
-        {hideDelay || isLastStation ? (
+        {departureDelay === null || hideDelay || isLastStation ? (
           ""
         ) : (
           <span className={getDelayColor(departureDelay)}>
@@ -458,11 +460,17 @@ const defaultRenderLink = (text, url) => {
   );
 };
 
-export default function RouteSchedule(props) {
+export type RouteScheduleProps = PreactDOMAttributes &
+  JSX.HTMLAttributes<HTMLDivElement> &
+  MobilityMapProps;
+
+function RouteSchedule(props: RouteScheduleProps) {
   const { t } = useContext(I18nContext);
+  const { lineInfos, isFollowing, map, realtimeLayer, setIsFollowing } =
+    useMapContext();
   const ref = useRef();
 
-  if (!props.lineInfos) {
+  if (!lineInfos) {
     return null;
   }
 
@@ -473,7 +481,6 @@ export default function RouteSchedule(props) {
       if (!elt) {
         return;
       }
-
       const nextStation = elt.querySelector("[data-station-passed=false]");
       if (nextStation) {
         nextStation.scrollIntoView({
@@ -486,18 +493,48 @@ export default function RouteSchedule(props) {
       clearTimeout(interval);
     };
     // Scroll automatically when a new scroll infos is set.
-  }, [props.lineInfos]);
+  }, [lineInfos]);
 
   return (
     <>
-      {renderHeader({ ...props })}
+      {renderHeader({
+        isFollowing,
+        lineInfos,
+        trackerLayer: realtimeLayer,
+        onFollowButtonClick: () => {
+          setIsFollowing(!isFollowing);
+        },
+        ...props,
+      })}
       <div ref={ref} className={props.className}>
-        <style>{rsStyle}</style>
-        {props.lineInfos.stations.map((stop, idx) => {
-          return renderStation({ ...props, stop, idx, t });
+        {lineInfos.stations.map((stop: RealtimeStop, idx) => {
+          return renderStation({
+            isFollowing,
+            lineInfos,
+            trackerLayer: realtimeLayer,
+            onStationClick: (stop) => {
+              if (stop.coordinate) {
+                map.getView().animate({
+                  zoom: map.getView().getZoom(),
+                  center: [stop.coordinate[0], stop.coordinate[1]],
+                });
+              }
+            },
+            ...props,
+            stop,
+            idx,
+            t,
+          });
         })}
-        {renderFooter({ ...props })}
+        {renderFooter({
+          isFollowing,
+          lineInfos,
+          trackerLayer: realtimeLayer,
+          ...props,
+        })}
       </div>
     </>
   );
 }
+
+export default memo(RouteSchedule);

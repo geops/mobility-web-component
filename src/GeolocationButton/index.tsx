@@ -1,18 +1,19 @@
 import { Geolocation, Map } from "ol";
 import { unByKey } from "ol/Observable";
 import { fromLonLat } from "ol/proj";
+import { useContext, useEffect, useMemo, useState } from "preact/hooks";
 import type { PreactDOMAttributes, JSX } from "preact";
-import { useEffect, useMemo, useState } from "preact/hooks";
+import useMapContext from "../utils/hooks/useMapContext";
 
-type Props = {
-  map: Map;
-  isTracking: boolean;
-} & JSX.HTMLAttributes<HTMLButtonElement> &
-  PreactDOMAttributes;
+export type GeolocationButtonProps = PreactDOMAttributes &
+  JSX.HTMLAttributes<HTMLButtonElement>;
 
 const TRACKING_ZOOM = 16;
 
-function GeolocationButton({ map, isTracking, ...props }: Props) {
+function GeolocationButton({ ...props }: GeolocationButtonProps) {
+  const mapContext = useMapContext();
+  const { map, isTracking, setIsTracking } = mapContext;
+
   const geolocation = useMemo(() => {
     return new Geolocation();
   }, []);
@@ -50,7 +51,13 @@ function GeolocationButton({ map, isTracking, ...props }: Props) {
   }, [geolocation, isTracking]);
 
   return (
-    <button className="bg-white shadow-lg rounded-full p-1" {...props}>
+    <button
+      className="bg-white shadow-lg rounded-full p-1"
+      onClick={() => {
+        setIsTracking(!isTracking);
+      }}
+      {...props}
+    >
       <svg
         className={isTracking ? "animate-pulse" : ""}
         stroke="currentColor"

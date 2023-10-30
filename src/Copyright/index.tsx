@@ -1,18 +1,19 @@
-import { Map } from "ol";
 import { JSX, PreactDOMAttributes } from "preact";
 import { useEffect, useMemo, useState } from "preact/hooks";
-// @ts-ignore
-import style from "./index.css";
 import { CopyrightControl } from "mobility-toolbox-js/ol";
 import { ControlCommonOptions } from "mobility-toolbox-js/common/controls/ControlCommon";
+import useMapContext from "../utils/hooks/useMapContext";
 
-type Props = {
-  map: Map;
-  options?: ControlCommonOptions;
-} & PreactDOMAttributes &
-  JSX.IntrinsicElements["div"];
+// @ts-ignore
+import style from "./index.css";
 
-function Copyright({ map, options, ...props }: Props) {
+export type CopyrightProps = PreactDOMAttributes &
+  JSX.HTMLAttributes<HTMLDivElement> & {
+    options?: ControlCommonOptions;
+  };
+
+function Copyright({ options, ...props }: CopyrightProps) {
+  const { map } = useMapContext();
   const [target, setTarget] = useState<HTMLElement>();
   const control = useMemo(() => {
     if (!target) {

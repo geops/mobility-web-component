@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
     <meta charset="utf-8" />
@@ -17,12 +17,12 @@
         .then((data) => {
           if (data && data.success) {
             document
-              .getElementsByTagName("mobility-toolbox-map")[0]
+              .getElementsByTagName("geops-mobility")[0]
               .setAttribute("apikey", data.key);
           }
         });
     </script>
-    <script type="module" src="./bundle.js"></script>
+    <script type="module" src="./index.js"></script>
     <link rel="stylesheet" type="text/css" href="./output.css" />
     <style>
       ::-webkit-scrollbar {
@@ -30,9 +30,94 @@
       }
     </style>
   </head>
-  <body>
-    <div class="w-screen h-screen block">
-      <mobility-toolbox-map class="w-full h-full block"></mobility-toolbox-map>
+  <body class="p-8">
+    <div id="doc" class="mx-auto max-w-3xl space-y-4">
+      <h1 class="text-3xl font-bold">Mobility Web Component</h1>
+      <p>This is a demo of the Mobility Web Component.</p>
+      <h2 class="text-xl font-bold">Usage example</h2>
+      <pre class="bg-slate-800 text-slate-200 p-4 rounded">
+&lt;script
+  type=&quot;module&quot;
+  src=&quot;https://www.unpkg.com/@geops/mobility-web-component&quot;&gt;
+&lt;/script&gt;
+&lt;geops-mobility
+  apikey=&quot;YOUR_GEOPS_API_KEY&quot;
+  baselayer=&quot;travic_v2&quot;
+  center=&quot;831634,5933959&quot;
+  mots=&quot;rail&quot;
+  zoom=&quot;13&quot;
+  style=&quot;display: block;width: 800px;height: 800px;&quot;&gt;
+&lt;/geops-mobility&gt;</pre
+      >
+
+      <!-- Default -->
+      <geops-mobility
+        class="max-w-3xl h-96 block resize-x overflow-auto"
+      ></geops-mobility>
+
+      <!--SOB-->
+      <!-- <geops-mobility
+        class="max-w-3xl h-96 block resize-x overflow-auto"
+        center="955768,5922646"
+        baselayer="travic_v2_network_plans"
+        realtime="false"
+        maxzoom="12"
+        notification="true"
+        notificationbeforelayerid="netzplan_line_lable"
+        notificationurl="https://moco.dev.geops.io/api/v1/export/notification/?sso_config=sob"
+      >
+      </geops-mobility> -->
     </div>
+
+    <geops-mobility
+      id="fullscreen"
+      class="absolute w-full h-full"
+    ></geops-mobility>
+
+    <script type="text/javascript">
+      const params = new URLSearchParams(window.location.search);
+
+      // Display only the map fullscreen and remove documentation
+      const doc = document.getElementById("doc");
+      const fullscreen = document.getElementById("fullscreen");
+      if (params.get("fullscreen")) {
+        document.body.removeChild(doc);
+        document.body.style = "padding:0;";
+      } else {
+        document.body.removeChild(fullscreen);
+      }
+      params.delete("fullscreen");
+
+      // There should be only on map on the html page at this point
+      const map = document.querySelector("geops-mobility");
+
+      // Apply all url paramters as attribute of the web component
+      params.forEach((value, key) => {
+        map.setAttribute(key, value);
+      });
+
+      // Listen wc event sent
+      [
+        // "departure",
+        // "moveend",
+        // "position",
+        // "singleclick",
+        // "station",
+        // "stop",
+        // "message",
+      ].forEach((type) => {
+        window.addEventListener(type, (event) => {
+          const { evt } = event.data;
+          console.log("wc event: " + event.type, event.data);
+          window.top.postMessage(event.data, "*");
+        });
+      });
+
+      // Listen window event
+      window.addEventListener("message", (event) => {
+        const { type } = event.data;
+        console.log("message event: " + type, event.data);
+      });
+    </script>
   </body>
 </html>
