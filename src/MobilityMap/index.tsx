@@ -56,7 +56,7 @@ export const I18nContext = createContext(i18n);
 
 export type MobilityMapProps = {
   apikey: string;
-  baselayer: string;
+  baselayer?: string;
   center: string;
   geolocation?: string;
   maxzoom?: string;
@@ -68,7 +68,7 @@ export type MobilityMapProps = {
   notificationbeforelayerid?: string;
   realtime?: string;
   realtimeurl?: string;
-  tenant: string;
+  tenant?: string;
   zoom: string;
 };
 
@@ -115,11 +115,9 @@ function MobilityMap({
               </div>
               <div className="z-10 absolute left-2 right-2 text-[10px] bottom-2 flex justify-between items-end gap-2">
                 <ScaleLine
-                  map={map}
                   className={"bg-slate-50 bg-opacity-70"}
                 ></ScaleLine>
                 <Copyright
-                  map={map}
                   className={"bg-slate-50 bg-opacity-70"}
                 ></Copyright>
               </div>

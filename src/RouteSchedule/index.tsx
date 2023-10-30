@@ -507,12 +507,12 @@ function RouteSchedule(props: RouteScheduleProps) {
         ...props,
       })}
       <div ref={ref} className={props.className}>
-        {lineInfos.stations.map((stop: RealtimeStop, idx) => {
+        {lineInfos.stations.map((stop: RealtimeStop, idx:number) => {
           return renderStation({
             isFollowing,
             lineInfos,
             trackerLayer: realtimeLayer,
-            onStationClick: (stop) => {
+            onStationClick: (stop: RealtimeStop) => {
               if (stop.coordinate) {
                 map.getView().animate({
                   zoom: map.getView().getZoom(),

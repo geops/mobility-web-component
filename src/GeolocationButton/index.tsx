@@ -1,7 +1,7 @@
 import { Geolocation, Map } from "ol";
 import { unByKey } from "ol/Observable";
 import { fromLonLat } from "ol/proj";
-import { useContext, useEffect, useMemo, useState } from "preact/hooks";
+import { useEffect, useMemo } from "preact/hooks";
 import type { PreactDOMAttributes, JSX } from "preact";
 import useMapContext from "../utils/hooks/useMapContext";
 
