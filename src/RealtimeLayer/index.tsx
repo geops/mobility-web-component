@@ -58,7 +58,7 @@ function RealtimeLayer({
 
     return () => {
       tracker.detachFromMap();
-      setRealtimeLayer(tracker);
+      setRealtimeLayer();
     };
   }, [map, setRealtimeLayer, tracker]);
 

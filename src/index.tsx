@@ -9,7 +9,7 @@ register(
     "apikey",
     "baselayer",
     "center",
-    "center",
+    "geolocation",
     "mots",
     "notification",
     "notificationat",
