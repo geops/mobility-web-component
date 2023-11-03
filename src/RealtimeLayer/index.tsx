@@ -46,12 +46,19 @@ function RealtimeLayer({
     if (!map || !tracker) {
       return () => {};
     }
-    tracker.attachToMap(map);
+    if (map.getView()?.getCenter()) {
+      tracker.attachToMap(map);
+    } else {
+      map.once("moveend", () => {
+        tracker.attachToMap(map);
+      });
+    }
 
     setRealtimeLayer(tracker);
 
     return () => {
       tracker.detachFromMap();
+      setRealtimeLayer(tracker);
     };
   }, [map, setRealtimeLayer, tracker]);
 

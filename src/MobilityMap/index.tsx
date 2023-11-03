@@ -100,6 +100,7 @@ function MobilityMap({
   }, [baseLayer, isFollowing, isTracking, lineInfos, map, realtimeLayer]);
 
   return (
+    // @ts-ignore
     <I18nContext.Provider value={i18n}>
       <style>{tailwind}</style>
       <style>{style}</style>

@@ -5,6 +5,20 @@ import MobilityMap from "./MobilityMap";
 register(
   MobilityMap,
   "geops-mobility",
-  ["apikey", "baselayer", "center", "mots", "tenant", "zoom"],
+  [
+    "apikey",
+    "baselayer",
+    "center",
+    "center",
+    "mots",
+    "notification",
+    "notificationat",
+    "notificationurl",
+    "notificationbeforelayerid",
+    "realtime",
+    "realtimeUrl",
+    "tenant",
+    "zoom",
+  ],
   { shadow: true },
 );
