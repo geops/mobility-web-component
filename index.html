@@ -9,9 +9,6 @@
       content="initial-scale=1,maximum-scale=1,user-scalable=no"
     />
     <script type="text/javascript">
-      new EventSource("/esbuild").addEventListener("change", () => {
-        location.reload();
-      });
       fetch("https://backend.developer.geops.io/publickey")
         .then((response) => response.json())
         .then((data) => {
