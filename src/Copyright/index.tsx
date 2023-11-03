@@ -24,16 +24,15 @@ function Copyright({ options, ...props }: CopyrightProps) {
     div.className = "flex flex-wrap-reverse justify-end";
 
     return new CopyrightControl({
-      target: target,
+      target,
       element: div,
       ...options,
     });
   }, [options, target]);
 
   useEffect(() => {
-    let keys = [];
     if (!map || !control) {
-      return;
+      return () => {};
     }
     control.attachToMap(map);
 

@@ -1,9 +1,10 @@
 import type { PreactDOMAttributes, JSX } from "preact";
 import { realtimeConfig } from "mobility-toolbox-js/ol";
 import { useContext, useEffect, useRef, useState } from "preact/hooks";
-import { I18nContext, MobilityMapProps } from "../MobilityMap";
 import { memo } from "preact/compat";
 import type { RealtimeStop } from "mobility-toolbox-js/types";
+import I18nContext, { UseI18NContextType } from "../I18NContext";
+import type { MobilityMapProps } from "../MobilityMap";
 import useMapContext from "../utils/hooks/useMapContext";
 
 /**
@@ -113,16 +114,10 @@ const isPassed = (stop, time, stops, idx) => {
   return timeToCompare + delayToCompare <= time;
 };
 
-const RouteStop = ({
-  lineInfos,
-  onStationClick,
-  trackerLayer,
-  stop,
-  idx,
-  t,
-}) => {
+function RouteStop({ lineInfos, onStationClick, trackerLayer, stop, idx, t }) {
   const {
     arrivalDelay,
+    // eslint-disable-next-line
     departureDelay,
     platform,
     state,
@@ -136,15 +131,16 @@ const RouteStop = ({
   const color = stroke || getBgColor(type || vehicleType);
   const isFirstStation = idx === 0;
   const isLastStation = idx === stations.length - 1;
-  const isInTransit =
-    (stations[idx - 1] &&
-      isPassed(stations[idx - 1], trackerLayer.time, stations, idx - 1) !==
-        isStationPassed) ||
-    (stations[idx + 1] &&
-      isPassed(stations[idx + 1], trackerLayer.time, stations, idx + 1) !==
-        isStationPassed)
-      ? true
-      : false;
+
+  // Keep this code may be we will need it
+  // const isInTransit = !!(
+  //   (stations[idx - 1] &&
+  //     isPassed(stations[idx - 1], trackerLayer.time, stations, idx - 1) !==
+  //       isStationPassed) ||
+  //   (stations[idx + 1] &&
+  //     isPassed(stations[idx + 1], trackerLayer.time, stations, idx + 1) !==
+  //       isStationPassed)
+  // );
   const isNotRealtime = arrivalDelay === null;
   const hideDelay =
     isNotRealtime ||
@@ -170,8 +166,12 @@ const RouteStop = ({
     };
   }, [stop, trackerLayer, stations, idx]);
 
+  const y1 = isFirstStation ? "29" : "0";
+  const y2 = isLastStation ? "29" : "58";
+
   return (
     <button
+      type="button"
       className={`w-full flex items-center hover:bg-slate-100 rounded scroll-mt-[50px] text-left ${
         isStationPassed ? "text-gray-500" : "text-gray-600"
       }`}
@@ -226,55 +226,18 @@ const RouteStop = ({
             cy="29"
             r="5"
             fill="white"
-            stroke-width="6"
+            strokeWidth="6"
             stroke="black"
           />
-          <line
-            x1="7"
-            y1={
-              isFirstStation
-                ? "29"
-                : isInTransit && !isStationPassed
-                ? "0"
-                : "0"
-            }
-            x2="7"
-            y2={
-              isLastStation
-                ? "29"
-                : isInTransit && isStationPassed
-                ? "58"
-                : "58"
-            }
-            stroke-width="6"
-            stroke="black"
-          />
-          <line
-            x1="7"
-            y1={
-              isFirstStation
-                ? "29"
-                : isInTransit && !isStationPassed
-                ? "0"
-                : "0"
-            }
-            x2="7"
-            y2={
-              isLastStation
-                ? "29"
-                : isInTransit && isStationPassed
-                ? "58"
-                : "58"
-            }
-            stroke-width="4"
-          />
-          <circle cx="7" cy="29" r="5" fill="white" stroke-width="4" />
+          <line x1="7" y1={y1} x2="7" y2={y2} strokeWidth="6" stroke="black" />
+          <line x1="7" y1={y1} x2="7" y2={y2} strokeWidth="4" />
+          <circle cx="7" cy="29" r="5" fill="white" strokeWidth="4" />
           <circle
             cx="7"
             cy="29"
             r="3"
             fill="white"
-            stroke-width="1"
+            strokeWidth="1"
             stroke="black"
           />
         </svg>
@@ -308,7 +271,7 @@ const RouteStop = ({
       </div>
     </button>
   );
-};
+}
 
 const renderStation = (props) => {
   const { stationId, arrivalTime, departureTime, stationName } = props.stop;
@@ -330,15 +293,15 @@ const renderRouteIdentifier = ({ routeIdentifier, longName }) => {
     let id = routeIdentifier;
 
     if (/\./.test(routeIdentifier)) {
-      id = routeIdentifier.split(".")[0];
-    } else if (/\_/.test(routeIdentifier)) {
-      id = routeIdentifier.split("_")[0];
-    } else if (/\:/.test(routeIdentifier)) {
-      id = routeIdentifier.split(":")[0];
+      [id] = routeIdentifier.split(".");
+    } else if (/_/.test(routeIdentifier)) {
+      [id] = routeIdentifier.split("_");
+    } else if (/:/.test(routeIdentifier)) {
+      [id] = routeIdentifier.split(":");
     }
 
     if (/^\d*$/.test(id)) {
-      id = parseInt(id, 10) + "";
+      id = `${parseInt(id, 10)}`;
     }
 
     if (!longName.includes(id)) {
@@ -379,7 +342,9 @@ const renderHeader = (props) => {
           {renderRouteIdentifier(lineInfos)}
         </span>
       </div>
+      {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
       <button
+        type="button"
         className={`flex flex-none bg-white shadow-lg rounded-full w-[38px] h-[38px] items-center justify-center p-1.5 ${
           isFollowing ? "animate-pulse" : ""
         }`}
@@ -399,21 +364,36 @@ const renderHeader = (props) => {
           part="svg"
         >
           <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
+            fillRule="evenodd"
+            clipRule="evenodd"
             fill="currentColor"
             d="M7 0.333344C7.375 0.333344 7.66667 0.62501 7.66667 0.97921V2.35414C9.7292 2.66668 11.3333 4.27081 11.625 6.33334H13C13.375 6.33334 13.6667 6.62501 13.6667 7.00001C13.6667 7.37501 13.375 7.66668 13 7.66668H11.625C11.3333 9.70834 9.70833 11.3333 7.66667 11.625V13C7.66667 13.375 7.375 13.6667 7 13.6667C6.64587 13.6667 6.33333 13.375 6.33333 13V11.625C4.29167 11.3333 2.68747 9.70834 2.39587 7.66668H1C0.625 7.66668 0.333333 7.37501 0.333333 7.00001C0.333333 6.62501 0.625 6.33334 1 6.33334H2.39587C2.68747 4.27081 4.29167 2.66668 6.33333 2.35414V0.97921C6.33333 0.62501 6.64587 0.333344 7 0.333344ZM7 3.66668C5.16667 3.66668 3.66667 5.16668 3.66667 7.00001C3.66667 8.79168 5.08333 10.3125 7 10.3125C8.89587 10.3125 10.3333 8.81254 10.3333 7.00001C10.3333 5.16668 8.83333 3.66668 7 3.66668Z"
           />
           <path
             part="circle"
-            fill-rule="evenodd"
-            clip-rule="evenodd"
+            fillRule="evenodd"
+            clipRule="evenodd"
             fill="currentColor"
             d="M5.66667 7.00001C5.66667 6.27081 6.2708 5.66668 7 5.66668C7.7292 5.66668 8.33333 6.27081 8.33333 7.00001C8.33333 7.72921 7.7292 8.33334 7 8.33334C6.2708 8.33334 5.66667 7.72921 5.66667 7.00001Z"
-          ></path>
+          />
         </svg>
       </button>
     </div>
+  );
+};
+
+const defaultRenderLink = (text, url) => {
+  return url ? (
+    <a
+      href={url}
+      target="_blank"
+      rel="noreferrer"
+      className="underline whitespace-normal"
+    >
+      {text}
+    </a>
+  ) : (
+    text
   );
 };
 
@@ -442,37 +422,17 @@ const renderFooter = (props) => {
   );
 };
 
-const defaultRenderLink = (text, url) => {
-  return url ? (
-    <a
-      href={url}
-      target="_blank"
-      rel="noreferrer"
-      className="underline whitespace-normal"
-    >
-      {text}
-    </a>
-  ) : (
-    <>{text}</>
-  );
-};
-
 export type RouteScheduleProps = PreactDOMAttributes &
   JSX.HTMLAttributes<HTMLDivElement> &
   MobilityMapProps;
 
 function RouteSchedule(props: RouteScheduleProps) {
-  const { t } = useContext(I18nContext);
+  const { t } = useContext(I18nContext) as unknown as UseI18NContextType;
   const { lineInfos, isFollowing, map, realtimeLayer, setIsFollowing } =
     useMapContext();
   const ref = useRef();
 
-  if (!lineInfos) {
-    return null;
-  }
-
   useEffect(() => {
-    let timeout = null;
     const interval = window.setInterval(() => {
       const elt = ref.current as HTMLDivElement;
       if (!elt) {
@@ -492,6 +452,12 @@ function RouteSchedule(props: RouteScheduleProps) {
     // Scroll automatically when a new scroll infos is set.
   }, [lineInfos]);
 
+  if (!lineInfos) {
+    return null;
+  }
+
+  const { className } = props;
+
   return (
     <>
       {renderHeader({
@@ -503,17 +469,17 @@ function RouteSchedule(props: RouteScheduleProps) {
         },
         ...props,
       })}
-      <div ref={ref} className={props.className}>
-        {lineInfos.stations.map((stop: RealtimeStop, idx:number) => {
+      <div ref={ref} className={className}>
+        {lineInfos.stations.map((stop: RealtimeStop, idx: number) => {
           return renderStation({
             isFollowing,
             lineInfos,
             trackerLayer: realtimeLayer,
-            onStationClick: (stop: RealtimeStop) => {
-              if (stop.coordinate) {
+            onStationClick: (station: RealtimeStop) => {
+              if (station.coordinate) {
                 map.getView().animate({
                   zoom: map.getView().getZoom(),
-                  center: [stop.coordinate[0], stop.coordinate[1]],
+                  center: [station.coordinate[0], station.coordinate[1]],
                 });
               }
             },

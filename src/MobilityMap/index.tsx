@@ -1,12 +1,16 @@
-import { createContext } from "preact";
 import { memo } from "preact/compat";
+import { useMemo, useState } from "preact/hooks";
+import { Map as OlMap } from "ol";
+import {
+  MaplibreLayer,
+  RealtimeLayer as MbtRealtimeLayer,
+} from "mobility-toolbox-js/ol";
 import rosetta from "rosetta";
 // @ts-ignore
 import tailwind from "../style.css";
 // @ts-ignore
 import style from "./index.css";
 import Map from "../Map";
-import { useState } from "preact/hooks";
 import NotificationLayer from "../NotificationLayer";
 import RouteSchedule from "../RouteSchedule";
 import GeolocationButton from "../GeolocationButton";
@@ -14,13 +18,9 @@ import BaseLayer from "../BaseLayer";
 import { MapContext } from "../utils/hooks/useMapContext";
 import RealtimeLayer from "../RealtimeLayer";
 import Overlay from "../Overlay";
-import { Map as OlMap } from "ol";
-import {
-  MaplibreLayer,
-  RealtimeLayer as MbtRealtimeLayer,
-} from "mobility-toolbox-js/ol";
 import ScaleLine from "../ScaleLine";
 import Copyright from "../Copyright";
+import I18nContext from "../I18NContext";
 
 const i18n = rosetta({
   de: {
@@ -52,8 +52,6 @@ i18n.locale(
     ?.split("-")[0] || "en",
 );
 
-export const I18nContext = createContext(i18n);
-
 export type MobilityMapProps = {
   apikey: string;
   baselayer?: string;
@@ -84,26 +82,28 @@ function MobilityMap({
   const [realtimeLayer, setRealtimeLayer] = useState<MbtRealtimeLayer>();
   const [map, setMap] = useState<OlMap>();
 
+  const mapContextValue = useMemo(() => {
+    return {
+      baseLayer,
+      isFollowing,
+      isTracking,
+      lineInfos,
+      map,
+      realtimeLayer,
+      setBaseLayer,
+      setIsFollowing,
+      setIsTracking,
+      setLineInfos,
+      setMap,
+      setRealtimeLayer,
+    };
+  }, [baseLayer, isFollowing, isTracking, lineInfos, map, realtimeLayer]);
+
   return (
     <I18nContext.Provider value={i18n}>
       <style>{tailwind}</style>
       <style>{style}</style>
-      <MapContext.Provider
-        value={{
-          baseLayer,
-          isFollowing,
-          isTracking,
-          lineInfos,
-          map,
-          realtimeLayer,
-          setBaseLayer,
-          setIsFollowing,
-          setIsTracking,
-          setLineInfos,
-          setMap,
-          setRealtimeLayer,
-        }}
-      >
+      <MapContext.Provider value={mapContextValue}>
         <div className="@container/main w-full h-full relative border">
           <div className="w-full h-full relative flex flex-col @lg/main:flex-row-reverse">
             <Map className="flex-1 relative overflow-hidden " {...props}>
@@ -114,12 +114,8 @@ function MobilityMap({
                 <GeolocationButton />
               </div>
               <div className="z-10 absolute left-2 right-2 text-[10px] bottom-2 flex justify-between items-end gap-2">
-                <ScaleLine
-                  className={"bg-slate-50 bg-opacity-70"}
-                ></ScaleLine>
-                <Copyright
-                  className={"bg-slate-50 bg-opacity-70"}
-                ></Copyright>
+                <ScaleLine className="bg-slate-50 bg-opacity-70" />
+                <Copyright className="bg-slate-50 bg-opacity-70" />
               </div>
             </Map>
             <Overlay

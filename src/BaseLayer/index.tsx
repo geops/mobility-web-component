@@ -1,15 +1,15 @@
 import { MaplibreLayer } from "mobility-toolbox-js/ol";
-import useMapContext from "../utils/hooks/useMapContext";
 import { useEffect } from "preact/hooks";
 import { memo } from "preact/compat";
-import { MobilityMapProps } from "../MobilityMap";
+import useMapContext from "../utils/hooks/useMapContext";
+import type { MobilityMapProps } from "../MobilityMap";
 
 function BaseLayer({ baselayer = "travic_v2", apikey }: MobilityMapProps) {
   const mapContext = useMapContext();
   const { map, setBaseLayer } = mapContext;
   useEffect(() => {
     if (!map || !baselayer || !apikey) {
-      return;
+      return () => {};
     }
     const layer = new MaplibreLayer({
       apiKey: apikey,
@@ -21,7 +21,7 @@ function BaseLayer({ baselayer = "travic_v2", apikey }: MobilityMapProps) {
     return () => {
       layer.detachFromMap();
     };
-  }, [map, baselayer, apikey]);
+  }, [map, baselayer, apikey, setBaseLayer]);
 
   return null;
 }

@@ -1,4 +1,3 @@
-import { Map } from "ol";
 import ScaleLineControl, {
   Options as ScaleLineOptions,
 } from "ol/control/ScaleLine";
@@ -7,7 +6,6 @@ import { useEffect, useMemo, useState } from "preact/hooks";
 // @ts-ignore
 import style from "./index.css";
 import useMapContext from "../utils/hooks/useMapContext";
-import { MobilityMapProps } from "../MobilityMap";
 
 type ScaleLineProps = PreactDOMAttributes &
   JSX.HTMLAttributes<HTMLDivElement> & { options?: ScaleLineOptions };
@@ -23,9 +21,8 @@ function ScaleLine({ options, ...props }: ScaleLineProps) {
   }, [options, target]);
 
   useEffect(() => {
-    let keys = [];
     if (!map || !control) {
-      return;
+      return () => {};
     }
     map.addControl(control);
 

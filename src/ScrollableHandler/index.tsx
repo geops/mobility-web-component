@@ -7,6 +7,7 @@ export type ScrollableHandlerProps = PreactDOMAttributes &
 function ScrollableHandler(props: ScrollableHandlerProps) {
   const [elt, setElt] = useState<HTMLElement>();
   const [overlayElt, setOverlayElt] = useState<HTMLElement>();
+  const { children } = props;
 
   useEffect(() => {
     // Clean css added by the scroller
@@ -26,40 +27,38 @@ function ScrollableHandler(props: ScrollableHandlerProps) {
           setOverlayElt(node.parentElement);
         }
       }}
+      // eslint-disable-next-line react/jsx-props-no-spreading
       {...props}
       onPointerDown={(evt) => {
-        const innerElt = overlayElt.querySelector(
-          ".scrollable-inner",
-        ) as HTMLDivElement;
         elt.setPointerCapture(evt.pointerId);
 
         const mapRect = overlayElt.parentElement.getBoundingClientRect();
         const eltRect = elt.getBoundingClientRect();
         const deltaToTop = mapRect.top + (evt.clientY - eltRect.top);
 
-        function onDragg(evt: PointerEvent) {
+        function onDragg() {
           overlayElt.style.height = `calc(100% - ${
             evt.clientY - deltaToTop
           }px)`;
           overlayElt.style.maxHeight = `100%`;
         }
 
-        function onDragStop(evt: PointerEvent) {
+        function onDragStop() {
           (evt.target as HTMLElement).releasePointerCapture(evt.pointerId);
           document.removeEventListener("pointermove", onDragg);
           document.removeEventListener("pointerup", onDragStop);
         }
         document.addEventListener("pointerup", onDragStop);
         document.addEventListener("pointermove", onDragg);
-        document.addEventListener("pointercancel", (evt) => {
+        document.addEventListener("pointercancel", (event: PointerEvent) => {
           document.removeEventListener("pointermove", onDragg);
           document.removeEventListener("pointerup", onDragStop);
-          evt.stopPropagation();
-          evt.preventDefault();
+          event.stopPropagation();
+          event.preventDefault();
         });
       }}
     >
-      {props.children}
+      {children}
     </div>
   );
 }
