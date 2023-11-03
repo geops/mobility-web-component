@@ -46,12 +46,7 @@ function RealtimeLayer({
     if (!map || !tracker) {
       return () => {};
     }
-    map.once("moveend", () => {
-      tracker.attachToMap(map);
-    });
-    tracker.onClick(([firstFeature]) => {
-      setFeature(firstFeature);
-    });
+    tracker.attachToMap(map);
 
     setRealtimeLayer(tracker);
 
@@ -59,6 +54,19 @@ function RealtimeLayer({
       tracker.detachFromMap();
     };
   }, [map, setRealtimeLayer, tracker]);
+
+  useEffect(() => {
+    if (!tracker) {
+      return () => {};
+    }
+    const onClick = ([firstFeature]) => {
+      setFeature(firstFeature);
+    };
+    tracker.onClick(onClick);
+    return () => {
+      tracker.unClick(onClick);
+    };
+  }, [tracker]);
 
   // Behavior when vehicle is selected or not.
   useEffect(() => {

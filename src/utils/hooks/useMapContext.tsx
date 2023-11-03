@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useContext } from "preact/hooks";
 import { createContext } from "preact";
 import { MaplibreLayer, RealtimeLayer } from "mobility-toolbox-js/ol";
@@ -28,12 +29,12 @@ export const MapContext = createContext({
   lineInfos: null,
   map: null,
   realtimeLayer: null,
-  setBaseLayer: (baseLayer: MaplibreLayer) => {},
+  setBaseLayer: (baseLayer?: MaplibreLayer) => {},
   setIsFollowing: (isFollowing: boolean) => {},
   setIsTracking: (isTracking: boolean) => {},
   setLineInfos: (lineInfos?: StopSequence) => {},
   setMap: (map?: Map) => {},
-  setRealtimeLayer: (realtimeLayer: RealtimeLayer) => {},
+  setRealtimeLayer: (realtimeLayer?: RealtimeLayer) => {},
 });
 
 const useMapContext = () => {

@@ -9,15 +9,11 @@
       content="initial-scale=1,maximum-scale=1,user-scalable=no"
     />
     <script type="text/javascript">
-      fetch("https://backend.developer.geops.io/publickey")
-        .then((response) => response.json())
-        .then((data) => {
-          if (data && data.success) {
-            document
-              .getElementsByTagName("geops-mobility")[0]
-              .setAttribute("apikey", data.key);
-          }
+      if (/localhost/.test(window.location.hostname)) {
+        new EventSource("/esbuild").addEventListener("change", () => {
+          location.reload();
         });
+      }
     </script>
     <script type="module" src="./index.js"></script>
     <link rel="stylesheet" type="text/css" href="./output.css" />
@@ -74,6 +70,15 @@
         map.setAttribute(key, value);
       });
 
+      if (!map.getAttribute("apikey")) {
+        fetch("https://backend.developer.geops.io/publickey")
+          .then((response) => response.json())
+          .then((data) => {
+            if (data && data.success) {
+              map.setAttribute("apikey", data.key);
+            }
+          });
+      }
       // Listen wc event sent
       [
         // "departure",
