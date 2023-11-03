@@ -49,10 +49,10 @@ Another url parameter is used to get a full screen map instead of the documentat
 
 ## Client specific code
 
-If a client, for example `trenord`, needs a `mobility-web-component` with custom foncionnalities.
-Never add custom client specific stuff in this project, instead:
+If a client, for example `trenord`, needs a `mobility-web-component` with custom functionnalities.
+Never add custom client specific stuff in this repository, instead:
 
-- create a fork from this project, and call it `trenord-mobility-web-component`.
+- create a fork from this repository, and call it `trenord-mobility-web-component`.
 - change the package name in `package.json` to `@geops/trenord-mobility-web-component`.
 - change the `README` and `index.html` titles.
 - create a new `MobilityMap` component in `src/` called `TrenordMobilityMap`. In this component you can copy the content of `MobilityMap` or just use the `MobilityMap` component with default values. It depends of your use case.
@@ -60,9 +60,20 @@ Never add custom client specific stuff in this project, instead:
 - create a new npm package on `npmjs.com` from this repository, and call it `@geops/trenord-mobility-web-component`.
 - publish a beta version to test the publishing with `ỳarn publish:beta`
 
-At this point you're ready to create custom code, some rules must be followed to facilitate the merge of remote `mobility-web-component` project:
+At this point you're ready to create custom code, some rules must be followed to facilitate the merge of upstream `mobility-web-component` repository:
 
 - always create new components using the client name as prefix, like `TrenordRouteSchedule`,  or put them in a client specific folder `src/trenord/RoutSchedule`.
-- never modify the original components in the forked project, do it in the remote project then merge it in the forked project.
-- never update dependencies in the forked project, do it in the remote project then merge it in the forked project.
+- never modify the original components in the forked repository, do it in the upstream repository then merge it in the forked repository.
+- never update dependencies in the forked repository, do it in the upstream repository then merge it in the forked repository.
 - if you have a doubt, ask.
+
+## Merge upstream repository
+
+When you use a fork you can merge the upstream repository using:
+
+```bash
+// Set up the upstream remote, to do only once
+git remote add upstream git@github.com:geops/mobility-web-component.git
+
+git fetch upstream && git merge upstream/main
+```
