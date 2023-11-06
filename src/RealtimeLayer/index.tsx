@@ -4,10 +4,10 @@ import type { RealtimeMot, RealtimeTrainId } from "mobility-toolbox-js/types";
 import { unByKey } from "ol/Observable";
 import { memo } from "preact/compat";
 
+import { Feature } from "ol";
 import useMapContext from "../utils/hooks/useMapContext";
 import centerOnVehicle from "../utils/centerOnVehicle";
-import { MobilityMapProps } from "../MobilityMap";
-import { Feature } from "ol";
+import type { MobilityMapProps } from "../MobilityMap";
 
 const TRACKING_ZOOM = 16;
 
@@ -22,7 +22,6 @@ function RealtimeLayer({
     isTracking,
     lineInfos,
     map,
-    realtimeLayer,
     setIsFollowing,
     setIsTracking,
     setLineInfos,
@@ -41,49 +40,63 @@ function RealtimeLayer({
       fullTrajectoryStyle: null,
       tenant,
     });
-  }, [apikey, mots, tenant]);
+  }, [apikey, mots, realtimeurl, tenant]);
 
   useEffect(() => {
     if (!map || !tracker) {
-      return;
+      return () => {};
     }
-    map.once("moveend", () => {
+    if (map.getView()?.getCenter()) {
       tracker.attachToMap(map);
-    });
-    tracker.onClick(([feature]) => {
-      setFeature(feature);
-    });
+    } else {
+      map.once("moveend", () => {
+        tracker.attachToMap(map);
+      });
+    }
 
     setRealtimeLayer(tracker);
 
     return () => {
       tracker.detachFromMap();
+      setRealtimeLayer();
     };
-  }, [map, tracker]);
+  }, [map, setRealtimeLayer, tracker]);
+
+  useEffect(() => {
+    if (!tracker) {
+      return () => {};
+    }
+    const onClick = ([firstFeature]) => {
+      setFeature(firstFeature);
+    };
+    tracker.onClick(onClick);
+    return () => {
+      tracker.unClick(onClick);
+    };
+  }, [tracker]);
 
   // Behavior when vehicle is selected or not.
   useEffect(() => {
     if (!lineInfos) {
       setIsFollowing(false);
-    } else {
     }
-  }, [lineInfos]);
+  }, [lineInfos, setIsFollowing]);
 
   // Behavior when user tracking is activated or not.
   useEffect(() => {
-    let olKeys = [];
+    const olKeys = [];
     if (isTracking) {
       setIsFollowing(false);
     }
     return () => {
       unByKey(olKeys);
     };
-  }, [isTracking]);
+  }, [isTracking, setIsFollowing]);
 
   // Deactive auto zooming when the user pans the map
   useEffect(() => {
     if (!map) {
-      return;
+      return () => {};
     }
     let onMovestartKey = null;
     onMovestartKey = map.getView().on("change:center", (evt) => {
@@ -95,11 +108,10 @@ function RealtimeLayer({
     return () => {
       unByKey(onMovestartKey);
     };
-  }, [map]);
+  }, [map, setIsFollowing, setIsTracking]);
 
   useEffect(() => {
     let interval = null;
-    let interval2 = null;
 
     if (tracker) {
       tracker.useThrottle = !isFollowing;
@@ -107,7 +119,7 @@ function RealtimeLayer({
       tracker.allowRenderWhenAnimating = !!isFollowing;
     }
     if (!isFollowing || !lineInfos || !map || !tracker) {
-      return;
+      return () => {};
     }
 
     setIsTracking(false);
@@ -135,7 +147,7 @@ function RealtimeLayer({
     return () => {
       clearInterval(interval);
     };
-  }, [isFollowing, map, tracker, lineInfos]);
+  }, [isFollowing, map, tracker, lineInfos, setIsTracking]);
 
   useEffect(() => {
     let vehicleId = null;
@@ -162,7 +174,7 @@ function RealtimeLayer({
         tracker.api.unsubscribeStopSequence(vehicleId);
       }
     };
-  }, [feature]);
+  }, [feature, map, setLineInfos, tracker]);
 
   return null;
 }

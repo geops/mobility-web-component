@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "preact/hooks";
 import useMapContext from "../utils/hooks/useMapContext";
-import { MobilityMapProps } from "../MobilityMap";
+import type { MobilityMapProps } from "../MobilityMap";
 import useZoom from "../utils/hooks/useZoom";
 import {
   addNotificationsLayers,
@@ -45,7 +45,7 @@ const useNotifications = ({
     } else {
       setStyleMetadata(baseLayer.mbMap?.getStyle()?.metadata);
     }
-  }, [baseLayer]);
+  }, [baseLayer, baselayer]);
 
   const now = useMemo(() => {
     return notificationat ? new Date(notificationat) : new Date();
@@ -143,6 +143,7 @@ const useNotifications = ({
     styleMetadata,
     zoom,
     graphMapping,
+    baseLayer,
   ]);
 
   return notifications;
