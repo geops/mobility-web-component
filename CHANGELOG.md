@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.4](https://github.com/geops/mobility-web-component/compare/v0.1.3...v0.1.4) (2023-11-07)
+
+
+### Bug Fixes
+
+* fix drag of overlay on mobile ([adb3047](https://github.com/geops/mobility-web-component/commit/adb3047172e236b551f324a96c6a09d573cb95d6))
+* fix useZoom hook ([ae87276](https://github.com/geops/mobility-web-component/commit/ae87276fc9ed5fddc4a160dd806e010c01a0ec60))
+
 ### [0.1.3](https://github.com/geops/mobility-web-component/compare/v0.1.2...v0.1.3) (2023-11-03)
 
 
