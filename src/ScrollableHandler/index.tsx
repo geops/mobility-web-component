@@ -36,15 +36,15 @@ function ScrollableHandler(props: ScrollableHandlerProps) {
         const eltRect = elt.getBoundingClientRect();
         const deltaToTop = mapRect.top + (evt.clientY - eltRect.top);
 
-        function onDragg() {
+        function onDragg(event: PointerEvent) {
           overlayElt.style.height = `calc(100% - ${
-            evt.clientY - deltaToTop
+            event.clientY - deltaToTop
           }px)`;
           overlayElt.style.maxHeight = `100%`;
         }
 
-        function onDragStop() {
-          (evt.target as HTMLElement).releasePointerCapture(evt.pointerId);
+        function onDragStop(event: PointerEvent) {
+          (event.target as HTMLElement).releasePointerCapture(evt.pointerId);
           document.removeEventListener("pointermove", onDragg);
           document.removeEventListener("pointerup", onDragStop);
         }
