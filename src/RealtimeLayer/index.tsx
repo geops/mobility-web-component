@@ -8,6 +8,8 @@ import { Feature } from "ol";
 import useMapContext from "../utils/hooks/useMapContext";
 import centerOnVehicle from "../utils/centerOnVehicle";
 import type { MobilityMapProps } from "../MobilityMap";
+import getDelayTextForVehicle from "../utils/getDelayTextForVehicle";
+import getDelayColorForVehicle from "../utils/getDelayColorForVehicle";
 
 const TRACKING_ZOOM = 16;
 
@@ -35,10 +37,14 @@ function RealtimeLayer({
     }
     return new MtbRealtimeLayer({
       apiKey: apikey,
+      tenant,
       url: realtimeurl,
       getMotsByZoom: mots ? () => mots.split(",") as RealtimeMot[] : undefined,
       fullTrajectoryStyle: null,
-      tenant,
+      styleOptions: {
+        getDelayText: getDelayTextForVehicle,
+        getDelayColor: getDelayColorForVehicle,
+      },
     });
   }, [apikey, mots, realtimeurl, tenant]);
 

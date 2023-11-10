@@ -6,82 +6,11 @@ import type { RealtimeStop } from "mobility-toolbox-js/types";
 import I18nContext, { UseI18NContextType } from "../I18NContext";
 import type { MobilityMapProps } from "../MobilityMap";
 import useMapContext from "../utils/hooks/useMapContext";
-
-/**
- * Returns a string representation of a number, with a zero if the number is lower than 10.
- * @ignore
- */
-const pad = (integer: number) => {
-  return integer < 10 ? `0${integer}` : integer;
-};
-
-/**
- * Returns a 'hh:mm' string from a time in ms.
- * @param {Number} timeInMs Time in milliseconds.
- * @ignore
- */
-const getHoursAndMinutes = (timeInMs: number) => {
-  if (!timeInMs || timeInMs <= 0) {
-    return "";
-  }
-  const date = new Date(timeInMs);
-  return `${pad(date.getHours())}:${pad(date.getMinutes())}`;
-};
-
-/**
- * Returns a string representing a delay.
- * @param {Number} timeInMs Delay time in milliseconds.
- * @ignore
- */
-export const getDelayString = (delayInMs: number) => {
-  let timeInMs = delayInMs;
-  if (timeInMs < 0) {
-    timeInMs = 0;
-  }
-  const h = Math.floor(timeInMs / 3600000);
-  const m = Math.floor((timeInMs % 3600000) / 60000);
-  const s = Math.floor(((timeInMs % 3600000) % 60000) / 1000);
-
-  if (s === 0 && h === 0 && m === 0) {
-    return "0";
-  }
-  if (s === 0 && h === 0) {
-    return `${m}m`;
-  }
-  if (s === 0) {
-    return `${h}h${m}m`;
-  }
-  if (m === 0 && h === 0) {
-    return `${s}s`;
-  }
-  if (h === 0) {
-    return `${m}m${s}s`;
-  }
-  return `${h}h${m}m${s}s`;
-};
+import getDelayString from "../utils/getDelayString";
+import getDelayColor from "../utils/getDelayColor";
+import getHoursAndMinutes from "../utils/getHoursAndMinutes";
 
 const { getBgColor } = realtimeConfig;
-
-/**
- * Returns a color class to display the delay.
- * @param {Number} time Delay time in milliseconds.
- */
-const getDelayColor = (time) => {
-  const secs = Math.round(((time / 1800 / 2) * 3600) / 1000);
-  if (secs >= 3600) {
-    return "text-red-600";
-  }
-  if (secs >= 500) {
-    return "text-orange-600";
-  }
-  if (secs >= 300) {
-    return "text-amber-600";
-  }
-  if (secs >= 180) {
-    return "text-yellow-600";
-  }
-  return "text-green-600";
-};
 
 /**
  * Returns true if the train doesn't stop to the station.
@@ -198,14 +127,14 @@ function RouteStop({ lineInfos, onStationClick, trackerLayer, stop, idx, t }) {
         {arrivalDelay === null || hideDelay || isFirstStation ? (
           ""
         ) : (
-          <span className={getDelayColor(arrivalDelay)}>
+          <span style={{ color: getDelayColor(arrivalDelay) }}>
             {`+${getDelayString(arrivalDelay)}`}
           </span>
         )}
         {departureDelay === null || hideDelay || isLastStation ? (
           ""
         ) : (
-          <span className={getDelayColor(departureDelay)}>
+          <span style={{ color: getDelayColor(arrivalDelay) }}>
             {`+${getDelayString(departureDelay)}`}
           </span>
         )}
@@ -382,7 +311,7 @@ const renderHeader = (props) => {
   );
 };
 
-const defaultRenderLink = (text, url) => {
+const defaultRenderLink = (text: string, url: string) => {
   return url ? (
     <a
       href={url}
@@ -397,7 +326,7 @@ const defaultRenderLink = (text, url) => {
   );
 };
 
-const renderFooter = (props) => {
+const renderFooter = (props: RouteScheduleProps) => {
   const { lineInfos } = props;
   if (!lineInfos.operator && !lineInfos.publisher) {
     return null;
