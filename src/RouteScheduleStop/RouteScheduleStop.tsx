@@ -49,9 +49,14 @@ export type RouteScheduleStopProps = {
     platform: string;
   };
   idx: number;
+  invertColor: boolean;
 };
 
-function RouteScheduleStop({ stop, idx }: RouteScheduleStopProps) {
+function RouteScheduleStop({
+  stop,
+  idx,
+  invertColor = false,
+}: RouteScheduleStopProps) {
   const { t } = useContext(I18nContext) as unknown as UseI18NContextType;
   const { lineInfos, map, realtimeLayer: trackerLayer } = useMapContext();
   const {
@@ -108,13 +113,33 @@ function RouteScheduleStop({ stop, idx }: RouteScheduleStopProps) {
   const y1 = isFirstStation ? "29" : "0";
   const y2 = isLastStation ? "29" : "58";
 
+  const colorSchemeGreyOut = {
+    textColor: "text-gray-500",
+    svgClassName: "stroke-gray-400",
+    svgStroke: undefined,
+    nameTextColor: "",
+    platformBgColor: "bg-slate-100",
+  };
+
+  const colorSchemeNormal = {
+    textColor: "text-gray-600",
+    svgClassName: null,
+    svgStroke: color,
+    nameTextColor: "text-black",
+    platformBgColor: "bg-slate-200",
+  };
+
+  let colorScheme = isStationPassed ? colorSchemeGreyOut : colorSchemeNormal;
+
+  if (invertColor) {
+    colorScheme = isStationPassed ? colorSchemeNormal : colorSchemeGreyOut;
+  }
+
   return (
     <button
       type="button"
       // max-h-[58px] because the svg showing the progress is 58px height.
-      className={`max-h-[58px] w-full flex items-center hover:bg-slate-100 rounded scroll-mt-[50px] text-left ${
-        isStationPassed ? "text-gray-500" : "text-gray-600"
-      }`}
+      className={`max-h-[58px] w-full flex items-center hover:bg-slate-100 rounded scroll-mt-[50px] text-left ${colorScheme.textColor}`}
       data-station-passed={isStationPassed} // Use for auto scroll
       onClick={() => {
         if (stop.coordinate) {
@@ -164,9 +189,9 @@ function RouteScheduleStop({ stop, idx }: RouteScheduleStopProps) {
           height="58"
           viewBox="0 0 14 58"
           fill="none"
-          className={isStationPassed ? "stroke-gray-400" : null}
+          className={colorScheme.svgClassName}
           // The tailwind css class stroke-[${color}] does not work
-          stroke={isStationPassed ? undefined : color}
+          stroke={colorScheme.svgStroke}
         >
           <circle
             cx="7"
@@ -192,15 +217,13 @@ function RouteScheduleStop({ stop, idx }: RouteScheduleStopProps) {
       <div
         className={`flex text-sm font-medium pr-2 justify-between flex-grow ${
           cancelled ? "text-red-600 line-through" : ""
-        } ${isStationPassed ? "" : "text-black"}`}
+        } ${colorScheme.nameTextColor}`}
       >
         <div className="">
           <div>{stationName}</div>
           {platform ? (
             <span
-              className={`${
-                isStationPassed ? "bg-slate-100" : "bg-slate-200"
-              } rounded-sm text-xs py-px px-0.5 group-hover:bg-slate-50`}
+              className={`${colorScheme.platformBgColor} rounded-sm text-xs py-px px-0.5 group-hover:bg-slate-50`}
             >
               {t(`depature_${type}`)} {platform}
             </span>
