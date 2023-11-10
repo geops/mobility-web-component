@@ -1,5 +1,5 @@
 const config = {
-  "(src|__mocks__)/**/*.js": [
+  "(src|__mocks__)/**/*.ts": [
     "eslint --fix",
     "prettier --write",
     "git add",
