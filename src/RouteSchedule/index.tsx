@@ -101,7 +101,8 @@ function RouteStop({ lineInfos, onStationClick, trackerLayer, stop, idx, t }) {
   return (
     <button
       type="button"
-      className={`w-full flex items-center hover:bg-slate-100 rounded scroll-mt-[50px] text-left ${
+      // max-h-[58px] because the svg showing the progress is 58px height.
+      className={`max-h-[58px] w-full flex items-center hover:bg-slate-100 rounded scroll-mt-[50px] text-left ${
         isStationPassed ? "text-gray-500" : "text-gray-600"
       }`}
       data-station-passed={isStationPassed} // Use for auto scroll
