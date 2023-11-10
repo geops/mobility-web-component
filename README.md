@@ -47,6 +47,11 @@ Another url parameter is used to get a full screen map instead of the documentat
 
 - fullscreen=true
 
+## Guidlines
+
+- every  new components must have a new folder `MyComponent` with an `index.tsx` that contains only an export and a `MyNewComponent.tsx` file. The reason is too simplifx the override in forked project.
+
+
 ## Client specific code
 
 If a client, for example `trenord`, needs a `mobility-web-component` with custom functionnalities.
@@ -63,6 +68,7 @@ Never add custom client specific stuff in this repository, instead:
 At this point you're ready to create custom code, some rules must be followed to facilitate the merge of upstream `mobility-web-component` repository:
 
 - always create new components using the client name as prefix, like `TrenordRouteSchedule`,  or put them in a client specific folder `src/trenord/RoutSchedule`.
+- to use the overrided components just change the export in the `index.tsx` of the component to overrided.
 - never modify the original components in the forked repository, do it in the upstream repository then merge it in the forked repository.
 - never update dependencies in the forked repository, do it in the upstream repository then merge it in the forked repository.
 - if you have a doubt, ask.
