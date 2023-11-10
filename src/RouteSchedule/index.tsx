@@ -123,7 +123,7 @@ function RouteStop({ lineInfos, onStationClick, trackerLayer, stop, idx, t }) {
           {getHoursAndMinutes(aimedDepartureTime)}
         </span>
       </div>
-      <div className="flex flex-col w-7 flex-shrink-0 justify-center text-xs">
+      <div className="flex flex-col w-8 flex-shrink-0 justify-center text-[0.6rem]">
         {arrivalDelay === null || hideDelay || isFirstStation ? (
           ""
         ) : (
