@@ -2,6 +2,7 @@ import { memo } from "preact/compat";
 import useMapContext from "../utils/hooks/useMapContext";
 import RouteIdentifier from "../RouteIdentifier";
 import getBgColor from "../utils/getBgColor";
+import RouteDestination from "../RouteDestination";
 
 function RouteScheduleHeader() {
   const { lineInfos, isFollowing, setIsFollowing } = useMapContext();
@@ -11,7 +12,6 @@ function RouteScheduleHeader() {
     shortName,
     longName,
     stroke,
-    destination,
     text_color: textColor,
   } = lineInfos;
   const backgroundColor = stroke || getBgColor(type || vehicleType);
@@ -28,7 +28,9 @@ function RouteScheduleHeader() {
         {shortName}
       </span>
       <div className="flex-grow flex flex-col">
-        <span className="font-bold">{destination}</span>
+        <span className="font-bold">
+          <RouteDestination {...lineInfos} />
+        </span>
         <span className="text-sm">
           {longName}
           <RouteIdentifier {...lineInfos} />
