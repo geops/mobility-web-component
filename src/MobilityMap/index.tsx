@@ -105,7 +105,7 @@ function MobilityMap({
       <style>{tailwind}</style>
       <style>{style}</style>
       <MapContext.Provider value={mapContextValue}>
-        <div className="@container/main w-full h-full relative border">
+        <div className="@container/main w-full h-full relative border font-serif">
           <div className="w-full h-full relative flex flex-col @lg/main:flex-row-reverse">
             <Map className="flex-1 relative overflow-hidden " {...props}>
               <BaseLayer {...props} />
