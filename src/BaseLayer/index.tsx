@@ -1,19 +1,20 @@
 import { MaplibreLayer } from "mobility-toolbox-js/ol";
 import { useEffect } from "preact/hooks";
 import { memo } from "preact/compat";
+import { MapGlLayerOptions } from "mobility-toolbox-js/ol/layers/MapGlLayer";
 import useMapContext from "../utils/hooks/useMapContext";
-import type { MobilityMapProps } from "../MobilityMap";
 
-function BaseLayer({ baselayer = "travic_v2", apikey }: MobilityMapProps) {
-  const mapContext = useMapContext();
-  const { map, setBaseLayer } = mapContext;
+function BaseLayer(props: MapGlLayerOptions) {
+  const { baselayer, apikey, map, setBaseLayer } = useMapContext();
   useEffect(() => {
+    console.log(baselayer, apikey);
     if (!map || !baselayer || !apikey) {
       return () => {};
     }
     const layer = new MaplibreLayer({
       apiKey: apikey,
       url: `https://maps.geops.io/styles/${baselayer}/style.json`,
+      ...(props || {}),
     });
     layer.attachToMap(map);
     setBaseLayer(layer);
@@ -21,7 +22,7 @@ function BaseLayer({ baselayer = "travic_v2", apikey }: MobilityMapProps) {
     return () => {
       layer.detachFromMap();
     };
-  }, [map, baselayer, apikey, setBaseLayer]);
+  }, [map, baselayer, apikey, setBaseLayer, props]);
 
   return null;
 }

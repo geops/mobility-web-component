@@ -12,19 +12,16 @@ export type RealtimeMapProps = PreactDOMAttributes &
   JSX.HTMLAttributes<HTMLDivElement> &
   MobilityMapProps;
 
-function Map({
-  apikey,
-  center = "831634,5933959",
-  zoom = "13",
-  minzoom,
-  maxzoom,
-  mots,
-  tenant,
-  children,
-  ...props
-}: RealtimeMapProps) {
+function Map({ children, ...props }: RealtimeMapProps) {
   const mapRef = useRef();
-  const { map, setMap } = useMapContext();
+  const {
+    center = "831634,5933959",
+    zoom = "13",
+    minzoom,
+    maxzoom,
+    map,
+    setMap,
+  } = useMapContext();
 
   useEffect(() => {
     let newMap: OlMap;

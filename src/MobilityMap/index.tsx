@@ -53,9 +53,9 @@ i18n.locale(
 );
 
 export type MobilityMapProps = {
-  apikey: string;
+  apikey?: string;
   baselayer?: string;
-  center: string;
+  center?: string;
   geolocation?: string;
   maxzoom?: string;
   minzoom?: string;
@@ -67,13 +67,25 @@ export type MobilityMapProps = {
   realtime?: string;
   realtimeurl?: string;
   tenant?: string;
-  zoom: string;
+  zoom?: string;
 };
 
 function MobilityMap({
-  realtime = "true",
+  apikey = null,
+  baselayer = "travic_v2",
+  center = "831634,5933959",
+  geolocation = null,
+  maxzoom = null,
+  minzoom = null,
+  mots = null,
   notification = "false",
-  ...props
+  notificationat = null,
+  notificationurl = null,
+  notificationbeforelayerid = null,
+  realtime = "true",
+  realtimeurl = "wss://api.geops.io/tracker-ws/v1/ws",
+  tenant = null,
+  zoom = "13",
 }: MobilityMapProps) {
   const [baseLayer, setBaseLayer] = useState<MaplibreLayer>();
   const [isFollowing, setIsFollowing] = useState(false);
@@ -84,6 +96,23 @@ function MobilityMap({
 
   const mapContextValue = useMemo(() => {
     return {
+      // MobilityMapProps
+      apikey,
+      baselayer,
+      center,
+      geolocation,
+      maxzoom,
+      minzoom,
+      mots,
+      notification,
+      notificationat,
+      notificationurl,
+      notificationbeforelayerid,
+      realtimeurl,
+      tenant,
+      zoom,
+
+      // MapContextProps
       baseLayer,
       isFollowing,
       isTracking,
@@ -97,7 +126,28 @@ function MobilityMap({
       setMap,
       setRealtimeLayer,
     };
-  }, [baseLayer, isFollowing, isTracking, lineInfos, map, realtimeLayer]);
+  }, [
+    apikey,
+    baselayer,
+    center,
+    geolocation,
+    maxzoom,
+    minzoom,
+    mots,
+    notification,
+    notificationat,
+    notificationurl,
+    notificationbeforelayerid,
+    realtimeurl,
+    tenant,
+    zoom,
+    baseLayer,
+    isFollowing,
+    isTracking,
+    lineInfos,
+    map,
+    realtimeLayer,
+  ]);
 
   return (
     // @ts-ignore
@@ -107,10 +157,10 @@ function MobilityMap({
       <MapContext.Provider value={mapContextValue}>
         <div className="@container/main w-full h-full relative border font-sans">
           <div className="w-full h-full relative flex flex-col @lg/main:flex-row-reverse">
-            <Map className="flex-1 relative overflow-hidden " {...props}>
-              <BaseLayer {...props} />
-              {realtime === "true" && <RealtimeLayer {...props} />}
-              {notification === "true" && <NotificationLayer {...props} />}
+            <Map className="flex-1 relative overflow-hidden ">
+              <BaseLayer />
+              {realtime === "true" && <RealtimeLayer />}
+              {notification === "true" && <NotificationLayer />}
               <div className="z-20 absolute right-2 top-2 flex flex-col gap-2">
                 <GeolocationButton />
               </div>
@@ -125,10 +175,7 @@ function MobilityMap({
               }}
             >
               {realtime === "true" && !!lineInfos && (
-                <RouteSchedule
-                  className="z-5 relative overflow-x-hidden overflow-y-auto  scrollable-inner"
-                  {...props}
-                />
+                <RouteSchedule className="z-5 relative overflow-x-hidden overflow-y-auto  scrollable-inner" />
               )}
             </Overlay>
           </div>

@@ -47,7 +47,7 @@ const isPassed = (
 
 export type RouteScheduleStopProps = {
   stop: RealtimeStop & {
-    platform: string;
+    platform?: string;
   };
   idx: number;
   invertColor: boolean;

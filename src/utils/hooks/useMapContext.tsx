@@ -3,16 +3,15 @@ import { useContext } from "preact/hooks";
 import { createContext } from "preact";
 import { MaplibreLayer, RealtimeLayer } from "mobility-toolbox-js/ol";
 import { Map } from "ol";
-import BaseLayer from "ol/layer/Base";
 import { StopSequence } from "mobility-toolbox-js/api/typedefs";
+import type { MobilityMapProps } from "../../MobilityMap";
 
-export type MapContextType = {
-  apiKey: string;
-  baseLayer: MaplibreLayer;
+export type MapContextType = MobilityMapProps & {
   lineInfos: StopSequence;
   isTracking: boolean;
   isFollowing: boolean;
   map: Map;
+  baseLayer: MaplibreLayer;
   realtimeLayer: RealtimeLayer;
   setBaseLayer: (baseLayer: MaplibreLayer) => void;
   setIsFollowing: (isFollowing: boolean) => void;
@@ -22,7 +21,7 @@ export type MapContextType = {
   setRealtimeLayer: (realtimeLayer: RealtimeLayer) => void;
 };
 
-export const MapContext = createContext({
+export const MapContext = createContext<MapContextType>({
   baseLayer: null,
   isFollowing: false,
   isTracking: false,

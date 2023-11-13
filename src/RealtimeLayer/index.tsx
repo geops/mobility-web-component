@@ -5,25 +5,26 @@ import { unByKey } from "ol/Observable";
 import { memo } from "preact/compat";
 
 import { Feature } from "ol";
+import type { OlRealtimeLayerOptions } from "mobility-toolbox-js/ol/layers/RealtimeLayer";
 import useMapContext from "../utils/hooks/useMapContext";
 import centerOnVehicle from "../utils/centerOnVehicle";
-import type { MobilityMapProps } from "../MobilityMap";
 import getDelayTextForVehicle from "../utils/getDelayTextForVehicle";
 import getDelayColorForVehicle from "../utils/getDelayColorForVehicle";
 
 const TRACKING_ZOOM = 16;
 
-function RealtimeLayer({
-  apikey,
-  mots,
-  tenant,
-  realtimeurl = "wss://api.geops.io/tracker-ws/v1/ws",
-}: MobilityMapProps) {
+export type RealtimeLayerProps = OlRealtimeLayerOptions;
+
+function RealtimeLayer(props: RealtimeLayerProps) {
   const {
+    apikey,
     isFollowing,
     isTracking,
     lineInfos,
     map,
+    mots,
+    realtimeurl,
+    tenant,
     setIsFollowing,
     setIsTracking,
     setLineInfos,
@@ -45,8 +46,9 @@ function RealtimeLayer({
         getDelayText: getDelayTextForVehicle,
         getDelayColor: getDelayColorForVehicle,
       },
+      ...props,
     });
-  }, [apikey, mots, realtimeurl, tenant]);
+  }, [apikey, mots, realtimeurl, tenant, props]);
 
   useEffect(() => {
     if (!map || !tracker) {

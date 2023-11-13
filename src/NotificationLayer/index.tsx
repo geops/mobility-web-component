@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from "preact/hooks";
 import useMapContext from "../utils/hooks/useMapContext";
-import type { MobilityMapProps } from "../MobilityMap";
 import useZoom from "../utils/hooks/useZoom";
 import {
   addNotificationsLayers,
@@ -16,13 +15,14 @@ interface Metadata {
   graphs?: Graphs;
 }
 
-const useNotifications = ({
-  notificationurl,
-  notificationbeforelayerid,
-  notificationat,
-  baselayer,
-}: MobilityMapProps) => {
-  const { baseLayer } = useMapContext();
+const useNotifications = () => {
+  const {
+    baselayer,
+    notificationurl,
+    notificationbeforelayerid,
+    notificationat,
+    baseLayer,
+  } = useMapContext();
   const zoom = useZoom();
   const [notifications, setNotifications] = useState([]);
   const [previewNotification, setPreviewNotification] = useState(null);
@@ -149,7 +149,7 @@ const useNotifications = ({
   return notifications;
 };
 
-export default function NotificationLayer(props: MobilityMapProps) {
-  useNotifications(props);
+export default function NotificationLayer() {
+  useNotifications();
   return null;
 }

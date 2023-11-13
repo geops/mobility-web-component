@@ -2,15 +2,13 @@ import type { PreactDOMAttributes, JSX } from "preact";
 import { useEffect, useRef } from "preact/hooks";
 import { memo } from "preact/compat";
 import type { RealtimeStop } from "mobility-toolbox-js/types";
-import type { MobilityMapProps } from "../MobilityMap";
 import useMapContext from "../utils/hooks/useMapContext";
 import RouteScheduleHeader from "../RouteScheduleHeader";
 import RouteScheduleFooter from "../RouteScheduleFooter";
 import RouteScheduleStop from "../RouteScheduleStop";
 
 export type RouteScheduleProps = PreactDOMAttributes &
-  JSX.HTMLAttributes<HTMLDivElement> &
-  MobilityMapProps;
+  JSX.HTMLAttributes<HTMLDivElement>;
 
 function RouteSchedule(props: RouteScheduleProps) {
   const { lineInfos } = useMapContext();
