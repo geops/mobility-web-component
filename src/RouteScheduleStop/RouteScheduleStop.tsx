@@ -7,6 +7,7 @@ import getDelayColor from "../utils/getDelayColor";
 import getDelayString from "../utils/getDelayString";
 import I18nContext, { UseI18NContextType } from "../I18NContext";
 import getBgColor from "../utils/getBgColor";
+import DebugStop from "../DebugStop/DebugStop";
 
 /**
  * Returns true if the train doesn't stop to the station.
@@ -136,100 +137,108 @@ function RouteScheduleStop({
   }
 
   return (
-    <button
-      type="button"
-      // max-h-[58px] because the svg showing the progress is 58px height.
-      className={`max-h-[58px] w-full flex items-center hover:bg-slate-100 rounded scroll-mt-[50px] text-left ${colorScheme.textColor}`}
-      data-station-passed={isStationPassed} // Use for auto scroll
-      onClick={() => {
-        if (stop.coordinate) {
-          map.getView().animate({
-            zoom: map.getView().getZoom(),
-            center: [stop.coordinate[0], stop.coordinate[1]],
-          });
-        }
-      }}
-    >
-      <div className="flex flex-col w-10 flex-shrink-0 items-start justify-center text-xs ml-4">
-        <span
-          className={`${cancelled ? "text-red-600 line-through" : ""} ${
-            isFirstStation ? "hidden" : ""
-          }`}
-        >
-          {getHoursAndMinutes(aimedArrivalTime)}
-        </span>
-        <span
-          className={`${cancelled ? "text-red-600 line-through" : ""} ${
-            isLastStation ? "hidden" : ""
-          }`}
-        >
-          {getHoursAndMinutes(aimedDepartureTime)}
-        </span>
-      </div>
-      <div className="flex flex-col w-8 flex-shrink-0 justify-center text-[0.6rem]">
-        {arrivalDelay === null || hideDelay || isFirstStation ? (
-          ""
-        ) : (
-          <span style={{ color: getDelayColor(arrivalDelay) }}>
-            {`+${getDelayString(arrivalDelay)}`}
-          </span>
-        )}
-        {departureDelay === null || hideDelay || isLastStation ? (
-          ""
-        ) : (
-          <span style={{ color: getDelayColor(arrivalDelay) }}>
-            {`+${getDelayString(departureDelay)}`}
-          </span>
-        )}
-      </div>
-      <div className="flex flex-shrink-0 items-center justify-center w-8">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="58"
-          viewBox="0 0 14 58"
-          fill="none"
-          className={colorScheme.svgClassName}
-          // The tailwind css class stroke-[${color}] does not work
-          stroke={colorScheme.svgStroke}
-        >
-          <circle
-            cx="7"
-            cy="29"
-            r="5"
-            fill="white"
-            strokeWidth="6"
-            stroke="black"
-          />
-          <line x1="7" y1={y1} x2="7" y2={y2} strokeWidth="6" stroke="black" />
-          <line x1="7" y1={y1} x2="7" y2={y2} strokeWidth="4" />
-          <circle cx="7" cy="29" r="5" fill="white" strokeWidth="4" />
-          <circle
-            cx="7"
-            cy="29"
-            r="3"
-            fill="white"
-            strokeWidth="1"
-            stroke="black"
-          />
-        </svg>
-      </div>
-      <div
-        className={`flex text-sm font-medium pr-2 justify-between flex-grow ${
-          cancelled ? "text-red-600 line-through" : ""
-        } ${colorScheme.nameTextColor}`}
+    <>
+      <button
+        type="button"
+        // max-h-[58px] because the svg showing the progress is 58px height.
+        className={`max-h-[58px] w-full flex items-center hover:bg-slate-100 rounded scroll-mt-[50px] text-left ${colorScheme.textColor}`}
+        data-station-passed={isStationPassed} // Use for auto scroll
+        onClick={() => {
+          if (stop.coordinate) {
+            map.getView().animate({
+              zoom: map.getView().getZoom(),
+              center: [stop.coordinate[0], stop.coordinate[1]],
+            });
+          }
+        }}
       >
-        <div className="">
-          <div>{stationName}</div>
-          {platform ? (
-            <span
-              className={`${colorScheme.platformBgColor} rounded-sm text-xs py-px px-0.5 group-hover:bg-slate-50`}
-            >
-              {t(`depature_${type}`)} {platform}
-            </span>
-          ) : null}
+        <div className="flex flex-col w-10 flex-shrink-0 items-start justify-center text-xs ml-4">
+          <span
+            className={`${cancelled ? "text-red-600 line-through" : ""} ${
+              isFirstStation ? "hidden" : ""
+            }`}
+          >
+            {getHoursAndMinutes(aimedArrivalTime)}
+          </span>
+          <span
+            className={`${cancelled ? "text-red-600 line-through" : ""} ${
+              isLastStation ? "hidden" : ""
+            }`}
+          >
+            {getHoursAndMinutes(aimedDepartureTime)}
+          </span>
         </div>
-        {/* {isInTransit && (
+        <div className="flex flex-col w-8 flex-shrink-0 justify-center text-[0.6rem]">
+          {arrivalDelay === null || hideDelay || isFirstStation ? (
+            ""
+          ) : (
+            <span style={{ color: getDelayColor(arrivalDelay) }}>
+              {`+${getDelayString(arrivalDelay)}`}
+            </span>
+          )}
+          {departureDelay === null || hideDelay || isLastStation ? (
+            ""
+          ) : (
+            <span style={{ color: getDelayColor(arrivalDelay) }}>
+              {`+${getDelayString(departureDelay)}`}
+            </span>
+          )}
+        </div>
+        <div className="flex flex-shrink-0 items-center justify-center w-8">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="58"
+            viewBox="0 0 14 58"
+            fill="none"
+            className={colorScheme.svgClassName}
+            // The tailwind css class stroke-[${color}] does not work
+            stroke={colorScheme.svgStroke}
+          >
+            <circle
+              cx="7"
+              cy="29"
+              r="5"
+              fill="white"
+              strokeWidth="6"
+              stroke="black"
+            />
+            <line
+              x1="7"
+              y1={y1}
+              x2="7"
+              y2={y2}
+              strokeWidth="6"
+              stroke="black"
+            />
+            <line x1="7" y1={y1} x2="7" y2={y2} strokeWidth="4" />
+            <circle cx="7" cy="29" r="5" fill="white" strokeWidth="4" />
+            <circle
+              cx="7"
+              cy="29"
+              r="3"
+              fill="white"
+              strokeWidth="1"
+              stroke="black"
+            />
+          </svg>
+        </div>
+        <div
+          className={`flex text-sm font-medium pr-2 justify-between flex-grow ${
+            cancelled ? "text-red-600 line-through" : ""
+          } ${colorScheme.nameTextColor}`}
+        >
+          <div className="">
+            <div>{stationName}</div>
+            {platform ? (
+              <span
+                className={`${colorScheme.platformBgColor} rounded-sm text-xs py-px px-0.5 group-hover:bg-slate-50`}
+              >
+                {t(`depature_${type}`)} {platform}
+              </span>
+            ) : null}
+          </div>
+          {/* {isInTransit && (
           <a
             href="#"
             className="bg-slate-200 hover:bg-slate-300 rounded-sm"
@@ -238,8 +247,10 @@ function RouteScheduleStop({
             <SEVIcon />
           </a>
         )} */}
-      </div>
-    </button>
+        </div>
+      </button>
+      <DebugStop stop={stop} isPassed={isStationPassed} />
+    </>
   );
 }
 export default memo(RouteScheduleStop);
