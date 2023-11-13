@@ -137,7 +137,7 @@ function RouteScheduleStop({
   }
 
   return (
-    <>
+    <div>
       <button
         type="button"
         // max-h-[58px] because the svg showing the progress is 58px height.
@@ -250,7 +250,7 @@ function RouteScheduleStop({
         </div>
       </button>
       <DebugStop stop={stop} isPassed={isStationPassed} />
-    </>
+    </div>
   );
 }
 export default memo(RouteScheduleStop);
