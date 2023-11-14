@@ -1,7 +1,8 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import * as esbuild from "esbuild";
 import { sassPlugin } from "esbuild-sass-plugin";
 
-let ctx = await esbuild.context({
+const ctx = await esbuild.context({
   entryPoints: ["./src/index.js"],
   bundle: true,
   external: ["mapbox-gl"],
@@ -13,7 +14,7 @@ let ctx = await esbuild.context({
   sourcemap: true,
 });
 
-let { host, port } = await ctx.serve({
+const { host, port } = await ctx.serve({
   servedir: ".",
 });
 
