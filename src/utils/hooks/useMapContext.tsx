@@ -34,10 +34,10 @@ export const MapContext = createContext<MapContextType>({
   setLineInfos: (lineInfos?: StopSequence) => {},
   setMap: (map?: Map) => {},
   setRealtimeLayer: (realtimeLayer?: RealtimeLayer) => {},
-});
+} as MapContextType);
 
-const useMapContext = () => {
-  const context = useContext(MapContext);
+const useMapContext = (): MapContextType => {
+  const context = useContext<MapContextType>(MapContext);
   if (!context) {
     throw new Error("useMapContext must be used within a ContextProvider");
   }

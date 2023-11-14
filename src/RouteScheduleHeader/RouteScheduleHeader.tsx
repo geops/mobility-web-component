@@ -3,13 +3,13 @@ import useMapContext from "../utils/hooks/useMapContext";
 import RouteIdentifier from "../RouteIdentifier";
 import getBgColor from "../utils/getBgColor";
 import RouteDestination from "../RouteDestination";
+import RouteIcon from "../RouteIcon";
 
 function RouteScheduleHeader() {
   const { lineInfos, isFollowing, setIsFollowing } = useMapContext();
   const {
     type,
     vehicleType,
-    shortName,
     longName,
     stroke,
     text_color: textColor,
@@ -18,15 +18,7 @@ function RouteScheduleHeader() {
   const color = textColor || "black";
   return (
     <div className="bg-slate-100 p-4 flex gap-x-4 items-center">
-      <span
-        className="border-2 border-black rounded-full font-bold text-sm h-9 min-w-[2.25rem] px-1 flex items-center justify-center"
-        style={{
-          backgroundColor,
-          color,
-        }}
-      >
-        {shortName}
-      </span>
+      <RouteIcon {...lineInfos} />
       <div className="flex-grow flex flex-col">
         <span className="font-bold">
           <RouteDestination {...lineInfos} />

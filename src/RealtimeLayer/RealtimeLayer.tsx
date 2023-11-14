@@ -10,6 +10,8 @@ import useMapContext from "../utils/hooks/useMapContext";
 import centerOnVehicle from "../utils/centerOnVehicle";
 import getDelayTextForVehicle from "../utils/getDelayTextForVehicle";
 import getDelayColorForVehicle from "../utils/getDelayColorForVehicle";
+import getDelayFontForVehicle from "../utils/getDelayFontForVehicle";
+import getTextFontForVehicle from "../utils/getTextFontForVehicle";
 
 const TRACKING_ZOOM = 16;
 
@@ -43,8 +45,10 @@ function RealtimeLayer(props: RealtimeLayerProps) {
       getMotsByZoom: mots ? () => mots.split(",") as RealtimeMot[] : undefined,
       fullTrajectoryStyle: null,
       styleOptions: {
-        getDelayText: getDelayTextForVehicle,
         getDelayColor: getDelayColorForVehicle,
+        getDelayText: getDelayTextForVehicle,
+        getDelayFont: getDelayFontForVehicle,
+        getTextFont: getTextFontForVehicle,
       },
       ...props,
     });
