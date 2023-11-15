@@ -1,6 +1,9 @@
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 const config = {
-  preset: "ts-jest",
-  testEnvironment: "node",
+  preset: "jest-preset-preact",
+  testEnvironment: "jsdom",
+  transform: {
+    "\\.[jt]sx?$": "ts-jest",
+  },
 };
 export default config;
