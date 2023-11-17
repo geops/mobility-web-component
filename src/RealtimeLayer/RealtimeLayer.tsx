@@ -43,7 +43,6 @@ function RealtimeLayer(props: RealtimeLayerProps) {
       tenant,
       url: realtimeurl,
       getMotsByZoom: mots ? () => mots.split(",") as RealtimeMot[] : undefined,
-      fullTrajectoryStyle: null,
       styleOptions: {
         getDelayColor: getDelayColorForVehicle,
         getDelayText: getDelayTextForVehicle,
