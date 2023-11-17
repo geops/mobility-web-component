@@ -5987,10 +5987,10 @@ minimist@^1.1.3, minimist@^1.2.0, minimist@^1.2.5, minimist@^1.2.6, minimist@^1.
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.8.tgz#c1a464e7693302e082a075cee0c057741ac4772c"
   integrity sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA==
 
-mobility-toolbox-js@^2.3.4:
-  version "2.3.4"
-  resolved "https://registry.yarnpkg.com/mobility-toolbox-js/-/mobility-toolbox-js-2.3.4.tgz#635984bf38d4dc6a3903968fa82a5dd1edcb0618"
-  integrity sha512-juaca7RM7E1WGm9ZzCOFld9Rwef3m2XCT9ePrOWjc5aT3YSN2iOryutakhmp1CRp0uxALnKHmLAWcmZdLGgZ8Q==
+mobility-toolbox-js@^2.3.5:
+  version "2.3.5"
+  resolved "https://registry.yarnpkg.com/mobility-toolbox-js/-/mobility-toolbox-js-2.3.5.tgz#7a8f699eb7d7bba290d093dbf1fca72f2329f6f9"
+  integrity sha512-RTEx9GVQ1W71XA2h9JjPjTceiD+bgxuAYtRo+mo/MiL6OSt3A6M7kJ9sEzytSuWf6+jq0I05ScfJrn9iggOP/Q==
   dependencies:
     "@turf/helpers" "6.5.0"
     "@turf/transform-rotate" "6.5.0"
