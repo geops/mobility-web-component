@@ -31,7 +31,6 @@ const centerOnVehicle = async (
   }
 
   view.cancelAnimations();
-  map.renderSync(); // Rerender the full trajectory feature, otherwise the line is cut after some time.
 
   const promise = new Promise((resolve) => {
     view.animate(
