@@ -126,6 +126,7 @@ function RealtimeLayer(props: RealtimeLayerProps) {
 
     if (tracker) {
       tracker.useThrottle = !isFollowing;
+      tracker.isUpdateBboxOnMoveEnd = !isFollowing;
       // tracker.useRequestAnimationFrame = isFollowing;
       tracker.allowRenderWhenAnimating = !!isFollowing;
     }
@@ -148,6 +149,7 @@ function RealtimeLayer(props: RealtimeLayerProps) {
 
       // Once the map is zoomed on the vehicle we follow him, only recenter , no zoom changes.
       if (success === true) {
+        tracker.setBbox(tracker.vectorLayer.getSource().getExtent());
         interval = setInterval(() => {
           centerOnVehicle(tracker?.trajectories?.[lineInfos.id], map);
         }, 1000);
@@ -157,6 +159,7 @@ function RealtimeLayer(props: RealtimeLayerProps) {
 
     return () => {
       clearInterval(interval);
+      tracker.setBbox();
     };
   }, [isFollowing, map, tracker, lineInfos, setIsTracking]);
 
