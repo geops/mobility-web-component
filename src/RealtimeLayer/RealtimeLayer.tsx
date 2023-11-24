@@ -69,7 +69,7 @@ function RealtimeLayer(props: RealtimeLayerProps) {
 
     return () => {
       layer.detachFromMap();
-      setRealtimeLayer();
+      setRealtimeLayer(null);
     };
   }, [map, setRealtimeLayer, layer]);
 
