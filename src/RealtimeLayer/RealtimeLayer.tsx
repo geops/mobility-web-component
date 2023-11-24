@@ -34,7 +34,7 @@ function RealtimeLayer(props: RealtimeLayerProps) {
   } = useMapContext();
   const [feature, setFeature] = useState<Feature>();
 
-  const tracker = useMemo(() => {
+  const layer = useMemo(() => {
     if (!apikey || !realtimeurl) {
       return null;
     }
@@ -54,37 +54,37 @@ function RealtimeLayer(props: RealtimeLayerProps) {
   }, [apikey, mots, realtimeurl, tenant, props]);
 
   useEffect(() => {
-    if (!map || !tracker) {
+    if (!map || !layer) {
       return () => {};
     }
     if (map.getView()?.getCenter()) {
-      tracker.attachToMap(map);
+      layer.attachToMap(map);
     } else {
       map.once("moveend", () => {
-        tracker.attachToMap(map);
+        layer.attachToMap(map);
       });
     }
 
-    setRealtimeLayer(tracker);
+    setRealtimeLayer(layer);
 
     return () => {
-      tracker.detachFromMap();
+      layer.detachFromMap();
       setRealtimeLayer();
     };
-  }, [map, setRealtimeLayer, tracker]);
+  }, [map, setRealtimeLayer, layer]);
 
   useEffect(() => {
-    if (!tracker) {
+    if (!layer) {
       return () => {};
     }
     const onClick = ([firstFeature]) => {
       setFeature(firstFeature);
     };
-    tracker.onClick(onClick);
+    layer.onClick(onClick);
     return () => {
-      tracker.unClick(onClick);
+      layer.unClick(onClick);
     };
-  }, [tracker]);
+  }, [layer]);
 
   // Behavior when vehicle is selected or not.
   useEffect(() => {
@@ -124,24 +124,24 @@ function RealtimeLayer(props: RealtimeLayerProps) {
   useEffect(() => {
     let interval = null;
 
-    if (tracker) {
-      tracker.useThrottle = !isFollowing;
-      tracker.isUpdateBboxOnMoveEnd = !isFollowing;
-      // tracker.useRequestAnimationFrame = isFollowing;
-      tracker.allowRenderWhenAnimating = !!isFollowing;
+    if (layer) {
+      layer.useThrottle = !isFollowing;
+      layer.isUpdateBboxOnMoveEnd = !isFollowing;
+      // layer.useRequestAnimationFrame = isFollowing;
+      layer.allowRenderWhenAnimating = !!isFollowing;
     }
-    if (!isFollowing || !stopSequence || !map || !tracker) {
+    if (!isFollowing || !stopSequence || !map || !layer) {
       return () => {};
     }
 
     setIsTracking(false);
 
     const followVehicle = async (id: RealtimeTrainId) => {
-      let vehicle = id && tracker?.trajectories?.[id];
+      let vehicle = id && layer?.trajectories?.[id];
 
       if (!vehicle) {
-        vehicle = await tracker.api
-          .getTrajectory(stopSequence.id, tracker.mode)
+        vehicle = await layer.api
+          .getTrajectory(stopSequence.id, layer.mode)
           .then((message) => message.content);
       }
 
@@ -149,9 +149,9 @@ function RealtimeLayer(props: RealtimeLayerProps) {
 
       // Once the map is zoomed on the vehicle we follow him, only recenter , no zoom changes.
       if (success === true) {
-        tracker.setBbox(tracker.vectorLayer.getSource().getExtent());
+        layer.setBbox(layer.vectorLayer.getSource().getExtent());
         interval = setInterval(() => {
-          centerOnVehicle(tracker?.trajectories?.[stopSequence.id], map);
+          centerOnVehicle(layer?.trajectories?.[stopSequence.id], map);
         }, 1000);
       }
     };
@@ -159,15 +159,15 @@ function RealtimeLayer(props: RealtimeLayerProps) {
 
     return () => {
       clearInterval(interval);
-      tracker.setBbox();
+      layer.setBbox();
     };
-  }, [isFollowing, map, tracker, stopSequence, setIsTracking]);
+  }, [isFollowing, map, layer, stopSequence, setIsTracking]);
 
   useEffect(() => {
     let vehicleId = null;
     if (feature) {
       vehicleId = feature.get("train_id");
-      tracker.api.subscribeStopSequence(vehicleId, ({ content }) => {
+      layer.api.subscribeStopSequence(vehicleId, ({ content }) => {
         if (content) {
           const [firstStopSequence] = content;
           if (firstStopSequence) {
@@ -176,7 +176,7 @@ function RealtimeLayer(props: RealtimeLayerProps) {
         }
       });
       // No animation, it's nicer for the user.
-      const center = tracker?.trajectories?.[vehicleId]?.properties?.coordinate;
+      const center = layer?.trajectories?.[vehicleId]?.properties?.coordinate;
       if (center) {
         map.getView().setCenter(center);
       }
@@ -185,10 +185,10 @@ function RealtimeLayer(props: RealtimeLayerProps) {
     }
     return () => {
       if (vehicleId) {
-        tracker.api.unsubscribeStopSequence(vehicleId);
+        layer.api.unsubscribeStopSequence(vehicleId);
       }
     };
-  }, [feature, map, setStopSequence, tracker]);
+  }, [feature, map, setStopSequence, layer]);
 
   return null;
 }
