@@ -1,19 +1,20 @@
 {
   "sortToTop": [
-    "name", 
+    "name",
     "license",
     "description",
     "version",
     "author",
     "homepage",
-    "main", 
-    "module", 
+    "type",
+    "main",
+    "module",
     "files",
-    "exports", 
+    "exports",
     "proxy",
     "dependencies",
-    "peerDependencies", 
-    "devDependencies", 
+    "peerDependencies",
+    "devDependencies",
     "resolutions",
     "scripts"
   ]
