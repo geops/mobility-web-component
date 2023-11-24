@@ -22,14 +22,14 @@ function RealtimeLayer(props: RealtimeLayerProps) {
     apikey,
     isFollowing,
     isTracking,
-    lineInfos,
+    stopSequence,
     map,
     mots,
     realtimeurl,
     tenant,
     setIsFollowing,
     setIsTracking,
-    setLineInfos,
+    setStopSequence,
     setRealtimeLayer,
   } = useMapContext();
   const [feature, setFeature] = useState<Feature>();
@@ -88,10 +88,10 @@ function RealtimeLayer(props: RealtimeLayerProps) {
 
   // Behavior when vehicle is selected or not.
   useEffect(() => {
-    if (!lineInfos) {
+    if (!stopSequence) {
       setIsFollowing(false);
     }
-  }, [lineInfos, setIsFollowing]);
+  }, [stopSequence, setIsFollowing]);
 
   // Behavior when user tracking is activated or not.
   useEffect(() => {
@@ -130,7 +130,7 @@ function RealtimeLayer(props: RealtimeLayerProps) {
       // tracker.useRequestAnimationFrame = isFollowing;
       tracker.allowRenderWhenAnimating = !!isFollowing;
     }
-    if (!isFollowing || !lineInfos || !map || !tracker) {
+    if (!isFollowing || !stopSequence || !map || !tracker) {
       return () => {};
     }
 
@@ -141,7 +141,7 @@ function RealtimeLayer(props: RealtimeLayerProps) {
 
       if (!vehicle) {
         vehicle = await tracker.api
-          .getTrajectory(lineInfos.id, tracker.mode)
+          .getTrajectory(stopSequence.id, tracker.mode)
           .then((message) => message.content);
       }
 
@@ -151,17 +151,17 @@ function RealtimeLayer(props: RealtimeLayerProps) {
       if (success === true) {
         tracker.setBbox(tracker.vectorLayer.getSource().getExtent());
         interval = setInterval(() => {
-          centerOnVehicle(tracker?.trajectories?.[lineInfos.id], map);
+          centerOnVehicle(tracker?.trajectories?.[stopSequence.id], map);
         }, 1000);
       }
     };
-    followVehicle(lineInfos.id);
+    followVehicle(stopSequence.id);
 
     return () => {
       clearInterval(interval);
       tracker.setBbox();
     };
-  }, [isFollowing, map, tracker, lineInfos, setIsTracking]);
+  }, [isFollowing, map, tracker, stopSequence, setIsTracking]);
 
   useEffect(() => {
     let vehicleId = null;
@@ -169,9 +169,9 @@ function RealtimeLayer(props: RealtimeLayerProps) {
       vehicleId = feature.get("train_id");
       tracker.api.subscribeStopSequence(vehicleId, ({ content }) => {
         if (content) {
-          const [stopSequence] = content;
-          if (stopSequence) {
-            setLineInfos(stopSequence);
+          const [firstStopSequence] = content;
+          if (firstStopSequence) {
+            setStopSequence(firstStopSequence);
           }
         }
       });
@@ -181,14 +181,14 @@ function RealtimeLayer(props: RealtimeLayerProps) {
         map.getView().setCenter(center);
       }
     } else {
-      setLineInfos(null);
+      setStopSequence(null);
     }
     return () => {
       if (vehicleId) {
         tracker.api.unsubscribeStopSequence(vehicleId);
       }
     };
-  }, [feature, map, setLineInfos, tracker]);
+  }, [feature, map, setStopSequence, tracker]);
 
   return null;
 }

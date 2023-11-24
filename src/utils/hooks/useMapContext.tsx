@@ -7,7 +7,7 @@ import { StopSequence } from "mobility-toolbox-js/api/typedefs";
 import type { MobilityMapProps } from "../../MobilityMap";
 
 export type MapContextType = MobilityMapProps & {
-  lineInfos: StopSequence;
+  stopSequence: StopSequence;
   isTracking: boolean;
   isFollowing: boolean;
   map: Map;
@@ -16,7 +16,7 @@ export type MapContextType = MobilityMapProps & {
   setBaseLayer: (baseLayer: MaplibreLayer) => void;
   setIsFollowing: (isFollowing: boolean) => void;
   setIsTracking: (isTracking: boolean) => void;
-  setLineInfos: (lineInfos?: StopSequence) => void;
+  setStopSequence: (stopSequence?: StopSequence) => void;
   setMap: (map?: Map) => void;
   setRealtimeLayer: (realtimeLayer: RealtimeLayer) => void;
 };
@@ -25,13 +25,13 @@ export const MapContext = createContext<MapContextType>({
   baseLayer: null,
   isFollowing: false,
   isTracking: false,
-  lineInfos: null,
+  stopSequence: null,
   map: null,
   realtimeLayer: null,
   setBaseLayer: (baseLayer?: MaplibreLayer) => {},
   setIsFollowing: (isFollowing: boolean) => {},
   setIsTracking: (isTracking: boolean) => {},
-  setLineInfos: (lineInfos?: StopSequence) => {},
+  setStopSequence: (stopSequence?: StopSequence) => {},
   setMap: (map?: Map) => {},
   setRealtimeLayer: (realtimeLayer?: RealtimeLayer) => {},
 } as MapContextType);

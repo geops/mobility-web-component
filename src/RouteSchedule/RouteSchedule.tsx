@@ -11,7 +11,7 @@ export type RouteScheduleProps = PreactDOMAttributes &
   JSX.HTMLAttributes<HTMLDivElement>;
 
 function RouteSchedule(props: RouteScheduleProps) {
-  const { lineInfos } = useMapContext();
+  const { stopSequence } = useMapContext();
   const ref = useRef();
 
   useEffect(() => {
@@ -32,9 +32,9 @@ function RouteSchedule(props: RouteScheduleProps) {
       clearTimeout(interval);
     };
     // Scroll automatically when a new scroll infos is set.
-  }, [lineInfos]);
+  }, [stopSequence]);
 
-  if (!lineInfos) {
+  if (!stopSequence) {
     return null;
   }
 
@@ -44,7 +44,7 @@ function RouteSchedule(props: RouteScheduleProps) {
     <>
       <RouteScheduleHeader />
       <div ref={ref} className={className}>
-        {lineInfos.stations.map((stop: RealtimeStop, idx: number) => {
+        {stopSequence.stations.map((stop: RealtimeStop, idx: number) => {
           const { stationId, arrivalTime, departureTime, stationName } = stop;
           return (
             <RouteScheduleStop

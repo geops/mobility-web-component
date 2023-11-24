@@ -59,7 +59,7 @@ function RouteScheduleStop({
   invertColor = false,
 }: RouteScheduleStopProps) {
   const { t } = useContext(I18nContext) as unknown as UseI18NContextType;
-  const { lineInfos, map, realtimeLayer: trackerLayer } = useMapContext();
+  const { stopSequence, map, realtimeLayer: trackerLayer } = useMapContext();
   const {
     arrivalDelay,
     // eslint-disable-next-line
@@ -70,7 +70,7 @@ function RouteScheduleStop({
     aimedArrivalTime,
     aimedDepartureTime,
   } = stop;
-  const { stations, type, stroke, vehicleType } = lineInfos;
+  const { stations, type, stroke, vehicleType } = stopSequence;
   const [isStationPassed, setIsStationPassed] = useState(false);
   const cancelled = state === "JOURNEY_CANCELLED" || state === "STOP_CANCELLED";
   const color = stroke || getBgColor(type || vehicleType);

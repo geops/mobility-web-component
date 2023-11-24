@@ -17,23 +17,23 @@ const defaultRenderLink = (text: string, url: string) => {
 };
 
 function RouteScheduleFooter() {
-  const { lineInfos } = useMapContext();
-  if (!lineInfos.operator && !lineInfos.publisher) {
+  const { stopSequence } = useMapContext();
+  if (!stopSequence.operator && !stopSequence.publisher) {
     return null;
   }
 
   return (
     <>
       <div className="m-4 mb-0 text-sm text-gray-500  flex flex-wrap ">
-        {lineInfos.operator &&
-          defaultRenderLink(lineInfos.operator, lineInfos.operatorUrl)}
-        {lineInfos.operator && lineInfos.publisher && <span> - </span>}
-        {lineInfos.publisher &&
-          defaultRenderLink(lineInfos.publisher, lineInfos.publisherUrl)}
-        {lineInfos.license && <span>&nbsp;(</span>}
-        {lineInfos.license &&
-          defaultRenderLink(lineInfos.license, lineInfos.licenseUrl)}
-        {lineInfos.license && ")"}
+        {stopSequence.operator &&
+          defaultRenderLink(stopSequence.operator, stopSequence.operatorUrl)}
+        {stopSequence.operator && stopSequence.publisher && <span> - </span>}
+        {stopSequence.publisher &&
+          defaultRenderLink(stopSequence.publisher, stopSequence.publisherUrl)}
+        {stopSequence.license && <span>&nbsp;(</span>}
+        {stopSequence.license &&
+          defaultRenderLink(stopSequence.license, stopSequence.licenseUrl)}
+        {stopSequence.license && ")"}
       </div>
       <div className="bg-gradient-to-b from-transparent to-white h-8 sticky bottom-0 w-full pointer-events-none" />
     </>

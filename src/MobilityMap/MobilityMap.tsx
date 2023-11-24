@@ -90,7 +90,7 @@ function MobilityMap({
   const [baseLayer, setBaseLayer] = useState<MaplibreLayer>();
   const [isFollowing, setIsFollowing] = useState(false);
   const [isTracking, setIsTracking] = useState(false);
-  const [lineInfos, setLineInfos] = useState(false);
+  const [stopSequence, setStopSequence] = useState(false);
   const [realtimeLayer, setRealtimeLayer] = useState<MbtRealtimeLayer>();
   const [map, setMap] = useState<OlMap>();
 
@@ -116,13 +116,13 @@ function MobilityMap({
       baseLayer,
       isFollowing,
       isTracking,
-      lineInfos,
+      stopSequence,
       map,
       realtimeLayer,
       setBaseLayer,
       setIsFollowing,
       setIsTracking,
-      setLineInfos,
+      setStopSequence,
       setMap,
       setRealtimeLayer,
     };
@@ -144,7 +144,7 @@ function MobilityMap({
     baseLayer,
     isFollowing,
     isTracking,
-    lineInfos,
+    stopSequence,
     map,
     realtimeLayer,
   ]);
@@ -174,7 +174,7 @@ function MobilityMap({
                 style: { width: "calc(100% - 60px)" },
               }}
             >
-              {realtime === "true" && !!lineInfos && (
+              {realtime === "true" && !!stopSequence && (
                 <RouteSchedule className="z-5 relative overflow-x-hidden overflow-y-auto  scrollable-inner" />
               )}
             </Overlay>

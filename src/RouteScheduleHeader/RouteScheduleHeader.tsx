@@ -6,26 +6,26 @@ import RouteDestination from "../RouteDestination";
 import RouteIcon from "../RouteIcon";
 
 function RouteScheduleHeader() {
-  const { lineInfos, isFollowing, setIsFollowing } = useMapContext();
+  const { stopSequence, isFollowing, setIsFollowing } = useMapContext();
   const {
     type,
     vehicleType,
     longName,
     stroke,
     text_color: textColor,
-  } = lineInfos;
+  } = stopSequence;
   const backgroundColor = stroke || getBgColor(type || vehicleType);
   const color = textColor || "black";
   return (
     <div className="bg-slate-100 p-4 flex gap-x-4 items-center">
-      <RouteIcon {...lineInfos} />
+      <RouteIcon {...stopSequence} />
       <div className="flex-grow flex flex-col">
         <span className="font-bold">
-          <RouteDestination {...lineInfos} />
+          <RouteDestination {...stopSequence} />
         </span>
         <span className="text-sm">
           {longName}
-          <RouteIdentifier {...lineInfos} />
+          <RouteIdentifier {...stopSequence} />
         </span>
       </div>
       {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
