@@ -86,7 +86,7 @@ function RouteScheduleStop({
   //     isPassed(stations[idx + 1], trackerLayer.time, stations, idx + 1) !==
   //       isStationPassed)
   // );
-  const isNotRealtime = arrivalDelay === null;
+  const isNotRealtime = arrivalDelay === null || state === "TIME_BASED";
   const hideDelay =
     isNotRealtime ||
     isFirstStation ||
