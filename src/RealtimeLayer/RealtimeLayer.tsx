@@ -1,10 +1,9 @@
 import { RealtimeLayer as MtbRealtimeLayer } from "mobility-toolbox-js/ol";
-import { useEffect, useMemo, useState } from "preact/hooks";
+import { useEffect, useMemo } from "preact/hooks";
 import type { RealtimeMot, RealtimeTrainId } from "mobility-toolbox-js/types";
 import { unByKey } from "ol/Observable";
 import { memo } from "preact/compat";
 
-import { Feature } from "ol";
 import type { OlRealtimeLayerOptions } from "mobility-toolbox-js/ol/layers/RealtimeLayer";
 import useMapContext from "../utils/hooks/useMapContext";
 import centerOnVehicle from "../utils/centerOnVehicle";
@@ -26,13 +25,12 @@ function RealtimeLayer(props: RealtimeLayerProps) {
     map,
     mots,
     realtimeurl,
+    trainId,
     tenant,
     setIsFollowing,
     setIsTracking,
-    setStopSequence,
     setRealtimeLayer,
   } = useMapContext();
-  const [feature, setFeature] = useState<Feature>();
 
   const layer = useMemo(() => {
     if (!apikey || !realtimeurl) {
@@ -49,6 +47,8 @@ function RealtimeLayer(props: RealtimeLayerProps) {
         getDelayFont: getDelayFontForVehicle,
         getTextFont: getTextFontForVehicle,
       },
+      // @ts-ignore
+      userClickInteractions: false,
       ...props,
     });
   }, [apikey, mots, realtimeurl, tenant, props]);
@@ -72,19 +72,6 @@ function RealtimeLayer(props: RealtimeLayerProps) {
       setRealtimeLayer(null);
     };
   }, [map, setRealtimeLayer, layer]);
-
-  useEffect(() => {
-    if (!layer) {
-      return () => {};
-    }
-    const onClick = ([firstFeature]) => {
-      setFeature(firstFeature);
-    };
-    layer.onClick(onClick);
-    return () => {
-      layer.unClick(onClick);
-    };
-  }, [layer]);
 
   // Behavior when vehicle is selected or not.
   useEffect(() => {
@@ -164,31 +151,14 @@ function RealtimeLayer(props: RealtimeLayerProps) {
   }, [isFollowing, map, layer, stopSequence, setIsTracking]);
 
   useEffect(() => {
-    let vehicleId = null;
-    if (feature) {
-      vehicleId = feature.get("train_id");
-      layer.api.subscribeStopSequence(vehicleId, ({ content }) => {
-        if (content) {
-          const [firstStopSequence] = content;
-          if (firstStopSequence) {
-            setStopSequence(firstStopSequence);
-          }
-        }
-      });
+    if (trainId) {
       // No animation, it's nicer for the user.
-      const center = layer?.trajectories?.[vehicleId]?.properties?.coordinate;
+      const center = layer?.trajectories?.[trainId]?.properties?.coordinate;
       if (center) {
         map.getView().setCenter(center);
       }
-    } else {
-      setStopSequence(null);
     }
-    return () => {
-      if (vehicleId) {
-        layer.api.unsubscribeStopSequence(vehicleId);
-      }
-    };
-  }, [feature, map, setStopSequence, layer]);
+  }, [map, trainId, layer]);
 
   return null;
 }

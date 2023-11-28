@@ -4,7 +4,8 @@ import { createContext } from "preact";
 import { MaplibreLayer, RealtimeLayer } from "mobility-toolbox-js/ol";
 import { Map } from "ol";
 import { StopSequence } from "mobility-toolbox-js/api/typedefs";
-import type { MobilityMapProps } from "../../MobilityMap";
+import { RealtimeTrainId } from "mobility-toolbox-js/types";
+import type { MobilityMapProps } from "../../MobilityMap/MobilityMap";
 
 export type MapContextType = MobilityMapProps & {
   stopSequence: StopSequence;
@@ -13,12 +14,14 @@ export type MapContextType = MobilityMapProps & {
   map: Map;
   baseLayer: MaplibreLayer;
   realtimeLayer: RealtimeLayer;
+  trainId: RealtimeTrainId;
   setBaseLayer: (baseLayer: MaplibreLayer) => void;
   setIsFollowing: (isFollowing: boolean) => void;
   setIsTracking: (isTracking: boolean) => void;
   setStopSequence: (stopSequence?: StopSequence) => void;
   setMap: (map?: Map) => void;
-  setRealtimeLayer: (realtimeLayer: RealtimeLayer) => void;
+  setRealtimeLayer: (realtimeLayer?: RealtimeLayer) => void;
+  setTrainId: (trainId?: RealtimeTrainId) => void;
 };
 
 export const MapContext = createContext<MapContextType>({
@@ -28,12 +31,14 @@ export const MapContext = createContext<MapContextType>({
   stopSequence: null,
   map: null,
   realtimeLayer: null,
+  trainId: null,
   setBaseLayer: (baseLayer?: MaplibreLayer) => {},
   setIsFollowing: (isFollowing: boolean) => {},
   setIsTracking: (isTracking: boolean) => {},
-  setStopSequence: (stopSequence?: StopSequence) => {},
   setMap: (map?: Map) => {},
+  setStopSequence: (stopSequence?: StopSequence) => {},
   setRealtimeLayer: (realtimeLayer?: RealtimeLayer) => {},
+  setTrainId: (trainId?: RealtimeTrainId) => {},
 } as MapContextType);
 
 const useMapContext = (): MapContextType => {

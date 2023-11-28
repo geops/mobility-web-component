@@ -1,11 +1,13 @@
 import { memo } from "preact/compat";
-import { useMemo, useState } from "preact/hooks";
-import { Map as OlMap } from "ol";
+import { useCallback, useEffect, useMemo, useState } from "preact/hooks";
+import { MapBrowserEvent, Map as OlMap } from "ol";
 import {
   MaplibreLayer,
   RealtimeLayer as MbtRealtimeLayer,
 } from "mobility-toolbox-js/ol";
 import rosetta from "rosetta";
+import { RealtimeTrainId } from "mobility-toolbox-js/types";
+import { unByKey } from "ol/Observable";
 // @ts-ignore
 import tailwind from "../style.css";
 // @ts-ignore
@@ -92,6 +94,7 @@ function MobilityMap({
   const [isTracking, setIsTracking] = useState(false);
   const [stopSequence, setStopSequence] = useState(false);
   const [realtimeLayer, setRealtimeLayer] = useState<MbtRealtimeLayer>();
+  const [trainId, setTrainId] = useState<RealtimeTrainId | undefined>();
   const [map, setMap] = useState<OlMap>();
 
   const mapContextValue = useMemo(() => {
@@ -119,12 +122,14 @@ function MobilityMap({
       stopSequence,
       map,
       realtimeLayer,
+      trainId,
       setBaseLayer,
       setIsFollowing,
       setIsTracking,
       setStopSequence,
       setMap,
       setRealtimeLayer,
+      setTrainId,
     };
   }, [
     apikey,
@@ -147,7 +152,77 @@ function MobilityMap({
     stopSequence,
     map,
     realtimeLayer,
+    trainId,
   ]);
+
+  useEffect(() => {
+    if (!trainId || !realtimeLayer?.api) {
+      setStopSequence(null);
+      return () => {};
+    }
+    const subscribe = async () => {
+      realtimeLayer?.api?.subscribeStopSequence(trainId, ({ content }) => {
+        if (content) {
+          const [firstStopSequence] = content;
+          if (firstStopSequence) {
+            setStopSequence(firstStopSequence);
+          }
+        }
+      });
+    };
+    subscribe();
+
+    return () => {
+      if (trainId) {
+        realtimeLayer?.api?.unsubscribeStopSequence(trainId);
+      }
+    };
+  }, [trainId, realtimeLayer?.api]);
+
+  const onPointerMove = useCallback(
+    async (evt: MapBrowserEvent<PointerEvent>) => {
+      const {
+        features: [realtimeFeature],
+      } = await realtimeLayer.getFeatureInfoAtCoordinate(evt.coordinate);
+
+      // eslint-disable-next-line no-param-reassign
+      evt.map.getTargetElement().style.cursor = realtimeFeature
+        ? "pointer"
+        : "default";
+    },
+    [realtimeLayer],
+  );
+
+  const onSingleClick = useCallback(
+    async (evt: MapBrowserEvent<PointerEvent>) => {
+      const {
+        features: [realtimeFeature],
+      } = await realtimeLayer.getFeatureInfoAtCoordinate(evt.coordinate);
+
+      const newTrainId = realtimeFeature?.get("train_id");
+
+      if (newTrainId && newTrainId !== trainId) {
+        setTrainId(newTrainId);
+      } else {
+        setTrainId(null);
+      }
+    },
+    [realtimeLayer, trainId],
+  );
+
+  useEffect(() => {
+    const key = map?.on("singleclick", onSingleClick);
+    return () => {
+      unByKey(key);
+    };
+  }, [map, onSingleClick]);
+
+  useEffect(() => {
+    const key = map?.on("pointermove", onPointerMove);
+    return () => {
+      unByKey(key);
+    };
+  }, [map, onPointerMove]);
 
   return (
     // @ts-ignore
