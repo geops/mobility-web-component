@@ -41,13 +41,14 @@ function RealtimeLayer(props: RealtimeLayerProps) {
       tenant,
       url: realtimeurl,
       getMotsByZoom: mots ? () => mots.split(",") as RealtimeMot[] : undefined,
+      ...props,
       styleOptions: {
         getDelayColor: getDelayColorForVehicle,
         getDelayText: getDelayTextForVehicle,
         getDelayFont: getDelayFontForVehicle,
         getTextFont: getTextFontForVehicle,
+        ...(props?.styleOptions || {}),
       },
-      ...props,
     });
   }, [apikey, mots, realtimeurl, tenant, props]);
 
