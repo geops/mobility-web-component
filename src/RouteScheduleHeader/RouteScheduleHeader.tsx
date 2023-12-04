@@ -7,13 +7,7 @@ import RouteIcon from "../RouteIcon";
 
 function RouteScheduleHeader() {
   const { stopSequence, isFollowing, setIsFollowing } = useMapContext();
-  const {
-    type,
-    vehicleType,
-    longName,
-    stroke,
-    text_color: textColor,
-  } = stopSequence;
+  const { type, vehicleType, stroke, text_color: textColor } = stopSequence;
   const backgroundColor = stroke || getBgColor(type || vehicleType);
   const color = textColor || "black";
   return (
@@ -24,7 +18,6 @@ function RouteScheduleHeader() {
           <RouteDestination {...stopSequence} />
         </span>
         <span className="text-sm">
-          {longName}
           <RouteIdentifier {...stopSequence} />
         </span>
       </div>

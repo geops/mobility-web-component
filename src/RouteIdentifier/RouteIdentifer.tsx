@@ -19,9 +19,14 @@ function RouteIdentifier({ routeIdentifier, longName }: RealtimeStopSequence) {
     }
 
     if (!longName.includes(id)) {
-      return <> ({id})</>;
+      return (
+        <>
+          {longName} ({id})
+        </>
+      );
     }
   }
-  return null;
+  // eslint-disable-next-line react/jsx-no-useless-fragment
+  return <>{longName}</>;
 }
 export default memo(RouteIdentifier);
