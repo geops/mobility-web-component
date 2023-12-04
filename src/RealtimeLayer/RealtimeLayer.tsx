@@ -47,8 +47,6 @@ function RealtimeLayer(props: RealtimeLayerProps) {
         getDelayFont: getDelayFontForVehicle,
         getTextFont: getTextFontForVehicle,
       },
-      // @ts-ignore
-      userClickInteractions: false,
       ...props,
     });
   }, [apikey, mots, realtimeurl, tenant, props]);
