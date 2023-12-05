@@ -47,7 +47,7 @@ Another url parameter is used to get a full screen map instead of the documentat
 
 - fullscreen=true
 
-## Guidlines
+## Guidelines
 
 - every  new components must have a new folder `MyComponent` with an `index.tsx` that contains only an export and a `MyNewComponent.tsx` file. The reason is too simplifx the override in forked project.
 
