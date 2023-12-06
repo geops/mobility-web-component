@@ -8,6 +8,15 @@ export type OverlayProps = PreactDOMAttributes &
   };
 
 function Overlay({ children, ScrollableHandlerProps = {} }: OverlayProps) {
+  let hasChildren = !!children;
+  if (Array.isArray(children)) {
+    hasChildren = children?.length && (children || []).find((c) => !!c);
+  }
+
+  if (!hasChildren) {
+    return null;
+  }
+
   return (
     <div
       className={`flex-0 relative overflow-hidden flex flex-col transition-[min-height,max-height] @lg:transition-[width]  ${
@@ -16,7 +25,7 @@ function Overlay({ children, ScrollableHandlerProps = {} }: OverlayProps) {
           : "min-h-0 max-h-0 @lg:w-0"
       }`}
     >
-      {!!children && (
+      {hasChildren && (
         <>
           <ScrollableHandler
             className="z-10 absolute inset-0 h-[65px] touch-none @lg:hidden flex justify-center"

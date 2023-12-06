@@ -5,14 +5,14 @@ import { MapGlLayerOptions } from "mobility-toolbox-js/ol/layers/MapGlLayer";
 import useMapContext from "../utils/hooks/useMapContext";
 
 function BaseLayer(props: MapGlLayerOptions) {
-  const { baselayer, apikey, map, setBaseLayer } = useMapContext();
+  const { baselayer, apikey, map, mapsurl, setBaseLayer } = useMapContext();
   useEffect(() => {
     if (!map || !baselayer || !apikey) {
       return () => {};
     }
     const layer = new MaplibreLayer({
       apiKey: apikey,
-      url: `https://maps.geops.io/styles/${baselayer}/style.json`,
+      url: `${mapsurl}/styles/${baselayer}/style.json`,
       ...(props || {}),
     });
     layer.attachToMap(map);
@@ -21,7 +21,7 @@ function BaseLayer(props: MapGlLayerOptions) {
     return () => {
       layer.detachFromMap();
     };
-  }, [map, baselayer, apikey, setBaseLayer, props]);
+  }, [map, baselayer, apikey, setBaseLayer, props, mapsurl]);
 
   return null;
 }

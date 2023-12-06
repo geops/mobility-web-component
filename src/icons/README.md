@@ -49,4 +49,4 @@ function MyIcon({ ...props }) {
 
 ## Where to find icons
 
-For now, if you need new icon, use https://www.svgrepo.com/  and select only icons you are allowed to use and modify.
+For now, if you need new icon, use <https://www.svgrepo.com/>  and select only icons you are allowed to use and modify.

@@ -2,11 +2,15 @@ import { memo } from "preact/compat";
 import { useCallback, useEffect, useMemo, useState } from "preact/hooks";
 import { MapBrowserEvent, Map as OlMap } from "ol";
 import {
+  MapboxStyleLayer,
   MaplibreLayer,
   RealtimeLayer as MbtRealtimeLayer,
 } from "mobility-toolbox-js/ol";
-import rosetta from "rosetta";
-import { RealtimeTrainId } from "mobility-toolbox-js/types";
+import {
+  RealtimeStation,
+  RealtimeStationId,
+  RealtimeTrainId,
+} from "mobility-toolbox-js/types";
 import { unByKey } from "ol/Observable";
 // @ts-ignore
 import tailwind from "../style.css";
@@ -23,36 +27,9 @@ import Overlay from "../Overlay";
 import ScaleLine from "../ScaleLine";
 import Copyright from "../Copyright";
 import I18nContext from "../I18NContext";
-
-const i18n = rosetta({
-  de: {
-    depature_rail: "Gleis",
-    depature_ferry: "Steg",
-    depature_other: "Kante",
-  },
-  en: {
-    depature_rail: "platform",
-    depature_ferry: "pier",
-    depature_other: "stand",
-  },
-  fr: {
-    depature_rail: "voie",
-    depature_ferry: "quai",
-    depature_other: "quai",
-  },
-  it: {
-    depature_rail: "binario",
-    depature_ferry: "imbarcadero",
-    depature_other: "corsia",
-  },
-});
-
-// Set current language to preferred browser language with fallback to english
-i18n.locale(
-  navigator.languages // @ts-ignore
-    .find((l) => i18n.table(l.split("-")[0]) !== undefined)
-    ?.split("-")[0] || "en",
-);
+import StationsLayer from "../StationsLayer";
+import Station from "../Station/Station";
+import i18n from "../utils/i18n";
 
 export type MobilityMapProps = {
   apikey?: string;
@@ -61,6 +38,7 @@ export type MobilityMapProps = {
   geolocation?: string;
   maxzoom?: string;
   minzoom?: string;
+  mapsurl?: string;
   mots?: string;
   notification?: string;
   notificationat?: string;
@@ -77,6 +55,7 @@ function MobilityMap({
   baselayer = "travic_v2",
   center = "831634,5933959",
   geolocation = null,
+  mapsurl = "https://maps.geops.io",
   maxzoom = null,
   minzoom = null,
   mots = null,
@@ -86,16 +65,19 @@ function MobilityMap({
   notificationbeforelayerid = null,
   realtime = "true",
   realtimeurl = "wss://api.geops.io/tracker-ws/v1/ws",
-  tenant = null,
+  tenant = "trenord",
   zoom = "13",
 }: MobilityMapProps) {
   const [baseLayer, setBaseLayer] = useState<MaplibreLayer>();
   const [isFollowing, setIsFollowing] = useState(false);
   const [isTracking, setIsTracking] = useState(false);
   const [stopSequence, setStopSequence] = useState(false);
+  const [stationsLayer, setStationsLayer] = useState<MapboxStyleLayer>();
+  const [station, setStation] = useState<RealtimeStation>();
   const [realtimeLayer, setRealtimeLayer] = useState<MbtRealtimeLayer>();
-  const [trainId, setTrainId] = useState<RealtimeTrainId | undefined>();
   const [map, setMap] = useState<OlMap>();
+  const [stationId, setStationId] = useState<RealtimeStationId>();
+  const [trainId, setTrainId] = useState<RealtimeTrainId>();
 
   const mapContextValue = useMemo(() => {
     return {
@@ -104,6 +86,7 @@ function MobilityMap({
       baselayer,
       center,
       geolocation,
+      mapsurl,
       maxzoom,
       minzoom,
       mots,
@@ -122,20 +105,25 @@ function MobilityMap({
       stopSequence,
       map,
       realtimeLayer,
-      trainId,
+      station,
+      stationsLayer,
       setBaseLayer,
       setIsFollowing,
       setIsTracking,
       setStopSequence,
       setMap,
       setRealtimeLayer,
+      setStation,
+      setStationId,
       setTrainId,
+      setStationsLayer,
     };
   }, [
     apikey,
     baselayer,
     center,
     geolocation,
+    mapsurl,
     maxzoom,
     minzoom,
     mots,
@@ -152,14 +140,16 @@ function MobilityMap({
     stopSequence,
     map,
     realtimeLayer,
-    trainId,
+    station,
+    stationsLayer,
   ]);
 
   useEffect(() => {
     if (!trainId || !realtimeLayer?.api) {
-      setStopSequence(null);
       return () => {};
     }
+    realtimeLayer.selectedVehicleId = trainId;
+    realtimeLayer.highlightTrajectory(trainId);
     const subscribe = async () => {
       realtimeLayer?.api?.subscribeStopSequence(trainId, ({ content }) => {
         if (content) {
@@ -173,41 +163,91 @@ function MobilityMap({
     subscribe();
 
     return () => {
-      if (trainId) {
-        realtimeLayer?.api?.unsubscribeStopSequence(trainId);
+      setStopSequence(null);
+      if (trainId && realtimeLayer) {
+        realtimeLayer.api?.unsubscribeStopSequence(trainId);
+        realtimeLayer.selectedVehicleId = null;
+        realtimeLayer.vectorLayer.getSource().clear();
       }
     };
-  }, [trainId, realtimeLayer?.api]);
+  }, [trainId, realtimeLayer, realtimeLayer?.api]);
+
+  useEffect(() => {
+    if (!stationId || !realtimeLayer?.api) {
+      return () => {};
+    }
+    const subscribe = async () => {
+      realtimeLayer?.api?.subscribe(`station ${stationId}`, ({ content }) => {
+        if (content) {
+          setStation(content);
+        }
+      });
+    };
+    subscribe();
+
+    return () => {
+      setStation(null);
+      if (stationId) {
+        realtimeLayer?.api?.unsubscribe(`station ${stationId}`);
+      }
+    };
+  }, [stationId, realtimeLayer?.api]);
 
   const onPointerMove = useCallback(
     async (evt: MapBrowserEvent<PointerEvent>) => {
       const {
         features: [realtimeFeature],
-      } = await realtimeLayer.getFeatureInfoAtCoordinate(evt.coordinate);
+      } = (await realtimeLayer?.getFeatureInfoAtCoordinate(evt.coordinate)) || {
+        features: [],
+      };
+
+      const { features: stationsFeatures } =
+        (await stationsLayer?.getFeatureInfoAtCoordinate(evt.coordinate)) || {
+          features: [],
+        };
+
+      const [stationFeature] = stationsFeatures.filter((feat) => {
+        return feat.get("tralis_network")?.includes(tenant);
+      });
 
       // eslint-disable-next-line no-param-reassign
-      evt.map.getTargetElement().style.cursor = realtimeFeature
-        ? "pointer"
-        : "default";
+      evt.map.getTargetElement().style.cursor =
+        realtimeFeature || stationFeature ? "pointer" : "default";
     },
-    [realtimeLayer],
+    [realtimeLayer, stationsLayer, tenant],
   );
 
   const onSingleClick = useCallback(
     async (evt: MapBrowserEvent<PointerEvent>) => {
       const {
         features: [realtimeFeature],
-      } = await realtimeLayer.getFeatureInfoAtCoordinate(evt.coordinate);
+      } = (await realtimeLayer?.getFeatureInfoAtCoordinate(evt.coordinate)) || {
+        features: [],
+      };
+
+      const { features: stationsFeatures } =
+        (await stationsLayer?.getFeatureInfoAtCoordinate(evt.coordinate)) || {
+          features: [],
+        };
+      const [stationFeature] = stationsFeatures.filter((feat) => {
+        return feat.get("tralis_network")?.includes(tenant);
+      });
+      const newStationId = stationFeature?.get("uid");
 
       const newTrainId = realtimeFeature?.get("train_id");
 
-      if (newTrainId && newTrainId !== trainId) {
-        setTrainId(newTrainId);
+      if (newStationId && stationId !== newStationId) {
+        setStationId(newStationId);
+        setTrainId(null);
+      } else if (newTrainId && newTrainId !== trainId) {
+        setTrainId(realtimeFeature.get("train_id"));
+        setStationId(null);
       } else {
         setTrainId(null);
+        setStationId(null);
       }
     },
-    [realtimeLayer, trainId],
+    [realtimeLayer, stationsLayer, stationId, trainId, tenant],
   );
 
   useEffect(() => {
@@ -235,6 +275,7 @@ function MobilityMap({
             <Map className="flex-1 relative overflow-hidden ">
               <BaseLayer />
               {realtime === "true" && <RealtimeLayer />}
+              {tenant && <StationsLayer />}
               {notification === "true" && <NotificationLayer />}
               <div className="z-20 absolute right-2 top-2 flex flex-col gap-2">
                 <GeolocationButton />
@@ -244,13 +285,17 @@ function MobilityMap({
                 <Copyright className="bg-slate-50 bg-opacity-70" />
               </div>
             </Map>
+
             <Overlay
               ScrollableHandlerProps={{
                 style: { width: "calc(100% - 60px)" },
               }}
             >
-              {realtime === "true" && !!stopSequence && (
+              {realtime === "true" && trainId && (
                 <RouteSchedule className="z-5 relative overflow-x-hidden overflow-y-auto  scrollable-inner" />
+              )}
+              {tenant && stationId && (
+                <Station className="z-5 relative overflow-x-hidden overflow-y-auto  scrollable-inner" />
               )}
             </Overlay>
           </div>

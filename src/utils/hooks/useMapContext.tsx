@@ -1,10 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useContext } from "preact/hooks";
 import { createContext } from "preact";
-import { MaplibreLayer, RealtimeLayer } from "mobility-toolbox-js/ol";
+import {
+  MaplibreLayer,
+  RealtimeLayer,
+  MapboxStyleLayer,
+} from "mobility-toolbox-js/ol";
 import { Map } from "ol";
 import { StopSequence } from "mobility-toolbox-js/api/typedefs";
-import { RealtimeTrainId } from "mobility-toolbox-js/types";
+import {
+  RealtimeStation,
+  RealtimeStationId,
+  RealtimeTrainId,
+} from "mobility-toolbox-js/types";
 import type { MobilityMapProps } from "../../MobilityMap/MobilityMap";
 
 export type MapContextType = MobilityMapProps & {
@@ -14,13 +22,17 @@ export type MapContextType = MobilityMapProps & {
   map: Map;
   baseLayer: MaplibreLayer;
   realtimeLayer: RealtimeLayer;
-  trainId: RealtimeTrainId;
+  station: RealtimeStation;
+  stationsLayer: MapboxStyleLayer;
   setBaseLayer: (baseLayer: MaplibreLayer) => void;
   setIsFollowing: (isFollowing: boolean) => void;
   setIsTracking: (isTracking: boolean) => void;
   setStopSequence: (stopSequence?: StopSequence) => void;
   setMap: (map?: Map) => void;
   setRealtimeLayer: (realtimeLayer?: RealtimeLayer) => void;
+  setStation: (station?: RealtimeStation) => void;
+  setStationId: (stationId?: RealtimeStationId) => void;
+  setStationsLayer: (stationsLayer?: MapboxStyleLayer) => void;
   setTrainId: (trainId?: RealtimeTrainId) => void;
 };
 
@@ -31,13 +43,17 @@ export const MapContext = createContext<MapContextType>({
   stopSequence: null,
   map: null,
   realtimeLayer: null,
-  trainId: null,
+  station: null,
+  stationsLayer: null,
   setBaseLayer: (baseLayer?: MaplibreLayer) => {},
   setIsFollowing: (isFollowing: boolean) => {},
   setIsTracking: (isTracking: boolean) => {},
   setMap: (map?: Map) => {},
-  setStopSequence: (stopSequence?: StopSequence) => {},
+  setStation: (station?: RealtimeStation) => {},
   setRealtimeLayer: (realtimeLayer?: RealtimeLayer) => {},
+  setStationId: (stationId?: RealtimeStationId) => {},
+  setStationsLayer: (stationsLayer?: MapboxStyleLayer) => {},
+  setStopSequence: (stopSequence?: StopSequence) => {},
   setTrainId: (trainId?: RealtimeTrainId) => {},
 } as MapContextType);
 

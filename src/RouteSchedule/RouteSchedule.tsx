@@ -5,7 +5,7 @@ import type { RealtimeStop } from "mobility-toolbox-js/types";
 import useMapContext from "../utils/hooks/useMapContext";
 import RouteScheduleHeader from "../RouteScheduleHeader";
 import RouteScheduleFooter from "../RouteScheduleFooter";
-import RouteScheduleStop from "../RouteScheduleStop";
+import RouteStop from "../RouteStop";
 
 export type RouteScheduleProps = PreactDOMAttributes &
   JSX.HTMLAttributes<HTMLDivElement>;
@@ -47,7 +47,7 @@ function RouteSchedule(props: RouteScheduleProps) {
         {stopSequence.stations.map((stop: RealtimeStop, idx: number) => {
           const { stationId, arrivalTime, departureTime, stationName } = stop;
           return (
-            <RouteScheduleStop
+            <RouteStop
               // Train line can go in circle so begin and end have the same id,
               // using the time in the key should fix the issue.
               key={

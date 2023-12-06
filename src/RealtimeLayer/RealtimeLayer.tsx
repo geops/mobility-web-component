@@ -11,6 +11,7 @@ import getDelayTextForVehicle from "../utils/getDelayTextForVehicle";
 import getDelayColorForVehicle from "../utils/getDelayColorForVehicle";
 import getDelayFontForVehicle from "../utils/getDelayFontForVehicle";
 import getTextFontForVehicle from "../utils/getTextFontForVehicle";
+import getTextForVehicle from "../utils/getTextForVehicle";
 
 const TRACKING_ZOOM = 16;
 
@@ -47,6 +48,7 @@ function RealtimeLayer(props: RealtimeLayerProps) {
         getDelayText: getDelayTextForVehicle,
         getDelayFont: getDelayFontForVehicle,
         getTextFont: getTextFontForVehicle,
+        getText: getTextForVehicle,
         ...(props?.styleOptions || {}),
       },
     });

@@ -1,27 +1,56 @@
-import { RealtimeMot, RealtimeStopSequence } from "mobility-toolbox-js/types";
+import { RealtimeLine, RealtimeMot } from "mobility-toolbox-js/types";
+import { PreactDOMAttributes, JSX } from "preact";
 import getBgColor from "../utils/getBgColor";
 import getTextFontForVehicle from "../utils/getTextFontForVehicle";
+import getTextForVehicle from "../utils/getTextForVehicle";
 
-function RouteIcon({
-  type,
-  vehicleType,
-  shortName,
-  stroke,
-  text_color: textColor,
-}: RealtimeStopSequence) {
-  const backgroundColor =
-    stroke || getBgColor(type || (vehicleType as unknown as RealtimeMot));
-  const color = textColor || "black";
+export type RouteIconProps = PreactDOMAttributes &
+  JSX.HTMLAttributes<HTMLSpanElement> & {
+    type?: RealtimeMot;
+    vehicleType?: RealtimeMot;
+    train_type?: RealtimeMot;
+    name?: string;
+    shortName?: string;
+    color?: string;
+    text_color?: string;
+    line?: RealtimeLine;
+  };
+
+function RouteIcon(props: RouteIconProps) {
+  const {
+    type,
+    vehicleType,
+    train_type: trainType,
+    name,
+    shortName,
+    color,
+    text_color: textColor,
+    line,
+    children,
+  } = props;
+  const nameToUse = name || line?.name || shortName;
+  const typeToUse = type || vehicleType || trainType || "rail";
+  const colorToUse = color || line?.color || getBgColor(typeToUse);
+  const textColorToUse = textColor || line?.text_color || "black";
+  const text = getTextForVehicle(nameToUse);
+
+  let fontSize = 16;
+  if (text.length >= 4) {
+    fontSize = 12;
+  }
+
+  const font = getTextFontForVehicle(fontSize, text);
   return (
     <span
-      className="border-2 border-black rounded-full h-9 min-w-[2.25rem] px-1 flex items-center justify-center"
+      className="border-0 rounded h-[40px] min-w-[40px] px-1 flex items-center justify-center"
       style={{
-        font: getTextFontForVehicle(16),
-        backgroundColor,
-        color,
+        font,
+        backgroundColor: colorToUse,
+        color: textColorToUse,
       }}
+      {...props}
     >
-      {shortName}
+      {children || text}
     </span>
   );
 }
