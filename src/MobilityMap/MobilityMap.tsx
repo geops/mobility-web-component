@@ -65,7 +65,7 @@ function MobilityMap({
   notificationbeforelayerid = null,
   realtime = "true",
   realtimeurl = "wss://api.geops.io/tracker-ws/v1/ws",
-  tenant = "trenord",
+  tenant = null,
   zoom = "13",
 }: MobilityMapProps) {
   const [baseLayer, setBaseLayer] = useState<MaplibreLayer>();
