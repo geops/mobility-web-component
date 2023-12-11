@@ -1,5 +1,6 @@
+import type { PreactDOMAttributes, JSX } from "preact";
 import { memo } from "preact/compat";
-import useMapContext from "../utils/hooks/useMapContext";
+import { RealtimeStation } from "mobility-toolbox-js/types";
 import WheelChair from "../icons/WheelChair";
 import Airport from "../icons/Airport";
 import BarAndRestaurants from "../icons/BarAndRestaurants";
@@ -9,8 +10,31 @@ import Police from "../icons/Police";
 import Elevator from "../icons/Elevator";
 import Bathroom from "../icons/Bathroom";
 
-function StationServices({ ...props }) {
-  const { station } = useMapContext();
+export type StationServicesProps = PreactDOMAttributes &
+  JSX.HTMLAttributes<HTMLDivElement> & {
+    station: RealtimeStation;
+    accessibility?: boolean;
+    airport?: boolean;
+    barAndRestaurants?: boolean;
+    bathroom?: boolean;
+    bikeStorage?: boolean;
+    elevator?: boolean;
+    police?: boolean;
+    waitingAreas?: boolean;
+  };
+
+function StationServices({
+  station,
+  accessibility = false,
+  airport = false,
+  barAndRestaurants = false,
+  bathroom = false,
+  bikeStorage = false,
+  elevator = false,
+  police = false,
+  waitingAreas = false,
+  ...props
+}: StationServicesProps) {
   if (!station) {
     return null;
   }
@@ -35,14 +59,14 @@ function StationServices({ ...props }) {
 
   return (
     <div {...props}>
-      {hasAccessibility && <WheelChair />}
-      {hasAirport && <Airport />}
-      {hasBarAndRestaurants && <BarAndRestaurants />}
-      {hasBathroom && <Bathroom />}
-      {hasBikeStorage && <BikeStorage />}
-      {hasElevator && <Elevator />}
-      {hasPolice && <Police />}
-      {hasWaitingAreas && <WaitingAreas />}
+      {accessibility && hasAccessibility && <WheelChair />}
+      {airport && hasAirport && <Airport />}
+      {barAndRestaurants && hasBarAndRestaurants && <BarAndRestaurants />}
+      {bathroom && hasBathroom && <Bathroom />}
+      {bikeStorage && hasBikeStorage && <BikeStorage />}
+      {elevator && hasElevator && <Elevator />}
+      {police && hasPolice && <Police />}
+      {waitingAreas && hasWaitingAreas && <WaitingAreas />}
     </div>
   );
 }

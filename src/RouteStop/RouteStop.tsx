@@ -1,16 +1,16 @@
-import { useContext, useEffect, useState } from "preact/hooks";
+import { useEffect, useState } from "preact/hooks";
 import type { RealtimeStation, RealtimeStop } from "mobility-toolbox-js/types";
 import { memo } from "preact/compat";
 import { PreactDOMAttributes, JSX } from "preact";
 import useMapContext from "../utils/hooks/useMapContext";
-import I18nContext, { UseI18NContextType } from "../I18NContext";
 import getBgColor from "../utils/getBgColor";
 import DebugStop from "../DebugStop/DebugStop";
-import WheelChair from "../icons/WheelChair";
 import getStopStatus from "../utils/getStopStatus";
 import RouteStopProgress from "../RouteStopProgress";
 import RouteStopTime from "../RouteStopTime";
 import RouteStopDelay from "../RouteStopDelay";
+import RouteStopStation from "../RouteStopStation";
+import RouteStopPlatform from "../RouteStopPlatform";
 
 export type RouteScheduleStopProps = PreactDOMAttributes &
   JSX.HTMLAttributes<HTMLButtonElement> & {
@@ -27,10 +27,8 @@ function RouteStop({
   invertColor = false,
   ...props
 }: RouteScheduleStopProps) {
-  const { t } = useContext(I18nContext) as unknown as UseI18NContextType;
   const { stopSequence, map, realtimeLayer } = useMapContext();
   const {
-    platform,
     // @ts-ignore
     stopUID,
     stationName,
@@ -140,23 +138,12 @@ function RouteStop({
             status.isCancelled ? "text-red-600 line-through" : ""
           } ${colorScheme.nameTextColor}`}
         >
-          <div>
-            <div className="flex items-center">
-              {stationName}{" "}
-              {station?.properties?.hasAccessibility && (
-                <span className="p-1">
-                  <WheelChair />
-                </span>
-              )}
-            </div>
-            {platform ? (
-              <span
-                className={`${colorScheme.platformBgColor} rounded-sm text-xs py-px px-0.5 group-hover:bg-slate-50`}
-              >
-                {t(`platform_${type}`)} {platform}
-              </span>
-            ) : null}
-          </div>
+          <RouteStopStation stop={stop} station={station} />
+          <RouteStopPlatform
+            stop={stop}
+            type={type}
+            className={`${colorScheme.platformBgColor} rounded-sm text-xs py-px px-0.5 group-hover:bg-slate-50`}
+          />
         </div>
       </button>
       <DebugStop stop={stop} isPassed={status.isPassed} />

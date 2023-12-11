@@ -10,7 +10,7 @@
     "maplibre-gl": "^3.6.2",
     "mobility-toolbox-js": "^2.3.7",
     "ol": "^8.2.0",
-    "preact": "^10.19.2",
+    "preact": "^10.19.3",
     "preact-custom-element": "^4.3.0",
     "rosetta": "^1.1.0"
   },
@@ -25,7 +25,7 @@
     "@typescript-eslint/eslint-plugin": "^6.13.2",
     "@typescript-eslint/parser": "^6.13.2",
     "concurrently": "^8.2.2",
-    "esbuild": "^0.19.8",
+    "esbuild": "^0.19.9",
     "esbuild-sass-plugin": "^2.16.0",
     "eslint": "^8.55.0",
     "eslint-config-airbnb": "^19.0.4",
@@ -45,11 +45,11 @@
     "jest-environment-jsdom": "^29.7.0",
     "jest-preset-preact": "^4.1.0",
     "preact-render-to-string": "^6.3.1",
-    "prettier": "^3.1.0",
+    "prettier": "^3.1.1",
     "standard-version": "^9.5.0",
     "tailwindcss": "^3.3.6",
     "ts-jest": "^29.1.1",
-    "typescript": "^5.3.2"
+    "typescript": "^5.3.3"
   },
   "scripts": {
     "build": "yarn build:css && yarn build:js",
