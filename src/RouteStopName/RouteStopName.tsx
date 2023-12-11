@@ -14,9 +14,10 @@ function RouteStopName({ stop, children, ...props }: RouteStopNameProps) {
     <div {...props}>
       {stationName}
       <br />
-      <span className="bg-slate-100">
-        <RouteStopPlatform stop={stop} />
-      </span>
+      <RouteStopPlatform
+        stop={stop}
+        className="bg-slate-100 rounded-sm text-xs py-px px-0.5 group-hover:bg-slate-50"
+      />
       {children}
     </div>
   );

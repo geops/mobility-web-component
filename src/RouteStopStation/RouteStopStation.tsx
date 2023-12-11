@@ -19,7 +19,7 @@ function RouteStopStation({
   ...props
 }: RouteStopStationProps) {
   return (
-    <div {...props}>
+    <div className="flex items-center gap-2" {...props}>
       <RouteStopName stop={stop} />
       <RouteStopServices
         stop={stop}

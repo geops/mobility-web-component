@@ -5,13 +5,13 @@ import I18nContext from "../I18NContext";
 import useMapContext from "../utils/hooks/useMapContext";
 
 export type RouteStopPlatformProps = PreactDOMAttributes &
-  JSX.HTMLAttributes<HTMLDivElement> & {
+  JSX.HTMLAttributes<HTMLSpanElement> & {
     stop: RealtimeStop & {
       platform?: string;
     };
   };
 
-function RouteStopPlatform({ stop }: RouteStopPlatformProps) {
+function RouteStopPlatform({ stop, ...props }: RouteStopPlatformProps) {
   const { stopSequence } = useMapContext();
   const { type } = stopSequence;
   const { t } = useContext(I18nContext);
@@ -21,9 +21,9 @@ function RouteStopPlatform({ stop }: RouteStopPlatformProps) {
   }
   const translated = t(`platform_${type || "rail"}`);
   return (
-    <>
+    <span {...props}>
       {translated || t(`platform_rail`)} {platform}
-    </>
+    </span>
   );
 }
 

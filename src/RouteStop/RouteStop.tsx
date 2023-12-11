@@ -137,11 +137,7 @@ function RouteStop({
             status.isCancelled ? "text-red-600 line-through" : ""
           } ${colorScheme.nameTextColor}`}
         >
-          <RouteStopStation
-            stop={stop}
-            station={station}
-            className="flex items-center gap-2"
-          />
+          <RouteStopStation stop={stop} station={station} />
         </div>
       </button>
       <DebugStop stop={stop} isPassed={status.isPassed} />
