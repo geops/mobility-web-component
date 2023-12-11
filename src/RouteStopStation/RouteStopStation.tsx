@@ -20,8 +20,12 @@ function RouteStopStation({
 }: RouteStopStationProps) {
   return (
     <div {...props}>
-      <RouteStopName stop={stop} className="flex items-center" />
-      <RouteStopServices stop={stop} station={station} />
+      <RouteStopName stop={stop} />
+      <RouteStopServices
+        stop={stop}
+        station={station}
+        className="flex flex-wrap gap-1"
+      />
       {children}
     </div>
   );

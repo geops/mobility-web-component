@@ -21,6 +21,7 @@ export type StationServicesProps = PreactDOMAttributes &
     elevator?: boolean;
     police?: boolean;
     waitingAreas?: boolean;
+    iconProps?: PreactDOMAttributes & JSX.HTMLAttributes<SVGElement>;
   };
 
 function StationServices({
@@ -33,6 +34,7 @@ function StationServices({
   elevator = false,
   police = false,
   waitingAreas = false,
+  iconProps = {},
   ...props
 }: StationServicesProps) {
   if (!station) {
@@ -59,14 +61,16 @@ function StationServices({
 
   return (
     <div {...props}>
-      {accessibility && hasAccessibility && <WheelChair />}
-      {airport && hasAirport && <Airport />}
-      {barAndRestaurants && hasBarAndRestaurants && <BarAndRestaurants />}
-      {bathroom && hasBathroom && <Bathroom />}
-      {bikeStorage && hasBikeStorage && <BikeStorage />}
-      {elevator && hasElevator && <Elevator />}
-      {police && hasPolice && <Police />}
-      {waitingAreas && hasWaitingAreas && <WaitingAreas />}
+      {accessibility && hasAccessibility && <WheelChair {...iconProps} />}
+      {airport && hasAirport && <Airport {...iconProps} />}
+      {barAndRestaurants && hasBarAndRestaurants && (
+        <BarAndRestaurants {...iconProps} />
+      )}
+      {bathroom && hasBathroom && <Bathroom {...iconProps} />}
+      {bikeStorage && hasBikeStorage && <BikeStorage {...iconProps} />}
+      {elevator && hasElevator && <Elevator {...iconProps} />}
+      {police && hasPolice && <Police {...iconProps} />}
+      {waitingAreas && hasWaitingAreas && <WaitingAreas {...iconProps} />}
     </div>
   );
 }

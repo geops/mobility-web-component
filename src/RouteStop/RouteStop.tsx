@@ -10,7 +10,6 @@ import RouteStopProgress from "../RouteStopProgress";
 import RouteStopTime from "../RouteStopTime";
 import RouteStopDelay from "../RouteStopDelay";
 import RouteStopStation from "../RouteStopStation";
-import RouteStopPlatform from "../RouteStopPlatform";
 
 export type RouteScheduleStopProps = PreactDOMAttributes &
   JSX.HTMLAttributes<HTMLButtonElement> & {
@@ -138,11 +137,10 @@ function RouteStop({
             status.isCancelled ? "text-red-600 line-through" : ""
           } ${colorScheme.nameTextColor}`}
         >
-          <RouteStopStation stop={stop} station={station} />
-          <RouteStopPlatform
+          <RouteStopStation
             stop={stop}
-            type={type}
-            className={`${colorScheme.platformBgColor} rounded-sm text-xs py-px px-0.5 group-hover:bg-slate-50`}
+            station={station}
+            className="flex items-center gap-2"
           />
         </div>
       </button>

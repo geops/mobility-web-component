@@ -13,7 +13,14 @@ function RouteStopServices({ stop, station, ...props }: RouteStopNameProps) {
   if (!station) {
     return null;
   }
-  return <StationServices station={station} accessibility {...props} />;
+  return (
+    <StationServices
+      station={station}
+      accessibility
+      {...props}
+      iconProps={{ width: 20 }}
+    />
+  );
 }
 
 export default memo(RouteStopServices);
