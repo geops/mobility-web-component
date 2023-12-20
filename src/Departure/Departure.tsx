@@ -31,7 +31,7 @@ function Departure({ departure, index, ...props }: DepartureProps) {
         }}
       >
         <div className="pl-4">
-          <RouteIcon {...departure} />
+          <RouteIcon departure={departure} />
         </div>
         <div className="flex-grow text-left">
           {[...new Set(departure.to)].join("/")}

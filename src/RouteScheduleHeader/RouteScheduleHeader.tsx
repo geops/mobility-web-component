@@ -12,7 +12,7 @@ function RouteScheduleHeader() {
   const color = textColor || "black";
   return (
     <div className="bg-slate-100 p-4 flex gap-x-4 items-center">
-      <RouteIcon {...stopSequence} />
+      <RouteIcon stopSequence={stopSequence} />
       <div className="flex-grow flex flex-col">
         <span className="font-bold">
           <RouteDestination {...stopSequence} />
