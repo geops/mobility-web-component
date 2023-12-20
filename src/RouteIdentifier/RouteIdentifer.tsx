@@ -8,7 +8,7 @@ export type RouteIdentifierProps = PreactDOMAttributes &
   };
 
 function RouteIdentifier({ stopSequence, ...props }: RouteIdentifierProps) {
-  const { routeIdentifier, longName } = stopSequence;
+  const { routeIdentifier, longName } = stopSequence || {};
   let text = longName;
   if (routeIdentifier) {
     // first part of the id, without leading zeros.
