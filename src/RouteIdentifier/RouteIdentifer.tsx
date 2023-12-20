@@ -1,7 +1,15 @@
 import { RealtimeStopSequence } from "mobility-toolbox-js/types";
+import { PreactDOMAttributes, JSX } from "preact";
 import { memo } from "preact/compat";
 
-function RouteIdentifier({ routeIdentifier, longName }: RealtimeStopSequence) {
+export type RouteIdentifierProps = PreactDOMAttributes &
+  JSX.HTMLAttributes<HTMLSpanElement> & {
+    stopSequence?: RealtimeStopSequence;
+  };
+
+function RouteIdentifier({ stopSequence, ...props }: RouteIdentifierProps) {
+  const { routeIdentifier, longName } = stopSequence;
+  let text = longName;
   if (routeIdentifier) {
     // first part of the id, without leading zeros.
     let id = routeIdentifier;
@@ -19,14 +27,9 @@ function RouteIdentifier({ routeIdentifier, longName }: RealtimeStopSequence) {
     }
 
     if (!longName.includes(id)) {
-      return (
-        <>
-          {longName} ({id})
-        </>
-      );
+      text = `${longName} (${id})`;
     }
   }
-  // eslint-disable-next-line react/jsx-no-useless-fragment
-  return <>{longName}</>;
+  return <span {...props}>{text}</span>;
 }
 export default memo(RouteIdentifier);

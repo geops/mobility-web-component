@@ -1,9 +1,8 @@
 import { memo } from "preact/compat";
 import useMapContext from "../utils/hooks/useMapContext";
-import RouteIdentifier from "../RouteIdentifier";
 import getBgColor from "../utils/getBgColor";
-import RouteDestination from "../RouteDestination";
 import RouteIcon from "../RouteIcon";
+import RouteInfos from "../RouteInfos";
 
 function RouteScheduleHeader() {
   const { stopSequence, isFollowing, setIsFollowing } = useMapContext();
@@ -13,14 +12,10 @@ function RouteScheduleHeader() {
   return (
     <div className="bg-slate-100 p-4 flex gap-x-4 items-center">
       <RouteIcon stopSequence={stopSequence} />
-      <div className="flex-grow flex flex-col">
-        <span className="font-bold">
-          <RouteDestination {...stopSequence} />
-        </span>
-        <span className="text-sm">
-          <RouteIdentifier {...stopSequence} />
-        </span>
-      </div>
+      <RouteInfos
+        stopSequence={stopSequence}
+        className="flex-grow flex flex-col"
+      />
       {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
       <button
         type="button"

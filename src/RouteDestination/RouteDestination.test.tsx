@@ -5,8 +5,10 @@ import RouteDestination from "./RouteDestination";
 
 describe("RouteDestination", () => {
   test("should display destination", () => {
-    // @ts-ignore
-    const { container } = render(<RouteDestination destination="foo" />);
+    const { container } = render(
+      // @ts-ignore
+      <RouteDestination stopSequence={{ destination: "foo" }} />,
+    );
     expect(container.textContent).toMatch("foo");
   });
 });
