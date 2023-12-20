@@ -2,7 +2,7 @@
   "name": "@geops/mobility-web-component",
   "license": "UNLICENSED",
   "description": "Web components in the domains of mobility and logistics.",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "homepage": "https://mobility-web-component.geops.io/",
   "type": "module",
   "main": "index.js",
