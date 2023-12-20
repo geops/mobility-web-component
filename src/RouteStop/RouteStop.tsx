@@ -103,43 +103,41 @@ function RouteStop({
 
   return (
     <RouteStopContext.Provider value={routeStopState}>
-      <div>
-        <button
-          type="button"
-          // max-h-[58px] because the svg showing the progress is 58px height.
-          className={`w-full max-h-[58px] flex items-stretch hover:bg-slate-100 rounded scroll-mt-[50px] text-left ${colorScheme.textColor}`}
-          data-station-passed={status.isPassed} // Use for auto scroll
-          onClick={() => {
-            if (stop.coordinate) {
-              map.getView().animate({
-                zoom: map.getView().getZoom(),
-                center: [stop.coordinate[0], stop.coordinate[1]],
-              });
-            }
-          }}
-          {...props}
-        >
-          {children || (
-            <>
-              <RouteStopTime className="flex flex-col flex-shrink-0 justify-center w-10 text-xs ml-4" />
-              <RouteStopDelay className="flex flex-col flex-shrink-0 justify-center w-8 text-[0.6rem]" />
-              <RouteStopProgress
-                className="flex flex-shrink-0 item-center w-8 relative"
-                svgProps={{
-                  className: colorScheme.svgClassName,
-                  style: { color: colorScheme.svgStroke },
-                }}
-              />
-              <RouteStopStation
-                className={`flex flex-col items-start justify-center text-sm flex-grow  font-medium pr-2 ${
-                  status.isCancelled ? "text-red-600 line-through" : ""
-                } ${colorScheme.nameTextColor}`}
-              />
-            </>
-          )}
-        </button>
-        <DebugStop />
-      </div>
+      <button
+        type="button"
+        // max-h-[58px] because the svg showing the progress is 58px height.
+        className={`w-full max-h-[58px] flex items-stretch hover:bg-slate-100 rounded scroll-mt-[50px] text-left ${colorScheme.textColor}`}
+        data-station-passed={status.isPassed} // Use for auto scroll
+        onClick={() => {
+          if (stop.coordinate) {
+            map.getView().animate({
+              zoom: map.getView().getZoom(),
+              center: [stop.coordinate[0], stop.coordinate[1]],
+            });
+          }
+        }}
+        {...props}
+      >
+        {children || (
+          <>
+            <RouteStopTime className="flex flex-col flex-shrink-0 justify-center w-10 text-xs ml-4" />
+            <RouteStopDelay className="flex flex-col flex-shrink-0 justify-center w-8 text-[0.6rem]" />
+            <RouteStopProgress
+              className="flex flex-shrink-0 item-center w-8 relative"
+              svgProps={{
+                className: colorScheme.svgClassName,
+                style: { color: colorScheme.svgStroke },
+              }}
+            />
+            <RouteStopStation
+              className={`flex flex-col items-start justify-center text-sm flex-grow  font-medium pr-2 ${
+                status.isCancelled ? "text-red-600 line-through" : ""
+              } ${colorScheme.nameTextColor}`}
+            />
+          </>
+        )}
+      </button>
+      <DebugStop />
     </RouteStopContext.Provider>
   );
 }
