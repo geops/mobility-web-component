@@ -1,27 +1,7 @@
 import rosetta from "rosetta";
+import translations from "./translations";
 
-const i18n = rosetta({
-  de: {
-    platform_rail: "Gl.",
-    platform_ferry: "St.",
-    platform_other: "Kan.",
-  },
-  en: {
-    platform_rail: "Pl.",
-    platform_ferry: "Pier", // pier
-    platform_other: "Std.", // stand
-  },
-  fr: {
-    platform_rail: "Voie",
-    platform_ferry: "Quai",
-    platform_other: "Quai",
-  },
-  it: {
-    platform_rail: "Bin.",
-    platform_ferry: "Imb.", // imbarcadero
-    platform_other: "Cor.", // corsia
-  },
-});
+const i18n = rosetta(translations);
 
 // Set current language to preferred browser language with fallback to english
 i18n.locale(
