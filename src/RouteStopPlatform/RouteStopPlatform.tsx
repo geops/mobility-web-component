@@ -1,8 +1,8 @@
-import { memo, useContext } from "preact/compat";
+import { memo } from "preact/compat";
 import type { PreactDOMAttributes, JSX } from "preact";
 import { RealtimeStop } from "mobility-toolbox-js/types";
-import I18nContext from "../I18NContext";
 import useMapContext from "../utils/hooks/useMapContext";
+import useI18n from "../utils/hooks/useI18n";
 
 export type RouteStopPlatformProps = PreactDOMAttributes &
   JSX.HTMLAttributes<HTMLSpanElement> & {
@@ -14,7 +14,7 @@ export type RouteStopPlatformProps = PreactDOMAttributes &
 function RouteStopPlatform({ stop, ...props }: RouteStopPlatformProps) {
   const { stopSequence } = useMapContext();
   const { type } = stopSequence;
-  const { t } = useContext(I18nContext);
+  const { t } = useI18n();
   const { platform } = stop || {};
   if (!platform) {
     return null;

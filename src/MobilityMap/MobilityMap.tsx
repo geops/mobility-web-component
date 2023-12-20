@@ -26,7 +26,7 @@ import RealtimeLayer from "../RealtimeLayer";
 import Overlay from "../Overlay";
 import ScaleLine from "../ScaleLine";
 import Copyright from "../Copyright";
-import I18nContext from "../I18NContext";
+import { I18nContext } from "../utils/hooks/useI18n";
 import StationsLayer from "../StationsLayer";
 import Station from "../Station";
 import i18n from "../utils/i18n";
