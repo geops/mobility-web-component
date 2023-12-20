@@ -28,7 +28,7 @@ import ScaleLine from "../ScaleLine";
 import Copyright from "../Copyright";
 import I18nContext from "../I18NContext";
 import StationsLayer from "../StationsLayer";
-import Station from "../Station/Station";
+import Station from "../Station";
 import i18n from "../utils/i18n";
 
 export type MobilityMapProps = {
