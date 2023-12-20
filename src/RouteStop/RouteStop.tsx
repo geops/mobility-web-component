@@ -75,8 +75,8 @@ function RouteStop({
   }, [stopUID, realtimeLayer?.api]);
 
   const routeStopState = useMemo(() => {
-    return { stop, status };
-  }, [stop, status]);
+    return { stop, status, idx, invertColor, station };
+  }, [stop, status, idx, invertColor, station]);
 
   let colorScheme = status.isPassed ? classNameGreyOut : "";
 
