@@ -1,21 +1,18 @@
-import type { RealtimeStop } from "mobility-toolbox-js/types";
 import { memo } from "preact/compat";
 import { PreactDOMAttributes, JSX } from "preact";
 import getHoursAndMinutes from "../utils/getHoursAndMinutes";
-import { StopStatus } from "../utils/getStopStatus";
+import useRouteStop from "../utils/hooks/useRouteStop";
 
 export type RouteStopTimeProps = PreactDOMAttributes &
-  JSX.HTMLAttributes<HTMLDivElement> & {
-    status: StopStatus;
-    stop: RealtimeStop;
-  };
+  JSX.HTMLAttributes<HTMLDivElement>;
 
-function RouteStopTime({ status, stop }: RouteStopTimeProps) {
+function RouteStopTime(props: RouteStopTimeProps) {
+  const { status, stop } = useRouteStop();
   const { isCancelled, isFirst, isLast } = status;
   const { aimedArrivalTime, aimedDepartureTime } = stop;
 
   return (
-    <>
+    <div {...props}>
       <span
         className={`${isCancelled ? "text-red-600 line-through" : ""} ${
           isFirst ? "hidden" : ""
@@ -30,7 +27,7 @@ function RouteStopTime({ status, stop }: RouteStopTimeProps) {
       >
         {getHoursAndMinutes(aimedDepartureTime)}
       </span>
-    </>
+    </div>
   );
 }
 export default memo(RouteStopTime);

@@ -2,7 +2,7 @@ import { createContext } from "preact";
 import { useContext } from "preact/hooks";
 
 export type I18NContextType = {
-  t: (id: string, templateValues: { [key: string]: string }) => string;
+  t: (id: string, templateValues?: { [key: string]: string }) => string;
 };
 
 export const I18nContext = createContext({

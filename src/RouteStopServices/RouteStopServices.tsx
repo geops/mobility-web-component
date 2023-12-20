@@ -1,15 +1,13 @@
 import { memo } from "preact/compat";
 import type { PreactDOMAttributes, JSX } from "preact";
-import { RealtimeStation, RealtimeStop } from "mobility-toolbox-js/types";
 import StationServices from "../StationServices";
+import useRouteStop from "../utils/hooks/useRouteStop";
 
 export type RouteStopNameProps = PreactDOMAttributes &
-  JSX.HTMLAttributes<HTMLDivElement> & {
-    stop: RealtimeStop;
-    station: RealtimeStation;
-  };
+  JSX.HTMLAttributes<HTMLDivElement>;
 
-function RouteStopServices({ stop, station, ...props }: RouteStopNameProps) {
+function RouteStopServices(props: RouteStopNameProps) {
+  const { station } = useRouteStop();
   if (!station) {
     return null;
   }

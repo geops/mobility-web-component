@@ -1,36 +1,39 @@
-import type { RealtimeStop } from "mobility-toolbox-js/types";
 import { memo } from "preact/compat";
 import { PreactDOMAttributes, JSX } from "preact";
 import getDelayColor from "../utils/getDelayColor";
 import getDelayString from "../utils/getDelayString";
-import { StopStatus } from "../utils/getStopStatus";
+import useRouteStop from "../utils/hooks/useRouteStop";
 
 export type RouteStopDelayProps = PreactDOMAttributes &
-  JSX.HTMLAttributes<HTMLDivElement> & {
-    status: StopStatus;
-    stop: RealtimeStop;
-  };
+  JSX.HTMLAttributes<HTMLDivElement>;
 
-function RouteStopDelay({ status, stop }: RouteStopDelayProps) {
+function RouteStopDelay(props: RouteStopDelayProps) {
+  const { status, stop } = useRouteStop();
   const {
     arrivalDelay,
     // eslint-disable-next-line
     departureDelay,
   } = stop;
 
+  const hideDelay =
+    status.isNotRealtime ||
+    status.isCancelled ||
+    status.isNotStop ||
+    status.isPassed;
+
   return (
-    <>
-      {arrivalDelay === null || status.isFirst ? null : (
+    <div {...props}>
+      {hideDelay || arrivalDelay === null || status.isFirst ? null : (
         <span style={{ color: getDelayColor(arrivalDelay) }}>
           {`+${getDelayString(arrivalDelay)}`}
         </span>
       )}
-      {departureDelay === null || status.isLast ? null : (
+      {hideDelay || departureDelay === null || status.isLast ? null : (
         <span style={{ color: getDelayColor(arrivalDelay) }}>
           {`+${getDelayString(departureDelay)}`}
         </span>
       )}
-    </>
+    </div>
   );
 }
 export default memo(RouteStopDelay);

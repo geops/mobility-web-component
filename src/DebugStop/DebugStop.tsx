@@ -1,17 +1,17 @@
-import { RealtimeStop } from "mobility-toolbox-js/types";
+import { PreactDOMAttributes, JSX } from "preact";
+import useRouteStop from "../utils/hooks/useRouteStop";
 
-export type DebugStopProps = {
-  stop: RealtimeStop;
-  isPassed: boolean;
-};
+export type DebugStopProps = PreactDOMAttributes &
+  JSX.HTMLAttributes<HTMLDivElement>;
 
-function DebugStop({ stop, isPassed }) {
+function DebugStop(props: DebugStopProps) {
+  const { stop, status } = useRouteStop();
   return (
     new URLSearchParams(window.location.search).get("debug") === "true" && (
-      <div style={{ display: "block", fontSize: 10 }}>
+      <div style={{ display: "block", fontSize: 10 }} {...props}>
         <div>
-          State: <b>{stop.state}</b> (isPassed: {`${isPassed}`}) (cancelled:{" "}
-          {`${stop.cancelled}`})
+          State: <b>{stop.state}</b> (isPassed: {`${status.isPassed}`})
+          (cancelled: {`${stop.cancelled}`})
         </div>
         <div>
           Arrival time: {stop.arrivalTime} (delay:{" "}
