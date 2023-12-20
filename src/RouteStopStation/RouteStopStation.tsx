@@ -9,18 +9,18 @@ export type RouteStopStationProps = PreactDOMAttributes &
     classNameCancelled?: string;
   };
 
-function RouteStopStation({ children, ...props }: RouteStopStationProps) {
+function RouteStopStation({
+  children,
+  className = "flex items-center gap-2",
+  classNameCancelled = "text-red-600 line-through",
+  ...props
+}: RouteStopStationProps) {
   const { status } = useRouteStop();
-  const classNameCancelled = status.isCancelled
-    ? "text-red-600 line-through"
-    : "";
 
   return (
     <div
       {...props}
-      className={`${
-        props.className || "flex items-center gap-2"
-      } ${classNameCancelled}`}
+      className={`${className} ${status.isCancelled ? classNameCancelled : ""}`}
     >
       <RouteStopName />
       <RouteStopServices className="flex flex-wrap gap-1" />
