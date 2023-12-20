@@ -4,6 +4,8 @@ import { useContext } from "preact/hooks";
 import { StopStatus } from "../getStopStatus";
 
 export type RouteStopContextType = {
+  index?: number;
+  invertColor?: boolean;
   station?: RealtimeStation;
   stop?: RealtimeStop & {
     platform?: string;
@@ -12,6 +14,8 @@ export type RouteStopContextType = {
 };
 
 export const RouteStopContext = createContext({
+  index: null,
+  invertColor: null,
   station: null,
   status: null,
   stop: null,

@@ -3,7 +3,6 @@ import type { RealtimeStation, RealtimeStop } from "mobility-toolbox-js/types";
 import { memo } from "preact/compat";
 import { PreactDOMAttributes, JSX } from "preact";
 import useMapContext from "../utils/hooks/useMapContext";
-import getBgColor from "../utils/getBgColor";
 import DebugStop from "../DebugStop/DebugStop";
 import getStopStatus from "../utils/getStopStatus";
 import RouteStopProgress from "../RouteStopProgress";
@@ -14,14 +13,16 @@ import { RouteStopContext } from "../utils/hooks/useRouteStop";
 
 export type RouteScheduleStopProps = PreactDOMAttributes &
   JSX.HTMLAttributes<HTMLButtonElement> & {
-    stop: RealtimeStop & {
+    stop?: RealtimeStop & {
       platform?: string;
     };
-    idx: number;
-    invertColor: boolean;
+    idx?: number;
+    invertColor?: boolean;
+    classNameGreyOut?: string;
   };
 
 function RouteStop({
+  classNameGreyOut = "opacity-50",
   stop,
   idx,
   invertColor = false,
@@ -34,9 +35,7 @@ function RouteStop({
     stopUID,
     stationName,
   } = stop;
-  const { type, stroke, vehicleType } = stopSequence;
   const [station, setStation] = useState<RealtimeStation>();
-  const color = stroke || getBgColor(type || vehicleType);
   const [status, setStatus] = useState(getStopStatus(stopSequence, idx));
 
   useEffect(() => {
@@ -79,26 +78,10 @@ function RouteStop({
     return { stop, status };
   }, [stop, status]);
 
-  const colorSchemeGreyOut = {
-    textColor: "text-gray-500",
-    svgClassName: "text-gray-400",
-    svgStroke: undefined,
-    nameTextColor: "",
-    platformBgColor: "bg-slate-100",
-  };
-
-  const colorSchemeNormal = {
-    textColor: "text-gray-600",
-    svgClassName: null,
-    svgStroke: color,
-    nameTextColor: "text-black",
-    platformBgColor: "bg-slate-200",
-  };
-
-  let colorScheme = status.isPassed ? colorSchemeGreyOut : colorSchemeNormal;
+  let colorScheme = status.isPassed ? classNameGreyOut : "";
 
   if (invertColor) {
-    colorScheme = status.isPassed ? colorSchemeNormal : colorSchemeGreyOut;
+    colorScheme = status.isPassed ? "" : classNameGreyOut;
   }
 
   return (
@@ -106,7 +89,7 @@ function RouteStop({
       <button
         type="button"
         // max-h-[58px] because the svg showing the progress is 58px height.
-        className={`w-full max-h-[58px] flex items-stretch hover:bg-slate-100 rounded scroll-mt-[50px] text-left ${colorScheme.textColor}`}
+        className={`w-full max-h-[58px] flex items-stretch hover:bg-slate-100 rounded scroll-mt-[50px] text-left ${colorScheme}`}
         data-station-passed={status.isPassed} // Use for auto scroll
         onClick={() => {
           if (stop.coordinate) {
@@ -122,18 +105,8 @@ function RouteStop({
           <>
             <RouteStopTime className="flex flex-col flex-shrink-0 justify-center w-10 text-xs ml-4" />
             <RouteStopDelay className="flex flex-col flex-shrink-0 justify-center w-8 text-[0.6rem]" />
-            <RouteStopProgress
-              className="flex flex-shrink-0 item-center w-8 relative"
-              svgProps={{
-                className: colorScheme.svgClassName,
-                style: { color: colorScheme.svgStroke },
-              }}
-            />
-            <RouteStopStation
-              className={`flex flex-col items-start justify-center text-sm flex-grow  font-medium pr-2 ${
-                status.isCancelled ? "text-red-600 line-through" : ""
-              } ${colorScheme.nameTextColor}`}
-            />
+            <RouteStopProgress className="flex flex-shrink-0 item-center w-8 relative" />
+            <RouteStopStation className="flex flex-col items-start justify-center text-sm flex-grow font-medium pr-2" />
           </>
         )}
       </button>

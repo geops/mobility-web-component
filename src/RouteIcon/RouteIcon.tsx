@@ -1,14 +1,13 @@
 import {
   RealtimeDepartureExtended,
   RealtimeLine,
-  RealtimeMot,
   RealtimeStopSequence,
   RealtimeTrajectory,
 } from "mobility-toolbox-js/types";
 import { PreactDOMAttributes, JSX } from "preact";
-import getBgColor from "../utils/getBgColor";
 import getTextFontForVehicle from "../utils/getTextFontForVehicle";
 import getTextForVehicle from "../utils/getTextForVehicle";
+import getMainColorForVehicle from "../utils/getMainColorForVehicle";
 
 export type RouteIconProps = PreactDOMAttributes &
   JSX.HTMLAttributes<HTMLSpanElement> & {
@@ -32,13 +31,9 @@ function RouteIcon({
     departure?.line ||
     stopSequence?.line ||
     trajectory?.properties?.line;
-  const typeToUse =
-    stopSequence?.type ||
-    stopSequence?.vehicleType ||
-    departure?.train_type ||
-    "rail";
-  const backgroundColor =
-    lineToUse?.color || getBgColor(typeToUse as RealtimeMot);
+  const backgroundColor = getMainColorForVehicle(
+    departure || stopSequence || trajectory,
+  );
   const color = lineToUse?.text_color || "black";
   let borderColor = lineToUse?.stroke || "black";
   const text = getTextForVehicle(lineToUse?.name);

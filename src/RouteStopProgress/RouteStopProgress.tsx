@@ -1,17 +1,37 @@
 import { memo } from "preact/compat";
 import { PreactDOMAttributes, JSX } from "preact";
 import useRouteStop from "../utils/hooks/useRouteStop";
+import getMainColorForVehicle from "../utils/getMainColorForVehicle";
+import useMapContext from "../utils/hooks/useMapContext";
 
 export type RouteStopProgressProps = PreactDOMAttributes &
   JSX.HTMLAttributes<HTMLDivElement> & {
-    svgProps: PreactDOMAttributes & JSX.HTMLAttributes<SVGElement>;
+    svgProps?: PreactDOMAttributes & JSX.HTMLAttributes<SVGElement>;
   };
 
 function RouteStopProgress({ svgProps, ...props }: RouteStopProgressProps) {
-  const { status } = useRouteStop();
-  const { isFirst, isLast } = status;
+  const { stopSequence } = useMapContext();
+  const { status, invertColor } = useRouteStop();
+  const { isFirst, isLast, isPassed } = status;
   const y1 = isFirst ? "50%" : "-100%";
   const y2 = isLast ? "50%" : "100%";
+  const color = getMainColorForVehicle(stopSequence);
+
+  const colorSchemeGreyOut = {
+    svgClassName: "text-gray-400",
+    svgStroke: undefined,
+  };
+
+  const colorSchemeNormal = {
+    svgClassName: null,
+    svgStroke: color,
+  };
+
+  let colorScheme = isPassed ? colorSchemeGreyOut : colorSchemeNormal;
+
+  if (invertColor) {
+    colorScheme = isPassed ? colorSchemeNormal : colorSchemeGreyOut;
+  }
 
   return (
     <div {...props}>
@@ -20,7 +40,8 @@ function RouteStopProgress({ svgProps, ...props }: RouteStopProgressProps) {
         width="16"
         height="100%"
         fill="none"
-        stroke="currentColor"
+        stroke={colorScheme.svgStroke || "currentColor"}
+        className={colorScheme.svgClassName}
         {...svgProps}
       >
         {/* Circle used to display a black border */}
