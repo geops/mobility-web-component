@@ -32,11 +32,13 @@ function RouteIcon({
     stopSequence?.line ||
     trajectory?.properties?.line;
   const backgroundColor = getMainColorForVehicle(
-    departure || stopSequence || trajectory,
+    line || departure || stopSequence || trajectory,
   );
   const color = lineToUse?.text_color || "black";
   let borderColor = lineToUse?.stroke || "black";
-  const text = getTextForVehicle(lineToUse?.name);
+  const text = getTextForVehicle(
+    line || departure || stopSequence || trajectory,
+  );
 
   const fontSize = fontSizesByNbLetters[text.length] || 12;
   const font = getTextFontForVehicle(fontSize, text);
