@@ -14,11 +14,7 @@ function DebugStop(props: DebugStopProps) {
   }
 
   return (
-    <div
-      className="p-4 text-xs text-left border-b"
-      style={{ display: "block", fontSize: 10 }}
-      {...props}
-    >
+    <div className="p-4 text-xs text-left" {...props}>
       <div>
         State: <b>{stop.state}</b> (isPassed: {`${status.isPassed}`})
         (cancelled: {`${stop.cancelled}`})
