@@ -44,7 +44,7 @@ function RouteSchedule(props: RouteScheduleProps) {
     <>
       <RouteScheduleHeader />
       <div ref={ref} className={className}>
-        {stopSequence.stations.map((stop: RealtimeStop, idx: number) => {
+        {stopSequence.stations.map((stop: RealtimeStop, index: number) => {
           const { stationId, arrivalTime, departureTime, stationName } = stop;
           return (
             <RouteStop
@@ -54,7 +54,7 @@ function RouteSchedule(props: RouteScheduleProps) {
                 (`${stationId}` || stationName) + arrivalTime + departureTime
               }
               stop={stop}
-              idx={idx}
+              index={index}
             />
           );
         })}

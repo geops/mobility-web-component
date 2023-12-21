@@ -16,7 +16,7 @@ export type RouteScheduleStopProps = PreactDOMAttributes &
     stop?: RealtimeStop & {
       platform?: string;
     };
-    idx?: number;
+    index?: number;
     invertColor?: boolean;
     classNameGreyOut?: string;
   };
@@ -24,7 +24,7 @@ export type RouteScheduleStopProps = PreactDOMAttributes &
 function RouteStop({
   classNameGreyOut = "opacity-50",
   stop,
-  idx,
+  index,
   invertColor = false,
   children,
   ...props
@@ -36,22 +36,22 @@ function RouteStop({
     stationName,
   } = stop;
   const [station, setStation] = useState<RealtimeStation>();
-  const [status, setStatus] = useState(getStopStatus(stopSequence, idx));
+  const [status, setStatus] = useState(getStopStatus(stopSequence, index));
 
   useEffect(() => {
     let interval = null;
-    setStatus(getStopStatus(stopSequence, idx));
+    setStatus(getStopStatus(stopSequence, index));
 
     // To see the progress bar we have to update the status of the  vehicle until we get the new stopSeqeunce.
     if (status.isInBetween) {
       interval = setInterval(() => {
-        setStatus(getStopStatus(stopSequence, idx));
+        setStatus(getStopStatus(stopSequence, index));
       }, 1000);
     }
     return () => {
       clearInterval(interval);
     };
-  }, [idx, status.isInBetween, stationName, station, stopSequence]);
+  }, [index, status.isInBetween, stationName, station, stopSequence]);
 
   useEffect(() => {
     if (!stopUID || !realtimeLayer?.api) {
@@ -75,8 +75,8 @@ function RouteStop({
   }, [stopUID, realtimeLayer?.api]);
 
   const routeStopState = useMemo(() => {
-    return { stop, status, idx, invertColor, station };
-  }, [stop, status, idx, invertColor, station]);
+    return { stop, status, index, invertColor, station };
+  }, [stop, status, index, invertColor, station]);
 
   let colorScheme = status.isPassed ? classNameGreyOut : "";
 
