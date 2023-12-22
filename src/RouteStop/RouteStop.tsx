@@ -33,7 +33,6 @@ function RouteStop({
   const {
     // @ts-ignore
     stopUID,
-    stationName,
   } = stop;
   const [station, setStation] = useState<RealtimeStation>();
   const [status, setStatus] = useState(getStopStatus(stopSequence, index));
@@ -51,7 +50,7 @@ function RouteStop({
     return () => {
       clearInterval(interval);
     };
-  }, [index, status.isInBetween, stationName, station, stopSequence]);
+  }, [index, status.isInBetween, stopSequence]);
 
   useEffect(() => {
     if (!stopUID || !realtimeLayer?.api) {
