@@ -81,7 +81,7 @@ function RouteStop({
 
   if (invertColor) {
     colorScheme =
-      status.isPassed || !status.isLeft || status.isBoarding
+      status.isPassed || status.isLeft || status.isBoarding
         ? ""
         : classNameGreyOut;
   }
