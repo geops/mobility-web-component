@@ -1,6 +1,6 @@
 import getMainColorForVehicle from "./getMainColorForVehicle";
 
-describe.only("getTextForVehicle", () => {
+describe("getTextForVehicle", () => {
   it("returns default rail color", () => {
     expect(getMainColorForVehicle()).toBe("#ff8080");
     expect(getMainColorForVehicle(null)).toBe("#ff8080");
