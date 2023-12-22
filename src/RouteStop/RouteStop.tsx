@@ -22,7 +22,7 @@ export type RouteScheduleStopProps = PreactDOMAttributes &
   };
 
 function RouteStop({
-  classNameGreyOut = "opacity-50",
+  classNameGreyOut = "text-gray-600",
   stop,
   index,
   invertColor = false,

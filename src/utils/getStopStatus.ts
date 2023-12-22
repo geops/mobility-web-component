@@ -15,6 +15,44 @@ export type StopStatus = {
   progress?: number;
 };
 
+const getBasicStatus = (stop, currTime, previousStop, nextStop) => {
+  let topBoundary = stop.arrivalTime;
+  let bottomBoundary = stop.arrivalTime;
+
+  if (previousStop) {
+    topBoundary =
+      stop.arrivalTime - (stop.arrivalTime - previousStop.arrivalTime) / 2;
+  }
+  if (nextStop) {
+    bottomBoundary =
+      stop.arrivalTime + (nextStop.arrivalTime - stop.arrivalTime) / 2;
+  }
+
+  const isNotStop = !stop.arrivalTime && !stop.departureTime;
+  const isNotRealtime = stop.state === "TIME_BASED";
+  const isCancelled =
+    stop.state === "JOURNEY_CANCELLED" || stop.state === "STOP_CANCELLED";
+  const isBoarding = stop.state === "BOARDING";
+
+  const isPassedBottom = currTime > bottomBoundary;
+
+  const isLeft =
+    stop.state === "LEAVING" ||
+    (isNotRealtime && isPassedBottom) ||
+    (isCancelled && isPassedBottom);
+
+  return {
+    bottomBoundary,
+    isBoarding,
+    isCancelled,
+    isLeft,
+    isNotRealtime,
+    isNotStop,
+    isPassedBottom,
+    topBoundary,
+  };
+};
+
 /**
  * This function provide an object with some informations about the status of the vehicle for this station.
  * If the vehicul has already passed the sattion how far is it from the station, ...
@@ -34,35 +72,25 @@ const getStopStatus = (
   }
 
   const currTime = Date.now();
-  let topBoundary = stop.arrivalTime;
-  let bottomBoundary = stop.arrivalTime;
+  const previousStopStatus =
+    previousStop &&
+    getBasicStatus(previousStop, currTime, stops[index - 2], stop);
+  const basicStatus = getBasicStatus(stop, currTime, previousStop, nextStop);
+  let { isLeft } = basicStatus;
+  const {
+    bottomBoundary,
+    isBoarding,
+    isCancelled,
+    isNotRealtime,
+    isNotStop,
+    isPassedBottom,
+    topBoundary,
+  } = basicStatus;
 
-  if (previousStop) {
-    topBoundary =
-      stop.arrivalTime - (stop.arrivalTime - previousStop.arrivalTime) / 2;
-  }
-  if (nextStop) {
-    bottomBoundary =
-      stop.arrivalTime + (nextStop.arrivalTime - stop.arrivalTime) / 2;
-  }
+  const isNextStop = !isLeft && (!previousStop || previousStopStatus.isLeft);
 
-  const isNotStop = !stop.arrivalTime && !stop.departureTime;
-  const isNotRealtime =
-    stop.arrivalDelay === null || stop.state === "TIME_BASED";
-  const isCancelled =
-    stop.state === "JOURNEY_CANCELLED" || stop.state === "STOP_CANCELLED";
-  const isBoarding = stop.state === "STATE_BOARDING";
-
-  let isLeft =
-    stop.state === "LEAVING" ||
-    (stop.state === "TIME_BASED" && currTime > bottomBoundary) ||
-    (isCancelled && currTime > bottomBoundary);
-
-  const isNextStop =
-    !isLeft && (!previousStop || previousStop.state === "LEAVING");
-
-  const isFutureStop =
-    !isLeft && (!previousStop || previousStop.state !== "LEAVING");
+  // The future stop is the stop after a stop with state === "BOARDING"
+  const isFutureStop = !isLeft && (!previousStop || !previousStopStatus.isLeft);
 
   let isCloseToNextStop = false;
   if (isNextStop) {
@@ -74,7 +102,7 @@ const getStopStatus = (
   // For SBAHNMW-298
   // Considerate the state ("LEAVING")
   // which is important if the data has not been updated for a long time
-  let isPassed = currTime > bottomBoundary && !isNextStop && !isFutureStop;
+  let isPassed = isPassedBottom && !isNextStop && !isFutureStop;
 
   if (topBoundary < currTime && currTime < bottomBoundary && !isFutureStop) {
     progress = Math.round(
@@ -86,16 +114,20 @@ const getStopStatus = (
   // Set the progress manually
   // if the data has not been updated for a long time.
   // These stops would have be passed if the data were up-to-date
-  if (currTime > bottomBoundary && (isNextStop || isFutureStop)) {
+  if (isPassedBottom && (isNextStop || isFutureStop)) {
     progress = 0;
   }
 
   // The first station is a special case because the top boundary starts at 50% of the div element.
   const isFirstStation = index === 0;
 
+  if (isFirstStation) {
+    progress = 50;
+  }
+
   if (isBoarding) {
     // When the train has not left the first station the progress is 0.
-    progress = isFirstStation ? 0 : 50;
+    progress = 50;
   } else if (
     !isFirstStation &&
     ((isLeft && progress < 50) || (!isLeft && progress > 50))
@@ -112,6 +144,10 @@ const getStopStatus = (
     progress = 100;
     isLeft = true;
     isPassed = true;
+  }
+
+  if (isPassed) {
+    progress = 100;
   }
 
   return {

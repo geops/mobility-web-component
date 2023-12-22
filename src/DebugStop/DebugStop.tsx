@@ -27,6 +27,18 @@ function DebugStop(props: DebugStopProps) {
         Departure time: {stop.arrivalTime} (delay:{" "}
         <b>{`${stop.departureDelay}`}</b>) (aimed: {stop.aimedArrivalTime})
       </div>
+      <div>
+        {Object.entries(status).map(([key, value]) => {
+          if (value === false) {
+            return null;
+          }
+          return (
+            <div>
+              {key}: {`${value}`}
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }
