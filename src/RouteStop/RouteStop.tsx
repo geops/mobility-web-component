@@ -77,10 +77,13 @@ function RouteStop({
     return { stop, status, index, invertColor, station };
   }, [stop, status, index, invertColor, station]);
 
-  let colorScheme = status.isPassed ? classNameGreyOut : "";
+  let colorScheme = status.isPassed || status.isLeft ? classNameGreyOut : "";
 
   if (invertColor) {
-    colorScheme = status.isPassed ? "" : classNameGreyOut;
+    colorScheme =
+      status.isPassed || !status.isLeft || status.isBoarding
+        ? ""
+        : classNameGreyOut;
   }
 
   return (
