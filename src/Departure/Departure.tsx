@@ -45,12 +45,6 @@ function Departure({ departure, index, ...props }: DepartureProps) {
           </div>
           <div className="pr-4">{getHoursAndMinutes(departure.time)}</div>
         </div>
-
-        {/* <DepartureDebugInfo departure={departure} />
-                    <DepartureInfo
-                      incidentProgram={this.simulateIncident || incidentProgram}
-                      departure={departure}
-                    /> */}
       </button>
       <DebugDeparture />
     </DepartureContext.Provider>
