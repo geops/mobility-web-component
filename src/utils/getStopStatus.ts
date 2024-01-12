@@ -29,7 +29,9 @@ const getBasicStatus = (stop, currTime, previousStop, nextStop) => {
   }
 
   const isNotStop = !stop.arrivalTime && !stop.departureTime;
-  const isNotRealtime = stop.state === "TIME_BASED";
+  const hasNoDelays =
+    stop.arrivalDelay === null && stop.departureDelay === null;
+  const isNotRealtime = stop.state === "TIME_BASED" || hasNoDelays;
   const isCancelled =
     stop.state === "JOURNEY_CANCELLED" || stop.state === "STOP_CANCELLED";
   const isBoarding = stop.state === "BOARDING";
