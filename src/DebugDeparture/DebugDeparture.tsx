@@ -8,7 +8,7 @@ export type DebugDepartureProps = PreactDOMAttributes &
 /**
  * Polyfill for String.prototype.padStart()
  */
-const pad = (n) => `0${n}`.slice(-2);
+const pad = (n: number) => `0${n}`.slice(-2);
 
 const formatDebugTime = (time, excludeSeconds = false) => {
   const d = new Date(time);
@@ -34,15 +34,22 @@ function DebugDeparture(props: DebugDepartureProps) {
   const {
     train_number: trainNumber,
     time,
+    // @ts-ignore
+    arrivalTime,
+    // @ts-ignore
+    departureTime,
     fzo_estimated_time: fzoEstimatedTime,
     ris_aimed_time: risAimedTime,
     ris_estimated_time: risEstimatedTime,
     at_station_ds100: atStationDs100,
     min_arrival_time: minArrivalTime,
     has_fzo: hasFzo,
+    // @ts-ignore
     last_boarding_time: lastBoardingTime,
+    // @ts-ignore
     stations_in_between: stationsInBetween,
     state,
+    // @ts-ignore
     station,
   } = departure;
 
@@ -50,9 +57,9 @@ function DebugDeparture(props: DebugDepartureProps) {
   const urlDate = Number.isNaN(risTime)
     ? ""
     : [
-        risTime.getFullYear(),
-        pad(risTime.getMonth() + 1),
-        pad(risTime.getDate()),
+        (risTime as Date).getFullYear(),
+        pad((risTime as Date).getMonth() + 1),
+        pad((risTime as Date).getDate()),
       ].join("-");
 
   const risLink = [
@@ -77,7 +84,11 @@ function DebugDeparture(props: DebugDepartureProps) {
         {/* @ts-ignore */}
         {`Has realtime: ${departure.has_realtime_journey};`}
         <br />
-        {`Time used: ${formatDebugTime(time)};`}
+        {`Time: ${formatDebugTime(time)};`}
+        <br />
+        {`Arrival time: ${formatDebugTime(arrivalTime)};`}
+        <br />
+        {`Departure time: ${formatDebugTime(departureTime)};`}
         <br />
         {`FzO-Estimated: ${formatDebugTime(fzoEstimatedTime)};`}
         <br />

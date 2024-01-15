@@ -1,4 +1,4 @@
-import type { RealtimeDepartureExtended } from "mobility-toolbox-js/types";
+import type { RealtimeDeparture } from "mobility-toolbox-js/types";
 import { memo, useMemo } from "preact/compat";
 import RouteIcon from "../RouteIcon";
 import getHoursAndMinutes from "../utils/getHoursAndMinutes";
@@ -7,7 +7,7 @@ import { DepartureContext } from "../utils/hooks/useDeparture";
 import DebugDeparture from "../DebugDeparture";
 
 export type DepartureProps = {
-  departure: RealtimeDepartureExtended;
+  departure: RealtimeDeparture;
   index: number;
 };
 

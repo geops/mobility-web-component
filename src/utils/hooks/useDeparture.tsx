@@ -1,10 +1,10 @@
-import { RealtimeDepartureExtended } from "mobility-toolbox-js/types";
+import { RealtimeDeparture } from "mobility-toolbox-js/types";
 import { createContext } from "preact";
 import { useContext } from "preact/hooks";
 
 export type DepartureContextType = {
   index?: number;
-  departure?: RealtimeDepartureExtended;
+  departure?: RealtimeDeparture;
 };
 
 export const DepartureContext = createContext({

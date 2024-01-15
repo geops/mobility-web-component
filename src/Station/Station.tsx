@@ -2,7 +2,7 @@ import type { PreactDOMAttributes, JSX } from "preact";
 import { useEffect, useRef, useState } from "preact/hooks";
 import { memo } from "preact/compat";
 import { debounceDeparturesMessages } from "mobility-toolbox-js/ol";
-import { RealtimeDepartureExtended } from "mobility-toolbox-js/types";
+import { RealtimeDeparture } from "mobility-toolbox-js/types";
 import useMapContext from "../utils/hooks/useMapContext";
 import StationHeader from "../StationHeader";
 import Departure from "../Departure";
@@ -12,7 +12,7 @@ export type StationProps = PreactDOMAttributes &
 
 function Station(props: StationProps) {
   const { station, realtimeLayer } = useMapContext();
-  const [departures, setDepartures] = useState<RealtimeDepartureExtended[]>();
+  const [departures, setDepartures] = useState<RealtimeDeparture[]>();
   const ref = useRef();
   const { className } = props;
 
@@ -23,7 +23,7 @@ function Station(props: StationProps) {
 
     const onMessage = debounceDeparturesMessages(
       // eslint-disable-next-line @typescript-eslint/no-shadow
-      (departures: RealtimeDepartureExtended[]) => {
+      (departures: RealtimeDeparture[]) => {
         setDepartures(departures);
         return null;
       },
@@ -48,7 +48,7 @@ function Station(props: StationProps) {
       <div ref={ref} className={className}>
         {(departures || [])
           // .filter(hideDepartures)
-          .map((departure: RealtimeDepartureExtended, index: number) => {
+          .map((departure: RealtimeDeparture, index: number) => {
             return (
               <Departure
                 key={departure.call_id}

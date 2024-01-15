@@ -1,5 +1,5 @@
 import {
-  RealtimeDepartureExtended,
+  RealtimeDeparture,
   RealtimeLine,
   RealtimeStopSequence,
   RealtimeTrajectory,
@@ -11,7 +11,7 @@ import getMainColorForVehicle from "../utils/getMainColorForVehicle";
 
 export type RouteIconProps = PreactDOMAttributes &
   JSX.HTMLAttributes<HTMLSpanElement> & {
-    departure?: RealtimeDepartureExtended;
+    departure?: RealtimeDeparture;
     line?: RealtimeLine;
     stopSequence?: RealtimeStopSequence;
     trajectory?: RealtimeTrajectory;
