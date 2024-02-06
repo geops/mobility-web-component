@@ -29,6 +29,7 @@ import Copyright from "../Copyright";
 import { I18nContext } from "../utils/hooks/useI18n";
 import StationsLayer from "../StationsLayer";
 import Station from "../Station";
+import MobilityEvent from "../utils/MobilityEvent";
 import i18n from "../utils/i18n";
 
 export type MobilityMapProps = {
@@ -142,6 +143,44 @@ function MobilityMap({
     realtimeLayer,
     station,
     stationsLayer,
+  ]);
+
+  useEffect(() => {
+    dispatchEvent(
+      new MobilityEvent("mwc:attribute", {
+        baselayer,
+        center,
+        geolocation,
+        mapsurl,
+        maxzoom,
+        minzoom,
+        mots,
+        notification,
+        notificationat,
+        notificationurl,
+        notificationbeforelayerid,
+        realtime,
+        realtimeurl,
+        tenant,
+        zoom,
+      }),
+    );
+  }, [
+    baselayer,
+    center,
+    geolocation,
+    mapsurl,
+    maxzoom,
+    minzoom,
+    mots,
+    notification,
+    notificationat,
+    notificationurl,
+    notificationbeforelayerid,
+    realtime,
+    realtimeurl,
+    tenant,
+    zoom,
   ]);
 
   useEffect(() => {

@@ -90,10 +90,15 @@
         // "message",
       ].forEach((type) => {
         window.addEventListener(type, (event) => {
-          const { evt } = event.data;
-          console.log("wc event: " + event.type, event.data);
+          console.log("wc event: " + type, event.data);
           window.top.postMessage(event.data, "*");
         });
+      });
+
+      // Send url search params to parent window 
+      window.addEventListener("mwc:attribute", (event) => {
+        console.log("mwc:attribute event: ", event.data);
+        window.top.postMessage(new URLSearchParams(event.data).toString(), "*");
       });
 
       // Listen window event
