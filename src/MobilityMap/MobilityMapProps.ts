@@ -16,3 +16,5 @@ export type MobilityMapProps = {
   tenant?: string;
   zoom?: string;
 };
+
+export default MobilityMapProps;

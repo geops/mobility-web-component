@@ -1,8 +1,6 @@
-import { MobilityMapProps } from "../MobilityMap/MobilityMapProps";
+import MobilityEventData from "../MobilityMap/MobilityMapProps";
 
 export type MobilityEventType = "mwc:attribute";
-
-export type MobilityEventData = MobilityMapProps;
 
 class MobilityEvent extends Event {
   data: MobilityEventData;

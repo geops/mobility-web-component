@@ -97,7 +97,7 @@
 
       // Send url search params to parent window 
       window.addEventListener("mwc:attribute", (event) => {
-        console.log("mwc:attribute event: ", event, new URLSearchParams(event.data).toString());
+        console.log("mwc:attribute event: ", event.data);
         window.top.postMessage(new URLSearchParams(event.data).toString(), "*");
       });
 
