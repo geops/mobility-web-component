@@ -29,26 +29,9 @@ import Copyright from "../Copyright";
 import { I18nContext } from "../utils/hooks/useI18n";
 import StationsLayer from "../StationsLayer";
 import Station from "../Station";
+import { MobilityMapProps } from "./MobilityMapProps";
+import MobilityEvent from "../utils/MobilityEvent";
 import i18n from "../utils/i18n";
-
-export type MobilityMapProps = {
-  apikey?: string;
-  baselayer?: string;
-  center?: string;
-  geolocation?: string;
-  maxzoom?: string;
-  minzoom?: string;
-  mapsurl?: string;
-  mots?: string;
-  notification?: string;
-  notificationat?: string;
-  notificationurl?: string;
-  notificationbeforelayerid?: string;
-  realtime?: string;
-  realtimeurl?: string;
-  tenant?: string;
-  zoom?: string;
-};
 
 function MobilityMap({
   apikey = null,
@@ -146,12 +129,25 @@ function MobilityMap({
 
   useEffect(() => {
     dispatchEvent(
-      new CustomEvent("update-params", {
-        detail: new URLSearchParams(window.location.search).toString(),
+      new MobilityEvent("mwc:attribute", {
+        baselayer,
+        center,
+        geolocation,
+        mapsurl,
+        maxzoom,
+        minzoom,
+        mots,
+        notification,
+        notificationat,
+        notificationurl,
+        notificationbeforelayerid,
+        realtime,
+        realtimeurl,
+        tenant,
+        zoom,
       }),
     );
   }, [
-    apikey,
     baselayer,
     center,
     geolocation,
@@ -163,6 +159,7 @@ function MobilityMap({
     notificationat,
     notificationurl,
     notificationbeforelayerid,
+    realtime,
     realtimeurl,
     tenant,
     zoom,
