@@ -88,11 +88,11 @@
         // "station",
         // "stop",
         // "message",
+        "update-params"
       ].forEach((type) => {
         window.addEventListener(type, (event) => {
-          const { evt } = event.data;
-          console.log("wc event: " + event.type, event.data);
-          window.top.postMessage(event.data, "*");
+          console.log("wc event: ", event.detail || event.data);
+          window.top.postMessage(event.detail || event.data, "*");
         });
       });
 

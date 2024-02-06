@@ -145,6 +145,30 @@ function MobilityMap({
   ]);
 
   useEffect(() => {
+    dispatchEvent(
+      new CustomEvent("update-params", {
+        detail: new URLSearchParams(window.location.search).toString(),
+      }),
+    );
+  }, [
+    apikey,
+    baselayer,
+    center,
+    geolocation,
+    mapsurl,
+    maxzoom,
+    minzoom,
+    mots,
+    notification,
+    notificationat,
+    notificationurl,
+    notificationbeforelayerid,
+    realtimeurl,
+    tenant,
+    zoom,
+  ]);
+
+  useEffect(() => {
     if (!trainId || !realtimeLayer?.api) {
       return () => {};
     }
