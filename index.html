@@ -65,7 +65,7 @@
       }
       params.delete("fullscreen");
 
-      if (params.get("x") & params.get("y")) {
+      if (params.get("x") && params.get("y")) {
         map.setAttribute("center", `${params.get("x")},${params.get("y")}`);
         params.delete("x");
         params.delete("y");
