@@ -69,7 +69,7 @@ const useUpdatePermalink = (map) => {
         urlParams.set("y", newY);
         setZ(newZ);
         urlParams.set("z", newZ);
-        window.history.pushState(null, null, `?${urlParams.toString()}`);
+        window.history.replaceState(null, null, `?${urlParams.toString()}`);
       });
     }
     return () => {
