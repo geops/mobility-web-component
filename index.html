@@ -65,13 +65,13 @@
       }
       params.delete("fullscreen");
 
-      if (params.get("x") && params.get("y")) {
+      if (params.get("permalink") !== "false" && params.get("x") && params.get("y")) {
         map.setAttribute("center", `${params.get("x")},${params.get("y")}`);
         params.delete("x");
         params.delete("y");
       }
 
-      if (params.get("z")) {
+      if (params.get("permalink") !== "false" && params.get("z")) {
         map.setAttribute("zoom", params.get("z"));
         params.delete("z");
       }

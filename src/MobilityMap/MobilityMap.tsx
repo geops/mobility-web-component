@@ -49,15 +49,16 @@ export type MobilityMapProps = {
   realtimeurl?: string;
   tenant?: string;
   zoom?: string;
+  permalink?: string;
 };
 
-const useUpdatePermalink = (map) => {
+const useUpdatePermalink = (map: OlMap, permalink: Boolean) => {
   const [x, setX] = useState<string>(null);
   const [y, setY] = useState<string>(null);
   const [z, setZ] = useState<string>(null);
   useEffect(() => {
     let listener;
-    if (map) {
+    if (map && permalink) {
       listener = map.on("moveend", () => {
         const urlParams = new URLSearchParams(window.location.search);
         const newX = map.getView().getCenter()[0].toFixed(2);
@@ -75,7 +76,7 @@ const useUpdatePermalink = (map) => {
     return () => {
       unByKey(listener);
     };
-  }, [map]);
+  }, [map, permalink]);
   return { x, y, z };
 };
 
@@ -96,6 +97,7 @@ function MobilityMap({
   realtimeurl = "wss://api.geops.io/tracker-ws/v1/ws",
   tenant = null,
   zoom = "13",
+  permalink = null,
 }: MobilityMapProps) {
   const [baseLayer, setBaseLayer] = useState<MaplibreLayer>();
   const [isFollowing, setIsFollowing] = useState(false);
@@ -107,7 +109,7 @@ function MobilityMap({
   const [map, setMap] = useState<OlMap>();
   const [stationId, setStationId] = useState<RealtimeStationId>();
   const [trainId, setTrainId] = useState<RealtimeTrainId>();
-  const { x, y, z } = useUpdatePermalink(map);
+  const { x, y, z } = useUpdatePermalink(map, permalink !== "false");
 
   const mapContextValue = useMemo(() => {
     return {
