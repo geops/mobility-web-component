@@ -51,6 +51,34 @@ export type MobilityMapProps = {
   zoom?: string;
 };
 
+const useUpdatePermalink = (map) => {
+  const [x, setX] = useState<string>(null);
+  const [y, setY] = useState<string>(null);
+  const [z, setZ] = useState<string>(null);
+  useEffect(() => {
+    let listener;
+    if (map) {
+      listener = map.on("moveend", () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const newX = map.getView().getCenter()[0].toFixed(2);
+        const newY = map.getView().getCenter()[1].toFixed(2);
+        const newZ = map.getView().getZoom().toFixed(1);
+        setX(newX);
+        urlParams.set("x", newX);
+        setY(newY);
+        urlParams.set("y", newY);
+        setZ(newZ);
+        urlParams.set("z", newZ);
+        window.history.pushState(null, null, `?${urlParams.toString()}`);
+      });
+    }
+    return () => {
+      unByKey(listener);
+    };
+  }, [map]);
+  return { x, y, z };
+};
+
 function MobilityMap({
   apikey = null,
   baselayer = "travic_v2",
@@ -79,6 +107,7 @@ function MobilityMap({
   const [map, setMap] = useState<OlMap>();
   const [stationId, setStationId] = useState<RealtimeStationId>();
   const [trainId, setTrainId] = useState<RealtimeTrainId>();
+  const { x, y, z } = useUpdatePermalink(map);
 
   const mapContextValue = useMemo(() => {
     return {
@@ -149,7 +178,7 @@ function MobilityMap({
     dispatchEvent(
       new MobilityEvent("mwc:attribute", {
         baselayer,
-        center,
+        center: `${x},${y}`,
         geolocation,
         mapsurl,
         maxzoom,
@@ -162,7 +191,7 @@ function MobilityMap({
         realtime,
         realtimeurl,
         tenant,
-        zoom,
+        zoom: z,
       }),
     );
   }, [
@@ -181,6 +210,9 @@ function MobilityMap({
     realtimeurl,
     tenant,
     zoom,
+    x,
+    y,
+    z,
   ]);
 
   useEffect(() => {
