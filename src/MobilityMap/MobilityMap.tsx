@@ -178,7 +178,7 @@ function MobilityMap({
     dispatchEvent(
       new MobilityEvent("mwc:attribute", {
         baselayer,
-        center: `${x},${y}`,
+        center: x && y ? `${x},${y}` : center,
         geolocation,
         mapsurl,
         maxzoom,
@@ -191,7 +191,7 @@ function MobilityMap({
         realtime,
         realtimeurl,
         tenant,
-        zoom: z,
+        zoom: z || zoom,
       }),
     );
   }, [
