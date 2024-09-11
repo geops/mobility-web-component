@@ -19,7 +19,7 @@ describe("getStopStatus", () => {
         // isBoarding,
         // isNextStop,
         // isCloseToNextStop,
-        // @ts-ignore
+        // @ts-expect-error bad type definition
       } = getStopStatus(stopSequence, 0);
       expect(isNotStop).toBe(true);
     });
@@ -35,16 +35,16 @@ describe("getStopStatus", () => {
       };
       let {
         isNotRealtime,
-        // @ts-ignore
+        // @ts-expect-error bad type definition
       } = getStopStatus(stopSequence, 0);
       expect(isNotRealtime).toBe(true);
-      // @ts-ignore
+      // @ts-expect-error bad type definition
       isNotRealtime = getStopStatus(stopSequence, 1).isNotRealtime;
       expect(isNotRealtime).toBe(true);
-      // @ts-ignore
+      // @ts-expect-error bad type definition
       isNotRealtime = getStopStatus(stopSequence, 2).isNotRealtime;
       expect(isNotRealtime).toBe(false);
-      // @ts-ignore
+      // @ts-expect-error bad type definition
       isNotRealtime = getStopStatus(stopSequence, 3).isNotRealtime;
       expect(isNotRealtime).toBe(true);
     });
@@ -68,7 +68,7 @@ describe("getStopStatus", () => {
         // isBoarding,
         isNextStop,
         // isCloseToNextStop,
-        // @ts-ignore
+        // @ts-expect-error bad type definition
       } = getStopStatus(stopSequence, 0);
       expect(progress).toBe(50);
       expect(isFirst).toBe(true);
@@ -93,7 +93,7 @@ describe("getStopStatus", () => {
         // isBoarding,
         isNextStop,
         // isCloseToNextStop,
-        // @ts-ignore
+        // @ts-expect-error bad type definition
       } = getStopStatus(stopSequence, 0);
       expect(progress).toBe(50);
       expect(isFirst).toBe(true);

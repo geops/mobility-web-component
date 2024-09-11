@@ -27,7 +27,6 @@ function ScrollableHandler(props: ScrollableHandlerProps) {
           setOverlayElt(node.parentElement);
         }
       }}
-      // eslint-disable-next-line react/jsx-props-no-spreading
       {...props}
       onPointerDown={(evt) => {
         elt.setPointerCapture(evt.pointerId);

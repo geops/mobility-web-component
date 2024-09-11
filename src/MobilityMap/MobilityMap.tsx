@@ -12,9 +12,9 @@ import {
   RealtimeTrainId,
 } from "mobility-toolbox-js/types";
 import { unByKey } from "ol/Observable";
-// @ts-ignore
+// @ts-expect-error bad type definition
 import tailwind from "../style.css";
-// @ts-ignore
+// @ts-expect-error bad type definition
 import style from "./index.css";
 import Map from "../Map";
 import NotificationLayer from "../NotificationLayer";
@@ -31,7 +31,7 @@ import StationsLayer from "../StationsLayer";
 import Station from "../Station";
 import i18n from "../utils/i18n";
 
-export type MobilityMapProps = {
+export interface MobilityMapProps {
   apikey?: string;
   baselayer?: string;
   center?: string;
@@ -48,7 +48,7 @@ export type MobilityMapProps = {
   realtimeurl?: string;
   tenant?: string;
   zoom?: string;
-};
+}
 
 function MobilityMap({
   apikey = null,
@@ -59,7 +59,7 @@ function MobilityMap({
   maxzoom = null,
   minzoom = null,
   mots = null,
-  notification = "false",
+  notification = "true",
   notificationat = null,
   notificationurl = null,
   notificationbeforelayerid = null,
@@ -146,7 +146,7 @@ function MobilityMap({
 
   useEffect(() => {
     if (!trainId || !realtimeLayer?.api) {
-      return () => {};
+      return;
     }
     realtimeLayer.selectedVehicleId = trainId;
     realtimeLayer.highlightTrajectory(trainId);
@@ -174,7 +174,7 @@ function MobilityMap({
 
   useEffect(() => {
     if (!stationId || !realtimeLayer?.api) {
-      return () => {};
+      return;
     }
     const subscribe = async () => {
       realtimeLayer?.api?.subscribe(`station ${stationId}`, ({ content }) => {
@@ -210,7 +210,6 @@ function MobilityMap({
         return feat.get("tralis_network")?.includes(tenant);
       });
 
-      // eslint-disable-next-line no-param-reassign
       evt.map.getTargetElement().style.cursor =
         realtimeFeature || stationFeature ? "pointer" : "default";
     },
@@ -265,7 +264,7 @@ function MobilityMap({
   }, [map, onPointerMove]);
 
   return (
-    // @ts-ignore
+    // @ts-expect-error bad type definition
     <I18nContext.Provider value={i18n}>
       <style>{tailwind}</style>
       <style>{style}</style>

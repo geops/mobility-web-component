@@ -21,7 +21,7 @@ function GeolocationButton({ ...props }: GeolocationButtonProps) {
   useEffect(() => {
     let keys = [];
     if (!map || !geolocation) {
-      return () => {};
+      return;
     }
     keys = [
       // First time we zoom and center on the position

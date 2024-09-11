@@ -3,7 +3,7 @@ import { useEffect, useRef } from "preact/hooks";
 import { memo } from "preact/compat";
 import { PreactDOMAttributes, JSX } from "preact";
 
-// @ts-ignore
+// @ts-expect-error bad type definition
 import olStyle from "ol/ol.css";
 import useMapContext from "../utils/hooks/useMapContext";
 

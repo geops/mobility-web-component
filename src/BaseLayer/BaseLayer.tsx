@@ -8,7 +8,7 @@ function BaseLayer(props: MapGlLayerOptions) {
   const { baselayer, apikey, map, mapsurl, setBaseLayer } = useMapContext();
   useEffect(() => {
     if (!map || !baselayer || !apikey) {
-      return () => {};
+      return;
     }
     const layer = new MaplibreLayer({
       apiKey: apikey,

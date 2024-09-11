@@ -56,7 +56,7 @@ function RealtimeLayer(props: RealtimeLayerProps) {
 
   useEffect(() => {
     if (!map || !layer) {
-      return () => {};
+      return;
     }
     if (map.getView()?.getCenter()) {
       layer.attachToMap(map);
@@ -95,7 +95,7 @@ function RealtimeLayer(props: RealtimeLayerProps) {
   // Deactive auto zooming when the user pans the map
   useEffect(() => {
     if (!map) {
-      return () => {};
+      return;
     }
     let onMovestartKey = null;
     onMovestartKey = map.getView().on("change:center", (evt) => {
@@ -119,7 +119,7 @@ function RealtimeLayer(props: RealtimeLayerProps) {
       layer.allowRenderWhenAnimating = !!isFollowing;
     }
     if (!isFollowing || !stopSequence || !map || !layer) {
-      return () => {};
+      return;
     }
 
     setIsTracking(false);

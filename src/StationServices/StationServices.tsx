@@ -44,16 +44,16 @@ function StationServices({
   const {
     hasAccessibility,
     hasAirport,
-    // @ts-ignore
+    // @ts-expect-error bad type definition
     hasBarAndRestaurants,
-    // @ts-ignore
+    // @ts-expect-error bad type definition
     hasBathroom,
-    // @ts-ignore
+    // @ts-expect-error bad type definition
     hasBikeStorage,
     hasElevator,
-    // @ts-ignore
+    // @ts-expect-error bad type definition
     hasPolice,
-    // @ts-ignore
+    // @ts-expect-error bad type definition
     hasWaitingAreas,
     // hasZOB,
     // isRailReplacement,

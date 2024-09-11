@@ -6,10 +6,10 @@ import useMapContext from "../utils/hooks/useMapContext";
 import { DepartureContext } from "../utils/hooks/useDeparture";
 import DebugDeparture from "../DebugDeparture";
 
-export type DepartureProps = {
+export interface DepartureProps {
   departure: RealtimeDeparture;
   index: number;
-};
+}
 
 function Departure({ departure, index, ...props }: DepartureProps) {
   const { setTrainId, setStationId } = useMapContext();

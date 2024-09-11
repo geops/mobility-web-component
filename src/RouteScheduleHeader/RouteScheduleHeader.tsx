@@ -16,7 +16,6 @@ function RouteScheduleHeader() {
         stopSequence={stopSequence}
         className="flex-grow flex flex-col"
       />
-      {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
       <button
         type="button"
         className={`flex flex-none bg-white shadow-lg rounded-full w-[38px] h-[38px] items-center justify-center p-1.5 ${

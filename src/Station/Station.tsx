@@ -18,11 +18,10 @@ function Station(props: StationProps) {
 
   useEffect(() => {
     if (!station || !realtimeLayer?.api) {
-      return () => {};
+      return;
     }
 
     const onMessage = debounceDeparturesMessages(
-      // eslint-disable-next-line @typescript-eslint/no-shadow
       (departures: RealtimeDeparture[]) => {
         setDepartures(departures);
         return null;
@@ -30,10 +29,12 @@ function Station(props: StationProps) {
       false,
       180,
     );
+    // @ts-expect-error bad type definition
     realtimeLayer.api.subscribeDepartures(station?.properties?.uid, onMessage);
 
     return () => {
       setDepartures(null);
+      // @ts-expect-error bad type definition
       realtimeLayer?.api?.unsubscribeDepartures(station?.properties.uid);
     };
   }, [station, realtimeLayer?.api]);

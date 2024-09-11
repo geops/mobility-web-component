@@ -9,7 +9,6 @@ export type RouteDestinationProps = PreactDOMAttributes &
 
 function RouteDestination({ stopSequence, ...props }: RouteDestinationProps) {
   const { destination } = stopSequence || {};
-  // eslint-disable-next-line react/jsx-no-useless-fragment
   return <span {...props}>{destination}</span>;
 }
 export default memo(RouteDestination);

@@ -7,7 +7,7 @@ const useZoom = () => {
   const [zoom, setZoom] = useState(map?.getView()?.getZoom());
   useEffect(() => {
     if (!map) {
-      return () => {};
+      return;
     }
     let timeout;
     const view = map.getView();

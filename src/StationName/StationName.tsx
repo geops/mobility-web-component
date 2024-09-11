@@ -9,7 +9,6 @@ export type StationNameProps = PreactDOMAttributes &
 
 function StationName({ station, children, ...props }: StationNameProps) {
   const { name } = station?.properties || {};
-  // eslint-disable-next-line react/jsx-no-useless-fragment
   return (
     <div {...props}>
       {name}

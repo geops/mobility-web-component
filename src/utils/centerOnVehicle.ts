@@ -6,14 +6,14 @@ import { RealtimeTrajectory } from "mobility-toolbox-js/types";
 const centerOnVehicle = async (
   vehicle: RealtimeTrajectory,
   map: Map,
-  targetZoom: number = 0,
+  targetZoom = 0,
 ) => {
   if (!vehicle) {
     return Promise.reject();
   }
 
   const {
-    // @ts-ignore
+    // @ts-expect-error bad type definition
     properties: { coordinate },
     geometry,
   } = vehicle;

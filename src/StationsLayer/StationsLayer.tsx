@@ -22,7 +22,7 @@ function StationsLayer(props: MapGlLayerOptions) {
 
   useEffect(() => {
     if (!map || !layer) {
-      return () => {};
+      return;
     }
 
     layer.attachToMap(map);

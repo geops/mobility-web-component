@@ -4,11 +4,10 @@ import {
   RealtimeTrajectory,
 } from "mobility-toolbox-js/types";
 
-// @ts-ignore
-const getTextForVehicle = (object: any = ""): string => {
+const getTextForVehicle = (object: unknown = ""): string => {
   const name =
     (object as RealtimeTrajectory)?.properties?.line?.name ||
-    // @ts-ignore
+    // @ts-expect-error bad type definition
     (object as RealtimeStopSequence)?.line?.name ||
     (object as RealtimeLine)?.name ||
     (object as string) ||

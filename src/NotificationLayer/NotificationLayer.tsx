@@ -7,9 +7,7 @@ import {
   getNotificationsWithStatus,
 } from "./notificationUtils";
 
-interface Graphs {
-  [key: string]: string;
-}
+type Graphs = Record<string, string>;
 
 interface Metadata {
   graphs?: Graphs;
@@ -38,7 +36,7 @@ const useNotifications = () => {
     }
     setStyle(baselayer);
     if (!baseLayer.loaded) {
-      // @ts-ignore
+      // @ts-expect-error bad type definition
       baseLayer.once("load", () =>
         setStyleMetadata(baseLayer.mbMap?.getStyle()?.metadata),
       );

@@ -34,9 +34,9 @@ function DebugDeparture(props: DebugDepartureProps) {
   const {
     train_number: trainNumber,
     time,
-    // @ts-ignore
+    // @ts-expect-error bad type definition
     arrivalTime,
-    // @ts-ignore
+    // @ts-expect-error bad type definition
     departureTime,
     fzo_estimated_time: fzoEstimatedTime,
     ris_aimed_time: risAimedTime,
@@ -44,16 +44,16 @@ function DebugDeparture(props: DebugDepartureProps) {
     at_station_ds100: atStationDs100,
     min_arrival_time: minArrivalTime,
     has_fzo: hasFzo,
-    // @ts-ignore
+    // @ts-expect-error bad type definition
     last_boarding_time: lastBoardingTime,
-    // @ts-ignore
+    // @ts-expect-error bad type definition
     stations_in_between: stationsInBetween,
     state,
-    // @ts-ignore
+    // @ts-expect-error bad type definition
     station,
   } = departure;
 
-  const risTime = new Date(risAimedTime) || "";
+  const risTime = new Date(risAimedTime);
   const urlDate = Number.isNaN(risTime)
     ? ""
     : [
@@ -81,7 +81,7 @@ function DebugDeparture(props: DebugDepartureProps) {
         <br />
         {`Has fzo: ${hasFzo};`}
         <br />
-        {/* @ts-ignore */}
+        {/* @ts-expect-error bad type definition */}
         {`Has realtime: ${departure.has_realtime_journey};`}
         <br />
         {`Time: ${formatDebugTime(time)};`}

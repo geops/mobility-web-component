@@ -3,7 +3,7 @@ import ScaleLineControl, {
 } from "ol/control/ScaleLine";
 import { PreactDOMAttributes, JSX } from "preact";
 import { useEffect, useMemo, useState } from "preact/hooks";
-// @ts-ignore
+// @ts-expect-error bad type definition
 import style from "./index.css";
 import useMapContext from "../utils/hooks/useMapContext";
 
@@ -22,7 +22,7 @@ function ScaleLine({ options, ...props }: ScaleLineProps) {
 
   useEffect(() => {
     if (!map || !control) {
-      return () => {};
+      return;
     }
     map.addControl(control);
 

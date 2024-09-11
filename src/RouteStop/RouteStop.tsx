@@ -31,7 +31,7 @@ function RouteStop({
 }: RouteScheduleStopProps) {
   const { stopSequence, map, realtimeLayer } = useMapContext();
   const {
-    // @ts-ignore
+    // @ts-expect-error bad type definition
     stopUID,
   } = stop;
   const [station, setStation] = useState<RealtimeStation>();
@@ -54,7 +54,7 @@ function RouteStop({
 
   useEffect(() => {
     if (!stopUID || !realtimeLayer?.api) {
-      return () => {};
+      return;
     }
     const subscribe = async () => {
       realtimeLayer?.api?.subscribe(`station ${stopUID}`, ({ content }) => {

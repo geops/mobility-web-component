@@ -8,10 +8,10 @@ import {
 import getBgColor from "./getBgColor";
 
 // This function returns the main color of a line using a line, trajectory, stopsequence or departure object.
-const getMainColorForVehicle = (object: any = null): string => {
+const getMainColorForVehicle = (object: unknown = null): string => {
   let color =
     (object as RealtimeTrajectory)?.properties?.line?.color ||
-    // @ts-ignore
+    // @ts-expect-error bad type definition
     (object as RealtimeStopSequence)?.line?.color ||
     (object as RealtimeLine)?.color;
 

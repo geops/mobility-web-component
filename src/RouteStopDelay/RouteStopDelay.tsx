@@ -9,11 +9,7 @@ export type RouteStopDelayProps = PreactDOMAttributes &
 
 function RouteStopDelay(props: RouteStopDelayProps) {
   const { status, stop } = useRouteStop();
-  const {
-    arrivalDelay,
-    // eslint-disable-next-line
-    departureDelay,
-  } = stop;
+  const { arrivalDelay, departureDelay } = stop;
 
   const hideDelay =
     status.isNotRealtime ||
