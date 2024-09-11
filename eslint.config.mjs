@@ -1,5 +1,4 @@
 import tseslint from "typescript-eslint";
-import cypress from "eslint-plugin-cypress";
 import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
 import eslint from "@eslint/js";
 
