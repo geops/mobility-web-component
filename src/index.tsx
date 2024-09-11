@@ -10,6 +10,7 @@ register(
     "baselayer",
     "center",
     "geolocation",
+    "mapsurl",
     "mots",
     "notification",
     "notificationat",
@@ -19,6 +20,7 @@ register(
     "realtimeUrl",
     "tenant",
     "zoom",
+    "permalink",
   ],
   { shadow: true },
 );

@@ -29,6 +29,7 @@ import Copyright from "../Copyright";
 import { I18nContext } from "../utils/hooks/useI18n";
 import StationsLayer from "../StationsLayer";
 import Station from "../Station";
+import MobilityEvent from "../utils/MobilityEvent";
 import i18n from "../utils/i18n";
 
 export interface MobilityMapProps {
@@ -48,7 +49,36 @@ export interface MobilityMapProps {
   realtimeurl?: string;
   tenant?: string;
   zoom?: string;
+  permalink?: string;
 }
+
+const useUpdatePermalink = (map: OlMap, permalink: boolean) => {
+  const [x, setX] = useState<string>(null);
+  const [y, setY] = useState<string>(null);
+  const [z, setZ] = useState<string>(null);
+  useEffect(() => {
+    let listener;
+    if (map && permalink) {
+      listener = map.on("moveend", () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const newX = map.getView().getCenter()[0].toFixed(2);
+        const newY = map.getView().getCenter()[1].toFixed(2);
+        const newZ = map.getView().getZoom().toFixed(1);
+        setX(newX);
+        urlParams.set("x", newX);
+        setY(newY);
+        urlParams.set("y", newY);
+        setZ(newZ);
+        urlParams.set("z", newZ);
+        window.history.replaceState(null, null, `?${urlParams.toString()}`);
+      });
+    }
+    return () => {
+      unByKey(listener);
+    };
+  }, [map, permalink]);
+  return { x, y, z };
+};
 
 function MobilityMap({
   apikey = null,
@@ -67,6 +97,7 @@ function MobilityMap({
   realtimeurl = "wss://api.geops.io/tracker-ws/v1/ws",
   tenant = null,
   zoom = "13",
+  permalink = "false",
 }: MobilityMapProps) {
   const [baseLayer, setBaseLayer] = useState<MaplibreLayer>();
   const [isFollowing, setIsFollowing] = useState(false);
@@ -78,6 +109,7 @@ function MobilityMap({
   const [map, setMap] = useState<OlMap>();
   const [stationId, setStationId] = useState<RealtimeStationId>();
   const [trainId, setTrainId] = useState<RealtimeTrainId>();
+  const { x, y, z } = useUpdatePermalink(map, permalink === "true");
 
   const mapContextValue = useMemo(() => {
     return {
@@ -142,6 +174,47 @@ function MobilityMap({
     realtimeLayer,
     station,
     stationsLayer,
+  ]);
+
+  useEffect(() => {
+    dispatchEvent(
+      new MobilityEvent("mwc:attribute", {
+        baselayer,
+        center: x && y ? `${x},${y}` : center,
+        geolocation,
+        mapsurl,
+        maxzoom,
+        minzoom,
+        mots,
+        notification,
+        notificationat,
+        notificationurl,
+        notificationbeforelayerid,
+        realtime,
+        realtimeurl,
+        tenant,
+        zoom: z || zoom,
+      }),
+    );
+  }, [
+    baselayer,
+    center,
+    geolocation,
+    mapsurl,
+    maxzoom,
+    minzoom,
+    mots,
+    notification,
+    notificationat,
+    notificationurl,
+    notificationbeforelayerid,
+    realtime,
+    realtimeurl,
+    tenant,
+    zoom,
+    x,
+    y,
+    z,
   ]);
 
   useEffect(() => {
@@ -264,7 +337,6 @@ function MobilityMap({
   }, [map, onPointerMove]);
 
   return (
-    // @ts-expect-error bad type definition
     <I18nContext.Provider value={i18n}>
       <style>{tailwind}</style>
       <style>{style}</style>
