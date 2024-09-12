@@ -6,8 +6,8 @@ import StationName from "../StationName";
 function StationHeader() {
   const { station } = useMapContext();
   return (
-    <div className="bg-slate-100 p-4 flex gap-x-4 items-center">
-      <div className="flex-grow flex flex-col">
+    <div className="flex items-center gap-x-4 bg-slate-100 p-4">
+      <div className="flex grow flex-col">
         <span className="font-bold">
           <StationName station={station} />
         </span>

@@ -30,7 +30,7 @@ function Departure({ departure, index, ...props }: DepartureProps) {
         {...props}
       >
         <div
-          className="pt-4 pb-4 gap-4"
+          className="gap-4 py-4"
           style={{
             overflow: "hidden",
             display: "flex",
@@ -40,7 +40,7 @@ function Departure({ departure, index, ...props }: DepartureProps) {
           <div className="pl-4">
             <RouteIcon departure={departure} />
           </div>
-          <div className="flex-grow text-left">
+          <div className="grow text-left">
             {[...new Set(departure.to)].join("/")}
           </div>
           <div className="pr-4">{getHoursAndMinutes(departure.time)}</div>

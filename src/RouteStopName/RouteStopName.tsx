@@ -13,7 +13,7 @@ function RouteStopName({ children, ...props }: RouteStopNameProps) {
     <div {...props}>
       {stationName}
       <br />
-      <RouteStopPlatform className="bg-slate-100 rounded-sm text-xs py-px px-0.5 group-hover:bg-slate-50" />
+      <RouteStopPlatform className="rounded-sm bg-slate-100 px-0.5 py-px text-xs group-hover:bg-slate-50" />
       {children}
     </div>
   );

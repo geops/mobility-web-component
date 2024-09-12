@@ -341,19 +341,19 @@ function MobilityMap({
       <style>{tailwind}</style>
       <style>{style}</style>
       <MapContext.Provider value={mapContextValue}>
-        <div className="@container/main w-full h-full relative border font-sans">
-          <div className="w-full h-full relative flex flex-col @lg/main:flex-row-reverse">
-            <Map className="flex-1 relative overflow-hidden ">
+        <div className="relative size-full border font-sans @container/main">
+          <div className="relative flex size-full flex-col @lg/main:flex-row-reverse">
+            <Map className="relative flex-1 overflow-hidden ">
               <BaseLayer />
               {realtime === "true" && <RealtimeLayer />}
               {tenant && <StationsLayer />}
               {notification === "true" && <NotificationLayer />}
-              <div className="z-20 absolute right-2 top-2 flex flex-col gap-2">
+              <div className="absolute right-2 top-2 z-20 flex flex-col gap-2">
                 <GeolocationButton />
               </div>
-              <div className="z-10 absolute left-2 right-2 text-[10px] bottom-2 flex justify-between items-end gap-2">
-                <ScaleLine className="bg-slate-50 bg-opacity-70" />
-                <Copyright className="bg-slate-50 bg-opacity-70" />
+              <div className="absolute inset-x-2 bottom-2 z-10 flex items-end justify-between gap-2 text-[10px]">
+                <ScaleLine className="bg-slate-50/70" />
+                <Copyright className="bg-slate-50/70" />
               </div>
             </Map>
 
@@ -363,10 +363,10 @@ function MobilityMap({
               }}
             >
               {realtime === "true" && trainId && (
-                <RouteSchedule className="z-5 relative overflow-x-hidden overflow-y-auto  scrollable-inner" />
+                <RouteSchedule className="relative overflow-y-auto  overflow-x-hidden" />
               )}
               {tenant && stationId && (
-                <Station className="z-5 relative overflow-x-hidden overflow-y-auto  scrollable-inner" />
+                <Station className="relative overflow-y-auto  overflow-x-hidden" />
               )}
             </Overlay>
           </div>

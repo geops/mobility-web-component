@@ -53,7 +53,7 @@ function GeolocationButton({ ...props }: GeolocationButtonProps) {
   return (
     <button
       type="button"
-      className="bg-white shadow-lg rounded-full p-1"
+      className="rounded-full bg-white p-1 shadow-lg"
       onClick={() => {
         setIsTracking(!isTracking);
       }}

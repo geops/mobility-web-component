@@ -10,15 +10,12 @@ function RouteScheduleHeader() {
   const backgroundColor = stroke || getBgColor(type || vehicleType);
   const color = textColor || "black";
   return (
-    <div className="bg-slate-100 p-4 flex gap-x-4 items-center">
+    <div className="flex items-center gap-x-4 bg-slate-100 p-4">
       <RouteIcon stopSequence={stopSequence} />
-      <RouteInfos
-        stopSequence={stopSequence}
-        className="flex-grow flex flex-col"
-      />
+      <RouteInfos stopSequence={stopSequence} className="flex grow flex-col" />
       <button
         type="button"
-        className={`flex flex-none bg-white shadow-lg rounded-full w-[38px] h-[38px] items-center justify-center p-1.5 ${
+        className={`flex size-[38px] flex-none items-center justify-center rounded-full bg-white p-1.5 shadow-lg ${
           isFollowing ? "animate-pulse" : ""
         }`}
         style={{

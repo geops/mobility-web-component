@@ -91,7 +91,7 @@ function RouteStop({
       <button
         type="button"
         // max-h-[58px] because the svg showing the progress is 58px height.
-        className={`w-full max-h-[58px] flex items-stretch hover:bg-slate-100 rounded scroll-mt-[50px] text-left ${colorScheme}`}
+        className={`flex max-h-[58px] w-full scroll-mt-[50px] items-stretch rounded text-left hover:bg-slate-100 ${colorScheme}`}
         data-station-passed={status.isPassed} // Use for auto scroll
         onClick={() => {
           if (stop.coordinate) {
@@ -105,10 +105,10 @@ function RouteStop({
       >
         {children || (
           <>
-            <RouteStopTime className="flex flex-col flex-shrink-0 justify-center w-10 text-xs ml-4" />
-            <RouteStopDelay className="flex flex-col flex-shrink-0 justify-center w-8 text-[0.6rem]" />
-            <RouteStopProgress className="flex flex-shrink-0 item-center w-8 relative" />
-            <RouteStopStation className="flex flex-col items-start justify-center text-sm flex-grow font-medium pr-2" />
+            <RouteStopTime className="ml-4 flex w-10 shrink-0 flex-col justify-center text-xs" />
+            <RouteStopDelay className="flex w-8 shrink-0 flex-col justify-center text-[0.6rem]" />
+            <RouteStopProgress className="relative flex w-8 shrink-0 items-center" />
+            <RouteStopStation className="flex grow flex-col items-start justify-center pr-2 text-sm font-medium" />
           </>
         )}
       </button>

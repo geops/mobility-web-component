@@ -49,7 +49,7 @@ function RouteIcon({
 
   return (
     <span
-      className="border-2 rounded-full h-[40px] min-w-[40px] px-1 flex items-center justify-center"
+      className="flex h-[40px] min-w-[40px] items-center justify-center rounded-full border-2 px-1"
       style={{
         font,
         backgroundColor,

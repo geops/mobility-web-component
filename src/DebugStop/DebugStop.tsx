@@ -14,7 +14,7 @@ function DebugStop(props: DebugStopProps) {
   }
 
   return (
-    <div className="p-4 text-xs text-left" {...props}>
+    <div className="p-4 text-left text-xs" {...props}>
       <div>
         State: <b>{stop.state}</b> (isPassed: {`${status.isPassed}`})
         (cancelled: {`${stop.cancelled}`})
@@ -33,7 +33,7 @@ function DebugStop(props: DebugStopProps) {
             return null;
           }
           return (
-            <div>
+            <div key={key}>
               {key}: {`${value}`}
             </div>
           );

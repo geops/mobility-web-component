@@ -1,15 +1,32 @@
-import tseslint from "typescript-eslint";
-import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
+import ts from "typescript-eslint";
+import { FlatCompat } from "@eslint/eslintrc";
+import prettier from "eslint-plugin-prettier/recommended";
 import eslint from "@eslint/js";
+import react from "eslint-plugin-react";
+import jsxA11y from "eslint-plugin-jsx-a11y";
+import tailwind from "eslint-plugin-tailwindcss";
+
+// FlatCompat convert old definition to the new ones
+const compat = new FlatCompat();
 
 export default [
   {
     ignores: ["build/*"],
   },
-  ...tseslint.config(
+  ...ts.config(
     eslint.configs.recommended,
-    ...tseslint.configs.strict,
-    ...tseslint.configs.stylistic,
-    eslintPluginPrettierRecommended,
+    ...ts.configs.strict,
+    ...ts.configs.stylistic,
+    react.configs.flat.recommended,
+    react.configs.flat["jsx-runtime"], // Avoid having the React-in-jsx-scope rule activated
+    jsxA11y.flatConfigs.recommended,
+    ...compat.config({
+      extends: ["plugin:react-hooks/recommended"],
+      rules: {
+        "react-hooks/exhaustive-deps": "error",
+      },
+    }),
+    prettier,
+    ...tailwind.configs["flat/recommended"],
   ),
 ];

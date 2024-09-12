@@ -70,7 +70,7 @@ function DebugDeparture(props: DebugDepartureProps) {
   ].join("");
 
   return (
-    <div className="p-4 text-xs text-left border-b" {...props}>
+    <div className="border-b p-4 text-left text-xs" {...props}>
       Zugnummer:
       <a href={risLink} target="_blank" rel="noopener noreferrer">
         {trainNumber}
