@@ -9,7 +9,9 @@ export type DebugDepartureProps = JSX.HTMLAttributes<HTMLDivElement> &
 /**
  * Polyfill for String.prototype.padStart()
  */
-const pad = (n: number) => `0${n}`.slice(-2);
+const pad = (n: number) => {
+  return `0${n}`.slice(-2);
+};
 
 const formatDebugTime = (time, excludeSeconds = false) => {
   const d = new Date(time);
@@ -21,7 +23,9 @@ const formatDebugTime = (time, excludeSeconds = false) => {
         pad(d.getMinutes()),
         excludeSeconds ? null : pad(d.getSeconds()),
       ]
-        .filter((t) => t)
+        .filter((t) => {
+          return t;
+        })
         .join(":");
 };
 

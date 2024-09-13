@@ -38,7 +38,9 @@ function Map({ children, ...props }: RealtimeMapProps) {
     if (!map) {
       return;
     }
-    const [x, y] = center.split(",").map((c) => parseFloat(c));
+    const [x, y] = center.split(",").map((c) => {
+      return parseFloat(c);
+    });
     if (x && y) {
       map.getView().setCenter([x, y]);
     }

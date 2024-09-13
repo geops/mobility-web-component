@@ -40,7 +40,11 @@ function RealtimeLayer(props: RealtimeLayerProps) {
     }
     return new MtbRealtimeLayer({
       apiKey: apikey,
-      getMotsByZoom: mots ? () => mots.split(",") as RealtimeMot[] : undefined,
+      getMotsByZoom: mots
+        ? () => {
+            return mots.split(",") as RealtimeMot[];
+          }
+        : undefined,
       tenant,
       url: realtimeurl,
       ...props,
@@ -131,7 +135,9 @@ function RealtimeLayer(props: RealtimeLayerProps) {
       if (!vehicle) {
         vehicle = await layer.api
           .getTrajectory(stopSequence.id, layer.mode)
-          .then((message) => message.content);
+          .then((message) => {
+            return message.content;
+          });
       }
 
       const success = await centerOnVehicle(vehicle, map, TRACKING_ZOOM);

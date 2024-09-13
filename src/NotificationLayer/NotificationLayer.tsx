@@ -38,9 +38,9 @@ const useNotifications = () => {
     setStyle(baselayer);
     if (!baseLayer.loaded) {
       // @ts-expect-error bad type definition
-      baseLayer.once("load", () =>
-        setStyleMetadata(baseLayer.mbMap?.getStyle()?.metadata),
-      );
+      baseLayer.once("load", () => {
+        return setStyleMetadata(baseLayer.mbMap?.getStyle()?.metadata);
+      });
     } else {
       setStyleMetadata(baseLayer.mbMap?.getStyle()?.metadata);
     }
@@ -57,7 +57,9 @@ const useNotifications = () => {
   const graphsString = useMemo(() => {
     return [
       ...new Set(
-        Object.keys(graphMapping || []).map((key) => graphMapping[key]),
+        Object.keys(graphMapping || []).map((key) => {
+          return graphMapping[key];
+        }),
       ),
     ].join(",");
   }, [graphMapping]);
@@ -104,9 +106,9 @@ const useNotifications = () => {
       const parsedPreviewNotification = parsePreviewNotification(
         previewNotification?.[style],
       );
-      const index = newNotifications.findIndex(
-        (n) => n.properties.id === previewNotification[style].id,
-      );
+      const index = newNotifications.findIndex((n) => {
+        return n.properties.id === previewNotification[style].id;
+      });
 
       if (index > -1) {
         newNotifications[index] = parsedPreviewNotification;

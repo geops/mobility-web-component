@@ -12,7 +12,11 @@ export type OverlayProps = {
 function Overlay({ children, ScrollableHandlerProps = {} }: OverlayProps) {
   let hasChildren = !!children;
   if (Array.isArray(children)) {
-    hasChildren = children?.length && (children || []).find((c) => !!c);
+    hasChildren =
+      children?.length &&
+      (children || []).find((c) => {
+        return !!c;
+      });
   }
 
   if (!hasChildren) {
