@@ -23,15 +23,15 @@ function RealtimeLayer(props: RealtimeLayerProps) {
     apikey,
     isFollowing,
     isTracking,
-    stopSequence,
     map,
     mots,
     realtimeurl,
-    trainId,
-    tenant,
     setIsFollowing,
     setIsTracking,
     setRealtimeLayer,
+    stopSequence,
+    tenant,
+    trainId,
   } = useMapContext();
 
   const layer = useMemo(() => {
@@ -40,16 +40,16 @@ function RealtimeLayer(props: RealtimeLayerProps) {
     }
     return new MtbRealtimeLayer({
       apiKey: apikey,
+      getMotsByZoom: mots ? () => mots.split(",") as RealtimeMot[] : undefined,
       tenant,
       url: realtimeurl,
-      getMotsByZoom: mots ? () => mots.split(",") as RealtimeMot[] : undefined,
       ...props,
       styleOptions: {
         getDelayColor: getDelayColorForVehicle,
-        getDelayText: getDelayTextForVehicle,
         getDelayFont: getDelayFontForVehicle,
-        getTextFont: getTextFontForVehicle,
+        getDelayText: getDelayTextForVehicle,
         getText: getTextForVehicle,
+        getTextFont: getTextFontForVehicle,
         ...(props?.styleOptions || {}),
       },
     });

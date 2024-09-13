@@ -27,14 +27,7 @@ export default [
       },
     }),
     jsxA11y.flatConfigs.recommended,
-    {
-      plugins: {
-        perfectionist,
-      },
-      rules: {
-        "perfectionist/sort-imports": "error",
-      },
-    },
+    perfectionist.configs["recommended-alphabetical"],
     prettier,
     ...tailwind.configs["flat/recommended"],
   ),

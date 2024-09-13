@@ -1,4 +1,4 @@
-import type { PreactDOMAttributes, JSX } from "preact";
+import type { JSX, PreactDOMAttributes } from "preact";
 
 import { debounceDeparturesMessages } from "mobility-toolbox-js/ol";
 import { RealtimeDeparture } from "mobility-toolbox-js/types";
@@ -9,11 +9,11 @@ import Departure from "../Departure";
 import StationHeader from "../StationHeader";
 import useMapContext from "../utils/hooks/useMapContext";
 
-export type StationProps = PreactDOMAttributes &
-  JSX.HTMLAttributes<HTMLDivElement>;
+export type StationProps = JSX.HTMLAttributes<HTMLDivElement> &
+  PreactDOMAttributes;
 
 function Station(props: StationProps) {
-  const { station, realtimeLayer } = useMapContext();
+  const { realtimeLayer, station } = useMapContext();
   const [departures, setDepartures] = useState<RealtimeDeparture[]>();
   const ref = useRef();
   const { className } = props;
@@ -48,15 +48,15 @@ function Station(props: StationProps) {
   return (
     <>
       <StationHeader />
-      <div ref={ref} className={className}>
+      <div className={className} ref={ref}>
         {(departures || [])
           // .filter(hideDepartures)
           .map((departure: RealtimeDeparture, index: number) => {
             return (
               <Departure
-                key={departure.call_id}
                 departure={departure}
                 index={index}
+                key={departure.call_id}
               />
             );
           })}

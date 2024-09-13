@@ -5,10 +5,10 @@ import useMapContext from "../utils/hooks/useMapContext";
 const defaultRenderLink = (text: string, url: string) => {
   return url ? (
     <a
-      href={url}
-      target="_blank"
-      rel="noreferrer"
       className="whitespace-normal underline"
+      href={url}
+      rel="noreferrer"
+      target="_blank"
     >
       {text}
     </a>

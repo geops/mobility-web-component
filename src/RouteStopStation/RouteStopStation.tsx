@@ -1,14 +1,14 @@
-import { PreactDOMAttributes, JSX } from "preact";
+import { JSX, PreactDOMAttributes } from "preact";
 import { memo } from "preact/compat";
 
 import RouteStopName from "../RouteStopName";
 import RouteStopServices from "../RouteStopServices";
 import useRouteStop from "../utils/hooks/useRouteStop";
 
-export type RouteStopStationProps = PreactDOMAttributes &
-  JSX.HTMLAttributes<HTMLDivElement> & {
-    classNameCancelled?: string;
-  };
+export type RouteStopStationProps = {
+  classNameCancelled?: string;
+} & JSX.HTMLAttributes<HTMLDivElement> &
+  PreactDOMAttributes;
 
 function RouteStopStation({
   children,

@@ -6,7 +6,7 @@ import { useEffect } from "preact/hooks";
 import useMapContext from "../utils/hooks/useMapContext";
 
 function BaseLayer(props: MapGlLayerOptions) {
-  const { baselayer, apikey, map, mapsurl, setBaseLayer } = useMapContext();
+  const { apikey, baselayer, map, mapsurl, setBaseLayer } = useMapContext();
   useEffect(() => {
     if (!map || !baselayer || !apikey) {
       return;

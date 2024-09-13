@@ -4,19 +4,19 @@ import {
   RealtimeStopSequence,
   RealtimeTrajectory,
 } from "mobility-toolbox-js/types";
-import { PreactDOMAttributes, JSX } from "preact";
+import { JSX, PreactDOMAttributes } from "preact";
 
 import getMainColorForVehicle from "../utils/getMainColorForVehicle";
 import getTextFontForVehicle from "../utils/getTextFontForVehicle";
 import getTextForVehicle from "../utils/getTextForVehicle";
 
-export type RouteIconProps = PreactDOMAttributes &
-  JSX.HTMLAttributes<HTMLSpanElement> & {
-    departure?: RealtimeDeparture;
-    line?: RealtimeLine;
-    stopSequence?: RealtimeStopSequence;
-    trajectory?: RealtimeTrajectory;
-  };
+export type RouteIconProps = {
+  departure?: RealtimeDeparture;
+  line?: RealtimeLine;
+  stopSequence?: RealtimeStopSequence;
+  trajectory?: RealtimeTrajectory;
+} & JSX.HTMLAttributes<HTMLSpanElement> &
+  PreactDOMAttributes;
 const fontSizesByNbLetters = [16, 16, 16, 14, 12];
 
 function RouteIcon({
@@ -52,10 +52,10 @@ function RouteIcon({
     <span
       className="flex h-[40px] min-w-[40px] items-center justify-center rounded-full border-2 px-1"
       style={{
-        font,
         backgroundColor,
-        color,
         borderColor,
+        color,
+        font,
       }}
       {...props}
     >

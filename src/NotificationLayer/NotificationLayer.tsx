@@ -4,8 +4,8 @@ import useMapContext from "../utils/hooks/useMapContext";
 import useZoom from "../utils/hooks/useZoom";
 import {
   addNotificationsLayers,
-  parsePreviewNotification,
   getNotificationsWithStatus,
+  parsePreviewNotification,
 } from "./notificationUtils";
 
 type Graphs = Record<string, string>;
@@ -17,10 +17,10 @@ interface Metadata {
 const useNotifications = () => {
   const {
     baselayer,
-    notificationurl,
-    notificationbeforelayerid,
-    notificationat,
     baseLayer,
+    notificationat,
+    notificationbeforelayerid,
+    notificationurl,
   } = useMapContext();
   const zoom = useZoom();
   const [notifications, setNotifications] = useState([]);

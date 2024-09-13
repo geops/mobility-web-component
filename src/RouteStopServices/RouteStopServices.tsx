@@ -1,12 +1,12 @@
-import type { PreactDOMAttributes, JSX } from "preact";
+import type { JSX, PreactDOMAttributes } from "preact";
 
 import { memo } from "preact/compat";
 
 import StationServices from "../StationServices";
 import useRouteStop from "../utils/hooks/useRouteStop";
 
-export type RouteStopNameProps = PreactDOMAttributes &
-  JSX.HTMLAttributes<HTMLDivElement>;
+export type RouteStopNameProps = JSX.HTMLAttributes<HTMLDivElement> &
+  PreactDOMAttributes;
 
 function RouteStopServices(props: RouteStopNameProps) {
   const { station } = useRouteStop();
@@ -15,8 +15,8 @@ function RouteStopServices(props: RouteStopNameProps) {
   }
   return (
     <StationServices
-      station={station}
       accessibility
+      station={station}
       {...props}
       iconProps={{ width: 20 }}
     />

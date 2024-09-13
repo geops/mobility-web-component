@@ -1,4 +1,4 @@
-import type { PreactDOMAttributes, JSX } from "preact";
+import type { JSX, PreactDOMAttributes } from "preact";
 
 import { memo } from "preact/compat";
 
@@ -6,8 +6,8 @@ import useI18n from "../utils/hooks/useI18n";
 import useMapContext from "../utils/hooks/useMapContext";
 import useRouteStop from "../utils/hooks/useRouteStop";
 
-export type RouteStopPlatformProps = PreactDOMAttributes &
-  JSX.HTMLAttributes<HTMLSpanElement>;
+export type RouteStopPlatformProps = JSX.HTMLAttributes<HTMLSpanElement> &
+  PreactDOMAttributes;
 
 function RouteStopPlatform({ ...props }: RouteStopPlatformProps) {
   const { stop } = useRouteStop();

@@ -1,6 +1,6 @@
 import type { RealtimeStation, RealtimeStop } from "mobility-toolbox-js/types";
 
-import { PreactDOMAttributes, JSX } from "preact";
+import { JSX, PreactDOMAttributes } from "preact";
 import { memo } from "preact/compat";
 import { useEffect, useMemo, useState } from "preact/hooks";
 
@@ -13,25 +13,25 @@ import getStopStatus from "../utils/getStopStatus";
 import useMapContext from "../utils/hooks/useMapContext";
 import { RouteStopContext } from "../utils/hooks/useRouteStop";
 
-export type RouteScheduleStopProps = PreactDOMAttributes &
-  JSX.HTMLAttributes<HTMLButtonElement> & {
-    stop?: RealtimeStop & {
-      platform?: string;
-    };
-    index?: number;
-    invertColor?: boolean;
-    classNameGreyOut?: string;
-  };
+export type RouteScheduleStopProps = {
+  classNameGreyOut?: string;
+  index?: number;
+  invertColor?: boolean;
+  stop?: {
+    platform?: string;
+  } & RealtimeStop;
+} & JSX.HTMLAttributes<HTMLButtonElement> &
+  PreactDOMAttributes;
 
 function RouteStop({
+  children,
   classNameGreyOut = "text-gray-600",
-  stop,
   index,
   invertColor = false,
-  children,
+  stop,
   ...props
 }: RouteScheduleStopProps) {
-  const { stopSequence, map, realtimeLayer } = useMapContext();
+  const { map, realtimeLayer, stopSequence } = useMapContext();
   const {
     // @ts-expect-error bad type definition
     stopUID,
@@ -76,7 +76,7 @@ function RouteStop({
   }, [stopUID, realtimeLayer?.api]);
 
   const routeStopState = useMemo(() => {
-    return { stop, status, index, invertColor, station };
+    return { index, invertColor, station, status, stop };
   }, [stop, status, index, invertColor, station]);
 
   let colorScheme = status.isPassed || status.isLeft ? classNameGreyOut : "";
@@ -91,18 +91,18 @@ function RouteStop({
   return (
     <RouteStopContext.Provider value={routeStopState}>
       <button
-        type="button"
         // max-h-[58px] because the svg showing the progress is 58px height.
         className={`flex max-h-[58px] w-full scroll-mt-[50px] items-stretch rounded text-left hover:bg-slate-100 ${colorScheme}`}
         data-station-passed={status.isPassed} // Use for auto scroll
         onClick={() => {
           if (stop.coordinate) {
             map.getView().animate({
-              zoom: map.getView().getZoom(),
               center: [stop.coordinate[0], stop.coordinate[1]],
+              zoom: map.getView().getZoom(),
             });
           }
         }}
+        type="button"
         {...props}
       >
         {children || (

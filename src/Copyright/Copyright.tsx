@@ -7,10 +7,10 @@ import useMapContext from "../utils/hooks/useMapContext";
 // @ts-expect-error bad type definition
 import style from "./index.css";
 
-export type CopyrightProps = PreactDOMAttributes &
-  JSX.HTMLAttributes<HTMLDivElement> & {
-    options?: ControlCommonOptions;
-  };
+export type CopyrightProps = {
+  options?: ControlCommonOptions;
+} & JSX.HTMLAttributes<HTMLDivElement> &
+  PreactDOMAttributes;
 
 function Copyright({ options, ...props }: CopyrightProps) {
   const { map } = useMapContext();
@@ -24,8 +24,8 @@ function Copyright({ options, ...props }: CopyrightProps) {
     div.className = "flex flex-wrap-reverse justify-end";
 
     return new CopyrightControl({
-      target,
       element: div,
+      target,
       ...options,
     });
   }, [options, target]);

@@ -1,30 +1,30 @@
 import { Map as OlMap } from "ol";
 // @ts-expect-error bad type definition
 import olStyle from "ol/ol.css";
-import { PreactDOMAttributes, JSX } from "preact";
+import { JSX, PreactDOMAttributes } from "preact";
 import { memo } from "preact/compat";
 import { useEffect, useRef } from "preact/hooks";
 
 import useMapContext from "../utils/hooks/useMapContext";
 
-export type RealtimeMapProps = PreactDOMAttributes &
-  JSX.HTMLAttributes<HTMLDivElement>;
+export type RealtimeMapProps = JSX.HTMLAttributes<HTMLDivElement> &
+  PreactDOMAttributes;
 
 function Map({ children, ...props }: RealtimeMapProps) {
   const mapRef = useRef();
   const {
     center = "831634,5933959",
-    zoom = "13",
-    minzoom,
-    maxzoom,
     map,
+    maxzoom,
+    minzoom,
     setMap,
+    zoom = "13",
   } = useMapContext();
 
   useEffect(() => {
     let newMap: OlMap;
     if (mapRef.current) {
-      newMap = new OlMap({ target: mapRef.current, controls: [] });
+      newMap = new OlMap({ controls: [], target: mapRef.current });
       setMap(newMap);
     }
 

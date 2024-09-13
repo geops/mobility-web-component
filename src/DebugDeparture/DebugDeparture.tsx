@@ -1,10 +1,10 @@
-import { PreactDOMAttributes, JSX } from "preact";
+import { JSX, PreactDOMAttributes } from "preact";
 
 import useDebug from "../utils/hooks/useDebug";
 import useDeparture from "../utils/hooks/useDeparture";
 
-export type DebugDepartureProps = PreactDOMAttributes &
-  JSX.HTMLAttributes<HTMLDivElement>;
+export type DebugDepartureProps = JSX.HTMLAttributes<HTMLDivElement> &
+  PreactDOMAttributes;
 
 /**
  * Polyfill for String.prototype.padStart()
@@ -33,25 +33,25 @@ function DebugDeparture(props: DebugDepartureProps) {
     return null;
   }
   const {
-    train_number: trainNumber,
-    time,
     // @ts-expect-error bad type definition
     arrivalTime,
+    at_station_ds100: atStationDs100,
     // @ts-expect-error bad type definition
     departureTime,
     fzo_estimated_time: fzoEstimatedTime,
-    ris_aimed_time: risAimedTime,
-    ris_estimated_time: risEstimatedTime,
-    at_station_ds100: atStationDs100,
-    min_arrival_time: minArrivalTime,
     has_fzo: hasFzo,
     // @ts-expect-error bad type definition
     last_boarding_time: lastBoardingTime,
-    // @ts-expect-error bad type definition
-    stations_in_between: stationsInBetween,
+    min_arrival_time: minArrivalTime,
+    ris_aimed_time: risAimedTime,
+    ris_estimated_time: risEstimatedTime,
     state,
     // @ts-expect-error bad type definition
     station,
+    // @ts-expect-error bad type definition
+    stations_in_between: stationsInBetween,
+    time,
+    train_number: trainNumber,
   } = departure;
 
   const risTime = new Date(risAimedTime);
@@ -73,7 +73,7 @@ function DebugDeparture(props: DebugDepartureProps) {
   return (
     <div className="border-b p-4 text-left text-xs" {...props}>
       Zugnummer:
-      <a href={risLink} target="_blank" rel="noopener noreferrer">
+      <a href={risLink} rel="noopener noreferrer" target="_blank">
         {trainNumber}
       </a>
       <div>

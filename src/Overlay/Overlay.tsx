@@ -1,13 +1,13 @@
-import { PreactDOMAttributes, JSX } from "preact";
+import { JSX, PreactDOMAttributes } from "preact";
 
 import type { ScrollableHandlerProps } from "../ScrollableHandler";
 
 import ScrollableHandler from "../ScrollableHandler";
 
-export type OverlayProps = PreactDOMAttributes &
-  JSX.HTMLAttributes<HTMLDivElement> & {
-    ScrollableHandlerProps?: ScrollableHandlerProps;
-  };
+export type OverlayProps = {
+  ScrollableHandlerProps?: ScrollableHandlerProps;
+} & JSX.HTMLAttributes<HTMLDivElement> &
+  PreactDOMAttributes;
 
 function Overlay({ children, ScrollableHandlerProps = {} }: OverlayProps) {
   let hasChildren = !!children;
@@ -37,9 +37,9 @@ function Overlay({ children, ScrollableHandlerProps = {} }: OverlayProps) {
             <div
               className="m-2 mr-[-60px] bg-gray-300"
               style={{
-                width: 32,
-                height: 4,
                 borderRadius: 2,
+                height: 4,
+                width: 32,
               }}
             />
           </ScrollableHandler>

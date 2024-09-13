@@ -1,14 +1,14 @@
 import { RealtimeStopSequence } from "mobility-toolbox-js/types";
-import { PreactDOMAttributes, JSX } from "preact";
+import { JSX, PreactDOMAttributes } from "preact";
 import { memo } from "preact/compat";
 
-export type RouteIdentifierProps = PreactDOMAttributes &
-  JSX.HTMLAttributes<HTMLSpanElement> & {
-    stopSequence?: RealtimeStopSequence;
-  };
+export type RouteIdentifierProps = {
+  stopSequence?: RealtimeStopSequence;
+} & JSX.HTMLAttributes<HTMLSpanElement> &
+  PreactDOMAttributes;
 
 function RouteIdentifier({ stopSequence, ...props }: RouteIdentifierProps) {
-  const { routeIdentifier, longName } = stopSequence || {};
+  const { longName, routeIdentifier } = stopSequence || {};
   let text = longName;
   if (routeIdentifier) {
     // first part of the id, without leading zeros.

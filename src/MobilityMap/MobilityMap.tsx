@@ -38,19 +38,19 @@ export interface MobilityMapProps {
   baselayer?: string;
   center?: string;
   geolocation?: string;
+  mapsurl?: string;
   maxzoom?: string;
   minzoom?: string;
-  mapsurl?: string;
   mots?: string;
   notification?: string;
   notificationat?: string;
-  notificationurl?: string;
   notificationbeforelayerid?: string;
+  notificationurl?: string;
+  permalink?: string;
   realtime?: string;
   realtimeurl?: string;
   tenant?: string;
   zoom?: string;
-  permalink?: string;
 }
 
 const useUpdatePermalink = (map: OlMap, permalink: boolean) => {
@@ -92,13 +92,13 @@ function MobilityMap({
   mots = null,
   notification = "true",
   notificationat = null,
-  notificationurl = null,
   notificationbeforelayerid = null,
+  notificationurl = null,
+  permalink = "false",
   realtime = "true",
   realtimeurl = "wss://api.geops.io/tracker-ws/v1/ws",
   tenant = null,
   zoom = "13",
-  permalink = "false",
 }: MobilityMapProps) {
   const [baseLayer, setBaseLayer] = useState<MaplibreLayer>();
   const [isFollowing, setIsFollowing] = useState(false);
@@ -114,42 +114,41 @@ function MobilityMap({
 
   const mapContextValue = useMemo(() => {
     return {
-      // MobilityMapProps
+      // MobilityMapProps && MapContextProps
       apikey,
       baselayer,
+      baseLayer,
       center,
       geolocation,
+      isFollowing,
+      isTracking,
+      map,
       mapsurl,
       maxzoom,
       minzoom,
       mots,
       notification,
       notificationat,
-      notificationurl,
       notificationbeforelayerid,
-      realtimeurl,
-      tenant,
-      zoom,
 
-      // MapContextProps
-      baseLayer,
-      isFollowing,
-      isTracking,
-      stopSequence,
-      map,
+      notificationurl,
       realtimeLayer,
-      station,
-      stationsLayer,
+      realtimeurl,
       setBaseLayer,
       setIsFollowing,
       setIsTracking,
-      setStopSequence,
       setMap,
       setRealtimeLayer,
       setStation,
       setStationId,
-      setTrainId,
       setStationsLayer,
+      setStopSequence,
+      setTrainId,
+      station,
+      stationsLayer,
+      stopSequence,
+      tenant,
+      zoom,
     };
   }, [
     apikey,
@@ -189,8 +188,8 @@ function MobilityMap({
         mots,
         notification,
         notificationat,
-        notificationurl,
         notificationbeforelayerid,
+        notificationurl,
         realtime,
         realtimeurl,
         tenant,

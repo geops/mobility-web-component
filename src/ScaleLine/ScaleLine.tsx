@@ -1,15 +1,17 @@
 import ScaleLineControl, {
   Options as ScaleLineOptions,
 } from "ol/control/ScaleLine";
-import { PreactDOMAttributes, JSX } from "preact";
+import { JSX, PreactDOMAttributes } from "preact";
 import { useEffect, useMemo, useState } from "preact/hooks";
 
 import useMapContext from "../utils/hooks/useMapContext";
 // @ts-expect-error bad type definition
 import style from "./index.css";
 
-type ScaleLineProps = PreactDOMAttributes &
-  JSX.HTMLAttributes<HTMLDivElement> & { options?: ScaleLineOptions };
+type ScaleLineProps = {
+  options?: ScaleLineOptions;
+} & JSX.HTMLAttributes<HTMLDivElement> &
+  PreactDOMAttributes;
 
 function ScaleLine({ options, ...props }: ScaleLineProps) {
   const { map } = useMapContext();

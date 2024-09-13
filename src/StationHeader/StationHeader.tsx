@@ -13,15 +13,15 @@ function StationHeader() {
           <StationName station={station} />
         </span>
         <StationServices
-          station={station}
-          className="flex gap-2"
           accessibility
           airport
           barAndRestaurants
           bathroom
           bikeStorage
+          className="flex gap-2"
           elevator
           police
+          station={station}
           waitingAreas
         />
       </div>

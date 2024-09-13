@@ -1,4 +1,4 @@
-import type { PreactDOMAttributes, JSX } from "preact";
+import type { JSX, PreactDOMAttributes } from "preact";
 
 import { RealtimeStation } from "mobility-toolbox-js/types";
 import { memo } from "preact/compat";
@@ -12,31 +12,31 @@ import Police from "../icons/Police";
 import WaitingAreas from "../icons/WaitingAreas";
 import WheelChair from "../icons/WheelChair";
 
-export type StationServicesProps = PreactDOMAttributes &
-  JSX.HTMLAttributes<HTMLDivElement> & {
-    station: RealtimeStation;
-    accessibility?: boolean;
-    airport?: boolean;
-    barAndRestaurants?: boolean;
-    bathroom?: boolean;
-    bikeStorage?: boolean;
-    elevator?: boolean;
-    police?: boolean;
-    waitingAreas?: boolean;
-    iconProps?: PreactDOMAttributes & JSX.HTMLAttributes<SVGElement>;
-  };
+export type StationServicesProps = {
+  accessibility?: boolean;
+  airport?: boolean;
+  barAndRestaurants?: boolean;
+  bathroom?: boolean;
+  bikeStorage?: boolean;
+  elevator?: boolean;
+  iconProps?: JSX.HTMLAttributes<SVGElement> & PreactDOMAttributes;
+  police?: boolean;
+  station: RealtimeStation;
+  waitingAreas?: boolean;
+} & JSX.HTMLAttributes<HTMLDivElement> &
+  PreactDOMAttributes;
 
 function StationServices({
-  station,
   accessibility = false,
   airport = false,
   barAndRestaurants = false,
   bathroom = false,
   bikeStorage = false,
   elevator = false,
-  police = false,
-  waitingAreas = false,
   iconProps = {},
+  police = false,
+  station,
+  waitingAreas = false,
   ...props
 }: StationServicesProps) {
   if (!station) {

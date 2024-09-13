@@ -14,7 +14,7 @@ export interface DepartureProps {
 }
 
 function Departure({ departure, index, ...props }: DepartureProps) {
-  const { setTrainId, setStationId } = useMapContext();
+  const { setStationId, setTrainId } = useMapContext();
 
   const departureState = useMemo(() => {
     return { departure, index };
@@ -23,20 +23,20 @@ function Departure({ departure, index, ...props }: DepartureProps) {
   return (
     <DepartureContext.Provider value={departureState}>
       <button
-        type="button"
         className="w-full border-b"
         onClick={() => {
           setTrainId(departure.train_id);
           setStationId();
         }}
+        type="button"
         {...props}
       >
         <div
           className="gap-4 py-4"
           style={{
-            overflow: "hidden",
-            display: "flex",
             alignItems: "center",
+            display: "flex",
+            overflow: "hidden",
           }}
         >
           <div className="pl-4">

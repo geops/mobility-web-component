@@ -1,11 +1,11 @@
-import { PreactDOMAttributes, JSX } from "preact";
+import { JSX, PreactDOMAttributes } from "preact";
 import { memo } from "preact/compat";
 
 import getHoursAndMinutes from "../utils/getHoursAndMinutes";
 import useRouteStop from "../utils/hooks/useRouteStop";
 
-export type RouteStopTimeProps = PreactDOMAttributes &
-  JSX.HTMLAttributes<HTMLDivElement>;
+export type RouteStopTimeProps = JSX.HTMLAttributes<HTMLDivElement> &
+  PreactDOMAttributes;
 
 function RouteStopTime(props: RouteStopTimeProps) {
   const { status, stop } = useRouteStop();

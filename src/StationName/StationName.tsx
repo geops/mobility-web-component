@@ -1,14 +1,14 @@
-import type { PreactDOMAttributes, JSX } from "preact";
+import type { JSX, PreactDOMAttributes } from "preact";
 
 import { RealtimeStation } from "mobility-toolbox-js/types";
 import { memo } from "preact/compat";
 
-export type StationNameProps = PreactDOMAttributes &
-  JSX.HTMLAttributes<HTMLDivElement> & {
-    station: RealtimeStation;
-  };
+export type StationNameProps = {
+  station: RealtimeStation;
+} & JSX.HTMLAttributes<HTMLDivElement> &
+  PreactDOMAttributes;
 
-function StationName({ station, children, ...props }: StationNameProps) {
+function StationName({ children, station, ...props }: StationNameProps) {
   const { name } = station?.properties || {};
   return (
     <div {...props}>

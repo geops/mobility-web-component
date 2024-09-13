@@ -1,19 +1,19 @@
-import { PreactDOMAttributes, JSX } from "preact";
+import { JSX, PreactDOMAttributes } from "preact";
 import { memo } from "preact/compat";
 
 import getMainColorForVehicle from "../utils/getMainColorForVehicle";
 import useMapContext from "../utils/hooks/useMapContext";
 import useRouteStop from "../utils/hooks/useRouteStop";
 
-export type RouteStopProgressProps = PreactDOMAttributes &
-  JSX.HTMLAttributes<HTMLDivElement> & {
-    svgProps?: PreactDOMAttributes & JSX.HTMLAttributes<SVGElement>;
-  };
+export type RouteStopProgressProps = {
+  svgProps?: JSX.HTMLAttributes<SVGElement> & PreactDOMAttributes;
+} & JSX.HTMLAttributes<HTMLDivElement> &
+  PreactDOMAttributes;
 
 function RouteStopProgress({ svgProps, ...props }: RouteStopProgressProps) {
   const { stopSequence } = useMapContext();
-  const { status, invertColor } = useRouteStop();
-  const { isFirst, isLast, isPassed, isLeft, progress, isBoarding } = status;
+  const { invertColor, status } = useRouteStop();
+  const { isBoarding, isFirst, isLast, isLeft, isPassed, progress } = status;
   const y1 = isFirst ? "50%" : "-100%";
   const y2 = isLast ? "50%" : "100%";
   const yDone = `${progress}%`;
@@ -37,11 +37,11 @@ function RouteStopProgress({ svgProps, ...props }: RouteStopProgressProps) {
   return (
     <div {...props}>
       <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="16"
-        height="100%"
         fill="none"
+        height="100%"
         stroke={colorScheme}
+        width="16"
+        xmlns="http://www.w3.org/2000/svg"
         {...svgProps}
       >
         {/* Circle used to display a black border */}
@@ -49,48 +49,48 @@ function RouteStopProgress({ svgProps, ...props }: RouteStopProgressProps) {
 
         {/* Black line used to display a black border */}
         <line
-          x1="50%"
-          y1={y1}
-          x2="50%"
-          y2={y2}
           stroke="black"
           strokeWidth="6"
+          x1="50%"
+          x2="50%"
+          y1={y1}
+          y2={y2}
         />
 
         {/* Colored line (grey or color) */}
         <line
-          x1="50%"
-          y1={y1}
-          x2="50%"
-          y2={yDone}
-          strokeWidth="4"
           stroke={progressDoneColor}
+          strokeWidth="4"
+          x1="50%"
+          x2="50%"
+          y1={y1}
+          y2={yDone}
         />
         <line
-          x1="50%"
-          y1={`${progress - 2}%`} // we use -2 because sometimes it could be a small gap between the previousline and this one
-          x2="50%"
-          y2={y2}
           strokeWidth="4"
+          x1="50%"
+          x2="50%"
+          y1={`${progress - 2}%`} // we use -2 because sometimes it could be a small gap between the previousline and this one
+          y2={y2}
         />
 
         {/* Colored circle (grey or color) */}
         <circle cx="50%" cy="50%" r="5" strokeWidth="4" />
         <circle
+          className={isBoarding ? "animate-pulse" : ""}
           cx="50%"
           cy="50%"
           r="5"
-          strokeWidth="4"
           stroke={circleColor}
-          className={isBoarding ? "animate-pulse" : ""}
+          strokeWidth="4"
         />
 
         {/* white circle with black border */}
         <circle
           cx="50%"
           cy="50%"
-          r="3"
           fill="white"
+          r="3"
           stroke="black"
           strokeWidth="1"
         />
