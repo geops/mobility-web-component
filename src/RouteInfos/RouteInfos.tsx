@@ -1,8 +1,9 @@
-import { memo } from "preact/compat";
-import { PreactDOMAttributes, JSX } from "preact";
 import { RealtimeStopSequence } from "mobility-toolbox-js/types";
-import RouteIdentifier from "../RouteIdentifier";
+import { PreactDOMAttributes, JSX } from "preact";
+import { memo } from "preact/compat";
+
 import RouteDestination from "../RouteDestination";
+import RouteIdentifier from "../RouteIdentifier";
 
 export type RouteInfosProps = PreactDOMAttributes &
   JSX.HTMLAttributes<HTMLDivElement> & {

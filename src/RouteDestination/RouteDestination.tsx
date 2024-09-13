@@ -1,5 +1,6 @@
-import { PreactDOMAttributes, JSX } from "preact";
 import type { RealtimeStopSequence } from "mobility-toolbox-js/types";
+
+import { PreactDOMAttributes, JSX } from "preact";
 import { memo } from "preact/compat";
 
 export type RouteDestinationProps = PreactDOMAttributes &

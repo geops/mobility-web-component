@@ -1,14 +1,16 @@
-import { useEffect, useMemo, useState } from "preact/hooks";
 import type { RealtimeStation, RealtimeStop } from "mobility-toolbox-js/types";
-import { memo } from "preact/compat";
+
 import { PreactDOMAttributes, JSX } from "preact";
-import useMapContext from "../utils/hooks/useMapContext";
+import { memo } from "preact/compat";
+import { useEffect, useMemo, useState } from "preact/hooks";
+
 import DebugStop from "../DebugStop/DebugStop";
-import getStopStatus from "../utils/getStopStatus";
-import RouteStopProgress from "../RouteStopProgress";
-import RouteStopTime from "../RouteStopTime";
 import RouteStopDelay from "../RouteStopDelay";
+import RouteStopProgress from "../RouteStopProgress";
 import RouteStopStation from "../RouteStopStation";
+import RouteStopTime from "../RouteStopTime";
+import getStopStatus from "../utils/getStopStatus";
+import useMapContext from "../utils/hooks/useMapContext";
 import { RouteStopContext } from "../utils/hooks/useRouteStop";
 
 export type RouteScheduleStopProps = PreactDOMAttributes &

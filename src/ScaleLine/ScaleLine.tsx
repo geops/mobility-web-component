@@ -3,9 +3,10 @@ import ScaleLineControl, {
 } from "ol/control/ScaleLine";
 import { PreactDOMAttributes, JSX } from "preact";
 import { useEffect, useMemo, useState } from "preact/hooks";
+
+import useMapContext from "../utils/hooks/useMapContext";
 // @ts-expect-error bad type definition
 import style from "./index.css";
-import useMapContext from "../utils/hooks/useMapContext";
 
 type ScaleLineProps = PreactDOMAttributes &
   JSX.HTMLAttributes<HTMLDivElement> & { options?: ScaleLineOptions };

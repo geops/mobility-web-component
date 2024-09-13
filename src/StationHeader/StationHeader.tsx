@@ -1,7 +1,8 @@
 import { memo } from "preact/compat";
-import useMapContext from "../utils/hooks/useMapContext";
-import StationServices from "../StationServices";
+
 import StationName from "../StationName";
+import StationServices from "../StationServices";
+import useMapContext from "../utils/hooks/useMapContext";
 
 function StationHeader() {
   const { station } = useMapContext();

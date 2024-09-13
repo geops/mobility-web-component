@@ -5,9 +5,10 @@ import {
   RealtimeTrajectory,
 } from "mobility-toolbox-js/types";
 import { PreactDOMAttributes, JSX } from "preact";
+
+import getMainColorForVehicle from "../utils/getMainColorForVehicle";
 import getTextFontForVehicle from "../utils/getTextFontForVehicle";
 import getTextForVehicle from "../utils/getTextForVehicle";
-import getMainColorForVehicle from "../utils/getMainColorForVehicle";
 
 export type RouteIconProps = PreactDOMAttributes &
   JSX.HTMLAttributes<HTMLSpanElement> & {

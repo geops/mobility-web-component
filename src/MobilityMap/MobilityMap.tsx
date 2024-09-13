@@ -1,6 +1,3 @@
-import { memo } from "preact/compat";
-import { useCallback, useEffect, useMemo, useState } from "preact/hooks";
-import { MapBrowserEvent, Map as OlMap } from "ol";
 import {
   MapboxStyleLayer,
   MaplibreLayer,
@@ -11,26 +8,30 @@ import {
   RealtimeStationId,
   RealtimeTrainId,
 } from "mobility-toolbox-js/types";
+import { MapBrowserEvent, Map as OlMap } from "ol";
 import { unByKey } from "ol/Observable";
-// @ts-expect-error bad type definition
-import tailwind from "../style.css";
-// @ts-expect-error bad type definition
-import style from "./index.css";
+import { memo } from "preact/compat";
+import { useCallback, useEffect, useMemo, useState } from "preact/hooks";
+
+import BaseLayer from "../BaseLayer";
+import Copyright from "../Copyright";
+import GeolocationButton from "../GeolocationButton";
 import Map from "../Map";
 import NotificationLayer from "../NotificationLayer";
-import RouteSchedule from "../RouteSchedule";
-import GeolocationButton from "../GeolocationButton";
-import BaseLayer from "../BaseLayer";
-import { MapContext } from "../utils/hooks/useMapContext";
-import RealtimeLayer from "../RealtimeLayer";
 import Overlay from "../Overlay";
+import RealtimeLayer from "../RealtimeLayer";
+import RouteSchedule from "../RouteSchedule";
 import ScaleLine from "../ScaleLine";
-import Copyright from "../Copyright";
-import { I18nContext } from "../utils/hooks/useI18n";
-import StationsLayer from "../StationsLayer";
 import Station from "../Station";
-import MobilityEvent from "../utils/MobilityEvent";
+import StationsLayer from "../StationsLayer";
+// @ts-expect-error bad type definition
+import tailwind from "../style.css";
+import { I18nContext } from "../utils/hooks/useI18n";
+import { MapContext } from "../utils/hooks/useMapContext";
 import i18n from "../utils/i18n";
+import MobilityEvent from "../utils/MobilityEvent";
+// @ts-expect-error bad type definition
+import style from "./index.css";
 
 export interface MobilityMapProps {
   apikey?: string;

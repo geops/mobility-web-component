@@ -1,5 +1,6 @@
-import { memo } from "preact/compat";
 import { PreactDOMAttributes, JSX } from "preact";
+import { memo } from "preact/compat";
+
 import getDelayColor from "../utils/getDelayColor";
 import getDelayString from "../utils/getDelayString";
 import useRouteStop from "../utils/hooks/useRouteStop";

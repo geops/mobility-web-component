@@ -1,5 +1,6 @@
-import { memo } from "preact/compat";
 import { PreactDOMAttributes, JSX } from "preact";
+import { memo } from "preact/compat";
+
 import RouteStopName from "../RouteStopName";
 import RouteStopServices from "../RouteStopServices";
 import useRouteStop from "../utils/hooks/useRouteStop";

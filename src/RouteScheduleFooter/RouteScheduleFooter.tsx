@@ -1,4 +1,5 @@
 import { memo } from "preact/compat";
+
 import useMapContext from "../utils/hooks/useMapContext";
 
 const defaultRenderLink = (text: string, url: string) => {

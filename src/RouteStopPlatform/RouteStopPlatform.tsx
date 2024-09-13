@@ -1,7 +1,9 @@
-import { memo } from "preact/compat";
 import type { PreactDOMAttributes, JSX } from "preact";
-import useMapContext from "../utils/hooks/useMapContext";
+
+import { memo } from "preact/compat";
+
 import useI18n from "../utils/hooks/useI18n";
+import useMapContext from "../utils/hooks/useMapContext";
 import useRouteStop from "../utils/hooks/useRouteStop";
 
 export type RouteStopPlatformProps = PreactDOMAttributes &

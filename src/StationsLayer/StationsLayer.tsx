@@ -1,7 +1,8 @@
 import { MapboxStyleLayer } from "mobility-toolbox-js/ol";
-import { useEffect, useMemo } from "preact/hooks";
-import { memo } from "preact/compat";
 import { MapGlLayerOptions } from "mobility-toolbox-js/ol/layers/MapGlLayer";
+import { memo } from "preact/compat";
+import { useEffect, useMemo } from "preact/hooks";
+
 import useMapContext from "../utils/hooks/useMapContext";
 
 function StationsLayer(props: MapGlLayerOptions) {

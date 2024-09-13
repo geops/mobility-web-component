@@ -1,9 +1,9 @@
+import { ControlCommonOptions } from "mobility-toolbox-js/common/controls/ControlCommon";
+import { CopyrightControl } from "mobility-toolbox-js/ol";
 import { JSX, PreactDOMAttributes } from "preact";
 import { useEffect, useMemo, useState } from "preact/hooks";
-import { CopyrightControl } from "mobility-toolbox-js/ol";
-import { ControlCommonOptions } from "mobility-toolbox-js/common/controls/ControlCommon";
-import useMapContext from "../utils/hooks/useMapContext";
 
+import useMapContext from "../utils/hooks/useMapContext";
 // @ts-expect-error bad type definition
 import style from "./index.css";
 

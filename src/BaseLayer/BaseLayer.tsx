@@ -1,7 +1,8 @@
 import { MaplibreLayer } from "mobility-toolbox-js/ol";
-import { useEffect } from "preact/hooks";
-import { memo } from "preact/compat";
 import { MapGlLayerOptions } from "mobility-toolbox-js/ol/layers/MapGlLayer";
+import { memo } from "preact/compat";
+import { useEffect } from "preact/hooks";
+
 import useMapContext from "../utils/hooks/useMapContext";
 
 function BaseLayer(props: MapGlLayerOptions) {

@@ -1,10 +1,12 @@
 import type { RealtimeDeparture } from "mobility-toolbox-js/types";
+
 import { memo, useMemo } from "preact/compat";
+
+import DebugDeparture from "../DebugDeparture";
 import RouteIcon from "../RouteIcon";
 import getHoursAndMinutes from "../utils/getHoursAndMinutes";
-import useMapContext from "../utils/hooks/useMapContext";
 import { DepartureContext } from "../utils/hooks/useDeparture";
-import DebugDeparture from "../DebugDeparture";
+import useMapContext from "../utils/hooks/useMapContext";
 
 export interface DepartureProps {
   departure: RealtimeDeparture;

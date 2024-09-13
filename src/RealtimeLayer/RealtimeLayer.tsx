@@ -1,17 +1,18 @@
-import { RealtimeLayer as MtbRealtimeLayer } from "mobility-toolbox-js/ol";
-import { useEffect, useMemo } from "preact/hooks";
+import type { OlRealtimeLayerOptions } from "mobility-toolbox-js/ol/layers/RealtimeLayer";
 import type { RealtimeMot, RealtimeTrainId } from "mobility-toolbox-js/types";
+
+import { RealtimeLayer as MtbRealtimeLayer } from "mobility-toolbox-js/ol";
 import { unByKey } from "ol/Observable";
 import { memo } from "preact/compat";
+import { useEffect, useMemo } from "preact/hooks";
 
-import type { OlRealtimeLayerOptions } from "mobility-toolbox-js/ol/layers/RealtimeLayer";
-import useMapContext from "../utils/hooks/useMapContext";
 import centerOnVehicle from "../utils/centerOnVehicle";
-import getDelayTextForVehicle from "../utils/getDelayTextForVehicle";
 import getDelayColorForVehicle from "../utils/getDelayColorForVehicle";
 import getDelayFontForVehicle from "../utils/getDelayFontForVehicle";
+import getDelayTextForVehicle from "../utils/getDelayTextForVehicle";
 import getTextFontForVehicle from "../utils/getTextFontForVehicle";
 import getTextForVehicle from "../utils/getTextForVehicle";
+import useMapContext from "../utils/hooks/useMapContext";
 
 const TRACKING_ZOOM = 16;
 

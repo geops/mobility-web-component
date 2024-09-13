@@ -1,8 +1,9 @@
 import { memo } from "preact/compat";
-import useMapContext from "../utils/hooks/useMapContext";
-import getBgColor from "../utils/getBgColor";
+
 import RouteIcon from "../RouteIcon";
 import RouteInfos from "../RouteInfos";
+import getBgColor from "../utils/getBgColor";
+import useMapContext from "../utils/hooks/useMapContext";
 
 function RouteScheduleHeader() {
   const { stopSequence, isFollowing, setIsFollowing } = useMapContext();

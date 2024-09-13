@@ -1,5 +1,6 @@
-import { memo } from "preact/compat";
 import { PreactDOMAttributes, JSX } from "preact";
+import { memo } from "preact/compat";
+
 import getHoursAndMinutes from "../utils/getHoursAndMinutes";
 import useRouteStop from "../utils/hooks/useRouteStop";
 

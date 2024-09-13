@@ -1,6 +1,7 @@
-import { memo } from "preact/compat";
 import type { PreactDOMAttributes, JSX } from "preact";
+
 import { RealtimeStation } from "mobility-toolbox-js/types";
+import { memo } from "preact/compat";
 
 export type StationNameProps = PreactDOMAttributes &
   JSX.HTMLAttributes<HTMLDivElement> & {

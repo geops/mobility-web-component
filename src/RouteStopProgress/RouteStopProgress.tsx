@@ -1,8 +1,9 @@
-import { memo } from "preact/compat";
 import { PreactDOMAttributes, JSX } from "preact";
-import useRouteStop from "../utils/hooks/useRouteStop";
+import { memo } from "preact/compat";
+
 import getMainColorForVehicle from "../utils/getMainColorForVehicle";
 import useMapContext from "../utils/hooks/useMapContext";
+import useRouteStop from "../utils/hooks/useRouteStop";
 
 export type RouteStopProgressProps = PreactDOMAttributes &
   JSX.HTMLAttributes<HTMLDivElement> & {
