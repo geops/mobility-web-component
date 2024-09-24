@@ -19,7 +19,7 @@
     <link rel="stylesheet" type="text/css" href="./output.css" />
     <style>
       ::-webkit-scrollbar {
-        width: 3px;
+        width: 10px;
       }
       a {
         text-decoration: underline;
@@ -27,86 +27,106 @@
     </style>
   </head>
   <body class="p-8">
-    <div id="doc" style="display: none" class="mx-auto max-w-3xl space-y-4">
-      <h1 class="text-3xl font-bold">Mobility Web Component</h1>
-      <p>This is a demo of the Mobility Web Component.</p>
+    <div
+      id="doc"
+      style="display: none"
+      class="mx-auto h-96 max-w-3xl space-y-4"
+    >
+      <h1 class="text-3xl font-bold">Mobility Search Web Component</h1>
+      <p>This is a demo of the geOps Mobility Search Web Component.</p>
+      <p>This web component launches a search on the <b>geOps Stops API</b></p>
+      <p>Every parameters of the <b>geOps Stops API</b>:</p>
+      <ul class="pl-8">
+        <li class="list-disc">can be passed as a string attribute of the web component.</li>
+        <li class="list-disc">
+          can be passed as an URL parameter of this page, they will be
+          automatically apply to the web component.
+        </li>
+      </ul>
+      <p>
+        The list of parameters of the <b>geOps Stops API</b> can be found
+        <a href="https://developer.geops.io/apis/stops#parameters">here</a>.
+      </p>
+
       <h2 class="text-xl font-bold">Usage example</h2>
       <pre class="bg-slate-800 text-slate-200 p-4 rounded">
 &lt;script
   type=&quot;module&quot;
   src=&quot;https://www.unpkg.com/@geops/mobility-web-component&quot;&gt;
 &lt;/script&gt;
-&lt;geops-mobility
+&lt;geops-mobility-search
   apikey=&quot;YOUR_GEOPS_API_KEY&quot;
-  baselayer=&quot;travic_v2&quot;
-  center=&quot;831634,5933959&quot;
-  mots=&quot;rail&quot;
-  zoom=&quot;13&quot;
+  limit=&quot;5&quot;
+  mots=&quot;rail,bus&quot;
   style=&quot;display: block;width: 800px;height: 800px;&quot;&gt;
 &lt;/geops-mobility&gt;</pre
       >
 
       <!-- Default -->
-      <geops-mobility
-        class="max-w-3xl h-96 block resize overflow-auto"
-      ></geops-mobility>
+      <geops-mobility-search
+        class="max-w-3xl block border"
+        limit="5"
+        mots="rail,bus"
+      ></geops-mobility-search>
 
-      <br />
-      <br />
-      <h1 class="text-xl font-bold">More mobility web components</h1>
-      <p>
-        <a href="search.html" target="_blank"
-          >&gt;&gt; Usage example Search Component</a
-        >
-      </p>
+      <pre id="textarea" class="w-full h-96 p-2"></pre>
     </div>
+    <script type="text/javascript">
+      let params = new URLSearchParams(window.location.search);
+      const searchElement = document.querySelector("geops-mobility-search");
+      const eventLog = document.querySelector("#textarea");
+      // Listen to element event
+      ["searchstationselect"].forEach((type) => {
+        searchElement.addEventListener(type, (event) => {
+          const data = event.detail || event.data || {};
+          if (!data) {
+            eventLog.innerText = "";
+          } else {
+            console.log("wc event: " + event.type, data);
+            eventLog.innerText =
+              "Event " +
+              event.type +
+              " received :\n " +
+              JSON.stringify(data, undefined, " ");
+            window.top.postMessage(data, "*");
+          }
+        });
+      });
 
-    <br />
-    <br />
+      // Listen window event
+      window.addEventListener("message", (event) => {
+        const { type } = event.data || {};
+        console.log("message event: " + type, event.data);
+      });
+    </script>
+
     <script type="text/javascript">
       params = new URLSearchParams(window.location.search);
 
-      // There should be only on map on the html page at this point
+      // There should be only one webcompoennt on the html page at this point
       const doc = document.querySelectorAll("#doc");
-      const map = document.querySelector("geops-mobility");
-      const search = document.querySelector("geops-mobility-search");
+      const wc = document.querySelector("geops-mobility-search");
       if (params.get("fullscreen") === "true") {
-        map.parentElement.removeChild(map);
-        map.className = "absolute w-full h-full inset-0";
-        document.body.appendChild(map);
+        wc.parentElement.removeChild(wc);
+        wc.className = "absolute w-full h-full inset-0";
+        document.body.appendChild(wc);
         document.body.style = "padding:0;";
       } else {
         doc.forEach((d) => (d.style.display = "block"));
       }
       params.delete("fullscreen");
 
-      if (
-        params.get("permalink") !== "false" &&
-        params.get("x") &&
-        params.get("y")
-      ) {
-        map.setAttribute("center", `${params.get("x")},${params.get("y")}`);
-        params.delete("x");
-        params.delete("y");
-      }
-
-      if (params.get("permalink") !== "false" && params.get("z")) {
-        map.setAttribute("zoom", params.get("z"));
-        params.delete("z");
-      }
-
       // Apply all url parameters as attribute of the web component
       params.forEach((value, key) => {
-        map.setAttribute(key, value);
+        wc.setAttribute(key, value);
       });
 
-      if (!map.getAttribute("apikey")) {
+      if (!wc.getAttribute("apikey")) {
         fetch("https://backend.developer.geops.io/publickey")
           .then((response) => response.json())
           .then((data) => {
             if (data && data.success) {
-              map.setAttribute("apikey", data.key);
-              search.setAttribute("apikey", data.key);
+              wc.setAttribute("apikey", data.key);
             }
           });
       }
@@ -135,7 +155,7 @@
 
       // Listen window event
       window.addEventListener("message", (event) => {
-        const { type } = event.data;
+        const { type } = event;
         console.log("message event: " + type, event.data);
       });
     </script>
