@@ -10,6 +10,7 @@ import {
 } from "mobility-toolbox-js/types";
 import { MapBrowserEvent, Map as OlMap } from "ol";
 import { unByKey } from "ol/Observable";
+import { fromLonLat } from "ol/proj";
 import { memo } from "preact/compat";
 import { useCallback, useEffect, useMemo, useState } from "preact/hooks";
 
@@ -24,6 +25,7 @@ import RouteSchedule from "../RouteSchedule";
 import ScaleLine from "../ScaleLine";
 import Station from "../Station";
 import StationsLayer from "../StationsLayer";
+import StopsSearch, { StationFeature } from "../StopsSearch/StopsSearch";
 // @ts-expect-error bad type definition
 import tailwind from "../style.css";
 import { I18nContext } from "../utils/hooks/useI18n";
@@ -49,6 +51,8 @@ export interface MobilityMapProps {
   permalink?: string;
   realtime?: string;
   realtimeurl?: string;
+  search?: string;
+  stopsurl?: string;
   tenant?: string;
   zoom?: string;
 }
@@ -97,6 +101,8 @@ function MobilityMap({
   permalink = "false",
   realtime = "true",
   realtimeurl = "wss://api.geops.io/tracker-ws/v1/ws",
+  search = "true",
+  stopsurl = "https://api.geops.io/stops/v1/",
   tenant = null,
   zoom = "13",
 }: MobilityMapProps) {
@@ -322,6 +328,21 @@ function MobilityMap({
     [realtimeLayer, stationsLayer, stationId, trainId, tenant],
   );
 
+  const onStopsSearchSelect = useCallback(
+    async (selectedStation: StationFeature) => {
+      console.log(selectedStation);
+      const center = selectedStation?.geometry?.coordinates;
+      if (center) {
+        map.getView().animate({
+          center: fromLonLat(center),
+          duration: 500,
+          zoom: 16,
+        });
+      }
+    },
+    [map],
+  );
+
   useEffect(() => {
     const key = map?.on("singleclick", onSingleClick);
     return () => {
@@ -355,6 +376,21 @@ function MobilityMap({
                 <ScaleLine className="bg-slate-50/70" />
                 <Copyright className="bg-slate-50/70" />
               </div>
+              {search === "true" && (
+                <div className="absolute left-2 right-12 top-2 z-10 min-w-64 max-w-96">
+                  <StopsSearch
+                    apikey={apikey}
+                    // countrycode={countrycode}
+                    onselect={onStopsSearchSelect}
+                    url={stopsurl}
+                  />
+                  {/* {showNoStationInfo && (
+                    <p className="border-trenord-green relative mt-2 w-full border-2 border-solid bg-white p-3">
+                      {t("no_station_info_available")}
+                    </p>
+                  )} */}
+                </div>
+              )}
             </Map>
 
             <Overlay
