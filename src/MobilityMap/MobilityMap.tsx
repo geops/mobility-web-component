@@ -364,23 +364,22 @@ function MobilityMap({
       <MapContext.Provider value={mapContextValue}>
         <div className="relative size-full border font-sans @container/main">
           <div className="relative flex size-full flex-col @lg/main:flex-row-reverse">
-            <Map className="relative flex-1 overflow-hidden ">
+            <Map className="relative flex-1 overflow-visible ">
               <BaseLayer />
               {realtime === "true" && <RealtimeLayer />}
               {tenant && <StationsLayer />}
               {notification === "true" && <NotificationLayer />}
-              <div className="absolute right-2 top-2 z-20 flex flex-col gap-2">
-                <GeolocationButton />
-              </div>
               <div className="absolute inset-x-2 bottom-2 z-10 flex items-end justify-between gap-2 text-[10px]">
                 <ScaleLine className="bg-slate-50/70" />
                 <Copyright className="bg-slate-50/70" />
               </div>
+              <div className="absolute right-2 top-2 z-10 flex flex-col gap-2">
+                <GeolocationButton />
+              </div>
               {search === "true" && (
-                <div className="absolute left-2 right-12 top-2 z-10 min-w-64 max-w-96">
+                <div className="absolute left-2 right-12 top-2 z-10 flex max-h-[90%] min-w-64 max-w-96 flex-col">
                   <StopsSearch
                     apikey={apikey}
-                    // countrycode={countrycode}
                     onselect={onStopsSearchSelect}
                     url={stopsurl}
                   />
@@ -394,6 +393,7 @@ function MobilityMap({
             </Map>
 
             <Overlay
+              className={"z-50"}
               ScrollableHandlerProps={{
                 style: { width: "calc(100% - 60px)" },
               }}

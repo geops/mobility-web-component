@@ -1,5 +1,1 @@
-export {
-  default as TrenordSearch,
-  SearchProps,
-  StationFeature,
-} from "./TrenordSearch";
+export { default, SearchProps, StationFeature } from "./StopsSearch";

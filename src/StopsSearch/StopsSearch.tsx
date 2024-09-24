@@ -13,7 +13,7 @@ import {
 import { FaSearch } from "react-icons/fa";
 import { MdClose } from "react-icons/md";
 
-import BusPoi from "../icons/BusPoi/BusPoi";
+// import BusPoi from "../icons/BusPoi/BusPoi";
 // @ts-expect-error tailwind must be added for the search web component
 import tailwind from "../style.css";
 import i18n from "../utils/i18n";
@@ -37,7 +37,7 @@ export type SearchProps = {
   PreactDOMAttributes;
 
 const getQueryForSelectedStation = (selectedStation: StationFeature) => {
-  return selectedStation.properties.name.toUpperCase();
+  return selectedStation.properties.name;
 };
 
 /**
@@ -57,12 +57,12 @@ function StopsSearch({
   params,
   prefagencies,
   reflocation,
-  url,
+  url = "https://api.geops.io/stops/v1/",
 }: SearchProps) {
   const { t } = i18n;
   const [query, setQuery] = useState("");
   const [selectedStation, setSelectedStation] = useState<StationFeature>();
-  const [results, setResults] = useState<StopsResponse["features"]>([]);
+  const [results, setResults] = useState<StopsResponse["features"]>(undefined);
   const myRef = useRef<HTMLDivElement>();
 
   const api: StopsAPI = useMemo(() => {
@@ -71,6 +71,8 @@ function StopsSearch({
 
   const dispatchEvent = useCallback(
     (station?: StationFeature) => {
+      console.log("station", station, event || "searchstationselect");
+
       const customEvt = new CustomEvent<{ data: StationFeature }>(
         event || "searchstationselect",
         {
@@ -153,7 +155,7 @@ function StopsSearch({
   }, [query, selectedStation, debouncedSearch]);
 
   useEffect(() => {
-    setResults([]);
+    setResults(undefined);
 
     if (selectedStation) {
       setQuery(getQueryForSelectedStation(selectedStation));
@@ -165,83 +167,90 @@ function StopsSearch({
   return (
     <>
       <style>{tailwind}</style>
-      <div className="relative z-10 rounded-md bg-white leading-9" ref={myRef}>
-        <div className="h-16 rounded-md shadow">
-          <div className="flex px-4 pt-3.5">
-            <div className="grow overflow-x-auto">
-              <div className={"flex grow gap-4"}>
-                <div className={"flex items-center "}>
-                  <FaSearch className="size-4" />
-                </div>
-                <div
-                  className={
-                    "flex grow overflow-hidden border-b-2 border-solid"
-                  }
-                >
-                  <input
-                    autoComplete="off"
-                    className="h-8 flex-1 outline-0 placeholder:uppercase placeholder:text-zinc-700"
-                    id="searchfield"
-                    onChange={(event) => {
-                      // @ts-expect-error target is missing
-                      setQuery(event.target.value);
-                    }}
-                    onKeyUp={(
-                      event: JSX.TargetedKeyboardEvent<HTMLInputElement>,
-                    ) => {
-                      if (event.key === "Enter") {
-                        if (results?.length > 0) {
-                          setSelectedStation(results[0]);
-                        }
-                      }
-                    }}
-                    placeholder={t("enter_station")}
-                    type="text"
-                    value={query}
-                  />
-                  {query.length > 0 && (
-                    <button
-                      className="flex items-center"
-                      onClick={() => {
-                        setQuery("");
-                      }}
-                    >
-                      <MdClose className="size-4" />
-                    </button>
-                  )}
-                </div>
-              </div>
-              <div className="pl-8">
-                <ul className="max-h-72 overflow-auto rounded-md bg-white shadow">
-                  {results.map((station) => {
-                    return (
-                      <li
-                        className="border-b border-dashed border-slate-300 p-3"
-                        key={station.properties.uid}
-                      >
-                        <button
-                          className="flex w-full items-center gap-3 text-left"
-                          onClick={() => {
-                            setSelectedStation(station);
-                          }}
-                        >
-                          <div>
-                            <BusPoi className="size-6" />
-                          </div>
-                          {/* <TrenordTrain className="size-8 pt-0.5" /> */}
-                          <div className="grow uppercase">
-                            {station.properties.name}
-                          </div>
-                        </button>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-            </div>
-          </div>
+      {/* <div className="relative z-0 rounded-md bg-white" > */}
+      <div
+        className={
+          "flex h-16 items-center gap-4 rounded-md bg-white p-4 pt-3.5 shadow"
+        }
+        ref={myRef}
+      >
+        <div className={"flex items-center "}>
+          <FaSearch className="size-4" />
+        </div>
+        <div className={"flex grow overflow-hidden border-b-2 border-solid"}>
+          <input
+            autoComplete="off"
+            className="h-8 flex-1 outline-0  placeholder:text-zinc-400"
+            id="searchfield"
+            onChange={(event) => {
+              // @ts-expect-error target is missing
+              setQuery(event.target.value);
+            }}
+            onKeyUp={(event: JSX.TargetedKeyboardEvent<HTMLInputElement>) => {
+              if (event.key === "Enter") {
+                if (results?.length > 0) {
+                  setSelectedStation(results[0]);
+                }
+              }
+            }}
+            placeholder={t("stops_search_placeholder")}
+            type="text"
+            value={query}
+          />
+          {query.length > 0 && (
+            <button
+              className="flex items-center"
+              onClick={() => {
+                setQuery("");
+                setResults(undefined);
+              }}
+            >
+              <MdClose className="size-4" />
+            </button>
+          )}
         </div>
       </div>
+
+      <div className="mt-[-4px] flex grow overflow-auto rounded-md rounded-t-none bg-white shadow">
+        {results && results.length === 0 && (
+          <div
+            className={
+              "flex grow gap-3 border border-solid p-3 pt-2 text-zinc-400"
+            }
+            style={{ border: 1 }}
+          >
+            <div className="size-6">{/* <BusPoi /> */}</div>
+            <div>{t("no_stops_found")}</div>
+          </div>
+        )}
+        {results && results.length > 0 && (
+          <ul
+            className="grow rounded-md rounded-t-none border border-solid bg-white p-0 "
+            style={{ border: 1 }} // without this th ul is displayed 1 px on the right
+          >
+            {results?.map((station) => {
+              return (
+                <li
+                  className="border-b border-dashed border-slate-300 p-3 last:border-0"
+                  key={station.properties.uid}
+                >
+                  <button
+                    className="flex w-full items-center gap-3 text-left"
+                    onClick={() => {
+                      setSelectedStation(station);
+                    }}
+                  >
+                    <div className="size-6">{/* <BusPoi /> */}</div>
+                    {/* <TrenordTrain className="size-8 pt-0.5" /> */}
+                    <div className="grow">{station.properties.name}</div>
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        )}
+      </div>
+      {/* </div> */}
     </>
   );
 }

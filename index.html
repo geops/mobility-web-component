@@ -45,27 +45,43 @@
 
       <!-- Default -->
       <geops-mobility
-        class="max-w-3xl h-96 block resize-x overflow-auto"
+        class="max-w-3xl h-96 block resize overflow-auto"
       ></geops-mobility>
+
+      <br />
+      <br />
+      <h1 class="text-xl font-bold">More mobility web components</h1>
+      <p>
+        <a href="search.html" target="_blank"
+          >&gt;&gt; Usage example Search Component</a
+        >
+      </p>
     </div>
 
+    <br />
+    <br />
     <script type="text/javascript">
-      const params = new URLSearchParams(window.location.search);
+      params = new URLSearchParams(window.location.search);
 
       // There should be only on map on the html page at this point
-      const doc = document.querySelector("#doc");
+      const doc = document.querySelectorAll("#doc");
       const map = document.querySelector("geops-mobility");
+      const search = document.querySelector("geops-mobility-search");
       if (params.get("fullscreen") === "true") {
         map.parentElement.removeChild(map);
         map.className = "absolute w-full h-full inset-0";
         document.body.appendChild(map);
         document.body.style = "padding:0;";
       } else {
-        doc.style.display = "block";
+        doc.forEach((d) => (d.style.display = "block"));
       }
       params.delete("fullscreen");
 
-      if (params.get("permalink") !== "false" && params.get("x") && params.get("y")) {
+      if (
+        params.get("permalink") !== "false" &&
+        params.get("x") &&
+        params.get("y")
+      ) {
         map.setAttribute("center", `${params.get("x")},${params.get("y")}`);
         params.delete("x");
         params.delete("y");
@@ -87,11 +103,13 @@
           .then((data) => {
             if (data && data.success) {
               map.setAttribute("apikey", data.key);
+              search.setAttribute("apikey", data.key);
             }
           });
       }
       // Listen wc event sent
       [
+        // "searchstationselect",
         // "departure",
         // "moveend",
         // "position",
@@ -106,7 +124,7 @@
         });
       });
 
-      // Send url search params to parent window 
+      // Send url search params to parent window
       window.addEventListener("mwc:attribute", (event) => {
         console.log("mwc:attribute event: ", event.data);
         window.top.postMessage(new URLSearchParams(event.data).toString(), "*");
