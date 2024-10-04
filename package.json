@@ -9,8 +9,8 @@
   "dependencies": {
     "maplibre-gl": "^4.7.1",
     "mobility-toolbox-js": "^2.4.2",
-    "ol": "^10.2.0",
-    "preact": "^10.24.0",
+    "ol": "^10.2.1",
+    "preact": "^10.24.2",
     "preact-custom-element": "^4.3.0",
     "react": "npm:@preact/compat@^18.3.1",
     "react-dom": "npm:@preact/compat@^18.3.1",
@@ -32,9 +32,9 @@
     "eslint": "^9.11.1",
     "eslint-config-prettier": "9.1.0",
     "eslint-plugin-jsx-a11y": "^6.10.0",
-    "eslint-plugin-perfectionist": "^3.7.0",
+    "eslint-plugin-perfectionist": "^3.8.0",
     "eslint-plugin-prettier": "^5.2.1",
-    "eslint-plugin-react": "^7.36.1",
+    "eslint-plugin-react": "^7.37.1",
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",
     "eslint-plugin-tailwindcss": "^3.17.4",
     "fixpack": "^4.0.0",
@@ -50,7 +50,7 @@
     "tailwindcss": "^3.4.13",
     "ts-jest": "^29.2.5",
     "typescript": "^5.6.2",
-    "typescript-eslint": "^8.7.0"
+    "typescript-eslint": "^8.8.0"
   },
   "scripts": {
     "build": "yarn build:css && yarn build:js",

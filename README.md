@@ -27,25 +27,29 @@ yarn start
 
 You can specify all the web component attributes as url parameters to customize easily the map.
 
-- apikey: string;
-- baselayer?: string;
-- center: string;
-- geolocation?: string;
-- maxzoom?: string;
-- minzoom?: string;
-- mots?: string;
-- notification?: string;
-- notificationat?: string;
-- notificationurl?: string;
-- notificationbeforelayerid?: string;
-- realtime?: string;
-- realtimeurl?: string;
-- tenant?: string;
-- zoom: string;
+- [`/?apikey=YOUR_API_KEY`](https://mobility-web-component.geops.io/?apikey=YOUR_API_KEY): your [geOps API key](https://developer.geops.io/).
+- [`/?baselayer=travic_v2`](https://mobility-web-component.geops.io/?baselayer=travic_v2): the style's name from the [geOps Maps API](https://developer.geops.io/apis/maps) (base_dark_v2, base_bright_v2, ...). Default to `travic_v2`.
+- [`/?center=831634,5933959`](https://mobility-web-component.geops.io/?center=831634,5933959): the center of the map in EPSG:3857 coordinates. Default to `831634,5933959` (Bern).
+- [`/?geolocation=false`](https://mobility-web-component.geops.io/?geolocation=false): display the geolocation button or not (true or false). Default to true.
+- [`/?mapsurl=https://maps.geops.io`](https://mobility-web-component.geops.io/?mapsurl=https://maps.geops.io): the [geOps Maps API](https://developer.geops.io/apis/maps) url to use. Default to `https://maps.geops.io`.
+- [`/?maxzoom=14`](https://mobility-web-component.geops.io/?maxzoom=14): define the max zoom level of the map.
+- [`/?minzoom=2`](https://mobility-web-component.geops.io/?minzoom=2): define the min zoom level of the map.
+- [`/?mots=rail,bus`](https://mobility-web-component.geops.io/?mots=rail,bus): list of commas separated mots to display on the Realtime layer ( rail, bus, coach, foot, tram, subway, gondola, funicular, ferry, car).
+- [`/?notification=false`](https://mobility-web-component.geops.io/?notification=true): display the notification layer or not (true or false). Default to true.
+- [`/?notificationat=2025-01-01T12:00:00Z`](https://mobility-web-component.geops.io/?notificationat=2025-01-01T12:00:00Z): a ISO date string used to display active notification at this date in the notification layer.
+- [`/?notificationbeforelayerid=`](https://mobility-web-component.geops.io/?notificationbeforelayerid=): the style layer's id before which the notification layer will be added. By default the layer will be added on top.
+- [`/?notificationurl=`](https://mobility-web-component.geops.io/?notificationurl=): the MOCO notification url to get the notifications from.
+- [`/?permalink=true`](https://mobility-web-component.geops.io/?permalink=true): add automatically an `x`,`y` an `z` URL parameters to the URL to allow to share the current map view. Default to false.
+- [`/?realtime=false`](https://mobility-web-component.geops.io/?realtime=false): display the realtime layer or not (true or false). Default to true.
+- [`/?realtimeurl=wss://api.geops.io/tracker-ws/v1/ws`](https://mobility-web-component.geops.io/?realtimeurl=wss://api.geops.io/tracker-ws/v1/ws): the [geOps Realtime API](https://developer.geops.io/apis/realtime) url to use. Default to `wss://api.geops.io/tracker-ws/v1/ws`.
+- [`/?search=false`](https://mobility-web-component.geops.io/?search=false): display the search stops input or not (true or false). Default to true.
+- [`/?stopsurl=https://api.geops.io/stops/v1/`](https://mobility-web-component.geops.io/?stopsurl=https://api.geops.io/stops/v1/): the [geOps Stops API](https://developer.geops.io/apis/stops) url to use. Default to `https://api.geops.io/stops/v1/`.
+- [`/?tenant=sbb`](https://mobility-web-component.geops.io/?tenant=sbb): the tenant name to use to filter the stations available to select by click.
+- [`/?zoom=13`](https://mobility-web-component.geops.io/?zoom=13): the zoom level of the map. Default to 13.
 
 Another url parameter is used to get a full screen map instead of the documentation:
 
-- fullscreen=true
+- [`/?fullscreen=true`](https://mobility-web-component.geops.io/?fullscreen=true): display the map in full screen mode.
 
 ## Guidelines
 
