@@ -75,23 +75,7 @@
       let params = new URLSearchParams(window.location.search);
       const searchElement = document.querySelector("geops-mobility-search");
       const eventLog = document.querySelector("#textarea");
-      // Listen to element event
-      ["searchstationselect"].forEach((type) => {
-        searchElement.addEventListener(type, (event) => {
-          const data = event.detail || event.data || {};
-          if (!data) {
-            eventLog.innerText = "";
-          } else {
-            console.log("wc event: " + event.type, data);
-            eventLog.innerText =
-              "Event " +
-              event.type +
-              " received :\n " +
-              JSON.stringify(data, undefined, " ");
-            window.top.postMessage(data, "*");
-          }
-        });
-      });
+
 
       // Listen window event
       window.addEventListener("message", (event) => {
@@ -130,33 +114,21 @@
             }
           });
       }
-      // Listen wc event sent
-      [
-        // "searchstationselect",
-        // "departure",
-        // "moveend",
-        // "position",
-        // "singleclick",
-        // "station",
-        // "stop",
-        // "message",
-      ].forEach((type) => {
-        window.addEventListener(type, (event) => {
-          console.log("wc event: " + type, event.data);
-          window.top.postMessage(event.data, "*");
-        });
-      });
 
-      // Send url search params to parent window
-      window.addEventListener("mwc:attribute", (event) => {
-        console.log("mwc:attribute event: ", event.data);
-        window.top.postMessage(new URLSearchParams(event.data).toString(), "*");
-      });
 
-      // Listen window event
-      window.addEventListener("message", (event) => {
-        const { type } = event;
-        console.log("message event: " + type, event.data);
+      // Listen to element event
+      searchElement.addEventListener("mwc:stopssearchselect", (event) => {
+        const data = event.data;
+        if (!data) {
+          eventLog.innerText = "";
+        } else {
+          eventLog.innerText =
+            "Event " +
+            event.type +
+            " received :\n " +
+            JSON.stringify(data, undefined, " ");
+          window.top.postMessage(data, "*");
+        }
       });
     </script>
   </body>

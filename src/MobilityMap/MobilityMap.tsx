@@ -184,7 +184,7 @@ function MobilityMap({
 
   useEffect(() => {
     dispatchEvent(
-      new MobilityEvent("mwc:attribute", {
+      new MobilityEvent<MobilityMapProps>("mwc:attribute", {
         baselayer,
         center: x && y ? `${x},${y}` : center,
         geolocation,
@@ -198,6 +198,7 @@ function MobilityMap({
         notificationurl,
         realtime,
         realtimeurl,
+        search,
         tenant,
         zoom: z || zoom,
       }),
@@ -216,6 +217,7 @@ function MobilityMap({
     notificationbeforelayerid,
     realtime,
     realtimeurl,
+    search,
     tenant,
     zoom,
     x,
@@ -382,11 +384,6 @@ function MobilityMap({
                     onselect={onStopsSearchSelect}
                     url={stopsurl}
                   />
-                  {/* {showNoStationInfo && (
-                    <p className="border-trenord-green relative mt-2 w-full border-2 border-solid bg-white p-3">
-                      {t("no_station_info_available")}
-                    </p>
-                  )} */}
                 </div>
               )}
             </Map>

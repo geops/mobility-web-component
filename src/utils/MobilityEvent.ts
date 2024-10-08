@@ -1,19 +1,16 @@
 import type { MobilityMapProps } from "../MobilityMap/MobilityMap";
 
-export type MobilityEventType = "mwc:attribute";
-export type AttributeEventData = MobilityMapProps;
-export type MobilityEventData = AttributeEventData;
+export type MobilityEventType =
+  | "mwc:attribute"
+  | "mwc:stopssearchselect"
+  | string;
 
-class MobilityEvent extends Event {
+class MobilityEvent<T> extends Event {
   data: MobilityMapProps;
 
-  constructor(
-    name: MobilityEventType,
-    data: MobilityMapProps,
-    options: EventInit = {},
-  ) {
+  constructor(name: MobilityEventType, data: T, options: EventInit = {}) {
     super(name, { ...options, composed: true });
-    this.data = { ...data };
+    this.data = data;
   }
 
   logImportantData() {

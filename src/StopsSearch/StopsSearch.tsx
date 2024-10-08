@@ -17,6 +17,7 @@ import { MdClose } from "react-icons/md";
 // @ts-expect-error tailwind must be added for the search web component
 import tailwind from "../style.css";
 import i18n from "../utils/i18n";
+import MobilityEvent from "../utils/MobilityEvent";
 
 export type StationFeature = StopsResponse["features"][0];
 
@@ -71,14 +72,11 @@ function StopsSearch({
 
   const dispatchEvent = useCallback(
     (station?: StationFeature) => {
-      console.log("station", station, event || "searchstationselect");
-
-      const customEvt = new CustomEvent<{ data: StationFeature }>(
-        event || "searchstationselect",
+      const customEvt = new MobilityEvent<StationFeature>(
+        event || "mwc:stopssearchselect",
+        station,
         {
           bubbles: true,
-          composed: true,
-          detail: { data: station },
         },
       );
       if (myRef.current) {

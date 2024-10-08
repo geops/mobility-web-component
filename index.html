@@ -106,21 +106,10 @@
           });
       }
 
-      // Listen wc event sent
-      [
-        // "searchstationselect",
-        // "departure",
-        // "moveend",
-        // "position",
-        // "singleclick",
-        // "station",
-        // "stop",
-        // "message",
-      ].forEach((type) => {
-        window.addEventListener(type, (event) => {
-          console.log("wc event: " + type, event.data);
-          window.top.postMessage(event.data, "*");
-        });
+      // Listen StopsSearch event
+      window.addEventListener("mwc:stopssearchselect", (event) => {
+        console.log("mwc:stopssearchselect event: ", event.data);
+        // window.top.postMessage(event.data, "*");
       });
 
       // Send url search params to parent window
@@ -131,8 +120,7 @@
 
       // Listen window event
       window.addEventListener("message", (event) => {
-        const { type } = event.data;
-        console.log("message event: " + type, event.data);
+        console.log("message event: ", event);
       });
 
       function toggleBooleanAttribute(name) {
