@@ -330,7 +330,6 @@ function MobilityMap({
 
   const onStopsSearchSelect = useCallback(
     async (selectedStation: StationFeature) => {
-      console.log(selectedStation);
       const center = selectedStation?.geometry?.coordinates;
       if (center) {
         map.getView().animate({
