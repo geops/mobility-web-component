@@ -19,6 +19,7 @@ register(
     "notificationbeforelayerid",
     "realtime",
     "realtimeUrl",
+    "search",
     "tenant",
     "zoom",
     "permalink",

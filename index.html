@@ -31,25 +31,21 @@
       <h1 class="text-3xl font-bold">Mobility Web Component</h1>
       <p>This is a demo of the Mobility Web Component.</p>
       <h2 class="text-xl font-bold">Usage example</h2>
-      <pre class="bg-slate-800 text-slate-200 p-4 rounded">
-&lt;script
-  type=&quot;module&quot;
-  src=&quot;https://www.unpkg.com/@geops/mobility-web-component&quot;&gt;
-&lt;/script&gt;
-&lt;geops-mobility
-  apikey=&quot;YOUR_GEOPS_API_KEY&quot;
-  baselayer=&quot;travic_v2&quot;
-  center=&quot;831634,5933959&quot;
-  mots=&quot;rail&quot;
-  zoom=&quot;13&quot;
-  style=&quot;display: block;width: 800px;height: 800px;&quot;&gt;
-&lt;/geops-mobility&gt;</pre
-      >
+      <pre id="code" class="bg-slate-800 text-slate-200 p-4 rounded"></pre>
 
       <!-- Default -->
       <geops-mobility
         class="max-w-3xl h-96 block resize overflow-auto"
       ></geops-mobility>
+
+      <br />
+      <h1 class="text-xl font-bold">More</h1>
+      <button
+        class="border rounded p-2 hover:bg-slate-200"
+        onclick="toggleBooleanAttribute('search')"
+      >
+        Toggle search
+      </button>
 
       <br />
       <br />
@@ -69,7 +65,7 @@
       // There should be only on map on the html page at this point
       const doc = document.querySelectorAll("#doc");
       const map = document.querySelector("geops-mobility");
-      const search = document.querySelector("geops-mobility-search");
+
       if (params.get("fullscreen") === "true") {
         map.parentElement.removeChild(map);
         map.className = "absolute w-full h-full inset-0";
@@ -106,10 +102,10 @@
           .then((data) => {
             if (data && data.success) {
               map.setAttribute("apikey", data.key);
-              search.setAttribute("apikey", data.key);
             }
           });
       }
+
       // Listen wc event sent
       [
         // "searchstationselect",
@@ -138,6 +134,63 @@
         const { type } = event.data;
         console.log("message event: " + type, event.data);
       });
+
+      function toggleBooleanAttribute(name) {
+        const value = map.getAttribute(name);
+        map.setAttribute(name, value === "false" ? "true" : "false");
+        const urlParams = new URLSearchParams(window.location.search);
+        urlParams.set(name, map.getAttribute(name));
+        window.history.replaceState(
+          {},
+          "",
+          `${window.location.pathname}?${urlParams}`,
+        );
+        generateCodeText();
+      }
+
+
+      function generateCodeText() {
+        const codeElt = document.querySelector("#code");
+        let codeText = "";
+        codeText = `&lt;script\n\ttype="module"\n\tsrc="https://www.unpkg.com/@geops/mobility-web-component"&gt;
+&lt;/script&gt;
+&lt;geops-mobility`;
+
+        [
+          "apikey",
+          "baselayer",
+          "center",
+          "geolocation",
+          "mapsurl",
+          "mots",
+          "notification",
+          "notificationat",
+          "notificationurl",
+          "notificationbeforelayerid",
+          "realtime",
+          "realtimeUrl",
+          "search",
+          "tenant",
+          "zoom",
+          "permalink",
+        ].forEach((key) => {
+          if (key == "apikey") {
+            codeText += `\n\tapikey="YOUR_GEOPS_API_KEY"`;
+          } else if (map.getAttribute(key) !== null) {
+            codeText += `\n\t${[key, '"' + map.getAttribute(key) + '"'].join("=")}`;
+          } else if (key == "center") {
+            codeText += `\n\tcenter="831634,5933959"`;
+          } else if (key == "zoom") {
+            codeText += `\n\tzoom="13"`;
+          } else if (key == "baselayer") {
+            codeText += `\n\tbaselayer="travic_v2"`;
+          }
+        });
+
+        code.innerHTML = codeText + `&gt;\n&lt;/geops-mobility&gt;`;
+      }
+
+      generateCodeText();
     </script>
   </body>
 </html>
