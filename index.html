@@ -39,13 +39,78 @@
       ></geops-mobility>
 
       <br />
-      <h1 class="text-xl font-bold">More</h1>
-      <button
+      <h2 class="text-xl font-bold">Attributes</h2>
+      <!-- <button
         class="border rounded p-2 hover:bg-slate-200"
         onclick="toggleBooleanAttribute('search')"
       >
         Toggle search
-      </button>
+      </button> -->
+
+      <table class="table-auto w-full" >
+        <thead>
+          <tr>
+            <th class="border px-4 py-2">Name</th>
+            <th class="border px-4 py-2">Default</th>
+            <th class="border px-4 py-2">Description</th>
+            <th class="border px-4 py-2">Selected</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="border px-4 py-2">apikey</td>
+            <td class="border px-4 py-2"></td>
+            <td class="border px-4 py-2"></td>
+            <td class="border px-4 py-2">
+              <input
+                type="text"
+                class="border"
+                value=""
+                onchange="map.setAttribute('apikey', this.value)"/>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border px-4 py-2">search</td>
+            <td class="border px-4 py-2">true</td>
+            <td class="border px-4 py-2"></td>
+            <td class="border px-4 py-2">
+              <select
+              class="border px-4 py-2"
+                name="baselayer"
+                onchange="map.setAttribute(this.name, this.value)">
+                <option value="travic_v2">travic_v2</option>
+                <option value="base_dark_v2">base_dark_v2</option>
+              </select>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="border px-4 py-2">realtime</td>
+            <td class="border px-4 py-2">true</td>
+            <td class="border px-4 py-2"></td>
+            <td class="border px-4 py-2">
+              <input
+                name="realtime"
+                type="checkbox"
+                checked
+                onchange="toggleBooleanAttribute(this.name)"/>
+            </td>
+          </tr>
+          <tr>
+            <td class="border px-4 py-2">search</td>
+            <td class="border px-4 py-2">true</td>
+            <td class="border px-4 py-2"></td>
+            <td class="border px-4 py-2">
+              <input
+                name="search"
+                type="checkbox"
+                checked
+                onchange="toggleBooleanAttribute(this.name)"/>
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
       <br />
       <br />
@@ -94,6 +159,14 @@
       // Apply all url parameters as attribute of the web component
       params.forEach((value, key) => {
         map.setAttribute(key, value);
+        const input = document.querySelector(`input[name=${key}]`);
+        if (input) {
+          if (input.type === "checkbox") {
+            input.checked = value !== "false";
+          } else {
+           input.value = value;
+          }
+        }
       });
 
       if (!map.getAttribute("apikey")) {
@@ -135,16 +208,7 @@
         );
         generateCodeText();
       }
-
-
-      function generateCodeText() {
-        const codeElt = document.querySelector("#code");
-        let codeText = "";
-        codeText = `&lt;script\n\ttype="module"\n\tsrc="https://www.unpkg.com/@geops/mobility-web-component"&gt;
-&lt;/script&gt;
-&lt;geops-mobility`;
-
-        [
+      const attrs = [
           "apikey",
           "baselayer",
           "center",
@@ -161,7 +225,16 @@
           "tenant",
           "zoom",
           "permalink",
-        ].forEach((key) => {
+        ];
+
+      function generateCodeText() {
+        const codeElt = document.querySelector("#code");
+        let codeText = "";
+        codeText = `&lt;script\n\ttype="module"\n\tsrc="https://www.unpkg.com/@geops/mobility-web-component"&gt;
+&lt;/script&gt;
+&lt;geops-mobility`;
+
+        attrs.forEach((key) => {
           if (key == "apikey") {
             codeText += `\n\tapikey="YOUR_GEOPS_API_KEY"`;
           } else if (map.getAttribute(key) !== null) {
@@ -178,6 +251,23 @@
         code.innerHTML = codeText + `&gt;\n&lt;/geops-mobility&gt;`;
       }
 
+      // Initialize value of inputs fields
+      function initInputs() {
+        attrs.forEach((key) => {
+          const input = document.querySelector(`input[name=${key}]`);
+          if (input) {
+            input.value = map.getAttribute(key) || "";
+          }
+        });
+        const inputs = document.querySelectorAll("input");
+        inputs.forEach((input) => {
+          input.addEventListener("change", () => {
+            generateCodeText();
+          });
+        });
+      }
+
+      initInputs();
       generateCodeText();
     </script>
   </body>

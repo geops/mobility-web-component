@@ -38,7 +38,7 @@ function RealtimeLayer(props: RealtimeLayerProps) {
     if (!apikey || !realtimeurl) {
       return null;
     }
-    return new MtbRealtimeLayer({
+    const layer = new MtbRealtimeLayer({
       apiKey: apikey,
       getMotsByZoom: mots
         ? () => {
@@ -57,6 +57,12 @@ function RealtimeLayer(props: RealtimeLayerProps) {
         ...(props?.styleOptions || {}),
       },
     });
+
+    layer.olLayer.getLayersArray().forEach((layer) => {
+      return layer.setZIndex(1);
+    });
+
+    return layer;
   }, [apikey, mots, realtimeurl, tenant, props]);
 
   useEffect(() => {
