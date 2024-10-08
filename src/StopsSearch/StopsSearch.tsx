@@ -241,7 +241,6 @@ function StopsSearch({
                     }}
                   >
                     <div className="size-6">{/* <BusPoi /> */}</div>
-                    {/* <TrenordTrain className="size-8 pt-0.5" /> */}
                     <div className="grow">{station.properties.name}</div>
                   </button>
                 </li>
