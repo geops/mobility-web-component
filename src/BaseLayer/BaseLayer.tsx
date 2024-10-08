@@ -16,6 +16,9 @@ function BaseLayer(props: MapGlLayerOptions) {
       url: `${mapsurl}/styles/${baselayer}/style.json`,
       ...(props || {}),
     });
+    layer.olLayer.getLayersArray().forEach((layer) => {
+      return layer.setZIndex(0);
+    });
     layer.attachToMap(map);
     setBaseLayer(layer);
 
