@@ -3,9 +3,9 @@
 This project contains a set of web components allowing to use easily the [geOps APIs](https://developer.geops.io/):
 
 - [`<geops-mobility>`](#geops-mobility-web-component): a web component used to display a map using different [geOps APIs](https://developer.geops.io/).
-- [`<geops-mobility-search>`](#geops-mobility-search): a search input to search stops using the  [geOps Stops API](https://developer.geops.io/apis/stops).
+- [`<geops-mobility-search>`](#geops-mobility-search-web-component): a search input to search stops using the  [geOps Stops API](https://developer.geops.io/apis/stops).
 
-## `<geops-mobility>`  web component
+## `<geops-mobility>` web component
 
 A web component used to display a map using different [geOps APIs](https://developer.geops.io/).
 
@@ -79,7 +79,7 @@ Another url parameter is used to get a full screen map instead of the documentat
 
 - [`/?fullscreen=true`](https://mobility-web-component.geops.io/?fullscreen=true): display the web component in full screen mode.
 
-## `<geops-mobility-search>`  web component
+## `<geops-mobility-search>` web component
 
 A search input to search stops using the  [geOps Stops API](https://developer.geops.io/apis/stops).
 
