@@ -13,7 +13,6 @@ import {
 import { FaSearch } from "react-icons/fa";
 import { MdClose } from "react-icons/md";
 
-// import BusPoi from "../icons/BusPoi/BusPoi";
 // @ts-expect-error tailwind must be added for the search web component
 import tailwind from "../style.css";
 import i18n from "../utils/i18n";
@@ -217,7 +216,7 @@ function StopsSearch({
             }
             style={{ border: 1 }}
           >
-            <div className="size-6">{/* <BusPoi /> */}</div>
+            <div className="size-6"></div>
             <div>{t("no_stops_found")}</div>
           </div>
         )}
@@ -238,7 +237,7 @@ function StopsSearch({
                       setSelectedStation(station);
                     }}
                   >
-                    <div className="size-6">{/* <BusPoi /> */}</div>
+                    <div className="size-6"></div>
                     <div className="grow">{station.properties.name}</div>
                   </button>
                 </li>
