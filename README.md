@@ -48,7 +48,7 @@ Here an exhaustive list of the `<geops-mobility>` web component attributes avail
 - [`realtimeurl="wss://api.geops.io/tracker-ws/v1/ws"`](https://mobility-web-component.geops.io/?realtimeurl=wss://api.geops.io/tracker-ws/v1/ws): the [geOps Realtime API](https://developer.geops.io/apis/realtime) url to use. Default to `wss://api.geops.io/tracker-ws/v1/ws"Z`.
 - [`search="false"`](https://mobility-web-component.geops.io/?search=false): display the search stops input or not (true or false). Default to true.
 - [`stopsurl="https://api.geops.io/stops/v1/"`](https://mobility-web-component.geops.io/?stopsurl=https://api.geops.io/stops/v1/): the [geOps Stops API](https://developer.geops.io/apis/stops) url to use. Default to `https://api.geops.io/stops/v1/`.
-- [`tenant="sbb"`](https://mobility-web-component.geops.io/?tenant=sbb): the tenant name to use to filter the stations available to select by click.
+- [`tenant="sbb"`](https://mobility-web-component.geops.io/?tenant=sbb): the tenant name to use to filter the Realtime vehicles available.
 - [`zoom="13"`](https://mobility-web-component.geops.io/?zoom=13): the zoom level of the map. Default to 13.
 
 ### URL parameters
