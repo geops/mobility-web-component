@@ -122,6 +122,7 @@ Another url parameter is used to get a full screen map instead of the documentat
 ## Development
 
 ```bash
+corepack enable
 yarn install
 yarn start
 ```
