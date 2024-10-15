@@ -1,4 +1,4 @@
-"use client;";
+"use client";
 import "@geops/mobility-web-component";
 import {
   Button,
@@ -90,7 +90,7 @@ const attrsConfig: Record<string, AttrConfig> = {
         >
           geOps Maps API
         </a>{" "}
-        (base_dark_v2, base_bright_v2, ...). Default to `travic_v2`.
+        (base_dark_v2, base_bright_v2, ...).
       </Typography>
     ),
     type: "select",
@@ -98,10 +98,7 @@ const attrsConfig: Record<string, AttrConfig> = {
   center: {
     defaultValue: "831634,5933959",
     description: (
-      <Typography>
-        the center of the map in EPSG:3857 coordinates. Default to
-        `831634,5933959` (Bern).
-      </Typography>
+      <Typography>The center of the map in EPSG:3857 coordinates.</Typography>
     ),
     type: "textfield",
   },
@@ -109,7 +106,7 @@ const attrsConfig: Record<string, AttrConfig> = {
     defaultValue: "true",
     description: (
       <Typography>
-        Display the geolocation button or not (true or false). Default to true.
+        Display the geolocation button or not (true or false).
       </Typography>
     ),
     type: "checkbox",
@@ -126,7 +123,7 @@ const attrsConfig: Record<string, AttrConfig> = {
         >
           geOps Maps API
         </a>{" "}
-        url to use. Default to `https://maps.geops.io`.
+        url to use.
       </Typography>
     ),
     type: "textfield",
@@ -172,7 +169,7 @@ const attrsConfig: Record<string, AttrConfig> = {
     defaultValue: "true",
     description: (
       <Typography>
-        Display the notification layer or not (true or false). Default to true.
+        Display the notification layer or not (true or false).
       </Typography>
     ),
     type: "checkbox",
@@ -218,7 +215,7 @@ const attrsConfig: Record<string, AttrConfig> = {
     defaultValue: "true",
     description: (
       <Typography>
-        Display the realtime layer or not (true or false). Default to true.
+        Display the realtime layer or not (true or false).
       </Typography>
     ),
     type: "checkbox",
@@ -235,7 +232,7 @@ const attrsConfig: Record<string, AttrConfig> = {
         >
           geOps Realtime API
         </a>{" "}
-        url to use. Default to `wss://api.geops.io/tracker-ws/v1/ws`.
+        url to use.
       </Typography>
     ),
     type: "textfield",
@@ -244,7 +241,7 @@ const attrsConfig: Record<string, AttrConfig> = {
     defaultValue: "true",
     description: (
       <Typography>
-        Display the search stops input or not (true or false). Default to true.
+        Display the search stops input or not (true or false).
       </Typography>
     ),
     type: "checkbox",
@@ -253,7 +250,7 @@ const attrsConfig: Record<string, AttrConfig> = {
     defaultValue: "https://api.geops.io/stops/v1/",
     description: (
       <Typography>
-        The
+        The{" "}
         <a
           href="https://developer.geops.io/apis/stops"
           rel="noreferrer"
@@ -261,7 +258,7 @@ const attrsConfig: Record<string, AttrConfig> = {
         >
           geOps Stops API
         </a>{" "}
-        url to use. Default to `https://api.geops.io/stops/v1/`.
+        url to use.
       </Typography>
     ),
     type: "textfield",
@@ -276,9 +273,7 @@ const attrsConfig: Record<string, AttrConfig> = {
   },
   zoom: {
     defaultValue: "13",
-    description: (
-      <Typography>the zoom level of the map. Default to 13.</Typography>
-    ),
+    description: <Typography>The initial zoom level of the map.</Typography>,
     props: {
       slotProps: {
         input: {
@@ -321,21 +316,7 @@ function GeopsMobilityDoc() {
 </script>
 <geops-mobility`;
 
-    // attributes.forEach((key) => {
-    //   if (key == "apikey") {
-    //     codeText += `\n\tapikey="YOUR_GEOPS_API_KEY"`;
-    //   } else if (map.getAttribute(key) !== null) {
-    //     codeText += `\n\t${[key, '"' + map.getAttribute(key) + '"'].join("=")}`;
-    //   } else if (key == "center") {
-    //     codeText += `\n\tcenter="831634,5933959"`;
-    //   } else if (key == "zoom") {
-    //     codeText += `\n\tzoom="13"`;
-    //   } else if (key == "baselayer") {
-    //     codeText += `\n\tbaselayer="travic_v2"`;
-    //   }
-    // });
-
-    str = Object.keys(attributes).reduce((acc, key) => {
+    str = Object.keys({ apikey: "", ...attributes }).reduce((acc, key) => {
       if (key === "apikey" && !attributes[key]) {
         return `${acc}\n\tapikey="YOUR_GEOPS_API_KEY"`;
       }
@@ -359,28 +340,47 @@ function GeopsMobilityDoc() {
 
   return (
     <div className="scroll-mt-20" id="geops-mobility-web-component">
-      <Typography
-        className="mb-8 mt-16"
-        variant="h2"
-      >{`<geops-mobility/>`}</Typography>
+      <Typography variant="h1">{`<geops-mobility />`}</Typography>
+      <br />
+      <Typography>
+        This is a demo of the &lt;geops-mobility /&gt; Web Component.
+      </Typography>
+      <br />
       <geops-mobility
         apikey={apiKey}
         class="block h-96 max-w-full resize overflow-auto"
         {...attributes}
       ></geops-mobility>
-      <Typography className="my-8" variant="h3">
+      <br />
+
+      <Typography className="my-8" variant="h2">
         HTML code
       </Typography>
+      <br />
+
       <pre className="rounded bg-slate-800 p-4 text-slate-200">{code}</pre>
-      <Typography className="my-8" variant="h3">
+      <br />
+
+      <Typography className="flex gap-4" variant="h2">
         Attributes
+        <Button
+          onClick={() => {
+            router.push(pathname, {
+              scroll: false,
+            });
+          }}
+        >
+          Reset
+        </Button>
       </Typography>
-      <table className="w-full table-auto">
+      <br />
+
+      <table className="w-full">
         <thead>
           <tr>
-            <th className="w-4 border px-4 py-2">Name</th>
-            <th className="w-8 border px-4 py-2">Value</th>
-            <th className="w-12 border px-4 py-2">Description</th>
+            <th className="w-[15%] border px-4 py-2">Name</th>
+            <th className="w-2/5 border px-4 py-2">Value</th>
+            <th className="w-[45%] border px-4 py-2">Description</th>
           </tr>
         </thead>
         <tbody>
@@ -400,8 +400,8 @@ function GeopsMobilityDoc() {
               } = attrsConfig[key] || {};
               return (
                 <tr key={key}>
-                  <td className="w-4 border px-4 py-2">{key}</td>
-                  <td className="w-8 border px-4 py-2">
+                  <td className="border px-4 py-2">{key}</td>
+                  <td className="border px-4 py-2">
                     {type === "textfield" && (
                       <div className="flex gap-2">
                         <TextField
@@ -447,7 +447,15 @@ function GeopsMobilityDoc() {
                       </Select>
                     )}
                   </td>
-                  <td className="w-12 border px-4 py-2">{description}</td>
+                  <td className="border p-4">
+                    {description}{" "}
+                    {defaultValue && (
+                      <>
+                        <br />
+                        <i>Default to &quot;{defaultValue}&quot;</i>
+                      </>
+                    )}
+                  </td>
                 </tr>
               );
             })}
