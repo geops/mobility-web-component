@@ -45,7 +45,7 @@ Here an exhaustive list of the `<geops-mobility>` web component attributes avail
 - [`notificationurl=`](https://mobility-web-component.geops.io/?notificationurl=): the MOCO notification url to get the notifications from.
 - [`permalink="true"`](https://mobility-web-component.geops.io/?permalink=true): add automatically an `x`,`y` an `z` URL parameters to the URL to allow to share the current map view. Default to false.
 - [`realtime="false"`](https://mobility-web-component.geops.io/?realtime=false): display the realtime layer or not (true or false). Default to true.
-- [`realtimeurl="wss://api.geops.io/tracker-ws/v1/ws"`](https://mobility-web-component.geops.io/?realtimeurl=wss://api.geops.io/tracker-ws/v1/ws): the [geOps Realtime API](https://developer.geops.io/apis/realtime) url to use. Default to `wss://api.geops.io/tracker-ws/v1/ws"Z`.
+- [`realtimeurl="wss://api.geops.io/tracker-ws/v1/ws"`](https://mobility-web-component.geops.io/?realtimeurl=wss://api.geops.io/tracker-ws/v1/ws): the [geOps Realtime API](https://developer.geops.io/apis/realtime) url to use. Default to `wss://api.geops.io/tracker-ws/v1/ws`.
 - [`search="false"`](https://mobility-web-component.geops.io/?search=false): display the search stops input or not (true or false). Default to true.
 - [`stopsurl="https://api.geops.io/stops/v1/"`](https://mobility-web-component.geops.io/?stopsurl=https://api.geops.io/stops/v1/): the [geOps Stops API](https://developer.geops.io/apis/stops) url to use. Default to `https://api.geops.io/stops/v1/`.
 - [`tenant="sbb"`](https://mobility-web-component.geops.io/?tenant=sbb): the tenant name to use to filter the Realtime vehicles available.

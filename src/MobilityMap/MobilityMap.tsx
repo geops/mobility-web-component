@@ -375,7 +375,7 @@ function MobilityMap({
                 <Copyright className="bg-slate-50/70" />
               </div>
               <div className="absolute right-2 top-2 z-10 flex flex-col gap-2">
-                <GeolocationButton />
+                {geolocation && <GeolocationButton />}
               </div>
               {search === "true" && (
                 <div className="absolute left-2 right-12 top-2 z-10 flex max-h-[90%] min-w-64 max-w-96 flex-col">
