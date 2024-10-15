@@ -1,69 +1,8 @@
-"use client";
 import "@geops/mobility-web-component";
-import {
-  Button,
-  Checkbox,
-  MenuItem,
-  Select,
-  TextField,
-  TextFieldProps,
-  Typography,
-} from "@mui/material";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { ReactNode, useCallback, useMemo } from "react";
+import { Typography } from "@mui/material";
+import { forwardRef } from "react";
 
-import useAttrFromUrlParams from "../hooks/useAttrFromUrlParams";
-import usePublicKey from "../hooks/usePublicKey";
-
-type GeopsMobilityAttributes =
-  | "apikey"
-  | "baselayer"
-  | "center"
-  | "geolocation"
-  | "mapsurl"
-  | "maxzoom"
-  | "minzoom"
-  | "mots"
-  | "notification"
-  | "notificationat"
-  | "notificationbeforelayerid"
-  | "notificationurl"
-  | "permalink"
-  | "realtime"
-  | "realtimeurl"
-  | "search"
-  | "stopsurl"
-  | "tenant"
-  | "zoom";
-
-interface AttrConfig {
-  defaultValue?: string;
-  description: ReactNode;
-  props?: TextFieldProps;
-  type: "checkbox" | "date" | "select" | "textfield";
-}
-
-const wcAttributes: GeopsMobilityAttributes[] = [
-  "apikey",
-  "baselayer",
-  "center",
-  "geolocation",
-  "mapsurl",
-  "stopsurl",
-  "maxzoom",
-  "minzoom",
-  "mots",
-  "notification",
-  "notificationat",
-  "notificationurl",
-  "notificationbeforelayerid",
-  "realtime",
-  "realtimeurl",
-  "search",
-  "tenant",
-  "zoom",
-  "permalink",
-];
+import WebComponentDoc, { AttrConfig } from "./WebComponentDoc";
 
 const attrsConfig: Record<string, AttrConfig> = {
   apikey: {
@@ -288,180 +227,23 @@ const attrsConfig: Record<string, AttrConfig> = {
   },
 };
 
-function GeopsMobilityDoc() {
-  const router = useRouter();
-  const pathname = usePathname();
-  const apiKey = usePublicKey();
-  const attributes = useAttrFromUrlParams(wcAttributes);
-  const searchParams = useSearchParams();
-
-  // Get a new searchParams string by merging the current
-  // searchParams with a provided key/value pair
-  const createQueryString = useCallback(
-    (name: string, value?: string) => {
-      const params = new URLSearchParams(searchParams.toString());
-      if (value === undefined || value === "") {
-        params.delete(name);
-      } else {
-        params.set(name, value);
-      }
-
-      return params.toString();
-    },
-    [searchParams],
-  );
-
-  const code = useMemo(() => {
-    let str = `<script\n\ttype="module"\n\tsrc="https://www.unpkg.com/@geops/mobility-web-component">
-</script>
-<geops-mobility`;
-
-    str = Object.keys({ apikey: "", ...attributes }).reduce((acc, key) => {
-      if (key === "apikey" && !attributes[key]) {
-        return `${acc}\n\tapikey="YOUR_GEOPS_API_KEY"`;
-      }
-      return `${acc}\n\t${key}="${attributes[key]}"`;
-    }, str);
-
-    str += `>\n</geops-mobility>`;
-
-    return str;
-  }, [attributes]);
-
-  const onChange = useCallback(
-    (key: string, value: string) => {
-      const val = value === attrsConfig[key]?.defaultValue ? undefined : value;
-      router.push(pathname + "?" + createQueryString(key, val), {
-        scroll: false,
-      });
-    },
-    [createQueryString, pathname, router],
-  );
-
+// eslint-disable-next-line react/display-name
+const GeopsMobility = forwardRef((props: Record<string, unknown>, ref) => {
   return (
-    <div className="scroll-mt-20" id="geops-mobility-web-component">
-      <Typography variant="h1">{`<geops-mobility />`}</Typography>
-      <br />
-      <Typography>
-        This is a demo of the &lt;geops-mobility /&gt; Web Component.
-      </Typography>
-      <br />
-      <geops-mobility
-        apikey={apiKey}
-        class="block h-96 max-w-full resize overflow-auto"
-        {...attributes}
-      ></geops-mobility>
-      <br />
-
-      <Typography className="my-8" variant="h2">
-        HTML code
-      </Typography>
-      <br />
-
-      <pre className="rounded bg-slate-800 p-4 text-slate-200">{code}</pre>
-      <br />
-
-      <Typography className="flex gap-4" variant="h2">
-        Attributes
-        <Button
-          onClick={() => {
-            router.push(pathname, {
-              scroll: false,
-            });
-          }}
-        >
-          Reset
-        </Button>
-      </Typography>
-      <br />
-
-      <table className="w-full">
-        <thead>
-          <tr>
-            <th className="w-[15%] border px-4 py-2">Name</th>
-            <th className="w-2/5 border px-4 py-2">Value</th>
-            <th className="w-[45%] border px-4 py-2">Description</th>
-          </tr>
-        </thead>
-        <tbody>
-          {wcAttributes
-            .sort((a, b) => {
-              return a < b ? -1 : 1;
-            })
-            .filter((key) => {
-              return attrsConfig[key]?.description;
-            })
-            .map((key) => {
-              const {
-                defaultValue,
-                description,
-                props = {},
-                type,
-              } = attrsConfig[key] || {};
-              return (
-                <tr key={key}>
-                  <td className="border px-4 py-2">{key}</td>
-                  <td className="border px-4 py-2">
-                    {type === "textfield" && (
-                      <div className="flex gap-2">
-                        <TextField
-                          defaultValue={attributes[key]}
-                          id={key}
-                          placeholder={defaultValue}
-                          {...props}
-                        />
-                        <Button
-                          onClick={() => {
-                            onChange(
-                              key,
-                              (document.getElementById(key) as HTMLInputElement)
-                                ?.value,
-                            );
-                          }}
-                        >
-                          Apply
-                        </Button>
-                      </div>
-                    )}
-
-                    {type === "checkbox" && (
-                      <Checkbox
-                        defaultChecked={
-                          (searchParams.get(key) || defaultValue) === "true"
-                        }
-                        onChange={(evt) => {
-                          onChange(key, evt.target.checked ? "true" : "false");
-                        }}
-                      />
-                    )}
-
-                    {type === "select" && (
-                      <Select
-                        defaultValue={searchParams.get(key) || defaultValue}
-                        onChange={(evt) => {
-                          onChange(key, evt.target.value);
-                        }}
-                      >
-                        <MenuItem value="travic_v2">Travic v2</MenuItem>
-                        <MenuItem value="base_dark_v2">Dark v2</MenuItem>
-                      </Select>
-                    )}
-                  </td>
-                  <td className="border p-4">
-                    {description}{" "}
-                    {defaultValue && (
-                      <>
-                        <br />
-                        <i>Default to &quot;{defaultValue}&quot;</i>
-                      </>
-                    )}
-                  </td>
-                </tr>
-              );
-            })}
-        </tbody>
-      </table>
-    </div>
+    <geops-mobility
+      class="block h-96 max-w-full resize overflow-auto"
+      ref={ref}
+      {...props}
+    ></geops-mobility>
+  );
+});
+function GeopsMobilityDoc() {
+  return (
+    <WebComponentDoc
+      attrsConfig={attrsConfig}
+      Comp={GeopsMobility}
+      tagName="geops-mobility"
+    />
   );
 }
 
