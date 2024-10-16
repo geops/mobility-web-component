@@ -1,60 +1,62 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { useContext } from "preact/hooks";
-import { createContext } from "preact";
+/* eslint-disable @typescript-eslint/no-empty-function */
+import { StopSequence } from "mobility-toolbox-js/api/typedefs";
 import {
+  MapboxStyleLayer,
   MaplibreLayer,
   RealtimeLayer,
-  MapboxStyleLayer,
 } from "mobility-toolbox-js/ol";
-import { Map } from "ol";
-import { StopSequence } from "mobility-toolbox-js/api/typedefs";
 import {
   RealtimeStation,
   RealtimeStationId,
   RealtimeTrainId,
 } from "mobility-toolbox-js/types";
+import { Map } from "ol";
+import { createContext } from "preact";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { useContext } from "preact/hooks";
+
 import type { MobilityMapProps } from "../../MobilityMap/MobilityMap";
 
-export type MapContextType = MobilityMapProps & {
-  stopSequence: StopSequence;
-  isTracking: boolean;
-  isFollowing: boolean;
-  map: Map;
+export type MapContextType = {
   baseLayer: MaplibreLayer;
+  isFollowing: boolean;
+  isTracking: boolean;
+  map: Map;
   realtimeLayer: RealtimeLayer;
-  station: RealtimeStation;
-  stationsLayer: MapboxStyleLayer;
   setBaseLayer: (baseLayer: MaplibreLayer) => void;
   setIsFollowing: (isFollowing: boolean) => void;
   setIsTracking: (isTracking: boolean) => void;
-  setStopSequence: (stopSequence?: StopSequence) => void;
   setMap: (map?: Map) => void;
   setRealtimeLayer: (realtimeLayer?: RealtimeLayer) => void;
   setStation: (station?: RealtimeStation) => void;
   setStationId: (stationId?: RealtimeStationId) => void;
   setStationsLayer: (stationsLayer?: MapboxStyleLayer) => void;
+  setStopSequence: (stopSequence?: StopSequence) => void;
   setTrainId: (trainId?: RealtimeTrainId) => void;
-};
+  station: RealtimeStation;
+  stationsLayer: MapboxStyleLayer;
+  stopSequence: StopSequence;
+} & MobilityMapProps;
 
 export const MapContext = createContext<MapContextType>({
   baseLayer: null,
   isFollowing: false,
   isTracking: false,
-  stopSequence: null,
   map: null,
   realtimeLayer: null,
-  station: null,
-  stationsLayer: null,
   setBaseLayer: (baseLayer?: MaplibreLayer) => {},
   setIsFollowing: (isFollowing: boolean) => {},
   setIsTracking: (isTracking: boolean) => {},
   setMap: (map?: Map) => {},
-  setStation: (station?: RealtimeStation) => {},
   setRealtimeLayer: (realtimeLayer?: RealtimeLayer) => {},
+  setStation: (station?: RealtimeStation) => {},
   setStationId: (stationId?: RealtimeStationId) => {},
   setStationsLayer: (stationsLayer?: MapboxStyleLayer) => {},
   setStopSequence: (stopSequence?: StopSequence) => {},
   setTrainId: (trainId?: RealtimeTrainId) => {},
+  station: null,
+  stationsLayer: null,
+  stopSequence: null,
 } as MapContextType);
 
 const useMapContext = (): MapContextType => {

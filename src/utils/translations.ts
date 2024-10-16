@@ -1,23 +1,31 @@
 const translations = {
   de: {
-    platform_rail: "Gl.",
+    no_stops_found: "Keine Haltestellen gefunden",
     platform_ferry: "St.",
     platform_other: "Kan.",
+    platform_rail: "Gl.",
+    stops_search_placeholder: "Haltestellen suchen",
   },
   en: {
-    platform_rail: "Pl.",
+    no_stops_found: "No stops found",
     platform_ferry: "Pier", // pier
     platform_other: "Std.", // stand
+    platform_rail: "Pl.",
+    stops_search_placeholder: "Search for stop",
   },
   fr: {
-    platform_rail: "Voie",
+    no_stops_found: "Aucun arrêt trouvé",
     platform_ferry: "Quai",
     platform_other: "Quai",
+    platform_rail: "Voie",
+    stops_search_placeholder: "Chercher un arrêt",
   },
   it: {
-    platform_rail: "Bin.",
+    no_stops_found: "Nessuna fermata trovata",
     platform_ferry: "Imb.", // imbarcadero
     platform_other: "Cor.", // corsia
+    platform_rail: "Bin.",
+    stops_search_placeholder: "Ricerca delle fermate",
   },
 };
 export default translations;
