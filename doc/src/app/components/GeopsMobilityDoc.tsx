@@ -1,6 +1,5 @@
-import "@geops/mobility-web-component";
 import { Typography } from "@mui/material";
-import { forwardRef } from "react";
+import GeopsMobility from "./GeopsMobility";
 
 import WebComponentDoc, { AttrConfig } from "./WebComponentDoc";
 
@@ -226,17 +225,6 @@ const attrsConfig: Record<string, AttrConfig> = {
     type: "textfield",
   },
 };
-
-// eslint-disable-next-line react/display-name
-const GeopsMobility = forwardRef((props: Record<string, unknown>, ref) => {
-  return (
-    <geops-mobility
-      class="block h-96 max-w-full resize overflow-auto"
-      ref={ref}
-      {...props}
-    ></geops-mobility>
-  );
-});
 function GeopsMobilityDoc() {
   return (
     <WebComponentDoc

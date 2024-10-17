@@ -36,7 +36,9 @@ export default function RootLayout({
         <AppRouterCacheProvider>
           <ThemeProvider theme={geopsTheme}>
             <Header tabs={tabs} title="mobility-web-component" />
-            <Container className="my-10 block">{children}</Container>
+            <Container className="my-12" maxWidth="md">
+              {children}
+            </Container>
             <Footer />
           </ThemeProvider>
         </AppRouterCacheProvider>

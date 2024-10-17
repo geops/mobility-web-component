@@ -12,7 +12,7 @@ const compat = new FlatCompat();
 
 export default [
   {
-    ignores: ["build/*"],
+    ignores: ["build/*", "node_modules/*"],
   },
   ...ts.config(
     eslint.configs.recommended,

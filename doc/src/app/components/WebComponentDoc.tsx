@@ -84,7 +84,7 @@ function WebComponentDoc({
   const onChange = useCallback(
     (key: string, value: string) => {
       const val = value === attrsConfig[key]?.defaultValue ? undefined : value;
-      router.push(pathname + "?" + createQueryString(key, val), {
+      router.replace(pathname + "?" + createQueryString(key, val), {
         scroll: false,
       });
     },
@@ -125,8 +125,9 @@ function WebComponentDoc({
     };
   }, [events]);
 
+  console.log(attributes);
   return (
-    <div className="scroll-mt-20">
+    <div className="mb-48 scroll-mt-20">
       <Typography variant="h1">{`<${tagName} />`}</Typography>
       <br />
       <Typography>
@@ -149,7 +150,10 @@ function WebComponentDoc({
           <Typography className="my-8  overflow-auto" variant="h3">
             Event received
           </Typography>
-          <pre className="h-40 w-full overflow-auto p-2" id="textarea"></pre>
+          <pre
+            className="h-40 w-full overflow-auto border p-2"
+            id="textarea"
+          ></pre>
           <br />
         </>
       )}
@@ -203,24 +207,32 @@ function WebComponentDoc({
                   <td className="border px-4 py-2">{key}</td>
                   <td className="border px-4 py-2">
                     {type === "textfield" && (
-                      <div className="flex gap-2">
+                      <div>
                         <TextField
                           defaultValue={attributes[key]}
+                          fullWidth
                           id={key}
                           placeholder={defaultValue}
+                          variant="standard"
                           {...props}
                         />
-                        <Button
-                          onClick={() => {
-                            onChange(
-                              key,
-                              (document.getElementById(key) as HTMLInputElement)
-                                ?.value,
-                            );
-                          }}
-                        >
-                          Apply
-                        </Button>
+                        <div className="mt-2">
+                          <Button
+                            fullWidth
+                            onClick={() => {
+                              onChange(
+                                key,
+                                (
+                                  document.getElementById(
+                                    key,
+                                  ) as HTMLInputElement
+                                )?.value,
+                              );
+                            }}
+                          >
+                            Apply
+                          </Button>
+                        </div>
                       </div>
                     )}
 
@@ -238,9 +250,11 @@ function WebComponentDoc({
                     {type === "select" && (
                       <Select
                         defaultValue={searchParams.get(key) || defaultValue}
+                        fullWidth
                         onChange={(evt) => {
                           onChange(key, evt.target.value);
                         }}
+                        variant="standard"
                       >
                         <MenuItem value="travic_v2">Travic v2</MenuItem>
                         <MenuItem value="base_dark_v2">Dark v2</MenuItem>

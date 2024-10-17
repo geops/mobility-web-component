@@ -14,7 +14,7 @@ export default function Home() {
       </p>
       <br />
       <ul>
-        <li className="my-4">
+        <li className="m-4 list-disc">
           <p>
             <a href="/geops-mobility">
               <b>{`<geops-mobility>`}</b>
@@ -28,7 +28,7 @@ export default function Home() {
             </span>
           </p>
         </li>
-        <li>
+        <li className="m-4 list-disc">
           <p>
             <a href="/geops-mobility-search">
               <b>{`<geops-mobility-search>`}</b>

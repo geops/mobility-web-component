@@ -1,14 +1,7 @@
-import "@geops/mobility-web-component";
-import { TextFieldProps, Typography } from "@mui/material";
-import { forwardRef, ReactNode } from "react";
+import { Typography } from "@mui/material";
 
-import WebComponentDoc from "./WebComponentDoc";
-interface AttrConfig {
-  defaultValue?: string;
-  description: ReactNode;
-  props?: TextFieldProps;
-  type: "checkbox" | "date" | "select" | "textfield";
-}
+import GeopsMobilitySearch from "./GeopsMobilitySearch";
+import WebComponentDoc, { AttrConfig } from "./WebComponentDoc";
 
 const attrsConfig: Record<string, AttrConfig> = {
   apikey: {
@@ -27,6 +20,32 @@ const attrsConfig: Record<string, AttrConfig> = {
     description: (
       <Typography>
         The extent where to search the stops (minx,miny,maxx,maxy).
+      </Typography>
+    ),
+    type: "textfield",
+  },
+  countrycode: {
+    description: (
+      <Typography>
+        The country code to filter the results (IT, DE, CH ...)
+      </Typography>
+    ),
+    type: "textfield",
+  },
+  event: {
+    defaultValue: "mwc:stopssearchselect",
+    description: (
+      <Typography>
+        The event&pos;s name to listen to when a stop is selected.
+      </Typography>
+    ),
+    type: "textfield",
+  },
+  field: {
+    description: (
+      <Typography>
+        Which field to look up, default all of them, Possible values:id, name,
+        coords.
       </Typography>
     ),
     type: "textfield",
@@ -55,6 +74,33 @@ const attrsConfig: Record<string, AttrConfig> = {
     ),
     type: "textfield",
   },
+  params: {
+    description: (
+      <Typography>
+        JSON string with additional parameters to pass to the request to the
+        API. Ex: {"{ 'key': 'value' }"}
+      </Typography>
+    ),
+    type: "textfield",
+  },
+  prefagencies: {
+    description: (
+      <Typography>
+        Comma seperated list, order chooses which agency will be preferred as
+        ident_source (for id and code fields). Possible values: sbb, db.
+      </Typography>
+    ),
+    type: "textfield",
+  },
+  reflocation: {
+    description: (
+      <Typography>
+        Coordinates in WGS84 (in lat,lon order) used to rank stops close to this
+        position higher
+      </Typography>
+    ),
+    type: "textfield",
+  },
   url: {
     defaultValue: "https://api.geops.io/stops/v1/",
     description: (
@@ -73,19 +119,6 @@ const attrsConfig: Record<string, AttrConfig> = {
     type: "textfield",
   },
 };
-
-// eslint-disable-next-line react/display-name
-const GeopsMobilitySearch = forwardRef(
-  (props: Record<string, unknown>, ref) => {
-    return (
-      <geops-mobility-search
-        class="block max-w-3xl border"
-        ref={ref}
-        {...props}
-      ></geops-mobility-search>
-    );
-  },
-);
 
 function GeopsMobilitySearchDoc() {
   return (
