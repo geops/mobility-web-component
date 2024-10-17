@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Container } from "@mui/material";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
 import { ThemeProvider } from "@mui/material/styles";
+import Script from "next/script";
 
 import { Footer, geopsTheme, Header } from "../geops-ui";
 import "./globals.css";
@@ -42,6 +43,7 @@ export default function RootLayout({
             <Footer />
           </ThemeProvider>
         </AppRouterCacheProvider>
+        <Script src="index.js" />
       </body>
     </html>
   );

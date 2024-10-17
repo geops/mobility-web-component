@@ -1,6 +1,7 @@
 import { Typography } from "@mui/material";
-import GeopsMobility from "./GeopsMobility";
+import { Suspense } from "react";
 
+import GeopsMobility from "./GeopsMobility";
 import WebComponentDoc, { AttrConfig } from "./WebComponentDoc";
 
 const attrsConfig: Record<string, AttrConfig> = {
@@ -227,11 +228,14 @@ const attrsConfig: Record<string, AttrConfig> = {
 };
 function GeopsMobilityDoc() {
   return (
-    <WebComponentDoc
-      attrsConfig={attrsConfig}
-      Comp={GeopsMobility}
-      tagName="geops-mobility"
-    />
+    <Suspense>
+      <WebComponentDoc
+        attrsConfig={attrsConfig}
+        // @ts-expect-error -  must find the correct type
+        Comp={GeopsMobility}
+        tagName="geops-mobility"
+      />
+    </Suspense>
   );
 }
 

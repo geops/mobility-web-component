@@ -58,6 +58,7 @@
     "build:js": "node scripts/build.mjs",
     "cp": "generact --root src",
     "dev": "node scripts/dev.mjs",
+    "doc": "yarn build && cp index.js doc/public/index.js && cp index.js.map doc/public/index.js.map && cd doc && yarn build",
     "format": "prettier --write 'src/**/*.(tsx|ts|js)' && eslint src/**/*.tsx --fix ",
     "lint": "eslint src/**/*.tsx",
     "prepare": "husky",

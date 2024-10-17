@@ -1,5 +1,4 @@
 "use client";
-import "@geops/mobility-web-component";
 import {
   Button,
   Checkbox,
@@ -136,8 +135,10 @@ function WebComponentDoc({
       <br />
       {
         <Comp
+          // @ts-expect-error - strange error
           apikey={apiKey}
           {...attributes}
+          // @ts-expect-error - strange error
           ref={(node: HTMLElement) => {
             // @ts-expect-error - strange error
             ref.current = node;

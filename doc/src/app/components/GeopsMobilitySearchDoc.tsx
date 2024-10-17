@@ -1,4 +1,5 @@
 import { Typography } from "@mui/material";
+import { Suspense } from "react";
 
 import GeopsMobilitySearch from "./GeopsMobilitySearch";
 import WebComponentDoc, { AttrConfig } from "./WebComponentDoc";
@@ -122,12 +123,15 @@ const attrsConfig: Record<string, AttrConfig> = {
 
 function GeopsMobilitySearchDoc() {
   return (
-    <WebComponentDoc
-      attrsConfig={attrsConfig}
-      Comp={GeopsMobilitySearch}
-      events={["mwc:stopssearchselect"]}
-      tagName="geops-mobility-search"
-    />
+    <Suspense>
+      <WebComponentDoc
+        attrsConfig={attrsConfig}
+        // @ts-expect-error -  must find the correct type
+        Comp={GeopsMobilitySearch}
+        events={["mwc:stopssearchselect"]}
+        tagName="geops-mobility-search"
+      />
+    </Suspense>
   );
 }
 
