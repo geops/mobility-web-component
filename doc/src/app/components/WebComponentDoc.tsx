@@ -8,6 +8,8 @@ import {
   TextFieldProps,
   Typography,
 } from "@mui/material";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   ReactElement,
@@ -162,10 +164,10 @@ function WebComponentDoc({
         HTML code
       </Typography>
       <br />
-
-      <pre className="rounded bg-slate-800 p-4 text-slate-200">{code}</pre>
+      <SyntaxHighlighter className="!m-0" language="xml">
+        {code}
+      </SyntaxHighlighter>
       <br />
-
       <Typography className="flex gap-4" variant="h2">
         Attributes
         <Button

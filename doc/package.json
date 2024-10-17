@@ -15,12 +15,14 @@
     "prismjs": "^1.29.0",
     "react": "^18",
     "react-dom": "^18",
+    "react-syntax-highlighter": "^15.6.1",
     "typeface-lato": "^1.1.13"
   },
   "devDependencies": {
     "@types/node": "^22.7.6",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/react-syntax-highlighter": "^15.5.13",
     "eslint": "^8",
     "eslint-config-next": "14.2.15",
     "eslint-config-prettier": "^9.1.0",
