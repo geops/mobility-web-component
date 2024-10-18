@@ -7,6 +7,7 @@ import GeopsMapsAPILink from "./GeopsMapsAPILink";
 import GeopsMobility from "./GeopsMobility";
 import GeopsRealtimeAPILink from "./GeopsRealtimeAPILink";
 import GeopsStopsAPILink from "./GeopsStopsAPILink";
+import Link from "./Link";
 import WebComponentDoc, { AttrConfig } from "./WebComponentDoc";
 
 const attrsConfig: Record<string, AttrConfig> = {
@@ -97,14 +98,9 @@ const attrsConfig: Record<string, AttrConfig> = {
         Display the notification layer or not (true or false). This layer will
         display informations about disruptions on the network. Data comes from
         our{" "}
-        <a
-          href="https://geops.com/en/solution/disruption-information"
-          rel="noreferrer"
-          target="_blank"
-        >
-          {" "}
+        <Link href="https://geops.com/en/solution/disruption-information">
           geOps MOCO tool
-        </a>
+        </Link>
         . It works it combination with `notificationurl`.
       </Typography>
     ),
@@ -132,13 +128,9 @@ const attrsConfig: Record<string, AttrConfig> = {
     description: (
       <Typography>
         The{" "}
-        <a
-          href="https://geops.com/en/solution/disruption-information"
-          rel="noreferrer"
-          target="_blank"
-        >
+        <Link href="https://geops.com/en/solution/disruption-information">
           geOps MOCO API
-        </a>{" "}
+        </Link>{" "}
         url to get the notifications from.
       </Typography>
     ),
