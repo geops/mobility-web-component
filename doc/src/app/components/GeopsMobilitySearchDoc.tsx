@@ -1,18 +1,16 @@
 import { Typography } from "@mui/material";
 import { Suspense } from "react";
 
+import GeopsAPIKeyLink from "./GeopsAPIKeyLink";
 import GeopsMobilitySearch from "./GeopsMobilitySearch";
+import GeopsStopsAPILink from "./GeopsStopsAPILink";
 import WebComponentDoc, { AttrConfig } from "./WebComponentDoc";
 
 const attrsConfig: Record<string, AttrConfig> = {
   apikey: {
     description: (
       <Typography>
-        Your{" "}
-        <a href="https://developer.geops.io/" rel="noreferrer" target="_blank">
-          geOps API key
-        </a>
-        .
+        Your <GeopsAPIKeyLink />.
       </Typography>
     ),
     type: "textfield",
@@ -106,15 +104,7 @@ const attrsConfig: Record<string, AttrConfig> = {
     defaultValue: "https://api.geops.io/stops/v1/",
     description: (
       <Typography>
-        The
-        <a
-          href="https://developer.geops.io/apis/stops"
-          rel="noreferrer"
-          target="_blank"
-        >
-          geOps Stops API
-        </a>{" "}
-        url to use.
+        The <GeopsStopsAPILink /> url to use.
       </Typography>
     ),
     type: "textfield",

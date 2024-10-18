@@ -2,18 +2,18 @@ import { Typography } from "@mui/material";
 import { Suspense } from "react";
 
 import useIsFullScreen from "../hooks/useIsFullScreen";
+import GeopsAPIKeyLink from "./GeopsAPIKeyLink";
+import GeopsMapsAPILink from "./GeopsMapsAPILink";
 import GeopsMobility from "./GeopsMobility";
+import GeopsRealtimeAPILink from "./GeopsRealtimeAPILink";
+import GeopsStopsAPILink from "./GeopsStopsAPILink";
 import WebComponentDoc, { AttrConfig } from "./WebComponentDoc";
 
 const attrsConfig: Record<string, AttrConfig> = {
   apikey: {
     description: (
       <Typography>
-        Your{" "}
-        <a href="https://developer.geops.io/" rel="noreferrer" target="_blank">
-          geOps API key
-        </a>
-        .
+        Your <GeopsAPIKeyLink />.
       </Typography>
     ),
     type: "textfield",
@@ -22,14 +22,7 @@ const attrsConfig: Record<string, AttrConfig> = {
     defaultValue: "travic_v2",
     description: (
       <Typography>
-        The style&apos;s name from the{" "}
-        <a
-          href="https://developer.geops.io/apis/maps"
-          rel="noreferrer"
-          target="_blank"
-        >
-          geOps Maps API
-        </a>{" "}
+        The style&apos;s name from the <GeopsMapsAPILink />
         (base_dark_v2, base_bright_v2, ...).
       </Typography>
     ),
@@ -55,15 +48,7 @@ const attrsConfig: Record<string, AttrConfig> = {
     defaultValue: "https://maps.geops.io",
     description: (
       <Typography>
-        The{" "}
-        <a
-          href="https://developer.geops.io/apis/maps"
-          rel="noreferrer"
-          target="_blank"
-        >
-          geOps Maps API
-        </a>{" "}
-        url to use.
+        The <GeopsMapsAPILink /> url to use.
       </Typography>
     ),
     type: "textfield",
@@ -109,7 +94,18 @@ const attrsConfig: Record<string, AttrConfig> = {
     defaultValue: "true",
     description: (
       <Typography>
-        Display the notification layer or not (true or false).
+        Display the notification layer or not (true or false). This layer will
+        display informations about disruptions on the network. Data comes from
+        our{" "}
+        <a
+          href="https://geops.com/en/solution/disruption-information"
+          rel="noreferrer"
+          target="_blank"
+        >
+          {" "}
+          geOps MOCO tool
+        </a>
+        . It works it combination with `notificationurl`.
       </Typography>
     ),
     type: "checkbox",
@@ -118,7 +114,7 @@ const attrsConfig: Record<string, AttrConfig> = {
     description: (
       <Typography>
         An ISO date string used to display active notification at this date in
-        the notification layer.
+        the notification layer. If not defined the current date will be used.
       </Typography>
     ),
     type: "textfield",
@@ -135,7 +131,15 @@ const attrsConfig: Record<string, AttrConfig> = {
   notificationurl: {
     description: (
       <Typography>
-        The MOCO notification url to get the notifications from.
+        The{" "}
+        <a
+          href="https://geops.com/en/solution/disruption-information"
+          rel="noreferrer"
+          target="_blank"
+        >
+          geOps MOCO API
+        </a>{" "}
+        url to get the notifications from.
       </Typography>
     ),
     type: "textfield",
@@ -155,7 +159,8 @@ const attrsConfig: Record<string, AttrConfig> = {
     defaultValue: "true",
     description: (
       <Typography>
-        Display the realtime layer or not (true or false).
+        Display the realtime layer or not (true or false). This layer display
+        realtime vehicles on the map using the <GeopsRealtimeAPILink />.
       </Typography>
     ),
     type: "checkbox",
@@ -164,15 +169,7 @@ const attrsConfig: Record<string, AttrConfig> = {
     defaultValue: "wss://api.geops.io/tracker-ws/v1/ws",
     description: (
       <Typography>
-        The{" "}
-        <a
-          href="https://developer.geops.io/apis/realtime"
-          rel="noreferrer"
-          target="_blank"
-        >
-          geOps Realtime API
-        </a>{" "}
-        url to use.
+        The <GeopsRealtimeAPILink /> url to use.
       </Typography>
     ),
     type: "textfield",
@@ -190,15 +187,7 @@ const attrsConfig: Record<string, AttrConfig> = {
     defaultValue: "https://api.geops.io/stops/v1/",
     description: (
       <Typography>
-        The{" "}
-        <a
-          href="https://developer.geops.io/apis/stops"
-          rel="noreferrer"
-          target="_blank"
-        >
-          geOps Stops API
-        </a>{" "}
-        url to use.
+        The <GeopsStopsAPILink /> url to use.
       </Typography>
     ),
     type: "textfield",

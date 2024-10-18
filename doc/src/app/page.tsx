@@ -1,6 +1,9 @@
 "use client";
 import { Typography } from "@mui/material";
 
+import GeopsAPIsLink from "./components/GeopsAPIsLink";
+import GeopsStopsAPILink from "./components/GeopsStopsAPILink";
+
 export default function Home() {
   return (
     <>
@@ -8,10 +11,7 @@ export default function Home() {
       <br />
       <p className="my-4">
         This project contains a set of web components allowing to use easily the{" "}
-        <a href="https://developer.geops.io/">
-          <b>geOps APIs</b>
-        </a>
-        :
+        <GeopsAPIsLink />:
       </p>
       <br />
       <ul>
@@ -22,10 +22,7 @@ export default function Home() {
             </a>
             <span>
               : a web component used to display a map using different{" "}
-              <a href="https://developer.geops.io/">
-                <b>geOps APIs</b>
-              </a>
-              .
+              <GeopsAPIsLink />.
             </span>
           </p>
         </li>
@@ -35,10 +32,7 @@ export default function Home() {
               <b>{`<geops-mobility-search>`}</b>
             </a>
             <span>
-              : a search input to search stops using the{" "}
-              <a href="https://developer.geops.io/apis/stops">
-                <b>geOps Stops API</b>
-              </a>
+              : a search input to search stops using the <GeopsStopsAPILink />
             </span>
           </p>
         </li>
