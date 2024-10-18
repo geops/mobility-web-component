@@ -8,8 +8,6 @@ import {
   TextFieldProps,
   Typography,
 } from "@mui/material";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   ReactElement,
@@ -19,6 +17,7 @@ import {
   useMemo,
   useRef,
 } from "react";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 
 import useAttrFromUrlParams from "../hooks/useAttrFromUrlParams";
 import usePublicKey from "../hooks/usePublicKey";
@@ -33,12 +32,16 @@ export interface AttrConfig {
 function WebComponentDoc({
   attrsConfig,
   Comp,
+  compProps,
   events,
+  isFullScreen,
   tagName,
 }: {
   attrsConfig: Record<string, AttrConfig>;
   Comp: (props: Record<string, string>) => ReactElement;
+  compProps: Record<string, string>;
   events?: string[];
+  isFullScreen?: boolean;
   tagName: string;
 }) {
   const wcAttributes = Object.keys(attrsConfig);
@@ -126,7 +129,26 @@ function WebComponentDoc({
     };
   }, [events]);
 
-  console.log(attributes);
+  const webComponent = useMemo(() => {
+    return (
+      <Comp
+        // @ts-expect-error - strange error
+        apikey={apiKey}
+        {...attributes}
+        // @ts-expect-error - strange error
+        ref={(node: HTMLElement) => {
+          // @ts-expect-error - strange error
+          ref.current = node;
+        }}
+        {...compProps}
+      />
+    );
+  }, [Comp, apiKey, attributes, compProps]);
+
+  if (isFullScreen) {
+    return webComponent;
+  }
+
   return (
     <div className="mb-48 scroll-mt-20">
       <Typography variant="h1">{`<${tagName} />`}</Typography>
@@ -135,18 +157,7 @@ function WebComponentDoc({
         This is a demo of the &lt;{tagName} /&gt; Web Component.
       </Typography>
       <br />
-      {
-        <Comp
-          // @ts-expect-error - strange error
-          apikey={apiKey}
-          {...attributes}
-          // @ts-expect-error - strange error
-          ref={(node: HTMLElement) => {
-            // @ts-expect-error - strange error
-            ref.current = node;
-          }}
-        />
-      }
+      {webComponent}
       <br />
       {events?.length && (
         <>

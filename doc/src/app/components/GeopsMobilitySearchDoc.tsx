@@ -128,6 +128,7 @@ function GeopsMobilitySearchDoc() {
         attrsConfig={attrsConfig}
         // @ts-expect-error -  must find the correct type
         Comp={GeopsMobilitySearch}
+        compProps={{ class: "block w-full border" }}
         events={["mwc:stopssearchselect"]}
         tagName="geops-mobility-search"
       />
