@@ -4,6 +4,7 @@ import { Container } from "@mui/material";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
 import { ThemeProvider } from "@mui/material/styles";
 import Script from "next/script";
+import { Suspense } from "react";
 
 import { Footer, geopsTheme, Header } from "../geops-ui";
 import "./globals.css";
@@ -38,7 +39,7 @@ export default function RootLayout({
           <ThemeProvider theme={geopsTheme}>
             <Header tabs={tabs} title="mobility-web-component" />
             <Container className="my-12" maxWidth="md">
-              {children}
+              <Suspense fallback={null}>{children}</Suspense>
             </Container>
             <Footer />
           </ThemeProvider>
