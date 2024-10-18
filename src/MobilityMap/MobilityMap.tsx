@@ -34,6 +34,7 @@ import i18n from "../utils/i18n";
 import MobilityEvent from "../utils/MobilityEvent";
 // @ts-expect-error bad type definition
 import style from "./index.css";
+// Notificationurl example: https://mobility-web-component-tmp.vercel.app/geops-mobility?notificationurl=https%3A%2F%2Fmoco.geops.io%2Fapi%2Fv1%2Fexport%2Fnotification%2F%3Fsso_config%3Dsob&geolocation=false&realtime=false&search=false&notificationat=2024-01-25T22%3A59%3A00Z
 
 export interface MobilityMapProps {
   apikey?: string;
@@ -45,9 +46,9 @@ export interface MobilityMapProps {
   minzoom?: string;
   mots?: string;
   notification?: string;
-  notificationat?: string;
+  notificationat?: string; // 2024-01-25T22:59:00Z
   notificationbeforelayerid?: string;
-  notificationurl?: string;
+  notificationurl?: string; // https://moco.geops.io/api/v1/export/notification/?sso_config=sob
   permalink?: string;
   realtime?: string;
   realtimeurl?: string;
