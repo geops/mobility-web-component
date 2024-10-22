@@ -1,0 +1,43 @@
+{
+  "name": "doc",
+  "description": "Documentation for the Mobility Web Components",
+  "version": "0.1.0",
+  "dependencies": {
+    "@emotion/cache": "^11.13.1",
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
+    "@geops/geops-ui": "^0.3.4",
+    "@mui/icons-material": "^6.1.4",
+    "@mui/material": "^6.1.4",
+    "@mui/material-nextjs": "^6.1.4",
+    "@mui/styles": "^6.1.4",
+    "next": "14.2.15",
+    "prismjs": "^1.29.0",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-syntax-highlighter": "^15.6.1",
+    "typeface-lato": "^1.1.13"
+  },
+  "devDependencies": {
+    "@types/node": "^22.7.6",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "@types/react-syntax-highlighter": "^15.5.13",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.15",
+    "eslint-config-prettier": "^9.1.0",
+    "generact": "^0.4.0",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
+  },
+  "scripts": {
+    "build": "next build",
+    "cp": "generact --root src/app/components",
+    "dev": "next dev",
+    "lint": "next lint",
+    "start": "next start",
+    "up": "yarn upgrade-interactive --latest"
+  },
+  "private": true
+}

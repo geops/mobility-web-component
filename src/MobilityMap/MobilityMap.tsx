@@ -10,6 +10,7 @@ import {
 } from "mobility-toolbox-js/types";
 import { MapBrowserEvent, Map as OlMap } from "ol";
 import { unByKey } from "ol/Observable";
+import { fromLonLat } from "ol/proj";
 import { memo } from "preact/compat";
 import { useCallback, useEffect, useMemo, useState } from "preact/hooks";
 
@@ -24,6 +25,7 @@ import RouteSchedule from "../RouteSchedule";
 import ScaleLine from "../ScaleLine";
 import Station from "../Station";
 import StationsLayer from "../StationsLayer";
+import StopsSearch, { StationFeature } from "../StopsSearch/StopsSearch";
 // @ts-expect-error bad type definition
 import tailwind from "../style.css";
 import { I18nContext } from "../utils/hooks/useI18n";
@@ -32,6 +34,7 @@ import i18n from "../utils/i18n";
 import MobilityEvent from "../utils/MobilityEvent";
 // @ts-expect-error bad type definition
 import style from "./index.css";
+// Notificationurl example: https://mobility-web-component-tmp.vercel.app/geops-mobility?notificationurl=https%3A%2F%2Fmoco.geops.io%2Fapi%2Fv1%2Fexport%2Fnotification%2F%3Fsso_config%3Dsob&geolocation=false&realtime=false&search=false&notificationat=2024-01-25T22%3A59%3A00Z
 
 export interface MobilityMapProps {
   apikey?: string;
@@ -43,12 +46,14 @@ export interface MobilityMapProps {
   minzoom?: string;
   mots?: string;
   notification?: string;
-  notificationat?: string;
+  notificationat?: string; // 2024-01-25T22:59:00Z
   notificationbeforelayerid?: string;
-  notificationurl?: string;
+  notificationurl?: string; // https://moco.geops.io/api/v1/export/notification/?sso_config=sob
   permalink?: string;
   realtime?: string;
   realtimeurl?: string;
+  search?: string;
+  stopsurl?: string;
   tenant?: string;
   zoom?: string;
 }
@@ -85,7 +90,7 @@ function MobilityMap({
   apikey = null,
   baselayer = "travic_v2",
   center = "831634,5933959",
-  geolocation = null,
+  geolocation = "true",
   mapsurl = "https://maps.geops.io",
   maxzoom = null,
   minzoom = null,
@@ -97,6 +102,8 @@ function MobilityMap({
   permalink = "false",
   realtime = "true",
   realtimeurl = "wss://api.geops.io/tracker-ws/v1/ws",
+  search = "true",
+  stopsurl = "https://api.geops.io/stops/v1/",
   tenant = null,
   zoom = "13",
 }: MobilityMapProps) {
@@ -178,7 +185,7 @@ function MobilityMap({
 
   useEffect(() => {
     dispatchEvent(
-      new MobilityEvent("mwc:attribute", {
+      new MobilityEvent<MobilityMapProps>("mwc:attribute", {
         baselayer,
         center: x && y ? `${x},${y}` : center,
         geolocation,
@@ -192,6 +199,7 @@ function MobilityMap({
         notificationurl,
         realtime,
         realtimeurl,
+        search,
         tenant,
         zoom: z || zoom,
       }),
@@ -210,6 +218,7 @@ function MobilityMap({
     notificationbeforelayerid,
     realtime,
     realtimeurl,
+    search,
     tenant,
     zoom,
     x,
@@ -322,6 +331,20 @@ function MobilityMap({
     [realtimeLayer, stationsLayer, stationId, trainId, tenant],
   );
 
+  const onStopsSearchSelect = useCallback(
+    async (selectedStation: StationFeature) => {
+      const center = selectedStation?.geometry?.coordinates;
+      if (center) {
+        map.getView().animate({
+          center: fromLonLat(center),
+          duration: 500,
+          zoom: 16,
+        });
+      }
+    },
+    [map],
+  );
+
   useEffect(() => {
     const key = map?.on("singleclick", onSingleClick);
     return () => {
@@ -343,21 +366,31 @@ function MobilityMap({
       <MapContext.Provider value={mapContextValue}>
         <div className="relative size-full border font-sans @container/main">
           <div className="relative flex size-full flex-col @lg/main:flex-row-reverse">
-            <Map className="relative flex-1 overflow-hidden ">
+            <Map className="relative flex-1 overflow-visible ">
               <BaseLayer />
               {realtime === "true" && <RealtimeLayer />}
               {tenant && <StationsLayer />}
               {notification === "true" && <NotificationLayer />}
-              <div className="absolute right-2 top-2 z-20 flex flex-col gap-2">
-                <GeolocationButton />
-              </div>
               <div className="absolute inset-x-2 bottom-2 z-10 flex items-end justify-between gap-2 text-[10px]">
                 <ScaleLine className="bg-slate-50/70" />
                 <Copyright className="bg-slate-50/70" />
               </div>
+              <div className="absolute right-2 top-2 z-10 flex flex-col gap-2">
+                {geolocation === "true" && <GeolocationButton />}
+              </div>
+              {search === "true" && (
+                <div className="absolute left-2 right-12 top-2 z-10 flex max-h-[90%] min-w-64 max-w-96 flex-col">
+                  <StopsSearch
+                    apikey={apikey}
+                    onselect={onStopsSearchSelect}
+                    url={stopsurl}
+                  />
+                </div>
+              )}
             </Map>
 
             <Overlay
+              className={"z-50"}
               ScrollableHandlerProps={{
                 style: { width: "calc(100% - 60px)" },
               }}
