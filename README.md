@@ -121,11 +121,21 @@ Another url parameter is used to get a full screen map instead of the documentat
 
 ## Development
 
+If you want only the basic HTML, faster development process.
 ```bash
 corepack enable
 yarn install
 yarn start
 ```
+
+If you want the documentation website:
+
+```bash
+corepack enable
+yarn install && cd doc && yarn install
+yarn doc
+```
+
 
 ## Deployment
 
