@@ -44,7 +44,7 @@
     "jest-canvas-mock": "^2.5.2",
     "jest-environment-jsdom": "^29.7.0",
     "jest-preset-preact": "^4.1.1",
-    "next": "14.2.15",
+    "next": "15.0.3",
     "preact-render-to-string": "^6.5.11",
     "prettier": "^3.4.1",
     "standard-version": "^9.5.0",

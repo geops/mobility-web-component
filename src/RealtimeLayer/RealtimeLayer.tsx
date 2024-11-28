@@ -222,7 +222,7 @@ function RealtimeLayer(props: RealtimeLayerProps) {
         layer.vectorLayer.getSource().clear();
       }
     };
-  }, [trainId, layer, layer.api, setStopSequence]);
+  }, [trainId, layer, layer?.api, setStopSequence]);
 
   return null;
 }
