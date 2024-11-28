@@ -2,9 +2,9 @@ import { RealtimeStation } from "mobility-toolbox-js/types";
 import { createContext } from "preact";
 import { useContext } from "preact/hooks";
 
-export type StationContextType = {
+export interface StationContextType {
   station?: RealtimeStation;
-};
+}
 
 export const StationContext = createContext({
   station: null,

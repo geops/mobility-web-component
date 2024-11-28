@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { StopSequence } from "mobility-toolbox-js/api/typedefs";
 import {
-  MapboxStyleLayer,
   MaplibreLayer,
+  MaplibreStyleLayer,
   RealtimeLayer,
 } from "mobility-toolbox-js/ol";
 import {
   RealtimeStation,
   RealtimeStationId,
+  RealtimeStopSequence,
   RealtimeTrainId,
 } from "mobility-toolbox-js/types";
 import { Map } from "ol";
@@ -30,12 +30,14 @@ export type MapContextType = {
   setRealtimeLayer: (realtimeLayer?: RealtimeLayer) => void;
   setStation: (station?: RealtimeStation) => void;
   setStationId: (stationId?: RealtimeStationId) => void;
-  setStationsLayer: (stationsLayer?: MapboxStyleLayer) => void;
-  setStopSequence: (stopSequence?: StopSequence) => void;
+  setStationsLayer: (stationsLayer?: MaplibreStyleLayer) => void;
+  setStopSequence: (stopSequence?: RealtimeStopSequence) => void;
   setTrainId: (trainId?: RealtimeTrainId) => void;
   station: RealtimeStation;
-  stationsLayer: MapboxStyleLayer;
-  stopSequence: StopSequence;
+  stationId: RealtimeStationId;
+  stationsLayer: MaplibreStyleLayer;
+  stopSequence: RealtimeStopSequence;
+  trainId: RealtimeTrainId;
 } & MobilityMapProps;
 
 export const MapContext = createContext<MapContextType>({
@@ -51,12 +53,14 @@ export const MapContext = createContext<MapContextType>({
   setRealtimeLayer: (realtimeLayer?: RealtimeLayer) => {},
   setStation: (station?: RealtimeStation) => {},
   setStationId: (stationId?: RealtimeStationId) => {},
-  setStationsLayer: (stationsLayer?: MapboxStyleLayer) => {},
-  setStopSequence: (stopSequence?: StopSequence) => {},
+  setStationsLayer: (stationsLayer?: MaplibreStyleLayer) => {},
+  setStopSequence: (stopSequence?: RealtimeStopSequence) => {},
   setTrainId: (trainId?: RealtimeTrainId) => {},
   station: null,
+  stationId: null,
   stationsLayer: null,
   stopSequence: null,
+  trainId: null,
 } as MapContextType);
 
 const useMapContext = (): MapContextType => {

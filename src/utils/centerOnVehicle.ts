@@ -1,7 +1,7 @@
 import { getVehiclePosition } from "mobility-toolbox-js/ol";
-import { linear } from "ol/easing";
-import { Map } from "ol";
 import { RealtimeTrajectory } from "mobility-toolbox-js/types";
+import { Map } from "ol";
+import { linear } from "ol/easing";
 
 const centerOnVehicle = async (
   vehicle: RealtimeTrajectory,
@@ -13,9 +13,8 @@ const centerOnVehicle = async (
   }
 
   const {
-    // @ts-expect-error bad type definition
-    properties: { coordinate },
     geometry,
+    properties: { coordinate },
   } = vehicle;
   const view = map.getView();
   const zoom = targetZoom || view.getZoom();
@@ -24,7 +23,7 @@ const centerOnVehicle = async (
   let center = coordinate;
   if (!center && geometry) {
     const { coord } = getVehiclePosition(Date.now(), vehicle, true);
-    center = coord;
+    center = coord as [number, number];
   }
   if (!center) {
     return Promise.reject();
@@ -36,9 +35,9 @@ const centerOnVehicle = async (
     view.animate(
       {
         center,
-        resolution,
         duration: 1000,
         easing: linear,
+        resolution,
       },
       (success) => {
         resolve(success);

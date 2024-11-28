@@ -1,5 +1,5 @@
-import { ControlCommonOptions } from "mobility-toolbox-js/common/controls/ControlCommon";
 import { CopyrightControl } from "mobility-toolbox-js/ol";
+import { CopyrightControlOptions } from "mobility-toolbox-js/ol/controls/CopyrightControl";
 import { JSX, PreactDOMAttributes } from "preact";
 import { useEffect, useMemo, useState } from "preact/hooks";
 
@@ -8,7 +8,7 @@ import useMapContext from "../utils/hooks/useMapContext";
 import style from "./index.css";
 
 export type CopyrightProps = {
-  options?: ControlCommonOptions;
+  options?: CopyrightControlOptions;
 } & JSX.HTMLAttributes<HTMLDivElement> &
   PreactDOMAttributes;
 
@@ -20,7 +20,6 @@ function Copyright({ options, ...props }: CopyrightProps) {
       return null;
     }
     const div = document.createElement("div");
-    // @ts-expect-error bad type definition
     div.className = "flex flex-wrap-reverse justify-end";
 
     return new CopyrightControl({
@@ -34,12 +33,9 @@ function Copyright({ options, ...props }: CopyrightProps) {
     if (!map || !control) {
       return;
     }
-    control.attachToMap(map);
-
+    map.addControl(control);
     return () => {
-      if (control) {
-        control.detachFromMap();
-      }
+      map?.removeControl(control);
     };
   }, [map, control]);
 

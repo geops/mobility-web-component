@@ -1,7 +1,7 @@
-import type { OlRealtimeLayerOptions } from "mobility-toolbox-js/ol/layers/RealtimeLayer";
 import type { RealtimeMot, RealtimeTrainId } from "mobility-toolbox-js/types";
 
 import { RealtimeLayer as MtbRealtimeLayer } from "mobility-toolbox-js/ol";
+import { RealtimeLayerOptions } from "mobility-toolbox-js/ol/layers/RealtimeLayer";
 import { unByKey } from "ol/Observable";
 import { memo } from "preact/compat";
 import { useEffect, useMemo } from "preact/hooks";
@@ -16,7 +16,7 @@ import useMapContext from "../utils/hooks/useMapContext";
 
 const TRACKING_ZOOM = 16;
 
-export type RealtimeLayerProps = OlRealtimeLayerOptions;
+export type RealtimeLayerProps = RealtimeLayerOptions;
 
 function RealtimeLayer(props: RealtimeLayerProps) {
   const {
@@ -29,6 +29,9 @@ function RealtimeLayer(props: RealtimeLayerProps) {
     setIsFollowing,
     setIsTracking,
     setRealtimeLayer,
+    setStation,
+    setStopSequence,
+    stationId,
     stopSequence,
     tenant,
     trainId,
@@ -58,9 +61,7 @@ function RealtimeLayer(props: RealtimeLayerProps) {
       },
     });
 
-    layer.olLayer.getLayersArray().forEach((layer) => {
-      return layer.setZIndex(1);
-    });
+    layer.setZIndex(1);
 
     return layer;
   }, [apikey, mots, realtimeurl, tenant, props]);
@@ -70,17 +71,17 @@ function RealtimeLayer(props: RealtimeLayerProps) {
       return;
     }
     if (map.getView()?.getCenter()) {
-      layer.attachToMap(map);
+      map.addLayer(layer);
     } else {
       map.once("moveend", () => {
-        layer.attachToMap(map);
+        map.addLayer(layer);
       });
     }
 
     setRealtimeLayer(layer);
 
     return () => {
-      layer.detachFromMap();
+      map.removeLayer(layer);
       setRealtimeLayer(null);
     };
   }, [map, setRealtimeLayer, layer]);
@@ -124,8 +125,8 @@ function RealtimeLayer(props: RealtimeLayerProps) {
     let interval = null;
 
     if (layer) {
-      layer.useThrottle = !isFollowing;
-      layer.isUpdateBboxOnMoveEnd = !isFollowing;
+      layer.engine.useThrottle = !isFollowing;
+      layer.engine.isUpdateBboxOnMoveEnd = !isFollowing;
       // layer.useRequestAnimationFrame = isFollowing;
       layer.allowRenderWhenAnimating = !!isFollowing;
     }
@@ -139,18 +140,17 @@ function RealtimeLayer(props: RealtimeLayerProps) {
       let vehicle = id && layer?.trajectories?.[id];
 
       if (!vehicle) {
-        vehicle = await layer.api
-          .getTrajectory(stopSequence.id, layer.mode)
-          .then((message) => {
-            return message.content;
-          });
+        const message = await layer.api.getTrajectory(
+          stopSequence.id,
+          layer.mode,
+        );
+        vehicle = message?.content;
       }
 
       const success = await centerOnVehicle(vehicle, map, TRACKING_ZOOM);
 
       // Once the map is zoomed on the vehicle we follow him, only recenter , no zoom changes.
       if (success === true) {
-        layer.setBbox(layer.vectorLayer.getSource().getExtent());
         interval = setInterval(() => {
           centerOnVehicle(layer?.trajectories?.[stopSequence.id], map);
         }, 1000);
@@ -160,7 +160,6 @@ function RealtimeLayer(props: RealtimeLayerProps) {
 
     return () => {
       clearInterval(interval);
-      layer.setBbox();
     };
   }, [isFollowing, map, layer, stopSequence, setIsTracking]);
 
@@ -173,6 +172,57 @@ function RealtimeLayer(props: RealtimeLayerProps) {
       }
     }
   }, [map, trainId, layer]);
+
+  // Ask the station using the stationId to the Realtime API.
+  useEffect(() => {
+    if (!stationId || !layer?.api) {
+      return;
+    }
+    const subscribe = async () => {
+      layer?.api?.subscribe(`station ${stationId}`, ({ content }) => {
+        if (content) {
+          setStation(content);
+        }
+      });
+    };
+    subscribe();
+
+    return () => {
+      setStation(null);
+      if (stationId) {
+        layer?.api?.unsubscribe(`station ${stationId}`);
+      }
+    };
+  }, [stationId, layer?.api, setStation]);
+
+  // Subscribe to the stop sequence of the selected vehicle.
+  useEffect(() => {
+    if (!trainId || !layer?.api) {
+      return;
+    }
+    layer.selectedVehicleId = trainId;
+    layer.highlightTrajectory(trainId);
+    const subscribe = async () => {
+      layer?.api?.subscribeStopSequence(trainId, ({ content }) => {
+        if (content) {
+          const [firstStopSequence] = content;
+          if (firstStopSequence) {
+            setStopSequence(firstStopSequence);
+          }
+        }
+      });
+    };
+    subscribe();
+
+    return () => {
+      setStopSequence(null);
+      if (trainId && layer) {
+        layer.api?.unsubscribeStopSequence(trainId);
+        layer.selectedVehicleId = null;
+        layer.vectorLayer.getSource().clear();
+      }
+    };
+  }, [trainId, layer, layer.api, setStopSequence]);
 
   return null;
 }
