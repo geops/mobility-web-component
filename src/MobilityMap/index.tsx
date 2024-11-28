@@ -1,1 +1,1 @@
-export { default } from "./MobilityMap";
+export { default } from "../RvfMobilityMap";
