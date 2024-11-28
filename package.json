@@ -61,7 +61,7 @@
     "dev": "node scripts/dev.mjs",
     "doc": "yarn build && cp index.js doc/public/index.js && cd doc && yarn build",
     "doc:dev": "yarn build && cp index.js doc/public/index.js && cp index.js.map doc/public/index.js.map && cd doc && yarn dev",
-    "format": "prettier --write 'src/**/*.(tsx|ts|js)' && eslint src/**/*.tsx --fix ",
+    "format": "prettier --write 'src/**/*.(tsx|ts)' && eslint src/**/*.tsx src/**/*.ts --fix ",
     "lint": "eslint src/**/*.tsx",
     "prepare": "husky",
     "publish:beta": "HUSKY=0 yarn release -- --prerelease beta --skip.changelog && yarn run build && HUSKY=0 yarn publish --access public --tag beta && git push origin HEAD && git push --tags ",

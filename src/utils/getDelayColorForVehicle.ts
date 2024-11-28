@@ -7,7 +7,7 @@ import getDelayColor from "./getDelayColor";
  * @param {boolean} isDelayText true if the color is used for delay text of the symbol.
  */
 const getDelayColorForVehicle = (
-  delayInMs: number | null,
+  delayInMs: null | number,
   cancelled?: boolean,
   isDelayText?: boolean,
 ): string => {

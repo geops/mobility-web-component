@@ -7,7 +7,7 @@ import getDelayString from "./getDelayString";
  */
 const getDelayTextForVehicle = (
   delayInMs: number,
-  cancelled: boolean = false,
+  cancelled = false,
 ): string => {
   if (cancelled) {
     return String.fromCodePoint(0x00d7);
