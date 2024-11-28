@@ -18,8 +18,6 @@ import tailwind from "../style.css";
 import i18n from "../utils/i18n";
 import MobilityEvent from "../utils/MobilityEvent";
 
-export type StationFeature = StopsResponse["features"][0];
-
 export type SearchProps = {
   apikey: string;
   bbox?: string;
@@ -35,6 +33,8 @@ export type SearchProps = {
   url: string;
 } & JSX.HTMLAttributes<HTMLDivElement> &
   PreactDOMAttributes;
+
+export type StationFeature = StopsResponse["features"][0];
 
 const getQueryForSelectedStation = (selectedStation: StationFeature) => {
   return selectedStation.properties.name;
