@@ -1,22 +1,22 @@
-import { MapboxStyleLayer } from "mobility-toolbox-js/ol";
-import { MapGlLayerOptions } from "mobility-toolbox-js/ol/layers/MapGlLayer";
+import { MaplibreStyleLayer } from "mobility-toolbox-js/ol";
+import { MaplibreStyleLayerOptions } from "mobility-toolbox-js/ol/layers/MaplibreStyleLayer";
 import { memo } from "preact/compat";
 import { useEffect, useMemo } from "preact/hooks";
 
 import useMapContext from "../utils/hooks/useMapContext";
 
-function StationsLayer(props: MapGlLayerOptions) {
+function StationsLayer(props: MaplibreStyleLayerOptions) {
   const { baseLayer, map, setStationsLayer } = useMapContext();
 
   const layer = useMemo(() => {
     if (!baseLayer) {
       return null;
     }
-    return new MapboxStyleLayer({
-      mapboxLayer: baseLayer,
-      styleLayersFilter: ({ metadata }) => {
+    return new MaplibreStyleLayer({
+      layersFilter: ({ metadata }) => {
         return metadata?.["tralis.variable"] === "station";
       },
+      maplibreLayer: baseLayer,
       ...(props || {}),
     });
   }, [baseLayer, props]);
@@ -26,10 +26,11 @@ function StationsLayer(props: MapGlLayerOptions) {
       return;
     }
 
-    layer.attachToMap(map);
+    map.addLayer(layer);
     setStationsLayer(layer);
 
     return () => {
+      map.removeLayer(layer);
       layer.detachFromMap();
     };
   }, [map, setStationsLayer, layer]);

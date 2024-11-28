@@ -1,5 +1,6 @@
-import { useEffect, useState } from "preact/hooks";
 import { unByKey } from "ol/Observable";
+import { useEffect, useState } from "preact/hooks";
+
 import useMapContext from "./useMapContext";
 
 const useZoom = () => {
@@ -16,7 +17,9 @@ const useZoom = () => {
     }
     const zoomListener = view.on("change:resolution", () => {
       clearTimeout(timeout);
-      timeout = setTimeout(() => setZoom(view.getZoom()), 150);
+      timeout = setTimeout(() => {
+        return setZoom(view.getZoom());
+      }, 150);
     });
     return () => {
       clearTimeout(timeout);

@@ -1,11 +1,12 @@
 import { MaplibreLayer } from "mobility-toolbox-js/ol";
-import { MapGlLayerOptions } from "mobility-toolbox-js/ol/layers/MapGlLayer";
+import { MaplibreLayerOptions } from "mobility-toolbox-js/ol/layers/MaplibreLayer";
+import { Layer } from "ol/layer";
 import { memo } from "preact/compat";
 import { useEffect } from "preact/hooks";
 
 import useMapContext from "../utils/hooks/useMapContext";
 
-function BaseLayer(props: MapGlLayerOptions) {
+function BaseLayer(props: MaplibreLayerOptions) {
   const { apikey, baselayer, map, mapsurl, setBaseLayer } = useMapContext();
   useEffect(() => {
     if (!map || !baselayer || !apikey) {
@@ -13,17 +14,19 @@ function BaseLayer(props: MapGlLayerOptions) {
     }
     const layer = new MaplibreLayer({
       apiKey: apikey,
-      url: `${mapsurl}/styles/${baselayer}/style.json`,
+      style: baselayer,
+      url: mapsurl,
       ...(props || {}),
     });
-    layer.olLayer.getLayersArray().forEach((layer) => {
-      return layer.setZIndex(0);
-    });
-    layer.attachToMap(map);
+    const baseLayer = layer as unknown as Layer;
+
+    // TODO: find why the setZIndex is not found
+    baseLayer.setZIndex(0);
+    map.addLayer(baseLayer);
     setBaseLayer(layer);
 
     return () => {
-      layer.detachFromMap();
+      map?.removeLayer(baseLayer);
     };
   }, [map, baselayer, apikey, setBaseLayer, props, mapsurl]);
 

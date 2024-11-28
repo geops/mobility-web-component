@@ -27,10 +27,10 @@ describe("getStopStatus", () => {
     it("returns a correct isNotRealtime status", () => {
       const stopSequence = {
         stations: [
-          { state: "PENDING", arrivalDelay: null, departureDelay: null },
-          { state: "TIME_BASED", arrivalDelay: null, departureDelay: null },
-          { state: "PENDING", arrivalDelay: 0, departureDelay: 0 },
-          { state: "TIME_BASED", arrivalDelay: 0, departureDelay: 0 },
+          { arrivalDelay: null, departureDelay: null, state: "PENDING" },
+          { arrivalDelay: null, departureDelay: null, state: "TIME_BASED" },
+          { arrivalDelay: 0, departureDelay: 0, state: "PENDING" },
+          { arrivalDelay: 0, departureDelay: 0, state: "TIME_BASED" },
         ],
       };
       let {
@@ -56,7 +56,6 @@ describe("getStopStatus", () => {
         stations: [{}],
       };
       const {
-        progress,
         // isInBetween,
         // isCancelled,
         isFirst,
@@ -67,6 +66,7 @@ describe("getStopStatus", () => {
         // isNotStop,
         // isBoarding,
         isNextStop,
+        progress,
         // isCloseToNextStop,
         // @ts-expect-error bad type definition
       } = getStopStatus(stopSequence, 0);
@@ -81,17 +81,17 @@ describe("getStopStatus", () => {
         stations: [{}],
       };
       const {
-        progress,
         // isInBetween,
         // isCancelled,
         isFirst,
+        // isBoarding,
+        isNextStop,
         // isLast,
         // isPassed,
         // isLeft,
         // isNotRealtime,
         isNotStop,
-        // isBoarding,
-        isNextStop,
+        progress,
         // isCloseToNextStop,
         // @ts-expect-error bad type definition
       } = getStopStatus(stopSequence, 0);

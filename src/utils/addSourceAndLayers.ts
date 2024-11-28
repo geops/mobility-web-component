@@ -50,7 +50,6 @@ const addSourceAndLayers = (
         }
         mbMap.addLayer(style, beforeLayerId);
       } else {
-        // eslint-disable-next-line no-console
         console.warn(
           `The source ${style.source} doesn't exist. This layer can't be added`,
           style,

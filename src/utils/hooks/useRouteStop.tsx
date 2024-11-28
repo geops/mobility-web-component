@@ -1,17 +1,18 @@
 import { RealtimeStation, RealtimeStop } from "mobility-toolbox-js/types";
 import { createContext } from "preact";
 import { useContext } from "preact/hooks";
+
 import { StopStatus } from "../getStopStatus";
 
-export type RouteStopContextType = {
+export interface RouteStopContextType {
   index?: number;
   invertColor?: boolean;
   station?: RealtimeStation;
-  stop?: RealtimeStop & {
-    platform?: string;
-  };
   status?: StopStatus;
-};
+  stop?: {
+    platform?: string;
+  } & RealtimeStop;
+}
 
 export const RouteStopContext = createContext({
   index: null,

@@ -5,6 +5,7 @@ import {
   RealtimeStopSequence,
   RealtimeTrajectory,
 } from "mobility-toolbox-js/types";
+
 import getBgColor from "./getBgColor";
 
 // This function returns the main color of a line using a line, trajectory, stopsequence or departure object.

@@ -1,19 +1,19 @@
 import { RealtimeStopSequence } from "mobility-toolbox-js/types";
 
-export type StopStatus = {
-  isInBetween?: boolean;
+export interface StopStatus {
+  isBoarding?: boolean;
   isCancelled?: boolean;
+  isCloseToNextStop?: boolean;
   isFirst?: boolean;
+  isInBetween?: boolean;
   isLast?: boolean;
-  isPassed?: boolean;
   isLeft?: boolean;
+  isNextStop?: boolean;
   isNotRealtime?: boolean;
   isNotStop?: boolean;
-  isBoarding?: boolean;
-  isNextStop?: boolean;
-  isCloseToNextStop?: boolean;
+  isPassed?: boolean;
   progress?: number;
-};
+}
 
 const getBasicStatus = (stop, currTime, previousStop, nextStop) => {
   let topBoundary = stop.arrivalTime;
@@ -153,17 +153,17 @@ const getStopStatus = (
   }
 
   return {
-    isInBetween: !isPassed && progress > 0,
+    isBoarding,
     isCancelled,
+    isCloseToNextStop,
     isFirst: !previousStop,
+    isInBetween: !isPassed && progress > 0,
     isLast: !nextStop,
-    isPassed,
     isLeft,
+    isNextStop,
     isNotRealtime,
     isNotStop,
-    isBoarding,
-    isNextStop,
-    isCloseToNextStop,
+    isPassed,
     progress,
   };
 };
