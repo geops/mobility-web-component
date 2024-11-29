@@ -2,6 +2,53 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.6](https://github.com/geops/mobility-web-component/compare/v0.1.5...v0.1.6) (2024-11-29)
+
+
+### Features
+
+* add new departure context ([e7c08f6](https://github.com/geops/mobility-web-component/commit/e7c08f6f1f53ba027ce791ee2872e45c9d1d71f2))
+* add RouteStop context ([2347b71](https://github.com/geops/mobility-web-component/commit/2347b7154e7b185fb332aafeac3bae1e5de05525))
+* add RouteStop context ([1498847](https://github.com/geops/mobility-web-component/commit/1498847dc652f1c1012160cd0ae6662c6a65e4d0))
+* add search web component and documentation websiite ([#14](https://github.com/geops/mobility-web-component/issues/14)) ([ec2ca77](https://github.com/geops/mobility-web-component/commit/ec2ca775e6ec2621026721087fae76fb6f40d48c))
+* add useDebug hook ([2eea01d](https://github.com/geops/mobility-web-component/commit/2eea01d203ad1b98e10a48cbb07cea0ff0a17b5e))
+* make map more configurable ([#17](https://github.com/geops/mobility-web-component/issues/17)) ([84b6e4c](https://github.com/geops/mobility-web-component/commit/84b6e4c46665c5cc6e93810f0c415cba02671bf1))
+* manage progress and boarding state ([cc23732](https://github.com/geops/mobility-web-component/commit/cc2373237bd152d6e53399befabe2d376d4f7e1d))
+* **permalink:** update permalink on map move with XYZ ([9a1678b](https://github.com/geops/mobility-web-component/commit/9a1678b4595dab17afb711d1debca167302db5f4))
+
+
+### Bug Fixes
+
+* add eslint perfectionist ([6b3e865](https://github.com/geops/mobility-web-component/commit/6b3e8655af167a86171bc1522885307b34181d12))
+* add more eslint configs* ([87cb085](https://github.com/geops/mobility-web-component/commit/87cb0850928b654c948d49aaf8aae72b1461f711))
+* add some eslint rules ([e7a568f](https://github.com/geops/mobility-web-component/commit/e7a568f346c8a3bb5be726af47b14b0ed12b3da1))
+* add useI18n hook ([9558c7b](https://github.com/geops/mobility-web-component/commit/9558c7b2d4c0c67772ae8c667099d195202e6bb9))
+* add useI18n hook ([80558a8](https://github.com/geops/mobility-web-component/commit/80558a8d98906d51c982a539166b6f3e20b2f594))
+* add useI18n hook ([6e8dcbb](https://github.com/geops/mobility-web-component/commit/6e8dcbb54ccd791f05dbc8c2d4cab5cceea11704))
+* aply greyout properly ([73c7a23](https://github.com/geops/mobility-web-component/commit/73c7a23ce686feffa70d9ab6aeeb8fb98d5c6142))
+* apply greyout properly ([8cb761e](https://github.com/geops/mobility-web-component/commit/8cb761e1c5579dcd2fc249e8f91db51cda4dde51))
+* detect stop with no delays as not realtime stop ([f0d9a3a](https://github.com/geops/mobility-web-component/commit/f0d9a3a396ccabf8fde41d63a99b50a0a9012fa7))
+* fix station loading ([a01c2d5](https://github.com/geops/mobility-web-component/commit/a01c2d59ff2da40e3a1a44660127e82aa0eb833a))
+* fix tialwind generation ([a1f14c3](https://github.com/geops/mobility-web-component/commit/a1f14c3509ecb6f1f235e4f85811803523a7cc28))
+* improve css of debug info ([36a159f](https://github.com/geops/mobility-web-component/commit/36a159fe275399d9496517237cb8cb99bcc73fdc))
+* improve css of debug info ([bfa8f22](https://github.com/geops/mobility-web-component/commit/bfa8f22ef62fbb80857ddd2c6bddd8173fa64166))
+* improve css of debug info ([0ddcb6c](https://github.com/geops/mobility-web-component/commit/0ddcb6c9cc9caaebd20f79a700693cad3a0f700a))
+* improve use of context ([3b60e2c](https://github.com/geops/mobility-web-component/commit/3b60e2cb91725dd7e55ea9e8de8152e1accbda25))
+* improve use of context ([8d3308c](https://github.com/geops/mobility-web-component/commit/8d3308c73dfa9dfa751cb3e1d57afe9f2ffcb170))
+* improve use of context ([ec4ab99](https://github.com/geops/mobility-web-component/commit/ec4ab99a6afc7cffc04b52bcf598d8a315b6e048))
+* manage when no stop sequence are defined ([26daf3a](https://github.com/geops/mobility-web-component/commit/26daf3a026a5807f8127a15b512d043fc280bf1a))
+* move translation in its own file ([69e2c3f](https://github.com/geops/mobility-web-component/commit/69e2c3f206c91afe7e48771f2b59a9d2e0ded285))
+* **permalink:** add permalink attribute as to toggle use of permalink ([6f73323](https://github.com/geops/mobility-web-component/commit/6f733237e91458616b3e903c4bdd507f49646e6a))
+* post queryparams and origin to window.top ([154b78b](https://github.com/geops/mobility-web-component/commit/154b78b6712c2b0bdc4ff14648ae16f222948d6b))
+* remove only ([20b5233](https://github.com/geops/mobility-web-component/commit/20b523361348c8f365f19494b4b86f812a480a93))
+* remove use of RealtimeDepartureExtended type ([85be4f6](https://github.com/geops/mobility-web-component/commit/85be4f6bbf9e53caff2ddb5bb5abcdd76bac47cc))
+* remove useless useeffect deps ([885e69d](https://github.com/geops/mobility-web-component/commit/885e69dc1de9299ae3195ff0406334b0a1e1aced))
+* remove uselss file an set a scrollbar height ([a36203c](https://github.com/geops/mobility-web-component/commit/a36203cc50ab99d2265e6af89efff8beea362334))
+* update dependencies ([d7b7eef](https://github.com/geops/mobility-web-component/commit/d7b7eef33cb58031caa9257678d605e70346261c))
+* update dependencies ([1d3bfd7](https://github.com/geops/mobility-web-component/commit/1d3bfd72a7507adb11dca95206986005fa9d0734))
+* use node 22 ([55fdb87](https://github.com/geops/mobility-web-component/commit/55fdb87054dd65f6ca78afa1a42e9bb77444048e))
+* use perfectionist alphabetical ([8fce42d](https://github.com/geops/mobility-web-component/commit/8fce42d9998761598858322236dddb300c31ac51))
+
 ### [0.1.5](https://github.com/geops/mobility-web-component/compare/v0.1.4...v0.1.5) (2023-12-20)
 
 
