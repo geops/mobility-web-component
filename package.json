@@ -71,7 +71,7 @@
     "release": "standard-version",
     "start": "concurrently \"yarn tailwind:component --watch\" \"yarn tailwind:website --watch\" \"yarn dev\"",
     "tailwind:component": "tailwindcss --output=src/style.css --content=src/**/*.tsx",
-    "tailwind:website": "tailwindcss --output=output.css --content=*.html --minify",
+    "tailwind:website": "tailwindcss --input=./input.css --output=output.css --content=*.html --minify",
     "test": "TZ=UTC jest",
     "up": "yarn upgrade-interactive --latest",
     "upstream": "git fetch upstream && git merge upstream/main"

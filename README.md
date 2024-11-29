@@ -1,4 +1,4 @@
-# mobility-web-component
+# rvf-mobility-web-component
 
 This project contains a set of web components allowing to use easily the [geOps APIs](https://developer.geops.io/):
 
