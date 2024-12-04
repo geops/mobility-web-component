@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.8](https://github.com/geops/mobility-web-component/compare/v0.1.7...v0.1.8) (2024-12-04)
+
+
+### Bug Fixes
+
+* prepare config for node 23 ([fe7267e](https://github.com/geops/mobility-web-component/commit/fe7267ea3dfd043fc20c066290c374793b12f27f))
+* remove rvf texts ([cbe567b](https://github.com/geops/mobility-web-component/commit/cbe567bf41f69126407a81034e67a1375ebc1564))
+
 ### [0.1.7](https://github.com/geops/mobility-web-component/compare/v0.1.5...v0.1.7) (2024-11-29)
 
 
