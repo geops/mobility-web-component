@@ -13,16 +13,8 @@ export type RealtimeMapProps = JSX.HTMLAttributes<HTMLDivElement> &
 
 function Map({ children, ...props }: RealtimeMapProps) {
   const mapRef = useRef();
-  const {
-    center = "831634,5933959",
-    extent,
-    map,
-    maxextent,
-    maxzoom,
-    minzoom,
-    setMap,
-    zoom = "13",
-  } = useMapContext();
+  const { center, extent, map, maxextent, maxzoom, minzoom, setMap, zoom } =
+    useMapContext();
 
   const view = useMemo(() => {
     if (!maxextent) {
