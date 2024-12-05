@@ -36,6 +36,16 @@ const attrsConfig: Record<string, AttrConfig> = {
     ),
     type: "textfield",
   },
+  extent: {
+    description: (
+      <Typography>
+        The extent of the map in EPSG:3857 coordinates (ex:
+        "830634,5923959,831634,5933959"). It has the priority over `center` and
+        `zoom` attributes.
+      </Typography>
+    ),
+    type: "textfield",
+  },
   geolocation: {
     defaultValue: "true",
     description: (
@@ -50,6 +60,15 @@ const attrsConfig: Record<string, AttrConfig> = {
     description: (
       <Typography>
         The <GeopsMapsAPILink /> url to use.
+      </Typography>
+    ),
+    type: "textfield",
+  },
+  maxextent: {
+    description: (
+      <Typography>
+        Constraint the map in a specific extent in EPSG:3857 coordinates, the
+        user can not navigate outside this extent.
       </Typography>
     ),
     type: "textfield",

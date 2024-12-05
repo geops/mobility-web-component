@@ -34,7 +34,7 @@ Here an exhaustive list of the `<geops-mobility>` web component attributes avail
 - [`apikey="YOUR_API_KEY"`](https://mobility-web-component.geops.io/?apikey=YOUR_API_KEY): your [geOps API key](https://developer.geops.io/).
 - [`baselayer="travic_v2"`](https://mobility-web-component.geops.io/?baselayer=travic_v2): the style's name from the [geOps Maps API](https://developer.geops.io/apis/maps) (base_dark_v2, base_bright_v2, ...). Default to `travic_v2`.
 - [`center="831634,5933959"`](https://mobility-web-component.geops.io/?center=831634,5933959): the center of the map in EPSG:3857 coordinates. Default to `831634,5933959` (Bern).
-- [`extent="830634,5923959,831634,5933959"`](https://mobility-web-component.geops.io/?extent=830634,5923959,831634,5933959): the extent of the map of the map in EPSG:3857 coordinates. Have the priority over `center` and `zoom` attributes.
+- [`extent="830634,5923959,831634,5933959"`](https://mobility-web-component.geops.io/?extent=830634,5923959,831634,5933959): the extent of the map of the map in EPSG:3857 coordinates. It has the priority over `center` and `zoom` attributes.
 - [`geolocation="false"`](https://mobility-web-component.geops.io/?geolocation=false): display the geolocation button or not (true or false). Default to true.
 - [`mapsurl="https://maps.geops.io"`](https://mobility-web-component.geops.io/?mapsurl=https://maps.geops.io): the [geOps Maps API](https://developer.geops.io/apis/maps) url to use.Default to `https://maps.geops.io`.
 - [`maxextent="830634,5923959,831634,5933959"`](https://mobility-web-component.geops.io/?extent=830634,5923959,831634,5933959): constraint the map in a specific extent  in EPSG:3857 coordinates, the user can not navigate outside this extent.
