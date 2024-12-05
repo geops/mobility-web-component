@@ -40,8 +40,8 @@ const attrsConfig: Record<string, AttrConfig> = {
     description: (
       <Typography>
         The extent of the map in EPSG:3857 coordinates (ex:
-        "830634,5923959,831634,5933959"). It has the priority over `center` and
-        `zoom` attributes.
+        830634,5923959,831634,5933959). It has the priority over center and zoom
+        attributes.
       </Typography>
     ),
     type: "textfield",
