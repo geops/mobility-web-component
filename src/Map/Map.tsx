@@ -1,9 +1,10 @@
-import { Map as OlMap } from "ol";
+import { Map as OlMap, View } from "ol";
+import { unByKey } from "ol/Observable";
 // @ts-expect-error bad type definition
 import olStyle from "ol/ol.css";
 import { JSX, PreactDOMAttributes } from "preact";
 import { memo } from "preact/compat";
-import { useEffect, useRef } from "preact/hooks";
+import { useEffect, useMemo, useRef } from "preact/hooks";
 
 import useMapContext from "../utils/hooks/useMapContext";
 
@@ -14,17 +15,54 @@ function Map({ children, ...props }: RealtimeMapProps) {
   const mapRef = useRef();
   const {
     center = "831634,5933959",
+    extent,
     map,
+    maxextent,
     maxzoom,
     minzoom,
     setMap,
     zoom = "13",
   } = useMapContext();
 
+  const view = useMemo(() => {
+    if (!maxextent) {
+      return;
+    }
+    const bbox = maxextent.split(",").map((c) => {
+      return parseFloat(c);
+    });
+    return new View({
+      extent: bbox,
+    });
+  }, [maxextent]);
+
+  useEffect(() => {
+    if (!map || !view) {
+      return;
+    }
+    const key = map.on("change:view", (evt) => {
+      const oldView = evt.oldValue;
+      if (oldView) {
+        view.setMinZoom(oldView.getMinZoom());
+        view.setMaxZoom(oldView.getMaxZoom());
+        view.setCenter(oldView.getCenter());
+        view.setZoom(oldView.getZoom());
+      }
+    });
+    map.setView(view);
+
+    return () => {
+      unByKey(key);
+    };
+  }, [map, view]);
+
   useEffect(() => {
     let newMap: OlMap;
     if (mapRef.current) {
-      newMap = new OlMap({ controls: [], target: mapRef.current });
+      newMap = new OlMap({
+        controls: [],
+        target: mapRef.current,
+      });
       setMap(newMap);
     }
 
@@ -35,7 +73,19 @@ function Map({ children, ...props }: RealtimeMapProps) {
   }, [setMap]);
 
   useEffect(() => {
-    if (!map) {
+    if (!map || !extent) {
+      return;
+    }
+    const bbox = extent.split(",").map((c) => {
+      return parseFloat(c);
+    });
+    if (bbox) {
+      map.getView().fit(bbox);
+    }
+  }, [map, extent]);
+
+  useEffect(() => {
+    if (!map || !center) {
       return;
     }
     const [x, y] = center.split(",").map((c) => {

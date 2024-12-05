@@ -41,8 +41,10 @@ export interface MobilityMapProps {
   apikey?: string;
   baselayer?: string;
   center?: string;
+  extent?: string;
   geolocation?: string;
   mapsurl?: string;
+  maxextent?: string;
   maxzoom?: string;
   minzoom?: string;
   mots?: string;
@@ -63,8 +65,10 @@ function MobilityMap({
   apikey = null,
   baselayer = "travic_v2",
   center = "831634,5933959",
+  extent = null,
   geolocation = "true",
   mapsurl = "https://maps.geops.io",
+  maxextent = null,
   maxzoom = null,
   minzoom = null,
   mots = null,
@@ -102,11 +106,13 @@ function MobilityMap({
       baselayer,
       baseLayer,
       center,
+      extent,
       geolocation,
       isFollowing,
       isTracking,
       map,
       mapsurl,
+      maxextent,
       maxzoom,
       minzoom,
       mots,
@@ -141,11 +147,13 @@ function MobilityMap({
     baselayer,
     baseLayer,
     center,
+    extent,
     geolocation,
     isFollowing,
     isTracking,
     map,
     mapsurl,
+    maxextent,
     maxzoom,
     minzoom,
     mots,
@@ -171,8 +179,10 @@ function MobilityMap({
       new MobilityEvent<MobilityMapProps>("mwc:attribute", {
         baselayer,
         center: x && y ? `${x},${y}` : center,
+        extent,
         geolocation,
         mapsurl,
+        maxextent,
         maxzoom,
         minzoom,
         mots,
@@ -190,8 +200,10 @@ function MobilityMap({
   }, [
     baselayer,
     center,
+    extent,
     geolocation,
     mapsurl,
+    maxextent,
     maxzoom,
     minzoom,
     mots,

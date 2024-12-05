@@ -10,6 +10,8 @@ register(
     "apikey",
     "baselayer",
     "center",
+    "extent",
+    "maxextent",
     "geolocation",
     "mapsurl",
     "mots",
