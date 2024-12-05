@@ -32,6 +32,7 @@ function Map({ children, ...props }: RealtimeMapProps) {
       return parseFloat(c);
     });
     return new View({
+      constrainOnlyCenter: true, // allow to have the same value as extent and max extent
       extent: bbox,
     });
   }, [maxextent]);
