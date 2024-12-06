@@ -79,6 +79,7 @@
     <br />
     <br />
     <script type="text/javascript">
+      const pkgSrc = "https://www.unpkg.com/@geops/mobility-web-component";
       const wc = document.querySelector("geops-mobility-search");
 
       const attrs = [
@@ -102,9 +103,9 @@
 
       document.querySelector('#attributes').innerHTML = generateAttributesTable(wc, attrs);
       document.querySelector('#events').innerHTML = generateEventsTable(wc, events);
-      document.querySelector('#code').innerHTML = generateCodeText(wc, attrs);
+      document.querySelector('#code').innerHTML = generateCodeText(wc, attrs, pkgSrc);
       wc.addEventListener('mwc:attribute', (event) => {
-        document.querySelector('#code').innerHTML = generateCodeText(wc, attrs);
+        document.querySelector('#code').innerHTML = generateCodeText(wc, attrs, pkgSrc);
       });
       applyPermalinkParameters(wc);
     </script>
