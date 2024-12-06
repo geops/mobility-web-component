@@ -98,7 +98,7 @@ function MobilityMap({
 
   // TODO: this should be removed. The parent application should be responsible to do this
   // or we should find something that fit more usecases
-  const { x, y, z } = useUpdatePermalink(map, permalink === "true");
+  useUpdatePermalink(map, permalink === "true");
 
   const mapContextValue = useMemo(() => {
     return {
@@ -179,7 +179,7 @@ function MobilityMap({
     eventNodeRef.current?.dispatchEvent(
       new MobilityEvent<MobilityMapProps>("mwc:attribute", {
         baselayer,
-        center: x && y ? `${x},${y}` : center,
+        center,
         extent,
         geolocation,
         mapsurl,
@@ -195,7 +195,7 @@ function MobilityMap({
         realtimeurl,
         search,
         tenant,
-        zoom: z || zoom,
+        zoom,
       }),
     );
   }, [
@@ -217,9 +217,6 @@ function MobilityMap({
     search,
     tenant,
     zoom,
-    x,
-    y,
-    z,
   ]);
 
   return (

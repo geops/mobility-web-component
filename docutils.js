@@ -15,7 +15,7 @@ function applyPermalinkParameters(wc) {
       return (d.style.display = "block");
     });
   }
-
+  console.log("icc, apply z");
   // Apply x,y,z
   if (
     params.get("permalink") === "true" &&
