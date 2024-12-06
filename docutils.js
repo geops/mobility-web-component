@@ -135,11 +135,16 @@ function generateEventsTable(wc, events) {
     .sort()
     .map((key) => {
       wc.addEventListener(key, (event) => {
-        document.querySelector(`[name='${key}']`).value = JSON.stringify(
-          event,
-          undefined,
-          4,
-        );
+        let stringify;
+        try {
+          stringify = JSON.stringify(event, undefined, 4);
+        } catch (e) {
+          stringify =
+            "Object not stringifyable, open the console (F12) to see the object received.";
+          console.log(key + " event", event);
+        }
+
+        document.querySelector(`[name='${key}']`).value = stringify.toString();
       });
       return `
         <tr>
