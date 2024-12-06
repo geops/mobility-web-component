@@ -16,17 +16,22 @@
       }
     </script>
     <script type="module" src="./index.js"></script>
+    <script src="./docutils.js"></script>
     <link rel="stylesheet" type="text/css" href="./output.css" />
     <style>
       ::-webkit-scrollbar {
-        width: 10px;
+        width: 3px;
+        height: 3px;
       }
       a {
         text-decoration: underline;
       }
     </style>
   </head>
+  </head>
   <body class="p-8">
+    <!-- tailwind hack to add class used in docutils -->
+    <div class="border px-4 py-2 table-auto w-full flex gap-4" style="display:none;"></div>
     <div
       id="doc"
       style="display: none"
@@ -49,28 +54,19 @@
       </p>
 
       <h2 class="text-xl font-bold">Usage example</h2>
-      <pre class="bg-slate-800 text-slate-200 p-4 rounded">
-&lt;script
-  type=&quot;module&quot;
-  src=&quot;https://www.unpkg.com/@geops/mobility-web-component&quot;&gt;
-&lt;/script&gt;
-&lt;geops-mobility-search
-  apikey=&quot;YOUR_GEOPS_API_KEY&quot;
-  limit=&quot;5&quot;
-  mots=&quot;rail,bus&quot;
-  style=&quot;display: block;width: 800px;height: 800px;&quot;&gt;
-&lt;/geops-mobility&gt;</pre
-      >
+      <pre id="code" class="bg-slate-800 text-slate-200 p-4 rounded"></pre>
 
-      <!-- Default -->
       <geops-mobility-search
         class="max-w-3xl block border"
         limit="5"
         mots="rail,bus"
       ></geops-mobility-search>
 
-      <pre id="textarea" class="w-full h-96 p-2"></pre>
-
+      <br />
+      <h2 class="text-xl font-bold">Attributes</h2>
+      <div id="attributes"></div>
+      <h2 class="text-xl font-bold">Events</h2>
+      <div id="events"></div>
       <br />
       <br />
       <h1 class="text-xl font-bold">More mobility web components</h1>
@@ -80,65 +76,37 @@
         >
       </p>
     </div>
+    <br />
+    <br />
     <script type="text/javascript">
-      let params = new URLSearchParams(window.location.search);
-      const searchElement = document.querySelector("geops-mobility-search");
-      const eventLog = document.querySelector("#textarea");
-
-
-      // Listen window event
-      window.addEventListener("message", (event) => {
-        const { type } = event.data || {};
-        console.log("message event: " + type, event.data);
-      });
-    </script>
-
-    <script type="text/javascript">
-      params = new URLSearchParams(window.location.search);
-
-      // There should be only one webcompoennt on the html page at this point
-      const doc = document.querySelectorAll("#doc");
       const wc = document.querySelector("geops-mobility-search");
-      if (params.get("fullscreen") === "true") {
-        wc.parentElement.removeChild(wc);
-        wc.className = "absolute w-full h-full inset-0";
-        document.body.appendChild(wc);
-        document.body.style = "padding:0;";
-      } else {
-        doc.forEach((d) => (d.style.display = "block"));
-      }
-      params.delete("fullscreen");
 
-      // Apply all url parameters as attribute of the web component
-      params.forEach((value, key) => {
-        wc.setAttribute(key, value);
+      const attrs = [
+        "apikey",
+        "bbox",
+        "countrycode",
+        "event",
+        "field",
+        "limit",
+        "mots",
+        "onselect",
+        "params",
+        "prefagencies",
+        "reflocation",
+        "url",
+      ];
+
+      const events = [
+        "mwc:stopssearchselect",
+      ];
+
+      document.querySelector('#attributes').innerHTML = generateAttributesTable(wc, attrs);
+      document.querySelector('#events').innerHTML = generateEventsTable(wc, events);
+      document.querySelector('#code').innerHTML = generateCodeText(wc, attrs);
+      wc.addEventListener('mwc:attribute', (event) => {
+        document.querySelector('#code').innerHTML = generateCodeText(wc, attrs);
       });
-
-      if (!wc.getAttribute("apikey")) {
-        fetch("https://backend.developer.geops.io/publickey")
-          .then((response) => response.json())
-          .then((data) => {
-            if (data && data.success) {
-              wc.setAttribute("apikey", data.key);
-            }
-          });
-      }
-
-
-      // Listen to element event
-      searchElement.addEventListener("mwc:stopssearchselect", (event) => {
-        const data = event.data;
-        if (!data) {
-          eventLog.innerText = "";
-        } else {
-          eventLog.innerText =
-            "Event " +
-            event.type +
-            " received :\n " +
-            JSON.stringify(data, undefined, " ");
-          window.top.postMessage(data, "*");
-        }
-      });
+      applyPermalinkParameters(wc);
     </script>
   </body>
 </html>

@@ -18,7 +18,7 @@ import tailwind from "../style.css";
 import i18n from "../utils/i18n";
 import MobilityEvent from "../utils/MobilityEvent";
 
-export type SearchProps = {
+export type MobilityStopsSearchProps = {
   apikey: string;
   bbox?: string;
   countrycode?: string;
@@ -58,12 +58,44 @@ function StopsSearch({
   prefagencies,
   reflocation,
   url = "https://api.geops.io/stops/v1/",
-}: SearchProps) {
+}: MobilityStopsSearchProps) {
   const { t } = i18n;
   const [query, setQuery] = useState("");
   const [selectedStation, setSelectedStation] = useState<StationFeature>();
   const [results, setResults] = useState<StopsResponse["features"]>(undefined);
   const myRef = useRef<HTMLDivElement>();
+
+  useEffect(() => {
+    myRef.current?.dispatchEvent(
+      new MobilityEvent<MobilityStopsSearchProps>("mwc:attribute", {
+        apikey,
+        bbox,
+        countrycode,
+        event,
+        field,
+        limit,
+        mots,
+        onselect,
+        params,
+        prefagencies,
+        reflocation,
+        url,
+      }),
+    );
+  }, [
+    apikey,
+    bbox,
+    countrycode,
+    event,
+    field,
+    limit,
+    mots,
+    onselect,
+    params,
+    prefagencies,
+    reflocation,
+    url,
+  ]);
 
   const api: StopsAPI = useMemo(() => {
     return new StopsAPI({ apiKey: apikey, url: url });
@@ -78,9 +110,9 @@ function StopsSearch({
           bubbles: true,
         },
       );
-      if (myRef.current) {
-        myRef.current.dispatchEvent(customEvt);
-      }
+
+      myRef.current?.dispatchEvent(customEvt);
+
       if (onselect && typeof onselect === "function") {
         onselect(station);
       }

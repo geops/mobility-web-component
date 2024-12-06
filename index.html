@@ -16,10 +16,12 @@
       }
     </script>
     <script type="module" src="./index.js"></script>
+    <script src="./docutils.js"></script>
     <link rel="stylesheet" type="text/css" href="./output.css" />
     <style>
       ::-webkit-scrollbar {
         width: 3px;
+        height: 3px;
       }
       a {
         text-decoration: underline;
@@ -27,91 +29,23 @@
     </style>
   </head>
   <body class="p-8">
+    <!-- tailwind hack to add class used in docutils -->
+    <div class="border px-4 py-2 table-auto w-full flex gap-4" style="display:none;"></div>
     <div id="doc" style="display: none" class="mx-auto max-w-3xl space-y-4">
       <h1 class="text-3xl font-bold">Mobility Web Component</h1>
       <p>This is a demo of the Mobility Web Component.</p>
       <h2 class="text-xl font-bold">Usage example</h2>
       <pre id="code" class="bg-slate-800 text-slate-200 p-4 rounded"></pre>
 
-      <!-- Default -->
       <geops-mobility
         class="max-w-3xl h-96 block resize overflow-auto"
       ></geops-mobility>
 
       <br />
       <h2 class="text-xl font-bold">Attributes</h2>
-      <!-- <button
-        class="border rounded p-2 hover:bg-slate-200"
-        onclick="toggleBooleanAttribute('search')"
-      >
-        Toggle search
-      </button> -->
-
-      <table class="table-auto w-full" >
-        <thead>
-          <tr>
-            <th class="border px-4 py-2">Name</th>
-            <th class="border px-4 py-2">Default</th>
-            <th class="border px-4 py-2">Description</th>
-            <th class="border px-4 py-2">Selected</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="border px-4 py-2">apikey</td>
-            <td class="border px-4 py-2"></td>
-            <td class="border px-4 py-2"></td>
-            <td class="border px-4 py-2">
-              <input
-                type="text"
-                class="border"
-                value=""
-                onchange="map.setAttribute('apikey', this.value)"/>
-            </td>
-          </tr>
-
-          <tr>
-            <td class="border px-4 py-2">search</td>
-            <td class="border px-4 py-2">true</td>
-            <td class="border px-4 py-2"></td>
-            <td class="border px-4 py-2">
-              <select
-              class="border px-4 py-2"
-                name="baselayer"
-                onchange="map.setAttribute(this.name, this.value)">
-                <option value="travic_v2">travic_v2</option>
-                <option value="base_dark_v2">base_dark_v2</option>
-              </select>
-            </td>
-          </tr>
-
-          <tr>
-            <td class="border px-4 py-2">realtime</td>
-            <td class="border px-4 py-2">true</td>
-            <td class="border px-4 py-2"></td>
-            <td class="border px-4 py-2">
-              <input
-                name="realtime"
-                type="checkbox"
-                checked
-                onchange="toggleBooleanAttribute(this.name)"/>
-            </td>
-          </tr>
-          <tr>
-            <td class="border px-4 py-2">search</td>
-            <td class="border px-4 py-2">true</td>
-            <td class="border px-4 py-2"></td>
-            <td class="border px-4 py-2">
-              <input
-                name="search"
-                type="checkbox"
-                checked
-                onchange="toggleBooleanAttribute(this.name)"/>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-
+      <div id="attributes"></div>
+      <h2 class="text-xl font-bold">Events</h2>
+      <div id="events"></div>
       <br />
       <br />
       <h1 class="text-xl font-bold">More mobility web components</h1>
@@ -121,93 +55,11 @@
         >
       </p>
     </div>
-
     <br />
     <br />
     <script type="text/javascript">
-      params = new URLSearchParams(window.location.search);
+      const wc = document.querySelector("geops-mobility");
 
-      // There should be only on map on the html page at this point
-      const doc = document.querySelectorAll("#doc");
-      const map = document.querySelector("geops-mobility");
-
-      if (params.get("fullscreen") === "true") {
-        map.parentElement.removeChild(map);
-        map.className = "absolute w-full h-full inset-0";
-        document.body.appendChild(map);
-        document.body.style = "padding:0;";
-      } else {
-        doc.forEach((d) => (d.style.display = "block"));
-      }
-      params.delete("fullscreen");
-
-      if (
-        params.get("permalink") !== "false" &&
-        params.get("x") &&
-        params.get("y")
-      ) {
-        map.setAttribute("center", `${params.get("x")},${params.get("y")}`);
-        params.delete("x");
-        params.delete("y");
-      }
-
-      if (params.get("permalink") !== "false" && params.get("z")) {
-        map.setAttribute("zoom", params.get("z"));
-        params.delete("z");
-      }
-
-      // Apply all url parameters as attribute of the web component
-      params.forEach((value, key) => {
-        map.setAttribute(key, value);
-        const input = document.querySelector(`input[name=${key}]`);
-        if (input) {
-          if (input.type === "checkbox") {
-            input.checked = value !== "false";
-          } else {
-           input.value = value;
-          }
-        }
-      });
-
-      if (!map.getAttribute("apikey")) {
-        fetch("https://backend.developer.geops.io/publickey")
-          .then((response) => response.json())
-          .then((data) => {
-            if (data && data.success) {
-              map.setAttribute("apikey", data.key);
-            }
-          });
-      }
-
-      // Listen StopsSearch event
-      window.addEventListener("mwc:stopssearchselect", (event) => {
-        console.log("mwc:stopssearchselect event: ", event.data);
-        // window.top.postMessage(event.data, "*");
-      });
-
-      // Send url search params to parent window
-      window.addEventListener("mwc:attribute", (event) => {
-        console.log("mwc:attribute event: ", event.data);
-        window.top.postMessage(new URLSearchParams(event.data).toString(), "*");
-      });
-
-      // Listen window event
-      window.addEventListener("message", (event) => {
-        console.log("message event: ", event);
-      });
-
-      function toggleBooleanAttribute(name) {
-        const value = map.getAttribute(name);
-        map.setAttribute(name, value === "false" ? "true" : "false");
-        const urlParams = new URLSearchParams(window.location.search);
-        urlParams.set(name, map.getAttribute(name));
-        window.history.replaceState(
-          {},
-          "",
-          `${window.location.pathname}?${urlParams}`,
-        );
-        generateCodeText();
-      }
       const attrs = [
           "apikey",
           "baselayer",
@@ -227,48 +79,18 @@
           "permalink",
         ];
 
-      function generateCodeText() {
-        const codeElt = document.querySelector("#code");
-        let codeText = "";
-        codeText = `&lt;script\n\ttype="module"\n\tsrc="https://www.unpkg.com/@geops/mobility-web-component"&gt;
-&lt;/script&gt;
-&lt;geops-mobility`;
+      const events = [
+        "mwc:stopssearchselect",
+        "mwc:attribute",
+      ];
 
-        attrs.forEach((key) => {
-          if (key == "apikey") {
-            codeText += `\n\tapikey="YOUR_GEOPS_API_KEY"`;
-          } else if (map.getAttribute(key) !== null) {
-            codeText += `\n\t${[key, '"' + map.getAttribute(key) + '"'].join("=")}`;
-          } else if (key == "center") {
-            codeText += `\n\tcenter="831634,5933959"`;
-          } else if (key == "zoom") {
-            codeText += `\n\tzoom="13"`;
-          } else if (key == "baselayer") {
-            codeText += `\n\tbaselayer="travic_v2"`;
-          }
-        });
-
-        code.innerHTML = codeText + `&gt;\n&lt;/geops-mobility&gt;`;
-      }
-
-      // Initialize value of inputs fields
-      function initInputs() {
-        attrs.forEach((key) => {
-          const input = document.querySelector(`input[name=${key}]`);
-          if (input) {
-            input.value = map.getAttribute(key) || "";
-          }
-        });
-        const inputs = document.querySelectorAll("input");
-        inputs.forEach((input) => {
-          input.addEventListener("change", () => {
-            generateCodeText();
-          });
-        });
-      }
-
-      initInputs();
-      generateCodeText();
+      document.querySelector('#attributes').innerHTML = generateAttributesTable(wc, attrs);
+      document.querySelector('#events').innerHTML = generateEventsTable(wc, events);
+      document.querySelector('#code').innerHTML = generateCodeText(wc, attrs);
+      wc.addEventListener('mwc:attribute', (event) => {
+        document.querySelector('#code').innerHTML = generateCodeText(wc, attrs);
+      });
+      applyPermalinkParameters(wc);
     </script>
   </body>
 </html>

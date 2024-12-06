@@ -11,7 +11,7 @@ import {
 } from "mobility-toolbox-js/types";
 import { Map as OlMap } from "ol";
 import { memo } from "preact/compat";
-import { useEffect, useMemo, useState } from "preact/hooks";
+import { useEffect, useMemo, useRef, useState } from "preact/hooks";
 
 import BaseLayer from "../BaseLayer";
 import Copyright from "../Copyright";
@@ -84,6 +84,7 @@ function MobilityMap({
   tenant = null,
   zoom = "13",
 }: MobilityMapProps) {
+  const eventNodeRef = useRef<HTMLDivElement>();
   const [baseLayer, setBaseLayer] = useState<MaplibreLayer>();
   const [isFollowing, setIsFollowing] = useState(false);
   const [isTracking, setIsTracking] = useState(false);
@@ -175,7 +176,7 @@ function MobilityMap({
   ]);
 
   useEffect(() => {
-    dispatchEvent(
+    eventNodeRef.current?.dispatchEvent(
       new MobilityEvent<MobilityMapProps>("mwc:attribute", {
         baselayer,
         center: x && y ? `${x},${y}` : center,
@@ -226,7 +227,10 @@ function MobilityMap({
       <style>{tailwind}</style>
       <style>{style}</style>
       <MapContext.Provider value={mapContextValue}>
-        <div className="relative size-full border font-sans @container/main">
+        <div
+          className="relative size-full border font-sans @container/main"
+          ref={eventNodeRef}
+        >
           <div className="relative flex size-full flex-col @lg/main:flex-row-reverse">
             <Map className="relative flex-1 overflow-visible ">
               <BaseLayer />
