@@ -30,7 +30,7 @@
   </head>
   <body class="p-8">
     <!-- tailwind hack to add class used in docutils -->
-    <div class="border px-4 py-2 table-auto w-full flex gap-4" style="display:none;"></div>
+    <div class="border px-4 py-2 table-auto w-full flex gap-4 p-2 bg-black text-white hover:bg-gray-700" style="display:none;"></div>
     <div id="doc" style="display: none" class="mx-auto max-w-3xl space-y-4">
       <h1 class="text-3xl font-bold">Mobility Web Component</h1>
       <p>This is a demo of the Mobility Web Component.</p>
@@ -80,12 +80,20 @@
           "permalink",
         ];
 
+      const booleanAttrs = [
+        "geolocation",
+        "notification",
+        "realtime",
+        "search",
+        "permalink",
+      ];
+
       const events = [
         "mwc:stopssearchselect",
         "mwc:attribute",
       ];
 
-      document.querySelector('#attributes').innerHTML = generateAttributesTable(wc, attrs);
+      document.querySelector('#attributes').innerHTML = generateAttributesTable(wc, attrs, booleanAttrs);
       document.querySelector('#events').innerHTML = generateEventsTable(wc, events);
       document.querySelector('#code').innerHTML = generateCodeText(wc, attrs, pkgSrc);
       wc.addEventListener('mwc:attribute', (event) => {

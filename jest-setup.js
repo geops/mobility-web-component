@@ -1,4 +1,5 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import "jest-canvas-mock";
 
-global.URL.createObjectURL = jest.fn(() => "fooblob");
+global.URL.createObjectURL = jest.fn(() => {
+  return "fooblob";
+});

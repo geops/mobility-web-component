@@ -60,7 +60,7 @@ function applyPermalinkParameters(wc) {
 }
 
 // Generates a HTML table with all attributes of a web component
-function generateAttributesTable(wc, attrs) {
+function generateAttributesTable(wc, attrs, booleanAttrs = []) {
   let innerHMTL = `<table class="table-auto w-full" >
     <thead>
       <tr>
@@ -74,6 +74,7 @@ function generateAttributesTable(wc, attrs) {
   innerHMTL += attrs
     .sort()
     .map((key) => {
+      const isBoolean = booleanAttrs.includes(key);
       return `
     <tr>
       <td class="border px-4 py-2">${key}</td>
@@ -81,12 +82,24 @@ function generateAttributesTable(wc, attrs) {
       <td class="border px-4 py-2"></td-->
       <td class="border px-4 py-2">
       <div class="flex gap-4">
+      ${
+        isBoolean
+          ? `<input
+          type="checkbox"
+          class="border"
+          name="${key}"
+          ${wc.getAttribute(key) === "true" ? "checked" : ""}
+          onchange="document.querySelector('${wc.localName}').setAttribute('${key}', this.checked);onAttributeUpdate(document.querySelector('${wc.localName}'),this.name, this.checked);" 
+          />`
+          : `
         <input
           type="text"
           class="border"
           name="${key}"
-          value="${wc.getAttribute(key) || ""}" />
-        <button onclick="document.querySelector('${wc.localName}').setAttribute('${key}', this.previousElementSibling.value);onAttributeUpdate(document.querySelector('${wc.localName}'),this.previousElementSibling.name, this.previousElementSibling.value);">Update</button>
+          value="${wc.getAttribute(key) || ""}" 
+          />
+        <button class="border p-2 bg-black hover:bg-gray-700 text-white" onclick="document.querySelector('${wc.localName}').setAttribute('${key}', this.previousElementSibling.value);onAttributeUpdate(document.querySelector('${wc.localName}'),this.previousElementSibling.name, this.previousElementSibling.value);">Update</button>`
+      }
       </div>
         </td>
     </tr>
