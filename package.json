@@ -70,7 +70,7 @@
     "publish:public:dryrun": "yarn release --dry-run",
     "release": "standard-version",
     "start": "concurrently \"yarn tailwind:component --watch\" \"yarn tailwind:website --watch\" \"yarn dev\"",
-    "tailwind:component": "tailwindcss --output=src/style.css --content=src/**/*.tsx",
+    "tailwind:component": "tailwindcss --input=./input.css --output=src/style.css --content=src/**/*.tsx",
     "tailwind:website": "tailwindcss --input=./input.css --output=output.css --content=*.html --minify",
     "test": "TZ=UTC jest",
     "up": "yarn upgrade-interactive --latest",
