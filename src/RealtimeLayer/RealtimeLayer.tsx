@@ -50,6 +50,7 @@ function RealtimeLayer(props: RealtimeLayerProps) {
         : undefined,
       tenant,
       url: realtimeurl,
+      zIndex: 1,
       ...props,
       styleOptions: {
         getDelayColor: getDelayColorForVehicle,
@@ -60,8 +61,6 @@ function RealtimeLayer(props: RealtimeLayerProps) {
         ...(props?.styleOptions || {}),
       },
     });
-
-    layer.setZIndex(1);
 
     return layer;
   }, [apikey, mots, realtimeurl, tenant, props]);

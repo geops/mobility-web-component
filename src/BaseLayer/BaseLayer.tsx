@@ -1,34 +1,42 @@
 import { MaplibreLayer } from "mobility-toolbox-js/ol";
 import { MaplibreLayerOptions } from "mobility-toolbox-js/ol/layers/MaplibreLayer";
-import { Layer } from "ol/layer";
 import { memo } from "preact/compat";
-import { useEffect } from "preact/hooks";
+import { useEffect, useMemo } from "preact/hooks";
 
 import useMapContext from "../utils/hooks/useMapContext";
 
-function BaseLayer(props: MaplibreLayerOptions) {
+export type BaseLayerProps = MaplibreLayerOptions;
+
+function BaseLayer(props: BaseLayerProps) {
   const { apikey, baselayer, map, mapsurl, setBaseLayer } = useMapContext();
-  useEffect(() => {
-    if (!map || !baselayer || !apikey) {
+
+  const layer = useMemo(() => {
+    if (!baselayer || !apikey) {
       return;
     }
-    const layer = new MaplibreLayer({
+    return new MaplibreLayer({
       apiKey: apikey,
       style: baselayer,
       url: mapsurl,
+      zIndex: 0,
       ...(props || {}),
     });
-    const baseLayer = layer as unknown as Layer;
+  }, [baselayer, apikey, props, mapsurl]);
 
-    // TODO: find why the setZIndex is not found
-    baseLayer.setZIndex(0);
-    map.addLayer(baseLayer);
+  useEffect(() => {
     setBaseLayer(layer);
+  }, [layer, setBaseLayer]);
+
+  useEffect(() => {
+    if (!map || !layer) {
+      return;
+    }
+    map.addLayer(layer);
 
     return () => {
-      map?.removeLayer(baseLayer);
+      map.removeLayer(layer);
     };
-  }, [map, baselayer, apikey, setBaseLayer, props, mapsurl]);
+  }, [map, layer]);
 
   return null;
 }
