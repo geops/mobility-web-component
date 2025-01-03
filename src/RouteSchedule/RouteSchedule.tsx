@@ -24,8 +24,10 @@ function RouteSchedule(props: RouteScheduleProps) {
       }
       const nextStation = elt.querySelector("[data-station-passed=false]");
       if (nextStation) {
-        nextStation.scrollIntoView({
+        // We use scrollTo avoid scrolling the entire window.
+        (nextStation.parentNode as Element).scrollTo({
           behavior: "smooth",
+          top: (nextStation as HTMLElement).offsetTop || 0,
         });
       }
       clearInterval(interval);
