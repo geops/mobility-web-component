@@ -1,15 +1,15 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import * as esbuild from "esbuild";
 import { sassPlugin } from "esbuild-sass-plugin";
 
 await esbuild.build({
-  entryPoints: ["./src/index.js"],
   bundle: true,
-  minify: true,
+  entryPoints: ["./src/index.js"],
   external: ["mapbox-gl"],
   loader: {
     ".png": "dataurl",
+    ".svg": "dataurl",
   },
+  minify: true,
   outfile: "index.js",
   plugins: [sassPlugin({ type: "css-text" })],
   sourcemap: false,
