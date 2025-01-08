@@ -28,7 +28,6 @@ function Departure({ departure, index, ...props }: DepartureProps) {
           setTrainId(departure.train_id);
           setStationId();
         }}
-        type="button"
         {...props}
       >
         <div
