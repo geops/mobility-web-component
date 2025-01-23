@@ -238,7 +238,7 @@ function GeopsMobilityDoc() {
         Comp={GeopsMobility}
         compProps={{
           class: isFullScreen
-            ? "fixed inset-0 w-screen h-sccreen z-[9000] bg-white"
+            ? "fixed inset-0 w-screen h-sccreen z-9000 bg-white"
             : "block h-96 max-w-full resize overflow-auto  bg-white",
         }}
         tagName="geops-mobility"

@@ -21,6 +21,7 @@
     "@commitlint/cli": "^19.6.1",
     "@commitlint/config-conventional": "^19.6.0",
     "@eslint/js": "^9.18.0",
+    "@tailwindcss/cli": "^4.0.0",
     "@tailwindcss/container-queries": "^0.1.1",
     "@testing-library/preact": "^3.2.4",
     "@types/geojson": "^7946.0.15",
@@ -48,7 +49,7 @@
     "preact-render-to-string": "^6.5.13",
     "prettier": "^3.4.2",
     "standard-version": "^9.5.0",
-    "tailwindcss": "4.0.0",
+    "tailwindcss": "^4.0.0",
     "ts-jest": "^29.2.5",
     "typescript": "^5.7.3",
     "typescript-eslint": "^8.21.0"
@@ -70,8 +71,8 @@
     "publish:public:dryrun": "yarn release --dry-run",
     "release": "standard-version",
     "start": "concurrently \"yarn tailwind:component --watch\" \"yarn tailwind:website --watch\" \"yarn dev\"",
-    "tailwind:component": "@tailwindcss/cli --input=./input.css --output=src/style.css --content=src/**/*.tsx",
-    "tailwind:website": "@tailwindcss/cli --input=./input.css --output=output.css --content=*.html --minify",
+    "tailwind:component": "npx @tailwindcss/cli --input=./input.css --output=src/style.css --content=src/**/*.tsx",
+    "tailwind:website": "npx @tailwindcss/cli --input=./input.css --output=output.css --content=*.html --minify",
     "test": "TZ=UTC jest",
     "up": "yarn upgrade-interactive --latest",
     "upstream": "git fetch upstream && git merge upstream/main"

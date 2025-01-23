@@ -175,7 +175,7 @@ function WebComponentDoc({
         HTML code
       </Typography>
       <br />
-      <SyntaxHighlighter className="!m-0" language="xml">
+      <SyntaxHighlighter className="m-0!" language="xml">
         {code}
       </SyntaxHighlighter>
       <br />
