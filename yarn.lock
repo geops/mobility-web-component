@@ -7209,10 +7209,10 @@ minimist@^1.1.3, minimist@^1.2.0, minimist@^1.2.5, minimist@^1.2.6, minimist@^1.
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.8.tgz#c1a464e7693302e082a075cee0c057741ac4772c"
   integrity sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA==
 
-mobility-toolbox-js@3.2.0-beta.0:
-  version "3.2.0-beta.0"
-  resolved "https://registry.yarnpkg.com/mobility-toolbox-js/-/mobility-toolbox-js-3.2.0-beta.0.tgz#415e6e5a11c48237e376c98b2121fe746a778c80"
-  integrity sha512-xKxn16tbHxATb9WKOdVOvAVFgj42Por4K8jnebJlYS9/cuFgwM+bvUEPiJUnMnv/x1rvWIijMZANko05pzqQMw==
+mobility-toolbox-js@3.2.1:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/mobility-toolbox-js/-/mobility-toolbox-js-3.2.1.tgz#3cc3dbda5c6b65465e396a1d1456e5be0bc7d7b9"
+  integrity sha512-MJTjY+t6xQnLnmAzxV89JBRxOP4zC8drkyE/SBSgdRpoqUjQ6nwK+IT956GRZ/XfNT+o5cGwgB8REpMT3jow7A==
   dependencies:
     "@geoblocks/ol-maplibre-layer" "^1.0.3"
     "@turf/helpers" "7.2.0"
