@@ -25,9 +25,9 @@ function Overlay({ children, ScrollableHandlerProps = {} }: OverlayProps) {
 
   return (
     <div
-      className={`relative z-50 flex flex-col overflow-hidden transition-[min-height,max-height] @lg:transition-[width]  ${
+      className={`relative z-50 flex flex-col overflow-hidden transition-[min-height,max-height] @lg:transition-[width] ${
         children
-          ? "max-h-[70%] min-h-[75px] w-full border-t @lg:h-[100%!important] @lg:max-h-full @lg:w-[350px] @lg:border-r @lg:border-t-0"
+          ? "max-h-[70%] min-h-[75px] w-full border-t @lg:h-[100%!important] @lg:max-h-full @lg:w-[350px] @lg:border-t-0 @lg:border-r"
           : "max-h-0 min-h-0 @lg:w-0"
       }`}
     >

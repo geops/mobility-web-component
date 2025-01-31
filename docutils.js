@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 function applyPermalinkParameters(wc) {
   const params = new URLSearchParams(window.location.search);
@@ -15,7 +14,7 @@ function applyPermalinkParameters(wc) {
       return (d.style.display = "block");
     });
   }
-  console.log("icc, apply z");
+
   // Apply x,y,z
   if (
     params.get("permalink") === "true" &&

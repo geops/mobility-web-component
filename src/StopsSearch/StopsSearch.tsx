@@ -203,13 +203,13 @@ function StopsSearch({
         }
         ref={myRef}
       >
-        <div className={"flex items-center "}>
+        <div className={"flex items-center"}>
           <FaSearch className="size-4" />
         </div>
         <div className={"flex grow overflow-hidden border-b-2 border-solid"}>
           <input
             autoComplete="off"
-            className="h-8 flex-1 outline-0  placeholder:text-zinc-400"
+            className="h-8 flex-1 outline-0 placeholder:text-zinc-400"
             id="searchfield"
             onChange={(event) => {
               // @ts-expect-error target is missing
@@ -254,7 +254,7 @@ function StopsSearch({
         )}
         {results && results.length > 0 && (
           <ul
-            className="grow rounded-md rounded-t-none border border-solid bg-white p-0 "
+            className="grow rounded-md rounded-t-none border border-solid bg-white p-0"
             style={{ border: 1 }} // without this th ul is displayed 1 px on the right
           >
             {results?.map((station) => {

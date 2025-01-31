@@ -225,11 +225,11 @@ function MobilityMap({
       <style>{style}</style>
       <MapContext.Provider value={mapContextValue}>
         <div
-          className="relative size-full border font-sans @container/main"
+          className="@container/main relative size-full border font-sans"
           ref={eventNodeRef}
         >
           <div className="relative flex size-full flex-col @lg/main:flex-row-reverse">
-            <Map className="relative flex-1 overflow-visible ">
+            <Map className="relative flex-1 overflow-visible">
               <BaseLayer />
               <SingleClickListener />
               {realtime === "true" && <RealtimeLayer />}
@@ -239,11 +239,11 @@ function MobilityMap({
                 <ScaleLine className="bg-slate-50/70" />
                 <Copyright className="bg-slate-50/70" />
               </div>
-              <div className="absolute right-2 top-2 z-10 flex flex-col gap-2">
+              <div className="absolute top-2 right-2 z-10 flex flex-col gap-2">
                 {geolocation === "true" && <GeolocationButton />}
               </div>
               {search === "true" && (
-                <div className="absolute left-2 right-12 top-2 z-10 flex max-h-[90%] min-w-64 max-w-96 flex-col">
+                <div className="absolute top-2 right-12 left-2 z-10 flex max-h-[90%] max-w-96 min-w-64 flex-col">
                   <Search />
                 </div>
               )}
@@ -256,10 +256,10 @@ function MobilityMap({
               }}
             >
               {realtime === "true" && trainId && (
-                <RouteSchedule className="relative overflow-y-auto  overflow-x-hidden" />
+                <RouteSchedule className="relative overflow-x-hidden overflow-y-auto" />
               )}
               {tenant && stationId && (
-                <Station className="relative overflow-y-auto  overflow-x-hidden" />
+                <Station className="relative overflow-x-hidden overflow-y-auto" />
               )}
             </Overlay>
           </div>
