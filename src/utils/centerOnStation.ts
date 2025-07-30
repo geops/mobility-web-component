@@ -1,7 +1,8 @@
-import { Map } from "ol";
 import { fromLonLat } from "ol/proj";
 
-import { StationFeature } from "../StopsSearch";
+import type { Map } from "ol";
+
+import type { StationFeature } from "../StopsSearch";
 
 const centerOnStation = (selectedStation: StationFeature, map: Map) => {
   const center = selectedStation?.geometry?.coordinates;

@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "preact/hooks";
 
 import useMapContext from "../utils/hooks/useMapContext";
 import useZoom from "../utils/hooks/useZoom";
+
 import {
   addNotificationsLayers,
   getNotificationsWithStatus,
@@ -79,7 +80,7 @@ const useNotifications = () => {
 
     // Fetch the main MOCO notifications
     const fetchNotifications = async () => {
-      const suffix = /\?/.test(notificationurl) ? "&" : "?";
+      const suffix = notificationurl.includes("?") ? "&" : "?";
       const url = `${notificationurl}${suffix}graph=${graphsString}`;
 
       abortCtrl?.abort();
@@ -91,7 +92,7 @@ const useNotifications = () => {
     };
 
     if (notificationurl && graphsString) {
-      fetchNotifications();
+      void fetchNotifications();
     }
 
     return () => {

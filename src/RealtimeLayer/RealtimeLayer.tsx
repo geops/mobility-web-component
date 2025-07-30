@@ -1,7 +1,4 @@
-import type { RealtimeMot, RealtimeTrainId } from "mobility-toolbox-js/types";
-
 import { RealtimeLayer as MtbRealtimeLayer } from "mobility-toolbox-js/ol";
-import { RealtimeLayerOptions } from "mobility-toolbox-js/ol/layers/RealtimeLayer";
 import { unByKey } from "ol/Observable";
 import { memo } from "preact/compat";
 import { useEffect, useMemo } from "preact/hooks";
@@ -13,6 +10,13 @@ import getDelayTextForVehicle from "../utils/getDelayTextForVehicle";
 import getTextFontForVehicle from "../utils/getTextFontForVehicle";
 import getTextForVehicle from "../utils/getTextForVehicle";
 import useMapContext from "../utils/hooks/useMapContext";
+
+import type { RealtimeLayerOptions } from "mobility-toolbox-js/ol/layers/RealtimeLayer";
+import type {
+  RealtimeMot,
+  RealtimeStation,
+  RealtimeTrainId,
+} from "mobility-toolbox-js/types";
 
 const TRACKING_ZOOM = 16;
 
@@ -41,7 +45,7 @@ function RealtimeLayer(props: RealtimeLayerProps) {
     if (!apikey || !realtimeurl) {
       return null;
     }
-    const layer = new MtbRealtimeLayer({
+    const lay = new MtbRealtimeLayer({
       apiKey: apikey,
       getMotsByZoom: mots
         ? () => {
@@ -62,7 +66,7 @@ function RealtimeLayer(props: RealtimeLayerProps) {
       },
     });
 
-    return layer;
+    return lay;
   }, [apikey, mots, realtimeurl, tenant, props]);
 
   useEffect(() => {
@@ -151,11 +155,11 @@ function RealtimeLayer(props: RealtimeLayerProps) {
       // Once the map is zoomed on the vehicle we follow him, only recenter , no zoom changes.
       if (success === true) {
         interval = setInterval(() => {
-          centerOnVehicle(layer?.trajectories?.[stopSequence.id], map);
+          void centerOnVehicle(layer?.trajectories?.[stopSequence.id], map);
         }, 1000);
       }
     };
-    followVehicle(stopSequence.id);
+    void followVehicle(stopSequence.id);
 
     return () => {
       clearInterval(interval);
@@ -177,14 +181,11 @@ function RealtimeLayer(props: RealtimeLayerProps) {
     if (!stationId || !layer?.api) {
       return;
     }
-    const subscribe = async () => {
-      layer?.api?.subscribe(`station ${stationId}`, ({ content }) => {
-        if (content) {
-          setStation(content);
-        }
-      });
-    };
-    subscribe();
+    layer?.api?.subscribe(`station ${stationId}`, ({ content }) => {
+      if (content) {
+        setStation(content as RealtimeStation);
+      }
+    });
 
     return () => {
       setStation(null);
@@ -200,18 +201,19 @@ function RealtimeLayer(props: RealtimeLayerProps) {
       return;
     }
     layer.selectedVehicleId = trainId;
-    layer.highlightTrajectory(trainId);
-    const subscribe = async () => {
-      layer?.api?.subscribeStopSequence(trainId, ({ content }) => {
-        if (content) {
-          const [firstStopSequence] = content;
-          if (firstStopSequence) {
-            setStopSequence(firstStopSequence);
-          }
+    layer.highlightTrajectory(trainId).catch((err) => {
+      // eslint-disable-next-line no-console
+      console.error("Error highlighting trajectory:", err);
+    });
+
+    layer?.api?.subscribeStopSequence(trainId, ({ content }) => {
+      if (content) {
+        const [firstStopSequence] = content;
+        if (firstStopSequence) {
+          setStopSequence(firstStopSequence);
         }
-      });
-    };
-    subscribe();
+      }
+    });
 
     return () => {
       setStopSequence(null);

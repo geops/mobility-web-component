@@ -1,9 +1,10 @@
-import { FeatureCollection } from "geojson";
-import { Feature } from "ol";
 import { getCenter } from "ol/extent";
 import GeoJSON from "ol/format/GeoJSON";
 
 import addSourceAndLayers from "../utils/addSourceAndLayers";
+
+import type { FeatureCollection } from "geojson";
+import type { Feature } from "ol";
 
 const format = new GeoJSON();
 

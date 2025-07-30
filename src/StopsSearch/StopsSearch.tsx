@@ -1,7 +1,5 @@
 import debounce from "lodash.debounce";
 import { StopsAPI } from "mobility-toolbox-js/api";
-import { StopsResponse } from "mobility-toolbox-js/types";
-import { JSX, PreactDOMAttributes } from "preact";
 import { memo } from "preact/compat";
 import {
   useCallback,
@@ -13,10 +11,16 @@ import {
 import { FaSearch } from "react-icons/fa";
 import { MdClose } from "react-icons/md";
 
+import useI18n from "../utils/hooks/useI18n";
+import MobilityEvent from "../utils/MobilityEvent";
+
 // @ts-expect-error tailwind must be added for the search web component
 import tailwind from "../style.css";
-import i18n from "../utils/i18n";
-import MobilityEvent from "../utils/MobilityEvent";
+
+import type { StopsParameters, StopsResponse } from "mobility-toolbox-js/types";
+import type { JSX, PreactDOMAttributes } from "preact";
+
+export type StopsFeature = StopsResponse["features"];
 
 export type MobilityStopsSearchProps = {
   apikey: string;
@@ -26,7 +30,7 @@ export type MobilityStopsSearchProps = {
   field?: string;
   limit?: number;
   mots?: string;
-  onselect?: (arg: StationFeature) => void;
+  onselect?: (arg: StopsFeature) => void;
   params?: string; // JSONstring
   prefagencies?: string;
   reflocation?: string;
@@ -34,10 +38,8 @@ export type MobilityStopsSearchProps = {
 } & JSX.HTMLAttributes<HTMLDivElement> &
   PreactDOMAttributes;
 
-export type StationFeature = StopsResponse["features"][0];
-
-const getQueryForSelectedStation = (selectedStation: StationFeature) => {
-  return selectedStation.properties.name;
+const getQueryForSelectedStation = (selectedStation?: StopsFeature): string => {
+  return selectedStation?.properties?.name || "";
 };
 
 /**
@@ -59,10 +61,11 @@ function StopsSearch({
   reflocation,
   url = "https://api.geops.io/stops/v1/",
 }: MobilityStopsSearchProps) {
-  const { t } = i18n;
+  const { t } = useI18n();
   const [query, setQuery] = useState("");
-  const [selectedStation, setSelectedStation] = useState<StationFeature>();
-  const [results, setResults] = useState<StopsResponse["features"]>(undefined);
+
+  const [selectedStation, setSelectedStation] = useState<StopsFeature>();
+  const [results, setResults] = useState<StopsFeature[] | undefined>();
   const myRef = useRef<HTMLDivElement>();
 
   useEffect(() => {
@@ -102,8 +105,8 @@ function StopsSearch({
   }, [apikey, url]);
 
   const dispatchEvent = useCallback(
-    (station?: StationFeature) => {
-      const customEvt = new MobilityEvent<StationFeature>(
+    (station?: StopsFeature) => {
+      const customEvt = new MobilityEvent<StopsFeature>(
         event || "mwc:stopssearchselect",
         station,
         {
@@ -121,24 +124,25 @@ function StopsSearch({
   );
 
   const debouncedSearch = useMemo(() => {
-    let abortCtrl: AbortController;
-    return debounce(async (q) => {
+    let abortCtrl: AbortController | undefined;
+
+    return debounce((q) => {
       abortCtrl?.abort();
       abortCtrl = new AbortController();
+
+      const reqParams = {
+        bbox,
+        field,
+        limit,
+        mots,
+        prefagencies,
+        q,
+        ref_location: reflocation,
+        ...JSON.parse(params || "{}"),
+      } as StopsParameters;
+
       api
-        .search(
-          {
-            bbox,
-            field,
-            limit,
-            mots,
-            prefagencies,
-            q,
-            ref_location: reflocation,
-            ...JSON.parse(params || "{}"),
-          },
-          { signal: abortCtrl.signal },
-        )
+        .search(reqParams, { signal: abortCtrl.signal })
         .then((res: StopsResponse) => {
           setResults(
             res.features.filter((f) => {
@@ -211,12 +215,12 @@ function StopsSearch({
             autoComplete="off"
             className="h-8 flex-1 outline-0 placeholder:text-zinc-400"
             id="searchfield"
-            onChange={(event) => {
+            onChange={(evt) => {
               // @ts-expect-error target is missing
-              setQuery(event.target.value);
+              setQuery(evt.target.value);
             }}
-            onKeyUp={(event: JSX.TargetedKeyboardEvent<HTMLInputElement>) => {
-              if (event.key === "Enter") {
+            onKeyUp={(evt: JSX.TargetedKeyboardEvent<HTMLInputElement>) => {
+              if (evt.key === "Enter") {
                 if (results?.length > 0) {
                   setSelectedStation(results[0]);
                 }

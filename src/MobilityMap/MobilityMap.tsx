@@ -1,15 +1,3 @@
-import {
-  MaplibreLayer,
-  MaplibreStyleLayer,
-  RealtimeLayer as MbtRealtimeLayer,
-} from "mobility-toolbox-js/ol";
-import {
-  RealtimeStation,
-  RealtimeStationId,
-  RealtimeStopSequence,
-  RealtimeTrainId,
-} from "mobility-toolbox-js/types";
-import { Map as OlMap } from "ol";
 import { memo } from "preact/compat";
 import { useEffect, useMemo, useRef, useState } from "preact/hooks";
 
@@ -26,15 +14,29 @@ import Search from "../Search";
 import SingleClickListener from "../SingleClickListener/SingleClickListener";
 import Station from "../Station";
 import StationsLayer from "../StationsLayer";
-// @ts-expect-error bad type definition
-import tailwind from "../style.css";
 import { I18nContext } from "../utils/hooks/useI18n";
 import { MapContext } from "../utils/hooks/useMapContext";
 import useUpdatePermalink from "../utils/hooks/useUpdatePermalink";
 import i18n from "../utils/i18n";
 import MobilityEvent from "../utils/MobilityEvent";
+
+// @ts-expect-error bad type definition
+import tailwind from "../style.css";
 // @ts-expect-error bad type definition
 import style from "./index.css";
+
+import type {
+  MaplibreLayer,
+  MaplibreStyleLayer,
+  RealtimeLayer as MbtRealtimeLayer,
+} from "mobility-toolbox-js/ol";
+import type {
+  RealtimeStation,
+  RealtimeStationId,
+  RealtimeStopSequence,
+  RealtimeTrainId,
+} from "mobility-toolbox-js/types";
+import type { Map as OlMap } from "ol";
 // Notificationurl example: https://mobility-web-component-tmp.vercel.app/geops-mobility?notificationurl=https%3A%2F%2Fmoco.geops.io%2Fapi%2Fv1%2Fexport%2Fnotification%2F%3Fsso_config%3Dsob&geolocation=false&realtime=false&search=false&notificationat=2024-01-25T22%3A59%3A00Z
 
 export interface MobilityMapProps {

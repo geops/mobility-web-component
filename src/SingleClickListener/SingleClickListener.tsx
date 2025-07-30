@@ -1,8 +1,9 @@
-import { Feature, MapBrowserEvent } from "ol";
 import { unByKey } from "ol/Observable";
 import { useCallback, useEffect } from "preact/hooks";
 
 import useMapContext from "../utils/hooks/useMapContext";
+
+import type { Feature, MapBrowserEvent } from "ol";
 
 function SingleClickListener() {
   const {
@@ -17,7 +18,7 @@ function SingleClickListener() {
   } = useMapContext();
 
   const onPointerMove = useCallback(
-    async (evt: MapBrowserEvent<PointerEvent>) => {
+    (evt: MapBrowserEvent<PointerEvent>) => {
       const [realtimeFeature] = evt.map.getFeaturesAtPixel(evt.pixel, {
         layerFilter: (l) => {
           return l === realtimeLayer;
@@ -42,7 +43,7 @@ function SingleClickListener() {
   );
 
   const onSingleClick = useCallback(
-    async (evt: MapBrowserEvent<PointerEvent>) => {
+    (evt: MapBrowserEvent<PointerEvent>) => {
       const [realtimeFeature] = evt.map.getFeaturesAtPixel(evt.pixel, {
         layerFilter: (l) => {
           return l === realtimeLayer;

@@ -1,7 +1,10 @@
-import { JSX, PreactDOMAttributes } from "preact";
-
 import useDebug from "../utils/hooks/useDebug";
 import useDeparture from "../utils/hooks/useDeparture";
+
+import type { RealtimeDeparture } from "mobility-toolbox-js/types";
+import type { JSX, PreactDOMAttributes } from "preact";
+
+import type { StationFeature } from "../StopsSearch";
 
 export type DebugDepartureProps = JSX.HTMLAttributes<HTMLDivElement> &
   PreactDOMAttributes;
@@ -13,7 +16,7 @@ const pad = (n: number) => {
   return `0${n}`.slice(-2);
 };
 
-const formatDebugTime = (time, excludeSeconds = false) => {
+const formatDebugTime = (time: string, excludeSeconds = false) => {
   const d = new Date(time);
 
   return !time || Number.isNaN(d)
@@ -37,34 +40,35 @@ function DebugDeparture(props: DebugDepartureProps) {
     return null;
   }
   const {
-    // @ts-expect-error bad type definition
     arrivalTime,
     at_station_ds100: atStationDs100,
-    // @ts-expect-error bad type definition
     departureTime,
     fzo_estimated_time: fzoEstimatedTime,
     has_fzo: hasFzo,
-    // @ts-expect-error bad type definition
     last_boarding_time: lastBoardingTime,
     min_arrival_time: minArrivalTime,
     ris_aimed_time: risAimedTime,
     ris_estimated_time: risEstimatedTime,
     state,
-    // @ts-expect-error bad type definition
     station,
-    // @ts-expect-error bad type definition
     stations_in_between: stationsInBetween,
     time,
     train_number: trainNumber,
-  } = departure;
+  } = departure as {
+    arrivalTime: string;
+    departureTime: string;
+    last_boarding_time: string;
+    station: StationFeature;
+    stations_in_between: number;
+  } & RealtimeDeparture;
 
   const risTime = new Date(risAimedTime);
   const urlDate = Number.isNaN(risTime)
     ? ""
     : [
-        (risTime as Date).getFullYear(),
-        pad((risTime as Date).getMonth() + 1),
-        pad((risTime as Date).getDate()),
+        risTime.getFullYear(),
+        pad(risTime.getMonth() + 1),
+        pad(risTime.getDate()),
       ].join("-");
 
   const risLink = [

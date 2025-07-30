@@ -1,9 +1,10 @@
 import { MaplibreStyleLayer } from "mobility-toolbox-js/ol";
-import { MaplibreStyleLayerOptions } from "mobility-toolbox-js/ol/layers/MaplibreStyleLayer";
 import { memo } from "preact/compat";
 import { useEffect, useMemo } from "preact/hooks";
 
 import useMapContext from "../utils/hooks/useMapContext";
+
+import type { MaplibreStyleLayerOptions } from "mobility-toolbox-js/ol/layers/MaplibreStyleLayer";
 
 function StationsLayer(props: MaplibreStyleLayerOptions) {
   const { baseLayer, map, setStationsLayer } = useMapContext();

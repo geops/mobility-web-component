@@ -1,4 +1,4 @@
-import { RealtimeStopSequence } from "mobility-toolbox-js/types";
+import type { RealtimeStopSequence } from "mobility-toolbox-js/types";
 
 export interface StopStatus {
   isBoarding?: boolean;

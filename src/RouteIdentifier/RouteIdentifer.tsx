@@ -1,6 +1,7 @@
-import { RealtimeStopSequence } from "mobility-toolbox-js/types";
-import { JSX, PreactDOMAttributes } from "preact";
 import { memo } from "preact/compat";
+
+import type { RealtimeStopSequence } from "mobility-toolbox-js/types";
+import type { JSX, PreactDOMAttributes } from "preact";
 
 export type RouteIdentifierProps = {
   stopSequence?: RealtimeStopSequence;
@@ -14,11 +15,11 @@ function RouteIdentifier({ stopSequence, ...props }: RouteIdentifierProps) {
     // first part of the id, without leading zeros.
     let id = routeIdentifier;
 
-    if (/\./.test(routeIdentifier)) {
+    if (routeIdentifier.includes(".")) {
       [id] = routeIdentifier.split(".");
-    } else if (/_/.test(routeIdentifier)) {
+    } else if (routeIdentifier.includes("_")) {
       [id] = routeIdentifier.split("_");
-    } else if (/:/.test(routeIdentifier)) {
+    } else if (routeIdentifier.includes(":")) {
       [id] = routeIdentifier.split(":");
     }
 

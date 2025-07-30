@@ -75,7 +75,8 @@ describe("getStopStatus", () => {
       expect(isNextStop).toBe(true);
     });
   });
-  describe("when it's the first station", () => {
+
+  describe("when it's the first station and not a stop", () => {
     it("returns a correct status", () => {
       const stopSequence = {
         stations: [{}],

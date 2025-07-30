@@ -1,6 +1,3 @@
-import type { RealtimeStop } from "mobility-toolbox-js/types";
-import type { JSX, PreactDOMAttributes } from "preact";
-
 import { memo } from "preact/compat";
 import { useEffect, useRef } from "preact/hooks";
 
@@ -8,6 +5,9 @@ import RouteScheduleFooter from "../RouteScheduleFooter";
 import RouteScheduleHeader from "../RouteScheduleHeader";
 import RouteStop from "../RouteStop";
 import useMapContext from "../utils/hooks/useMapContext";
+
+import type { RealtimeStop } from "mobility-toolbox-js/types";
+import type { JSX, PreactDOMAttributes } from "preact";
 
 export type RouteScheduleProps = JSX.HTMLAttributes<HTMLDivElement> &
   PreactDOMAttributes;

@@ -1,12 +1,13 @@
-import ScaleLineControl, {
-  Options as ScaleLineOptions,
-} from "ol/control/ScaleLine";
-import { JSX, PreactDOMAttributes } from "preact";
+import ScaleLineControl from "ol/control/ScaleLine";
 import { useEffect, useMemo, useState } from "preact/hooks";
 
 import useMapContext from "../utils/hooks/useMapContext";
+
 // @ts-expect-error bad type definition
 import style from "./index.css";
+
+import type { Options as ScaleLineOptions } from "ol/control/ScaleLine";
+import type { JSX, PreactDOMAttributes } from "preact";
 
 type ScaleLineProps = {
   options?: ScaleLineOptions;

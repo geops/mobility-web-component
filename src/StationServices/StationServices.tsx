@@ -1,6 +1,3 @@
-import type { JSX, PreactDOMAttributes } from "preact";
-
-import { RealtimeStation } from "mobility-toolbox-js/types";
 import { memo } from "preact/compat";
 
 import Airport from "../icons/Airport";
@@ -11,6 +8,9 @@ import Elevator from "../icons/Elevator";
 import Police from "../icons/Police";
 import WaitingAreas from "../icons/WaitingAreas";
 import WheelChair from "../icons/WheelChair";
+
+import type { RealtimeStation } from "mobility-toolbox-js/types";
+import type { JSX, PreactDOMAttributes } from "preact";
 
 export type StationServicesProps = {
   accessibility?: boolean;
