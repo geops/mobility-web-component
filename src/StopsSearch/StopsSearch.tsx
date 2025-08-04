@@ -208,7 +208,7 @@ function StopsSearch({
         ref={myRef}
       >
         <div className={"flex items-center"}>
-          <FaSearch className="size-4" />
+          <FaSearch />
         </div>
         <div className={"flex grow overflow-hidden border-b-2 border-solid"}>
           <input
@@ -228,7 +228,7 @@ function StopsSearch({
             }}
             placeholder={t("stops_search_placeholder")}
             type="text"
-            value={query}
+            value={query || ""}
           />
           {query.length > 0 && (
             <button

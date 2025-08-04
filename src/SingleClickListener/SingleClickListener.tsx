@@ -1,14 +1,28 @@
+import { GeoJSON } from "ol/format";
 import { unByKey } from "ol/Observable";
 import { useCallback, useEffect } from "preact/hooks";
 
 import useMapContext from "../utils/hooks/useMapContext";
+import MobilityEvent from "../utils/MobilityEvent";
 
 import type { Feature, MapBrowserEvent } from "ol";
+import type BaseLayer from "ol/layer/Base";
 
-function SingleClickListener() {
+const geojson = new GeoJSON();
+
+function SingleClickListener({
+  eventName = "mwc:selectedfeature",
+  // layers = null,
+}: {
+  eventName?: string;
+  layers?: BaseLayer[];
+}) {
   const {
     map,
     realtimeLayer,
+    selectedFeature,
+    setSelectedFeature,
+    setSelectedFeatures,
     setStationId,
     setTrainId,
     stationId,
@@ -16,6 +30,21 @@ function SingleClickListener() {
     tenant,
     trainId,
   } = useMapContext();
+
+  // Send the selectedFeature to the parent window
+  useEffect(() => {
+    if (!map) {
+      return;
+    }
+
+    map.getTargetElement().dispatchEvent(
+      new MobilityEvent(eventName, {
+        feature: selectedFeature
+          ? geojson.writeFeatureObject(selectedFeature)
+          : null,
+      }),
+    );
+  }, [eventName, map, selectedFeature]);
 
   const onPointerMove = useCallback(
     (evt: MapBrowserEvent<PointerEvent>) => {
@@ -36,8 +65,17 @@ function SingleClickListener() {
         return feat.get("tralis_network")?.includes(tenant);
       });
 
+      // Send all the features under the cursor
+      const features = evt.map.getFeaturesAtPixel(evt.pixel, {
+        layerFilter: (l) => {
+          return l.get("isQueryable");
+        },
+      }) as Feature[];
+
       evt.map.getTargetElement().style.cursor =
-        realtimeFeature || stationFeature ? "pointer" : "default";
+        realtimeFeature || stationFeature || features?.length
+          ? "pointer"
+          : "default";
     },
     [realtimeLayer, stationsLayer, tenant],
   );
@@ -73,6 +111,29 @@ function SingleClickListener() {
         setTrainId(null);
         setStationId(null);
       }
+
+      // Send all the features under the cursor
+      const features = evt.map.getFeaturesAtPixel(evt.pixel, {
+        layerFilter: (l) => {
+          return l.get("isQueryable");
+        },
+      }) as Feature[];
+
+      // evt.map.getTargetElement().dispatchEvent(
+      //   new MobilityEvent("singleclick", {
+      //     ...evt,
+      //     features: geojson.writeFeaturesObject(features),
+      //     lonlat: toLonLat(evt.coordinate),
+      //   }),
+      // );
+
+      if (newStationId || newTrainId || !features.length) {
+        setSelectedFeature(null);
+        setSelectedFeatures([]);
+      } else {
+        setSelectedFeatures(features);
+        setSelectedFeature(features[0]);
+      }
     },
     [
       stationId,
@@ -82,6 +143,8 @@ function SingleClickListener() {
       tenant,
       setStationId,
       setTrainId,
+      setSelectedFeature,
+      setSelectedFeatures,
     ],
   );
 

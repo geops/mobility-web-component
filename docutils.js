@@ -59,7 +59,13 @@ function applyPermalinkParameters(wc) {
 }
 
 // Generates a HTML table with all attributes of a web component
-function generateAttributesTable(wc, attrs, booleanAttrs = []) {
+function generateAttributesTable(
+  wc,
+  attrs,
+  booleanAttrs = [],
+  booleanTrueByDefault = [],
+  descriptionByAttr = {},
+) {
   let innerHMTL = `<table class="table-auto w-full" >
     <thead>
       <tr>
@@ -74,6 +80,14 @@ function generateAttributesTable(wc, attrs, booleanAttrs = []) {
     .sort()
     .map((key) => {
       const isBoolean = booleanAttrs.includes(key);
+      const defaultChecked = booleanTrueByDefault.includes(key)
+        ? "checked"
+        : "";
+      const currValue = wc.getAttribute(key);
+      let checked = currValue === "true" ? "checked" : "";
+      if (currValue !== "true" && currValue !== "false") {
+        checked = defaultChecked;
+      }
       return `
     <tr>
       <td class="border px-4 py-2">${key}</td>
@@ -87,7 +101,7 @@ function generateAttributesTable(wc, attrs, booleanAttrs = []) {
           type="checkbox"
           class="border"
           name="${key}"
-          ${wc.getAttribute(key) === "true" ? "checked" : ""}
+          ${checked ? "checked" : ""}
           onchange="document.querySelector('${wc.localName}').setAttribute('${key}', this.checked);onAttributeUpdate(document.querySelector('${wc.localName}'),this.name, this.checked);" 
           />`
           : `
@@ -100,7 +114,8 @@ function generateAttributesTable(wc, attrs, booleanAttrs = []) {
         <button class="border p-2 bg-black hover:bg-gray-700 text-white" onclick="document.querySelector('${wc.localName}').setAttribute('${key}', this.previousElementSibling.value);onAttributeUpdate(document.querySelector('${wc.localName}'),this.previousElementSibling.name, this.previousElementSibling.value);">Update</button>`
       }
       </div>
-        </td>
+      ${descriptionByAttr[key] ? `<div class="pt-2">${descriptionByAttr[key]}</div>` : ``}
+      </td>
     </tr>
   `;
     })
@@ -120,11 +135,11 @@ function generateCodeText(
   let codeText = "";
   codeText = `&lt;script\n\ttype="module"\n\tsrc="${pkgSrc}"&gt;
 &lt;/script&gt;
-&lt;${wc.localName}`;
+&lt;${wc.localName} id="map" style="display:block;width:100%;height:500px;border:1px solid #e5e7eb;border-radius:16px;"`;
 
   attrs.forEach((key) => {
     const attributeValue = wc.getAttribute(key);
-    const inputValue = document.querySelector(`[name=${key}]`).value;
+    const inputValue = document.querySelector(`[name=${key}]`)?.value;
     if (attributeValue !== null && attributeValue === inputValue) {
       codeText += `\n\t${[key, '"' + wc.getAttribute(key) + '"'].join("=")}`;
     }
@@ -134,7 +149,7 @@ function generateCodeText(
 }
 
 // Generates a HTML table with all events of a web component
-function generateEventsTable(wc, events) {
+function generateEventsTable(wc, events, descriptionByEvent = {}) {
   let innerHMTL = `<table class="table-auto w-full" >
     <thead>
       <tr>
@@ -155,6 +170,13 @@ function generateEventsTable(wc, events) {
             "Object not stringifyable, open the console (F12) to see the object received.";
           console.log(key + " event", event);
         }
+        if (key === "singleclick") {
+          stringify = "event.data.lonlat:\n";
+          stringify += JSON.stringify(event.data.lonlat, undefined, 4);
+          stringify += "\n";
+          stringify += "event.data.features:\n";
+          stringify += JSON.stringify(event.data.features, undefined, 4);
+        }
 
         document.querySelector(`[name='${key}']`).value = stringify.toString();
       });
@@ -162,13 +184,16 @@ function generateEventsTable(wc, events) {
         <tr>
           <td class="border px-4 py-2">${key}</td>
           <td class="border px-4 py-2">
-            <div class="flex gap-4">
+            <div class="flex-col gap-4">
               <textarea
                 type="text"
-                class="border w-full h-300"
+                class="border h-300 w-full"
                 style="height:300px;"
                 name="${key}"
               ></textarea>
+              <p class="p-2">
+              ${descriptionByEvent[key] || ""}
+              </p>
             </div>
           </td>
         </tr>
