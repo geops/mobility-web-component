@@ -1,4 +1,7 @@
-import { RealtimeLayer as MtbRealtimeLayer } from "mobility-toolbox-js/ol";
+import {
+  getGraphByZoom,
+  RealtimeLayer as MtbRealtimeLayer,
+} from "mobility-toolbox-js/ol";
 import { unByKey } from "ol/Observable";
 import { memo } from "preact/compat";
 import { useEffect, useMemo } from "preact/hooks";
@@ -16,6 +19,7 @@ import type {
   RealtimeMot,
   RealtimeStation,
   RealtimeTrainId,
+  StyleMetadataGraphs,
 } from "mobility-toolbox-js/types";
 
 const TRACKING_ZOOM = 16;
@@ -25,6 +29,7 @@ export type RealtimeLayerProps = RealtimeLayerOptions;
 function RealtimeLayer(props: RealtimeLayerProps) {
   const {
     apikey,
+    baseLayer,
     isFollowing,
     isTracking,
     map,
@@ -224,6 +229,26 @@ function RealtimeLayer(props: RealtimeLayerProps) {
       }
     };
   }, [trainId, layer, layer?.api, setStopSequence]);
+
+  // Get graphs value
+  useEffect(() => {
+    if (!map || !baseLayer) {
+      return;
+    }
+    const key = map.once("rendercomplete", () => {
+      const metadata = baseLayer.mapLibreMap?.getStyle()?.metadata as {
+        graphs: StyleMetadataGraphs;
+      };
+      const graphByZoom = [];
+      for (let i = 0; i < 26; i++) {
+        graphByZoom.push(getGraphByZoom(i, metadata?.graphs));
+      }
+      layer.engine.graphByZoom = graphByZoom;
+    });
+    return () => {
+      unByKey(key);
+    };
+  }, [map, baseLayer, layer]);
 
   return null;
 }
