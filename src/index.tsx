@@ -18,6 +18,7 @@ register(
     "mots",
     "notification",
     "notificationat",
+    "notificationtenant",
     "notificationurl",
     "realtime",
     "realtimeUrl",

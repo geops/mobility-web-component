@@ -43,7 +43,7 @@ Here an exhaustive list of the `<geops-mobility>` web component attributes avail
 - [`mots="rail,bus"`](https://mobility-web-component.geops.io/?mots=rail,bus): list of commas separated mots to display on the Realtime layer ( rail, bus, coach, foot, tram, subway, gondola, funicular, ferry, car).
 - [`notification="false"`](https://mobility-web-component.geops.io/?notification=true): display the notification layer or not (true or false). Default to true.
 - [`notificationat="2025-01-01T12:00:00Z"`](https://mobility-web-component.geops.io/?notificationat=2025-01-01T12:00:00Z): a ISO date string used to display active notification at this date in the notification layer.
-- [`notificationbeforelayerid=`](https://mobility-web-component.geops.io/?notificationbeforelayerid=): the style layer's id before which the notification layer will be added. By default the layer will be added on top.
+- [`notificationtenant=`](https://mobility-web-component.geops.io/?notificationtenant=): the MOCO notification tenant to get the notifications from.
 - [`notificationurl=`](https://mobility-web-component.geops.io/?notificationurl=): the MOCO notification url to get the notifications from.
 - [`permalink="true"`](https://mobility-web-component.geops.io/?permalink=true): add automatically an `x`,`y` an `z` URL parameters to the URL to allow to share the current map view. Default to false.
 - [`realtime="false"`](https://mobility-web-component.geops.io/?realtime=false): display the realtime layer or not (true or false). Default to true.

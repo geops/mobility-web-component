@@ -57,6 +57,7 @@ export interface MobilityMapProps {
   mots?: string;
   notification?: string;
   notificationat?: string; // 2024-01-25T22:59:00Z
+  notificationtenant?: string;
   notificationurl?: string; // https://moco.geops.io/api/v1/
   permalink?: string;
   realtime?: string;
@@ -81,6 +82,7 @@ function MobilityMap({
   mots = null,
   notification = "false",
   notificationat = null, //"2025-09-10T00:00:00Z",
+  notificationtenant = null,
   notificationurl = "https://moco.geops.io/api/v1/",
   permalink = "false",
   realtime = "true",
@@ -146,6 +148,7 @@ function MobilityMap({
       mots,
       notification,
       notificationat,
+      notificationtenant,
       notificationurl,
       permalink,
       realtime,
@@ -169,6 +172,7 @@ function MobilityMap({
     mots,
     notification,
     notificationat,
+    notificationtenant,
     notificationurl,
     permalink,
     realtime,
@@ -242,11 +246,17 @@ function MobilityMap({
       date: notificationat ? new Date(notificationat) : undefined,
       isQueryable: true,
       notifications: previewNotification,
-      tenant: "rvf",
+      tenant: notificationtenant,
       title: "Notifications",
       url: notificationurl,
     };
-  }, [apikey, notificationat, notificationurl, previewNotification]);
+  }, [
+    apikey,
+    notificationat,
+    notificationtenant,
+    notificationurl,
+    previewNotification,
+  ]);
 
   return (
     <I18nContext.Provider value={i18n}>

@@ -27,7 +27,7 @@ const attrsConfig: Record<string, AttrConfig> = {
         (base_dark_v2, base_bright_v2, ...).
       </Typography>
     ),
-    type: "select",
+    type: "textfield",
   },
   center: {
     defaultValue: "831634,5933959",
@@ -134,11 +134,14 @@ const attrsConfig: Record<string, AttrConfig> = {
     ),
     type: "textfield",
   },
-  notificationbeforelayerid: {
+  notificationtenant: {
     description: (
       <Typography>
-        The style layer&apos;s id before which the notification layer will be
-        added. By default the layer will be added on top.
+        The{" "}
+        <Link href="https://geops.com/en/solution/disruption-information">
+          geOps MOCO API
+        </Link>{" "}
+        tenant to get the notifications from.
       </Typography>
     ),
     type: "textfield",
