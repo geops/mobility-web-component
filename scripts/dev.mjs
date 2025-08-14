@@ -23,6 +23,6 @@ await ctx.watch();
 // eslint-disable-next-line no-undef
 console.log(
   `watching... and running at ${
-    host === "0.0.0.0" ? "http://localhost" : host
+    !host || host === "0.0.0.0" ? "http://localhost" : host
   }:${port}`,
 );

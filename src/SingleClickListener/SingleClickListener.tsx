@@ -49,6 +49,7 @@ function SingleClickListener({
   const onPointerMove = useCallback(
     (evt: MapBrowserEvent<PointerEvent>) => {
       const [realtimeFeature] = evt.map.getFeaturesAtPixel(evt.pixel, {
+        hitTolerance: 5,
         layerFilter: (l) => {
           return l === realtimeLayer;
         },
@@ -83,6 +84,7 @@ function SingleClickListener({
   const onSingleClick = useCallback(
     (evt: MapBrowserEvent<PointerEvent>) => {
       const [realtimeFeature] = evt.map.getFeaturesAtPixel(evt.pixel, {
+        hitTolerance: 5,
         layerFilter: (l) => {
           return l === realtimeLayer;
         },
