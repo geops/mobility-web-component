@@ -242,11 +242,11 @@ function MobilityMap({
       date: notificationat ? new Date(notificationat) : undefined,
       isQueryable: true,
       notifications: previewNotification,
-      tenant: tenant,
+      tenant: "rvf",
       title: "Notifications",
       url: notificationurl,
     };
-  }, [apikey, notificationat, notificationurl, previewNotification, tenant]);
+  }, [apikey, notificationat, notificationurl, previewNotification]);
 
   return (
     <I18nContext.Provider value={i18n}>
