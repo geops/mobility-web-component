@@ -135,12 +135,19 @@ function generateCodeText(
   let codeText = "";
   codeText = `&lt;script\n\ttype="module"\n\tsrc="${pkgSrc}"&gt;
 &lt;/script&gt;
-&lt;${wc.localName} id="map" style="display:block;width:100%;height:500px;border:1px solid #e5e7eb;border-radius:16px;"`;
+&lt;${wc.localName}\n\tid="map"\n\tstyle="display:block;width:100%;height:500px;border:1px solid #e5e7eb;border-radius:16px;"`;
 
   attrs.forEach((key) => {
     const attributeValue = wc.getAttribute(key);
-    const inputValue = document.querySelector(`[name=${key}]`)?.value;
-    if (attributeValue !== null && attributeValue === inputValue) {
+    const input = document.querySelector(`[name=${key}]`);
+    const inputValue =
+      input?.type === "checkbox" ? input.checked : input?.value;
+    if (
+      attributeValue !== null &&
+      (attributeValue === inputValue ||
+        (attributeValue === "true" && inputValue === true) ||
+        (attributeValue === "false" && inputValue === false))
+    ) {
       codeText += `\n\t${[key, '"' + wc.getAttribute(key) + '"'].join("=")}`;
     }
   });

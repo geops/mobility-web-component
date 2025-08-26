@@ -36,7 +36,7 @@
       <h1 class="text-3xl font-bold">Mobility Web Component</h1>
       <p>This is a demo of the Mobility Web Component.</p>
       <h2 class="text-xl font-bold">Usage example</h2>
-      <pre id="code" class="bg-slate-800 text-slate-200 p-4 rounded"></pre>
+      <pre id="code" class="bg-slate-800 text-slate-200 p-4 rounded overflow-auto"></pre>
 
       <geops-mobility
         class="h-96 block resize overflow-hidden w-full border rounded-[16px]"></geops-mobility>
@@ -45,7 +45,6 @@
       <h2 class="text-xl font-bold">Attributes</h2>
       <div id="attributes"></div>
       <h2 class="text-xl font-bold">Events</h2>
-
       <pre id="code" class="bg-slate-800 text-slate-200 p-4 rounded">document.getElementById('map').addEventListener('mwc:attribute', (event) => {
   console.log('Display last data received:', event.data);
 });</pre>
@@ -102,12 +101,12 @@
       const booleanTrueByDefault = [ "details", "print", "share", "layertree", "geolocation", "toolbar", "realtime"];
       const reloadAttrs = [ "fullscreen" ]
 
-
       const events = [
         "mwc:selectedfeature",
         "mwc:stopssearchselect",
         "mwc:attribute",
-        "mwc:permalink"
+        "mwc:permalink",
+        "mwc:messageready"
       ];
 
       const descriptionByAttr = {
@@ -133,21 +132,19 @@
       };
 
       const descriptionByEvent = {
-        "mwc:selectedfeature": "Event fired when a feature is selected on the map. The event data contains the selected feature.",
+        "mwc:selectedfeature": "Event fired when a feature is selected on the map. The event data contains the selected feature in GeoJSON format.",
         "mwc:stopssearchselect": "Only when search attribute is 'true'. Event fired when a stop is selected in the stops search results. The event data contains the selected stop.",
         "mwc:attribute": "Event fired when an attribute is changed on the web component. The event data contains the list of all attributes and their values.",
         "mwc:permalink": "only when permalink attribute is 'true'. Event fired when the permalink is updated. The event data contains the permalink parameters.",
+        "mwc:messageready": "Event fired when the web component is ready to receive messages from parent window."
       };
 
       document.querySelector('#attributes').innerHTML = generateAttributesTable(wc, attrs, booleanAttrs, booleanTrueByDefault, descriptionByAttr, reloadAttrs);
       document.querySelector('#events').innerHTML = generateEventsTable(wc, events, descriptionByEvent);
       document.querySelector('#code').innerHTML = generateCodeText(wc, attrs, pkgSrc);
       wc.addEventListener('mwc:attribute', (event) => {
+        console.log('attribute event', event);
         document.querySelector('#code').innerHTML = generateCodeText(wc, attrs, pkgSrc);
-      });
-      wc.addEventListener('mwc:permalink', (event) => {
-        console.log("Permalink event received", event.data);
-        window.parent?.postMessage({type:"mwc:permalink", data: event.data}, '*');
       });
       applyPermalinkParameters(wc);
     </script>

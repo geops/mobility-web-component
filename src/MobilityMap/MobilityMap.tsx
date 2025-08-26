@@ -236,7 +236,9 @@ function MobilityMap({
 
   useEffect(() => {
     eventNodeRef.current?.dispatchEvent(
-      new MobilityEvent<MobilityMapProps>("mwc:attribute", wcAttributesValues),
+      new MobilityEvent<MobilityMapProps>("mwc:attribute", wcAttributesValues, {
+        bubbles: true,
+      }),
     );
   }, [wcAttributesValues]);
 
@@ -263,7 +265,7 @@ function MobilityMap({
       <style>{tailwind}</style>
       <style>{style}</style>
       <MapContext.Provider value={mapContextValue}>
-        <WindowMessageListener />
+        <WindowMessageListener eventNode={eventNodeRef.current} />
         <div
           className="@container/main relative size-full border font-sans"
           ref={eventNodeRef}

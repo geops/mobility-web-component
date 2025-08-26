@@ -24,7 +24,7 @@ export type MapContextType = {
   isFollowing: boolean;
   isTracking: boolean;
   map: Map;
-  previewNotification?: MocoNotification[];
+  previewNotifications?: MocoNotification[];
   realtimeLayer: RealtimeLayer;
   selectedFeature: Feature;
   selectedFeatures: Feature[];
@@ -32,7 +32,9 @@ export type MapContextType = {
   setIsFollowing: (isFollowing: boolean) => void;
   setIsTracking: (isTracking: boolean) => void;
   setMap: (map?: Map) => void;
-  setPreviewNotification: (previewNotification?: MocoNotification[]) => void;
+  setPreviewNotifications: (
+    setPreviewNotifications?: MocoNotification[],
+  ) => void;
   setRealtimeLayer: (realtimeLayer?: RealtimeLayer) => void;
   setSelectedFeature: (feature: Feature) => void;
   setSelectedFeatures: (features: Feature[]) => void;
@@ -57,7 +59,7 @@ export const MapContext = createContext<MapContextType>({
   setIsFollowing: (isFollowing: boolean) => {},
   setIsTracking: (isTracking: boolean) => {},
   setMap: (map?: Map) => {},
-  setPreviewNotification: (previewNotification?: MocoNotification[]) => {},
+  setPreviewNotifications: (previewNotifications?: MocoNotification[]) => {},
   setRealtimeLayer: (realtimeLayer?: RealtimeLayer) => {},
   setSelectedFeature: (feature: Feature) => {},
   setSelectedFeatures: (features: Feature[]) => {},
