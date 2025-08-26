@@ -106,7 +106,7 @@ function MobilityMap({
   const [selectedFeature, setSelectedFeature] = useState<Feature>(null);
   const [selectedFeatures, setSelectedFeatures] = useState<Feature[]>([]);
 
-  const [previewNotification, setPreviewNotification] =
+  const [previewNotifications, setPreviewNotifications] =
     useState<MocoNotification[]>();
 
   const hasRealtime = useMemo(() => {
@@ -114,8 +114,8 @@ function MobilityMap({
   }, [realtime]);
 
   const hasNotification = useMemo(() => {
-    return notification === "true" || !!previewNotification;
-  }, [notification, previewNotification]);
+    return notification === "true" || !!previewNotifications;
+  }, [notification, previewNotifications]);
 
   const hasGeolocation = useMemo(() => {
     return geolocation === "true";
@@ -193,7 +193,7 @@ function MobilityMap({
       isFollowing,
       isTracking,
       map,
-      previewNotification,
+      previewNotifications,
       realtimeLayer,
       selectedFeature,
       selectedFeatures,
@@ -201,7 +201,7 @@ function MobilityMap({
       setIsFollowing,
       setIsTracking,
       setMap,
-      setPreviewNotification,
+      setPreviewNotifications,
       setRealtimeLayer,
       setSelectedFeature,
       setSelectedFeatures,
@@ -223,7 +223,7 @@ function MobilityMap({
     isFollowing,
     isTracking,
     map,
-    previewNotification,
+    previewNotifications,
     realtimeLayer,
     selectedFeature,
     selectedFeatures,
@@ -247,7 +247,7 @@ function MobilityMap({
       apiKey: apikey,
       date: notificationat ? new Date(notificationat) : undefined,
       isQueryable: true,
-      notifications: previewNotification,
+      notifications: previewNotifications,
       tenant: notificationtenant,
       title: "Notifications",
       url: notificationurl,
@@ -257,7 +257,7 @@ function MobilityMap({
     notificationat,
     notificationtenant,
     notificationurl,
-    previewNotification,
+    previewNotifications,
   ]);
 
   return (
