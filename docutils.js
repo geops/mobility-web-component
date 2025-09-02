@@ -191,16 +191,19 @@ function generateEventsTable(wc, events, descriptionByEvent = {}) {
         <tr>
           <td class="border px-4 py-2">${key}</td>
           <td class="border px-4 py-2">
-            <div class="flex-col gap-4">
+            <div class="flex flex-col gap-4">
+              <p>
+              ${descriptionByEvent[key] || ""}
+              </p>
+              <p>
+              Last event received:
+              </p>
               <textarea
                 type="text"
                 class="border h-300 w-full"
                 style="height:300px;"
                 name="${key}"
               ></textarea>
-              <p class="p-2">
-              ${descriptionByEvent[key] || ""}
-              </p>
             </div>
           </td>
         </tr>
