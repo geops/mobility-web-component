@@ -1,13 +1,15 @@
 import { memo } from "preact/compat";
-import { useEffect, useMemo, useRef, useState } from "preact/hooks";
+import { useMemo, useRef, useState } from "preact/hooks";
 
 import BaseLayer from "../BaseLayer";
 import Copyright from "../Copyright";
 import EmbedNavigation from "../EmbedNavigation";
 import GeolocationButton from "../GeolocationButton";
 import Map from "../Map";
+import MapDispatchEvents from "../MapDispatchEvents";
 import NotificationLayer from "../NotificationLayer";
 import Overlay from "../Overlay";
+import Permalink from "../Permalink";
 import RealtimeLayer from "../RealtimeLayer";
 import RouteSchedule from "../RouteSchedule";
 import ScaleLine from "../ScaleLine";
@@ -17,9 +19,7 @@ import Station from "../Station";
 import StationsLayer from "../StationsLayer";
 import { I18nContext } from "../utils/hooks/useI18n";
 import { MapContext } from "../utils/hooks/useMapContext";
-import useUpdatePermalink from "../utils/hooks/useUpdatePermalink";
 import i18n from "../utils/i18n";
-import MobilityEvent from "../utils/MobilityEvent";
 import WindowMessageListener from "../WindowMessageListener";
 
 // @ts-expect-error bad type definition
@@ -105,6 +105,9 @@ function MobilityMap({
   const [trainId, setTrainId] = useState<RealtimeTrainId>();
   const [selectedFeature, setSelectedFeature] = useState<Feature>(null);
   const [selectedFeatures, setSelectedFeatures] = useState<Feature[]>([]);
+  const [permalinkUrlSearchParams, setPermalinkUrlSearchParams] = useState<
+    Feature[]
+  >([]);
 
   const [previewNotifications, setPreviewNotifications] =
     useState<MocoNotification[]>();
@@ -121,6 +124,10 @@ function MobilityMap({
     return geolocation === "true";
   }, [geolocation]);
 
+  const hasPermalink = useMemo(() => {
+    return permalink === "true";
+  }, [permalink]);
+
   const hasSearch = useMemo(() => {
     return search === "true";
   }, [search]);
@@ -129,10 +136,7 @@ function MobilityMap({
     return embed === "true";
   }, [embed]);
 
-  // TODO: this should be removed. The parent application should be responsible to do this
-  // or we should find something that fit more usecases
-  useUpdatePermalink(map, permalink === "true", eventNodeRef);
-
+  // Object representing all the web-component attributes.
   const wcAttributesValues = useMemo<MobilityMapProps>(() => {
     return {
       apikey,
@@ -183,6 +187,7 @@ function MobilityMap({
     zoom,
   ]);
 
+  // Object representing all the web-component attributes and the map context values.
   const mapContextValue = useMemo(() => {
     return {
       // MobilityMapProps
@@ -193,6 +198,7 @@ function MobilityMap({
       isFollowing,
       isTracking,
       map,
+      permalinkUrlSearchParams,
       previewNotifications,
       realtimeLayer,
       selectedFeature,
@@ -201,6 +207,7 @@ function MobilityMap({
       setIsFollowing,
       setIsTracking,
       setMap,
+      setPermalinkUrlSearchParams,
       setPreviewNotifications,
       setRealtimeLayer,
       setSelectedFeature,
@@ -223,6 +230,7 @@ function MobilityMap({
     isFollowing,
     isTracking,
     map,
+    permalinkUrlSearchParams,
     previewNotifications,
     realtimeLayer,
     selectedFeature,
@@ -233,14 +241,6 @@ function MobilityMap({
     stopSequence,
     trainId,
   ]);
-
-  useEffect(() => {
-    eventNodeRef.current?.dispatchEvent(
-      new MobilityEvent<MobilityMapProps>("mwc:attribute", wcAttributesValues, {
-        bubbles: true,
-      }),
-    );
-  }, [wcAttributesValues]);
 
   const notificationsLayerProps: MocoLayerOptions = useMemo(() => {
     return {
@@ -265,6 +265,11 @@ function MobilityMap({
       <style>{tailwind}</style>
       <style>{style}</style>
       <MapContext.Provider value={mapContextValue}>
+        <Permalink replaceState={hasPermalink} />
+        <MapDispatchEvents
+          node={eventNodeRef.current}
+          wcAttributes={wcAttributesValues}
+        />
         <WindowMessageListener eventNode={eventNodeRef.current} />
         <div
           className="@container/main relative size-full border font-sans"

@@ -1,4 +1,5 @@
 import debounce from "lodash.debounce";
+import { getLayersAsFlatArray } from "mobility-toolbox-js/common";
 import { unByKey } from "ol/Observable";
 import { useEffect } from "preact/hooks";
 
@@ -52,16 +53,16 @@ const useUpdatePermalink = (
       });
 
       // Update layers in URL on change:visible event
-      // loadEndKey = map.once("loadend", (evt) => {
-      //   updatePermalinkDebounced(evt.map, eventNodeRef);
-      //   changeVisibleKeys = getLayersAsFlatArray(
-      //     evt.map.getLayers().getArray(),
-      //   ).map((layer) => {
-      //     return layer.on("change:visible", () => {
-      //       updatePermalinkDebounced(evt.map, eventNodeRef);
-      //     });
-      //   });
-      // });
+      loadEndKey = map.once("loadend", (evt) => {
+        updatePermalinkDebounced(evt.map, eventNodeRef);
+        changeVisibleKeys = getLayersAsFlatArray(
+          evt.map.getLayers().getArray(),
+        ).map((layer) => {
+          return layer.on("change:visible", () => {
+            updatePermalinkDebounced(evt.map, eventNodeRef);
+          });
+        });
+      });
     }
 
     return () => {

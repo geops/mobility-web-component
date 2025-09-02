@@ -24,6 +24,7 @@ export type MapContextType = {
   isFollowing: boolean;
   isTracking: boolean;
   map: Map;
+  permalinkUrlSearchParams: URLSearchParams;
   previewNotifications?: MocoNotification[];
   realtimeLayer: RealtimeLayer;
   selectedFeature: Feature;
@@ -32,6 +33,9 @@ export type MapContextType = {
   setIsFollowing: (isFollowing: boolean) => void;
   setIsTracking: (isTracking: boolean) => void;
   setMap: (map?: Map) => void;
+  setPermalinkUrlSearchParams: (
+    setPermalinkUrlSearchParams: URLSearchParams,
+  ) => void;
   setPreviewNotifications: (
     setPreviewNotifications?: MocoNotification[],
   ) => void;
@@ -59,6 +63,9 @@ export const MapContext = createContext<MapContextType>({
   setIsFollowing: (isFollowing: boolean) => {},
   setIsTracking: (isTracking: boolean) => {},
   setMap: (map?: Map) => {},
+  setPermalinkUrlSearchParams: (
+    permalinkUrlSearchParams: URLSearchParams,
+  ) => {},
   setPreviewNotifications: (previewNotifications?: MocoNotification[]) => {},
   setRealtimeLayer: (realtimeLayer?: RealtimeLayer) => {},
   setSelectedFeature: (feature: Feature) => {},

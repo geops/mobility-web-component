@@ -1,26 +1,14 @@
-import { GeoJSON } from "ol/format";
 import { unByKey } from "ol/Observable";
 import { useCallback, useEffect } from "preact/hooks";
 
 import useMapContext from "../utils/hooks/useMapContext";
-import MobilityEvent from "../utils/MobilityEvent";
 
 import type { Feature, MapBrowserEvent } from "ol";
-import type BaseLayer from "ol/layer/Base";
 
-const geojson = new GeoJSON();
-
-function SingleClickListener({
-  eventName = "mwc:selectedfeature",
-  // layers = null,
-}: {
-  eventName?: string;
-  layers?: BaseLayer[];
-}) {
+function SingleClickListener() {
   const {
     map,
     realtimeLayer,
-    selectedFeature,
     setSelectedFeature,
     setSelectedFeatures,
     setStationId,
@@ -30,21 +18,6 @@ function SingleClickListener({
     tenant,
     trainId,
   } = useMapContext();
-
-  // Send the selectedFeature to the parent window
-  useEffect(() => {
-    if (!map) {
-      return;
-    }
-
-    map.getTargetElement().dispatchEvent(
-      new MobilityEvent(eventName, {
-        feature: selectedFeature
-          ? geojson.writeFeatureObject(selectedFeature)
-          : null,
-      }),
-    );
-  }, [eventName, map, selectedFeature]);
 
   const onPointerMove = useCallback(
     (evt: MapBrowserEvent<PointerEvent>) => {
@@ -120,14 +93,6 @@ function SingleClickListener({
           return l.get("isQueryable");
         },
       }) as Feature[];
-
-      // evt.map.getTargetElement().dispatchEvent(
-      //   new MobilityEvent("singleclick", {
-      //     ...evt,
-      //     features: geojson.writeFeaturesObject(features),
-      //     lonlat: toLonLat(evt.coordinate),
-      //   }),
-      // );
 
       if (newStationId || newTrainId || !features.length) {
         setSelectedFeature(null);

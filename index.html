@@ -105,6 +105,7 @@
         "mwc:selectedfeature",
         "mwc:stopssearchselect",
         "mwc:attribute",
+        "mwc:singleclick",
         "mwc:permalink",
         "mwc:messageready"
       ];
@@ -136,7 +137,8 @@
         "mwc:stopssearchselect": "Only when search attribute is 'true'. Event fired when a stop is selected in the stops search results. The event data contains the selected stop.",
         "mwc:attribute": "Event fired when an attribute is changed on the web component. The event data contains the list of all attributes and their values.",
         "mwc:permalink": "only when permalink attribute is 'true'. Event fired when the permalink is updated. The event data contains the permalink parameters.",
-        "mwc:messageready": "Event fired when the web component is ready to receive messages from parent window."
+        "mwc:messageready": "Event fired when the web component is ready to receive messages from parent window.",
+        "mwc:singleclick": "Event fired when the map is clicked. The event data contains the map coordinates in EPSG:3857 and the pixel coordinates.",
       };
 
       document.querySelector('#attributes').innerHTML = generateAttributesTable(wc, attrs, booleanAttrs, booleanTrueByDefault, descriptionByAttr, reloadAttrs);
@@ -147,6 +149,11 @@
         document.querySelector('#code').innerHTML = generateCodeText(wc, attrs, pkgSrc);
       });
       applyPermalinkParameters(wc);
+      events.forEach(eventName => {
+        wc.addEventListener(eventName, (event) => {
+          console.log(`${eventName} event`, event);
+        });
+      });
     </script>
   </body>
 </html>
