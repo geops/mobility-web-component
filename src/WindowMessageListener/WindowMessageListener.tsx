@@ -5,6 +5,19 @@ import useMapContext from "../utils/hooks/useMapContext";
 
 import type MobilityEvent from "../utils/MobilityEvent";
 
+const evtTypes = [
+  "mwc:permalink",
+  "mwc:selectedfeature",
+  "mwc:singleclick",
+  "mwc:attribute",
+];
+
+/**
+ * This component propagate the web-components events to the parent window using messages events,
+ * and listen for messages from the parent window.
+ * @param param0
+ * @returns
+ */
 function WindowMessageListener({ eventNode }: { eventNode: HTMLElement }) {
   const { setPreviewNotifications } = useMapContext();
 
@@ -32,15 +45,17 @@ function WindowMessageListener({ eventNode }: { eventNode: HTMLElement }) {
     const postMessage = (evt: MobilityEvent<unknown>) => {
       window.parent?.postMessage({ data: evt.data, type: evt.type }, "*");
     };
-    eventNode.addEventListener("mwc:permalink", postMessage);
-    eventNode.addEventListener("mwc:selectedfeature", postMessage);
+    evtTypes.forEach((eventType) => {
+      eventNode.addEventListener(eventType, postMessage);
+    });
 
     // warn the parent that the web component is listening
     window.parent?.postMessage({ data: true, type: "mwc:messageready" }, "*");
 
     return () => {
-      eventNode.removeEventListener("mwc:permalink", postMessage);
-      eventNode.removeEventListener("mwc:selectedfeature", postMessage);
+      evtTypes.forEach((eventType) => {
+        eventNode.removeEventListener(eventType, postMessage);
+      });
     };
   }, [eventNode]);
 
