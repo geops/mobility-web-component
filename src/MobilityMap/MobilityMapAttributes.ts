@@ -68,7 +68,7 @@ const attrs: MobilityMapAttributes = {
   },
   extent: {
     description:
-      "The map's extent in EPSG:3857 coordinates.<br/>Ex: 831634,5933959,940649,6173660.<br/>Parameter required if center and zoom are not set.",
+      "The map's extent in EPSG:3857 coordinates.<br/>Ex: 831634,5933959,940649,6173660 .<br/>Parameter required if center and zoom are not set.",
   },
   geolocation: {
     defaultValue: "true",
@@ -89,7 +89,6 @@ const attrs: MobilityMapAttributes = {
       "The maximum extent of the map in EPSG:3857 coordinates.<br/>Ex: 831634,5933959,940649,6173660 .",
   },
   maxzoom: {
-    defaultValue: "13",
     description: "The maximal zoom level of the map.",
   },
   minzoom: {
@@ -100,7 +99,7 @@ const attrs: MobilityMapAttributes = {
       "Commas separated list of mots to display on the Realtime layer.<br/>Ex: rail,bus,coach,foot,tram,subway,gondola,funicular,ferry,car .",
   },
   notification: {
-    defaultValue: "true",
+    defaultValue: "false",
     description: `Add the notification layer to the map. This layer will display informations about disruptions on the network. Data comes from
         our ${geopsMocoApiLink} .`,
     type: "boolean",

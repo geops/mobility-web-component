@@ -24,10 +24,8 @@ function WindowMessageListener({ eventNode }: { eventNode: HTMLElement }) {
   // Listen to parent window message events
   useEffect(() => {
     const onMessage = (event) => {
-      if (event.data.notification) {
-        setPreviewNotifications([event.data.notification]);
-      } else if (event.data.notifications) {
-        setPreviewNotifications(event.data.notifications);
+      if (event.data.situations) {
+        setPreviewNotifications(event.data.situations);
       }
     };
     window.addEventListener("message", onMessage);
@@ -43,6 +41,10 @@ function WindowMessageListener({ eventNode }: { eventNode: HTMLElement }) {
     }
 
     const postMessage = (evt: MobilityEvent<unknown>) => {
+      // Clean data before sending it to the parent
+      if (evt.type === "mwc:attribute") {
+        delete evt.data.children;
+      }
       window.parent?.postMessage({ data: evt.data, type: evt.type }, "*");
     };
     evtTypes.forEach((eventType) => {

@@ -33,6 +33,7 @@ function RealtimeLayer(props: Partial<RealtimeLayerOptions>) {
     isTracking,
     map,
     mots,
+    realtimebboxparameters,
     realtimeurl,
     setIsFollowing,
     setIsTracking,
@@ -51,6 +52,16 @@ function RealtimeLayer(props: Partial<RealtimeLayerOptions>) {
     }
     const lay = new MtbRealtimeLayer({
       apiKey: apikey,
+      bboxParameters: realtimebboxparameters
+        ?.split(" ")
+        .reduce((acc, string) => {
+          if (!string) {
+            return acc;
+          }
+          const [key, value] = string.split("=");
+          acc[key] = value;
+          return acc;
+        }, {}),
       getMotsByZoom: mots
         ? () => {
             return mots.split(",") as RealtimeMot[];
@@ -73,7 +84,7 @@ function RealtimeLayer(props: Partial<RealtimeLayerOptions>) {
     });
 
     return lay;
-  }, [apikey, mots, realtimeurl, tenant, props]);
+  }, [apikey, realtimeurl, realtimebboxparameters, mots, tenant, props]);
 
   useEffect(() => {
     if (!map || !layer) {
@@ -245,6 +256,7 @@ function RealtimeLayer(props: Partial<RealtimeLayerOptions>) {
         graphByZoom.push(getGraphByZoom(i, metadata?.graphs));
       }
       layer.engine.graphByZoom = graphByZoom;
+      layer.engine.setBbox();
     });
     return () => {
       unByKey(key);

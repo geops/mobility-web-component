@@ -27,7 +27,7 @@ function NotificationLayer(props?: Partial<MocoLayerOptions>) {
       date: notificationat ? new Date(notificationat) : undefined,
       maplibreLayer: baseLayer,
       name: LAYER_NAME_NOTIFICATION,
-      notifications: previewNotifications,
+      situations: previewNotifications,
       tenant: notificationtenant,
       url: notificationurl,
       ...(props || {}),
