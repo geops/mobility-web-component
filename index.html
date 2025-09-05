@@ -16,6 +16,7 @@
       }
     </script>
     <script type="module" src="./index.js"></script>
+    <script type="module" src="./indexDoc.js"></script>
     <script src="./docutils.js"></script>
     <link rel="stylesheet" type="text/css" href="./output.css" />
     <style>
@@ -30,24 +31,33 @@
   </head>
   <body class="p-8">
     <!-- tailwind hack to add class used in docutils -->
-    <div class="border px-4 py-2 table-auto w-full flex gap-4 bg-black text-white hover:bg-gray-700 pt-2 absolute h-full inset-0 p-0" style="display:none;"></div>
-    <div class="pt-2" style="display:none;"></div>
+    <div
+      class="absolute inset-0 flex h-full w-full table-auto gap-4 border bg-black p-0 px-4 py-2 pt-2 text-white hover:bg-gray-700"
+      style="display: none"
+    ></div>
+    <div class="pt-2" style="display: none"></div>
     <div id="doc" style="display: none" class="mx-auto max-w-3xl space-y-4">
       <h1 class="text-3xl font-bold">Mobility Web Component</h1>
       <p>This is a demo of the Mobility Web Component.</p>
       <h2 class="text-xl font-bold">Usage example</h2>
-      <pre id="code" class="bg-slate-800 text-slate-200 p-4 rounded overflow-auto"></pre>
+      <pre
+        id="code"
+        class="overflow-auto rounded bg-slate-800 p-4 text-slate-200"
+      ></pre>
 
       <geops-mobility
-        class="h-96 block resize overflow-hidden w-full border rounded-[16px]"></geops-mobility>
+        class="block h-96 w-full resize overflow-hidden rounded-[16px] border"
+      ></geops-mobility>
 
       <br />
       <h2 class="text-xl font-bold">Attributes</h2>
       <div id="attributes"></div>
       <h2 class="text-xl font-bold">Events</h2>
-      <pre id="code" class="bg-slate-800 text-slate-200 p-4 rounded">document.getElementById('map').addEventListener('mwc:attribute', (event) => {
+      <pre id="code" class="rounded bg-slate-800 p-4 text-slate-200">
+document.getElementById('map').addEventListener('mwc:attribute', (event) => {
   console.log('Display last data received:', event.data);
-});</pre>
+});</pre
+      >
       <div id="events"></div>
       <br />
       <br />
@@ -64,93 +74,88 @@
       const pkgSrc = "https://www.unpkg.com/@geops/mobility-web-component";
       const wc = document.querySelector("geops-mobility");
 
-      const attrs = [
-          "apikey",
-          "baselayer",
-          "center",
-          "extent",
-          "geolocation",
-          "mapsurl",
-          "mots",
-          "notification",
-          "notificationat",
-          "notificationurl",
-          "notificationtenant",
-          // "notificationbeforelayerid",
-          "realtime",
-          "realtimeUrl",
-          "search",
-          "tenant",
-          "zoom",
-          "permalink",
-          "maxextent",
-          "embed",
-          "fullscreen",
+      window.addEventListener("load", () => {
+
+        // Add special parameters
+        window.MobilityMapAttributes.fullscreen = {
+          type: "boolean",
+          defaultValue: "false",
+          description: `Load the page in fullscreen mode.`,
+          reload: true,
+        };
+
+        /* Attributes */
+        const attrs = Object.keys(MobilityMapAttributes);
+        const booleanAttrs = Object.entries(MobilityMapAttributes)
+          .filter(([, attr]) => attr.type === "boolean")
+          .map(([key]) => key);
+        const booleanTrueByDefault = booleanAttrs.filter(
+          (key) => MobilityMapAttributes[key].defaultValue === "true",
+        );
+        const reloadAttrs = Object.entries(MobilityMapAttributes)
+          .filter(([key, attr]) => !!attr.reload)
+          .map(([key]) => key);
+
+        const descriptionByAttr = Object.entries(MobilityMapAttributes).reduce((acc, [key, attr]) => {
+            acc[key] = attr.description;
+            return acc;
+          }, {});
+
+        /* Events */
+        const events = [
+          "mwc:selectedfeature",
+          "mwc:stopssearchselect",
+          "mwc:attribute",
+          "mwc:singleclick",
+          "mwc:permalink",
+          "mwc:messageready",
         ];
+        const descriptionByEvent = {
+          "mwc:selectedfeature":
+            "Event fired when a feature is selected on the map. The event data contains the selected feature in GeoJSON format.",
+          "mwc:stopssearchselect":
+            "Only when search attribute is 'true'. Event fired when a stop is selected in the stops search results. The event data contains the selected stop.",
+          "mwc:attribute":
+            "Event fired when an web component's attribute is changed. The event data contains the list of all attributes and their values.",
+          "mwc:permalink":
+            "Event fired when the map's state changes. The event data contains the permalink URL search parameters as string.",
+          "mwc:messageready":
+            "Only if the web-component is embedded in an iframe. Message event fired when the web component is ready to receive messages from parent window. ",
+          "mwc:singleclick":
+            "Event fired when the map is clicked. The event data contains the map coordinates in EPSG:3857 and the pixel coordinates.",
+        };
 
-      const booleanAttrs = [
-        "geolocation",
-        "notification",
-        "realtime",
-        "search",
-        "permalink",
-        "search",
-        "embed",
-        "fullscreen",
-      ];
-      const booleanTrueByDefault = [ "details", "print", "share", "layertree", "geolocation", "toolbar", "realtime"];
-      const reloadAttrs = [ "fullscreen" ]
-
-      const events = [
-        "mwc:selectedfeature",
-        "mwc:stopssearchselect",
-        "mwc:attribute",
-        "mwc:singleclick",
-        "mwc:permalink",
-        "mwc:messageready"
-      ];
-
-      const descriptionByAttr = {
-        extent: "The extent to show when opening the map in EPSG:3857 coordinates, ex: 831634,5933959,940649,6173660. Default is the RVF data extent: 834896.1809495519,6057089.852937808,940649.6972031617,6173660.451962929 . Parameter required if center and zoom are not set.",
-        maxextent: "The maximum extent of the map in EPSG:3857 coordinates, ex: 831634,5933959,940649,6173660. Default is the RVF data extent: [834896.1809495519,6057089.852937808,940649.6972031617,6173660.451962929 .",
-        search: "Show/hide the search bar on the map. Default to false.",
-        permalink: "Add/remove url paremeters to the current window location. These parameters are used to store the current state of the map. They will be used on page load to configure the web-component. Default to false. Parameter required if extent is not set.",
-        center: "The center of the map in EPSG:3857 coordinates, ex: 831634,5933959. The center must be inside the RVF extent: [834896.1809495519, 6057089.852937808, 940649.6972031617, 6173660.451962929]. Default to null. Parameter required if extent is not set.",
-        zoom: "The zoom level of the map (between 0 and 20). Default to null. If maxextent paramter is defined some values will not have any effects because the view will be constraint to the maxextent defined. Parameter required if extent is not set.",
-        print: "Show/hide the print button in the toolbar. Default to true.",
-        share: "Show/hide the share button in the toolbar. Default to true.",
-        layertree: "Show/hide the layer tree button in the toolbar. Default to true.",
-        geolocation: "Show/hide geolocation button on the map. Default to true.",
-        toolbar: "Show/hide the toolbar on the left. Default to true.",
-        layers: "A comma separated list of layers: echtzeit,haltestellen,verkaufsstellen,liniennetz,tarifzonen,fahrradfrelo,fahrradandere,cargobikefrelo,cargobikeandere,grueneflotte,naturenergie,autoandere,e-roller,mitfahrpunkt,pois",
-        details: "Show shared mobility details in the sidebar when we click on an shared mobility feature.", 
-        realtime: "Show/hide the realtime data in the map. Default to true.",
-        embed: "Activate/deactivate the embedded navigation mode. In this mode zooming with mouse wheel is deactivated and, on touch device, you can only navigate with two finger, a warning message is displayed to warn the user. Default to false.",
-        debug: "Displays debug information for vehicles when true, use only for debugging. Default to false.",
-        fullscreen: "Load the component in fullscreen mode. Default to false.",
-        runs: "Shows the number of trips on a line in the sidebar, use only for debugging. Default to false.",
-        notification: "Show/hide the notifications (coming from geOps MOCO API) layer on the map. Default to false.",
-      };
-
-      const descriptionByEvent = {
-        "mwc:selectedfeature": "Event fired when a feature is selected on the map. The event data contains the selected feature in GeoJSON format.",
-        "mwc:stopssearchselect": "Only when search attribute is 'true'. Event fired when a stop is selected in the stops search results. The event data contains the selected stop.",
-        "mwc:attribute": "Event fired when an web component's attribute is changed. The event data contains the list of all attributes and their values.",
-        "mwc:permalink": "Event fired when the map's state changes. The event data contains the permalink URL search parameters as string.",
-        "mwc:messageready": "Only if the web-component is embedded in an iframe. Message event fired when the web component is ready to receive messages from parent window. ",
-        "mwc:singleclick": "Event fired when the map is clicked. The event data contains the map coordinates in EPSG:3857 and the pixel coordinates.",
-      };
-
-      document.querySelector('#attributes').innerHTML = generateAttributesTable(wc, attrs, booleanAttrs, booleanTrueByDefault, descriptionByAttr, reloadAttrs);
-      document.querySelector('#events').innerHTML = generateEventsTable(wc, events, descriptionByEvent);
-      document.querySelector('#code').innerHTML = generateCodeText(wc, attrs, pkgSrc);
-      wc.addEventListener('mwc:attribute', (event) => {
-        document.querySelector('#code').innerHTML = generateCodeText(wc, attrs, pkgSrc);
-      });
-      applyPermalinkParameters(wc);
-      events.forEach(eventName => {
-        wc.addEventListener(eventName, (event) => {
-          console.log(`${eventName} event`, event);
+        document.querySelector("#attributes").innerHTML =
+          generateAttributesTable(
+            wc,
+            attrs,
+            booleanAttrs,
+            booleanTrueByDefault,
+            descriptionByAttr,
+            reloadAttrs,
+          );
+        document.querySelector("#events").innerHTML = generateEventsTable(
+          wc,
+          events,
+          descriptionByEvent,
+        );
+        document.querySelector("#code").innerHTML = generateCodeText(
+          wc,
+          attrs,
+          pkgSrc,
+        );
+        wc.addEventListener("mwc:attribute", (event) => {
+          document.querySelector("#code").innerHTML = generateCodeText(
+            wc,
+            attrs,
+            pkgSrc,
+          );
+        });
+        applyPermalinkParameters(wc);
+        events.forEach((eventName) => {
+          wc.addEventListener(eventName, (event) => {
+            console.log(`${eventName} event`, event);
+          });
         });
       });
     </script>

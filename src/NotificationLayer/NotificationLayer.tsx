@@ -2,12 +2,21 @@ import { MocoLayer } from "mobility-toolbox-js/ol";
 import { memo } from "preact/compat";
 import { useEffect, useMemo } from "preact/hooks";
 
+import { LAYER_NAME_NOTIFICATION } from "../utils/constants";
 import useMapContext from "../utils/hooks/useMapContext";
 
-import type { MocoLayerOptions } from "mobility-toolbox-js/ol/layers/MocoLayer";
+import type { MocoLayerOptions } from "mobility-toolbox-js/ol";
 
-function NotificationLayer(props: MocoLayerOptions) {
-  const { apikey, baseLayer, map } = useMapContext();
+function NotificationLayer(props?: Partial<MocoLayerOptions>) {
+  const {
+    apikey,
+    baseLayer,
+    map,
+    notificationat,
+    notificationtenant,
+    notificationurl,
+    previewNotifications,
+  } = useMapContext();
 
   const layer = useMemo(() => {
     if (!baseLayer) {
@@ -15,10 +24,23 @@ function NotificationLayer(props: MocoLayerOptions) {
     }
     return new MocoLayer({
       apiKey: apikey,
+      date: notificationat ? new Date(notificationat) : undefined,
       maplibreLayer: baseLayer,
+      name: LAYER_NAME_NOTIFICATION,
+      notifications: previewNotifications,
+      tenant: notificationtenant,
+      url: notificationurl,
       ...(props || {}),
     });
-  }, [apikey, baseLayer, props]);
+  }, [
+    apikey,
+    baseLayer,
+    notificationat,
+    notificationtenant,
+    notificationurl,
+    previewNotifications,
+    props,
+  ]);
 
   useEffect(() => {
     if (!map || !layer) {

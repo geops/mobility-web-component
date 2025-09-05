@@ -8,6 +8,7 @@ import type { Feature, MapBrowserEvent } from "ol";
 function SingleClickListener() {
   const {
     map,
+    // queryablelayers,
     realtimeLayer,
     setSelectedFeature,
     setSelectedFeatures,
@@ -56,6 +57,16 @@ function SingleClickListener() {
 
   const onSingleClick = useCallback(
     (evt: MapBrowserEvent<PointerEvent>) => {
+      // const qeryableLayers = queryablelayers?.split(",");
+      // const featuress = evt.map.getFeaturesAtPixel(evt.pixel, {
+      //   layerFilter: (l) => {
+      //     return qeryableLayers
+      //       ? queryablelayers.includes(l.get("name"))
+      //       : true;
+      //   },
+      // });
+      // console.log("featursss", featuress);
+
       const [realtimeFeature] = evt.map.getFeaturesAtPixel(evt.pixel, {
         hitTolerance: 5,
         layerFilter: (l) => {
@@ -103,6 +114,7 @@ function SingleClickListener() {
       }
     },
     [
+      // queryablelayers,
       stationId,
       trainId,
       realtimeLayer,

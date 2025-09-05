@@ -7,6 +7,7 @@ import { memo } from "preact/compat";
 import { useEffect, useMemo } from "preact/hooks";
 
 import centerOnVehicle from "../utils/centerOnVehicle";
+import { LAYER_NAME_REALTIME } from "../utils/constants";
 import getDelayColorForVehicle from "../utils/getDelayColorForVehicle";
 import getDelayFontForVehicle from "../utils/getDelayFontForVehicle";
 import getDelayTextForVehicle from "../utils/getDelayTextForVehicle";
@@ -24,9 +25,7 @@ import type {
 
 const TRACKING_ZOOM = 16;
 
-export type RealtimeLayerProps = RealtimeLayerOptions;
-
-function RealtimeLayer(props: RealtimeLayerProps) {
+function RealtimeLayer(props: Partial<RealtimeLayerOptions>) {
   const {
     apikey,
     baseLayer,
@@ -57,6 +56,8 @@ function RealtimeLayer(props: RealtimeLayerProps) {
             return mots.split(",") as RealtimeMot[];
           }
         : undefined,
+      isQueryable: true,
+      name: LAYER_NAME_REALTIME,
       tenant,
       url: realtimeurl,
       zIndex: 1,

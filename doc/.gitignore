@@ -38,3 +38,5 @@ next-env.d.ts
 # bundle web components
 public/index.js
 public/index.js.map
+public/indexDoc.js
+public/indexDoc.js.map

@@ -8,11 +8,11 @@ import type {
   RealtimeLayer,
 } from "mobility-toolbox-js/ol";
 import type {
-  MocoNotification,
   RealtimeStation,
   RealtimeStationId,
   RealtimeStopSequence,
   RealtimeTrainId,
+  SituationType,
 } from "mobility-toolbox-js/types";
 import type { Feature, Map } from "ol";
 
@@ -25,7 +25,7 @@ export type MapContextType = {
   isTracking: boolean;
   map: Map;
   permalinkUrlSearchParams: URLSearchParams;
-  previewNotifications?: MocoNotification[];
+  previewNotifications?: SituationType[];
   realtimeLayer: RealtimeLayer;
   selectedFeature: Feature;
   selectedFeatures: Feature[];
@@ -36,9 +36,7 @@ export type MapContextType = {
   setPermalinkUrlSearchParams: (
     setPermalinkUrlSearchParams: URLSearchParams,
   ) => void;
-  setPreviewNotifications: (
-    setPreviewNotifications?: MocoNotification[],
-  ) => void;
+  setPreviewNotifications: (setPreviewNotifications?: SituationType[]) => void;
   setRealtimeLayer: (realtimeLayer?: RealtimeLayer) => void;
   setSelectedFeature: (feature: Feature) => void;
   setSelectedFeatures: (features: Feature[]) => void;
@@ -66,7 +64,7 @@ export const MapContext = createContext<MapContextType>({
   setPermalinkUrlSearchParams: (
     permalinkUrlSearchParams: URLSearchParams,
   ) => {},
-  setPreviewNotifications: (previewNotifications?: MocoNotification[]) => {},
+  setPreviewNotifications: (previewNotifications?: SituationType[]) => {},
   setRealtimeLayer: (realtimeLayer?: RealtimeLayer) => {},
   setSelectedFeature: (feature: Feature) => {},
   setSelectedFeatures: (features: Feature[]) => {},

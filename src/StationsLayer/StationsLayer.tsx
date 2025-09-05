@@ -2,11 +2,12 @@ import { MaplibreStyleLayer } from "mobility-toolbox-js/ol";
 import { memo } from "preact/compat";
 import { useEffect, useMemo } from "preact/hooks";
 
+import { LAYER_NAME_STATIONS } from "../utils/constants";
 import useMapContext from "../utils/hooks/useMapContext";
 
-import type { MaplibreStyleLayerOptions } from "mobility-toolbox-js/ol/layers/MaplibreStyleLayer";
+import type { MaplibreStyleLayerOptions } from "mobility-toolbox-js/ol";
 
-function StationsLayer(props: MaplibreStyleLayerOptions) {
+function StationsLayer(props: Partial<MaplibreStyleLayerOptions>) {
   const { baseLayer, map, setStationsLayer } = useMapContext();
 
   const layer = useMemo(() => {
@@ -18,6 +19,7 @@ function StationsLayer(props: MaplibreStyleLayerOptions) {
         return metadata?.["tralis.variable"] === "station";
       },
       maplibreLayer: baseLayer,
+      name: LAYER_NAME_STATIONS,
       ...(props || {}),
     });
   }, [baseLayer, props]);
