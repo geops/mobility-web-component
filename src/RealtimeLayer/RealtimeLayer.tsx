@@ -24,7 +24,7 @@ import type {
 } from "mobility-toolbox-js/types";
 
 const TRACKING_ZOOM = 16;
-const useGraphs = false;
+const useGraphs = true;
 
 function RealtimeLayer(props: Partial<RealtimeLayerOptions>) {
   const {
