@@ -1,3 +1,5 @@
+import { twMerge } from "tailwind-merge";
+
 import NoRealtime from "../icons/NoRealtime";
 import getMainColorForVehicle from "../utils/getMainColorForVehicle";
 import getTextColor from "../utils/getTextColor";
@@ -13,6 +15,7 @@ import type {
 import type { HTMLAttributes, PreactDOMAttributes } from "preact";
 
 export type RouteIconProps = {
+  className?: string;
   departure?: RealtimeDeparture;
   displayNoRealtimeIcon?: boolean;
   line?: RealtimeLine;
@@ -24,6 +27,7 @@ const fontSizesByNbLetters = [16, 16, 16, 14, 12];
 
 function RouteIcon({
   children,
+  className,
   departure,
   displayNoRealtimeIcon = false,
   line,
@@ -60,7 +64,10 @@ function RouteIcon({
 
   return (
     <span
-      className="relative flex h-[40px] min-w-[40px] items-center justify-center rounded-full border-2 px-1"
+      className={twMerge(
+        "relative flex h-[40px] min-w-[40px] items-center justify-center rounded-full border-2 px-1",
+        className,
+      )}
       style={{
         backgroundColor,
         borderColor,
