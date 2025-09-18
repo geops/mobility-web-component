@@ -43,6 +43,7 @@ function WindowMessageListener({ eventNode }: { eventNode: HTMLElement }) {
     const postMessage = (evt: MobilityEvent<unknown>) => {
       // Clean data before sending it to the parent
       if (evt.type === "mwc:attribute") {
+        // @ts-expect-error children is the react property
         delete evt.data.children;
       }
       window.parent?.postMessage({ data: evt.data, type: evt.type }, "*");

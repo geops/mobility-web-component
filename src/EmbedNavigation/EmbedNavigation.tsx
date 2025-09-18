@@ -12,10 +12,10 @@ function EmbedNavigation() {
   useEffect(() => {
     let dragPanWarningControl = null;
 
-    console.log("EmbedNavigation useEffect", isEmbed);
     if (!map || !target || !isEmbed) {
       return;
     }
+
     // Deactivates mouse wheel zoom
     map.getInteractions().forEach((interaction) => {
       if (interaction instanceof MouseWheelZoom) {

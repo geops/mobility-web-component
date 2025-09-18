@@ -1,11 +1,11 @@
 import flat from "@geops/eslint-config-react/flat";
 
-// Not supported for tailwind@4 yet, we use prtttier plugin instead
+// tailwind@4 only supported in beta channel
 // import tailwind from "eslint-plugin-tailwindcss";
 
 export default [
   ...flat,
-  // Not supported for tailwind@4 yet, we use prtttier plugin instead
+  // tailwind@4 only supported in beta channel
   // ...tailwind.configs["flat/recommended"],
   // {
   //   settings: {
