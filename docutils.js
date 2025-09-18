@@ -65,6 +65,7 @@ function generateAttributesTable(
   booleanAttrs = [],
   booleanTrueByDefault = [],
   descriptionByAttr = {},
+  defaultValueByAttr = {},
 ) {
   let innerHMTL = `<table class="table-auto w-full" >
     <thead>
@@ -78,6 +79,7 @@ function generateAttributesTable(
     <tbody>`;
   innerHMTL += attrs
     .sort()
+    .filter((key) => descriptionByAttr[key])
     .map((key) => {
       const isBoolean = booleanAttrs.includes(key);
       const defaultChecked = booleanTrueByDefault.includes(key)
@@ -110,6 +112,7 @@ function generateAttributesTable(
           class="border"
           name="${key}"
           value="${wc.getAttribute(key) || ""}" 
+          placeholder="${defaultValueByAttr[key] || ""}"
           />
         <button class="border p-2 bg-black hover:bg-gray-700 text-white" onclick="document.querySelector('${wc.localName}').setAttribute('${key}', this.previousElementSibling.value);onAttributeUpdate(document.querySelector('${wc.localName}'),this.previousElementSibling.name, this.previousElementSibling.value);">Update</button>`
       }
