@@ -60,7 +60,6 @@ function StopsSearch({
 }: StopsSearchProps) {
   const { t } = useI18n();
   const [query, setQuery] = useState("");
-  console.log(t("stops_search_placeholder"));
   const [selectedStation, setSelectedStation] = useState<StopsFeature>();
   const [results, setResults] = useState<StopsFeature[] | undefined>();
   const myRef = useRef<HTMLDivElement>();
