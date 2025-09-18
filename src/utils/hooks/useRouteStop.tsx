@@ -1,8 +1,9 @@
-import { RealtimeStation, RealtimeStop } from "mobility-toolbox-js/types";
 import { createContext } from "preact";
 import { useContext } from "preact/hooks";
 
-import { StopStatus } from "../getStopStatus";
+import type { RealtimeStation, RealtimeStop } from "mobility-toolbox-js/types";
+
+import type { StopStatus } from "../getStopStatus";
 
 export interface RouteStopContextType {
   index?: number;

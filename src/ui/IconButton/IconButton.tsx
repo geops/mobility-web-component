@@ -1,11 +1,12 @@
-import type { JSX, PreactDOMAttributes } from "preact";
-
 import { memo, useMemo } from "preact/compat";
 
+import type { ButtonHTMLAttributes, PreactDOMAttributes } from "preact";
+
 export type IconButtonProps = {
+  className?: string;
   selected?: boolean;
   theme?: "primary" | "secondary";
-} & JSX.ButtonHTMLAttributes<HTMLButtonElement> &
+} & ButtonHTMLAttributes<HTMLButtonElement> &
   PreactDOMAttributes;
 
 const baseClasses =

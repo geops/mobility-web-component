@@ -149,6 +149,7 @@ function StopsSearch({
         .catch((e) => {
           // AbortError is expected
           if (e.code !== 20) {
+            // eslint-disable-next-line no-console
             console.error("Failed to fetch stations", e);
             return;
           }
