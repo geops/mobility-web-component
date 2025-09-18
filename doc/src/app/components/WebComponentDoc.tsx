@@ -2,8 +2,6 @@
 import {
   Button,
   Checkbox,
-  MenuItem,
-  Select,
   TextField,
   TextFieldProps,
   Typography,
@@ -26,7 +24,7 @@ export interface AttrConfig {
   defaultValue?: string;
   description: ReactNode;
   props?: TextFieldProps;
-  type: "boolean" | null;
+  type?: "boolean";
 }
 
 function WebComponentDoc({
@@ -259,19 +257,6 @@ function WebComponentDoc({
                           }}
                         />
                       )}
-                      {/* {type === "select" && (
-                      <Select
-                        defaultValue={searchParams.get(key) || defaultValue}
-                        fullWidth
-                        onChange={(evt) => {
-                          onChange(key, evt.target.value);
-                        }}
-                        variant="standard"
-                      >
-                        <MenuItem value="travic_v2">Travic v2</MenuItem>
-                        <MenuItem value="base_dark_v2">Dark v2</MenuItem>
-                      </Select>
-                    )} */}
                       <div>
                         {typeof description !== "string" ? (
                           description

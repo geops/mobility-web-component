@@ -229,6 +229,7 @@ function GeopsMobilityDoc() {
   const isFullScreen = useIsFullScreen();
 
   if (typeof window !== undefined) {
+    // @ts-expect-error - MobilityMapAttributes is added via a script file.
     attrsConfig = window.MobilityMapAttributes;
   }
 

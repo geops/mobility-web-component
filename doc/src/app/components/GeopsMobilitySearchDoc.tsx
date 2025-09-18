@@ -13,7 +13,6 @@ const attrsConfig: Record<string, AttrConfig> = {
         Your <GeopsAPIKeyLink />.
       </Typography>
     ),
-    type: "textfield",
   },
   bbox: {
     description: (
@@ -21,7 +20,6 @@ const attrsConfig: Record<string, AttrConfig> = {
         The extent where to search the stops (minx,miny,maxx,maxy).
       </Typography>
     ),
-    type: "textfield",
   },
   countrycode: {
     description: (
@@ -29,7 +27,6 @@ const attrsConfig: Record<string, AttrConfig> = {
         The country code to filter the results (IT, DE, CH ...)
       </Typography>
     ),
-    type: "textfield",
   },
   event: {
     defaultValue: "mwc:stopssearchselect",
@@ -38,7 +35,6 @@ const attrsConfig: Record<string, AttrConfig> = {
         The event&pos;s name to listen to when a stop is selected.
       </Typography>
     ),
-    type: "textfield",
   },
   field: {
     description: (
@@ -47,7 +43,6 @@ const attrsConfig: Record<string, AttrConfig> = {
         coords.
       </Typography>
     ),
-    type: "textfield",
   },
   limit: {
     defaultValue: "5",
@@ -62,7 +57,6 @@ const attrsConfig: Record<string, AttrConfig> = {
       },
       type: "number",
     },
-    type: "textfield",
   },
   mots: {
     description: (
@@ -71,7 +65,6 @@ const attrsConfig: Record<string, AttrConfig> = {
         coach, foot, tram, subway, gondola, funicular, ferry, car).
       </Typography>
     ),
-    type: "textfield",
   },
   params: {
     description: (
@@ -80,7 +73,6 @@ const attrsConfig: Record<string, AttrConfig> = {
         API. Ex: {"{ 'key': 'value' }"}
       </Typography>
     ),
-    type: "textfield",
   },
   prefagencies: {
     description: (
@@ -89,7 +81,6 @@ const attrsConfig: Record<string, AttrConfig> = {
         ident_source (for id and code fields). Possible values: sbb, db.
       </Typography>
     ),
-    type: "textfield",
   },
   reflocation: {
     description: (
@@ -98,7 +89,6 @@ const attrsConfig: Record<string, AttrConfig> = {
         position higher
       </Typography>
     ),
-    type: "textfield",
   },
   url: {
     defaultValue: "https://api.geops.io/stops/v1/",
@@ -107,7 +97,6 @@ const attrsConfig: Record<string, AttrConfig> = {
         The <GeopsStopsAPILink /> url to use.
       </Typography>
     ),
-    type: "textfield",
   },
 };
 

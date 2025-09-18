@@ -52,13 +52,13 @@
     "typescript-eslint": "^8.44.0"
   },
   "scripts": {
-    "build": "yarn build:css && yarn build:js && cp indexDoc.js doc/public/indexDoc.js && cp index.js doc/public/index.js && cp index.js.map doc/public/index.js.map",
+    "build": "yarn build:css && yarn build:js && cp index*.js doc/public/",
     "build:css": "yarn tailwind:component && yarn tailwind:website",
     "build:js": "node scripts/build.mjs",
     "cp": "generact --root src",
     "dev": "node scripts/dev.mjs",
     "doc": "yarn build && cd doc && yarn build",
-    "doc:dev": "yarn build && cd doc && yarn dev",
+    "doc:dev": "yarn build && cp index.js.map doc/public/index.js.map cd doc && yarn dev",
     "format": "prettier --write 'src/**/*.(tsx|ts)' && eslint src/**/*.tsx src/**/*.ts --fix ",
     "lint": "eslint src/**/*.tsx",
     "prepare": "husky",
