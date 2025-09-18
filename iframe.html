@@ -18,17 +18,20 @@
   <body>
     <iframe
       id="iframe"
-      src="/?realtime=false&baselayer=travic_v2_network_plans&type=notification&notificationurl=https%3A%2F%2Fmoco.dev.geops.io%2Fapi%2Fv1%2Fexport%2Fnotification%2F%3Fsso_config%3Dsob&notificationbeforelayerid=netzplan_line_lable&maxzoom=12&center=955768,5922646"
+      src="/index.html?realtime=false&baselayer=travic_v2&type=notification&notificationurl=https%3A%2F%2Fmoco.dev.geops.io%2Fapi%2Fv1/&center=955768,5922646"
       frameborder="0"
     ></iframe>
   </body>
   <script type="module">
-    import testNotification from "./testNotification.json" assert { type: "json" };
-    const iframe = document.getElementById("iframe");
-    iframe.addEventListener("load", function () {
-      setTimeout(() => {
-        this.contentWindow.postMessage({ notification: testNotification }, "*");
-      }, 500);
+    // import testNotification from "./testNotification.json";
+    // const iframe = document.getElementById("iframe");
+    // iframe.addEventListener("load", function () {
+    //   setTimeout(() => {
+    //     this.contentWindow.postMessage({ notification: testNotification }, "*");
+    //   }, 500);
+    // });
+    window.addEventListener("message", (event) => {
+      console.log(`parent received ${event.data.type} message:`, event.data.data);
     });
   </script>
 </html>

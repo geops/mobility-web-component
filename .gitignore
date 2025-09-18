@@ -5,6 +5,8 @@ node_modules
 /index.js.map
 /index.css
 index.css.map
+/indexDoc.js
+/indexDoc.js.map
 
 # Tailwind CSS ouput file
 /output.css

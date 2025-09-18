@@ -3,13 +3,13 @@ import { sassPlugin } from "esbuild-sass-plugin";
 
 const ctx = await esbuild.context({
   bundle: true,
-  entryPoints: ["./src/index.js"],
+  entryPoints: ["./src/index.js", "./src/indexDoc.js"],
   external: ["mapbox-gl"],
   loader: {
     ".png": "dataurl",
     ".svg": "dataurl",
   },
-  outfile: "index.js",
+  outdir: "./",
   plugins: [sassPlugin({ type: "css-text" })],
   sourcemap: true,
 });
@@ -23,6 +23,6 @@ await ctx.watch();
 // eslint-disable-next-line no-undef
 console.log(
   `watching... and running at ${
-    host === "0.0.0.0" ? "http://localhost" : host
+    !host || host === "0.0.0.0" ? "http://localhost" : host
   }:${port}`,
 );

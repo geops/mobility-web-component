@@ -1,9 +1,10 @@
 import { MaplibreLayer } from "mobility-toolbox-js/ol";
-import { MaplibreLayerOptions } from "mobility-toolbox-js/ol/layers/MaplibreLayer";
 import { memo } from "preact/compat";
 import { useEffect, useMemo } from "preact/hooks";
 
 import useMapContext from "../utils/hooks/useMapContext";
+
+import type { MaplibreLayerOptions } from "mobility-toolbox-js/ol/layers/MaplibreLayer";
 
 export type BaseLayerProps = MaplibreLayerOptions;
 

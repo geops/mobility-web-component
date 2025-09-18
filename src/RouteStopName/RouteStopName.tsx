@@ -1,9 +1,9 @@
-import type { JSX, PreactDOMAttributes } from "preact";
-
 import { memo } from "preact/compat";
 
 import RouteStopPlatform from "../RouteStopPlatform";
 import useRouteStop from "../utils/hooks/useRouteStop";
+
+import type { JSX, PreactDOMAttributes } from "preact";
 
 export type RouteStopNameProps = JSX.HTMLAttributes<HTMLDivElement> &
   PreactDOMAttributes;

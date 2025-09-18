@@ -1,9 +1,10 @@
-import { RealtimeStopSequence } from "mobility-toolbox-js/types";
-import { JSX, PreactDOMAttributes } from "preact";
 import { memo } from "preact/compat";
 
 import RouteDestination from "../RouteDestination";
 import RouteIdentifier from "../RouteIdentifier";
+
+import type { RealtimeStopSequence } from "mobility-toolbox-js/types";
+import type { JSX, PreactDOMAttributes } from "preact";
 
 export type RouteInfosProps = {
   stopSequence?: RealtimeStopSequence;

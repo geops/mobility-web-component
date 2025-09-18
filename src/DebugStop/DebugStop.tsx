@@ -1,7 +1,7 @@
-import { JSX, PreactDOMAttributes } from "preact";
-
 import useDebug from "../utils/hooks/useDebug";
 import useRouteStop from "../utils/hooks/useRouteStop";
+
+import type { JSX, PreactDOMAttributes } from "preact";
 
 export type DebugStopProps = JSX.HTMLAttributes<HTMLDivElement> &
   PreactDOMAttributes;

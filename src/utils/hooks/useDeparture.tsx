@@ -1,15 +1,16 @@
-import { RealtimeDeparture } from "mobility-toolbox-js/types";
 import { createContext } from "preact";
 import { useContext } from "preact/hooks";
 
-export type DepartureContextType = {
-  index?: number;
+import type { RealtimeDeparture } from "mobility-toolbox-js/types";
+
+export interface DepartureContextType {
   departure?: RealtimeDeparture;
-};
+  index?: number;
+}
 
 export const DepartureContext = createContext({
-  index: null,
   departure: null,
+  index: null,
 } as DepartureContextType);
 
 const useDeparture = (): DepartureContextType => {

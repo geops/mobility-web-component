@@ -1,6 +1,3 @@
-import type { RealtimeStation, RealtimeStop } from "mobility-toolbox-js/types";
-
-import { JSX, PreactDOMAttributes } from "preact";
 import { memo } from "preact/compat";
 import { useEffect, useMemo, useState } from "preact/hooks";
 
@@ -12,6 +9,9 @@ import RouteStopTime from "../RouteStopTime";
 import getStopStatus from "../utils/getStopStatus";
 import useMapContext from "../utils/hooks/useMapContext";
 import { RouteStopContext } from "../utils/hooks/useRouteStop";
+
+import type { RealtimeStation, RealtimeStop } from "mobility-toolbox-js/types";
+import type { JSX, PreactDOMAttributes } from "preact";
 
 export type RouteScheduleStopProps = {
   classNameGreyOut?: string;
@@ -58,14 +58,11 @@ function RouteStop({
     if (!stopUID || !realtimeLayer?.api) {
       return;
     }
-    const subscribe = async () => {
-      realtimeLayer?.api?.subscribe(`station ${stopUID}`, ({ content }) => {
-        if (content) {
-          setStation(content);
-        }
-      });
-    };
-    subscribe();
+    realtimeLayer?.api?.subscribe(`station ${stopUID}`, ({ content }) => {
+      if (content) {
+        setStation(content);
+      }
+    });
 
     return () => {
       setStation(null);

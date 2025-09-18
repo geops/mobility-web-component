@@ -1,13 +1,17 @@
-import { Feature, MapBrowserEvent } from "ol";
 import { unByKey } from "ol/Observable";
 import { useCallback, useEffect } from "preact/hooks";
 
 import useMapContext from "../utils/hooks/useMapContext";
 
+import type { Feature, MapBrowserEvent } from "ol";
+
 function SingleClickListener() {
   const {
     map,
+    // queryablelayers,
     realtimeLayer,
+    setSelectedFeature,
+    setSelectedFeatures,
     setStationId,
     setTrainId,
     stationId,
@@ -17,8 +21,9 @@ function SingleClickListener() {
   } = useMapContext();
 
   const onPointerMove = useCallback(
-    async (evt: MapBrowserEvent<PointerEvent>) => {
+    (evt: MapBrowserEvent<PointerEvent>) => {
       const [realtimeFeature] = evt.map.getFeaturesAtPixel(evt.pixel, {
+        hitTolerance: 5,
         layerFilter: (l) => {
           return l === realtimeLayer;
         },
@@ -35,15 +40,35 @@ function SingleClickListener() {
         return feat.get("tralis_network")?.includes(tenant);
       });
 
+      // Send all the features under the cursor
+      const features = evt.map.getFeaturesAtPixel(evt.pixel, {
+        layerFilter: (l) => {
+          return l.get("isQueryable");
+        },
+      }) as Feature[];
+
       evt.map.getTargetElement().style.cursor =
-        realtimeFeature || stationFeature ? "pointer" : "default";
+        realtimeFeature || stationFeature || features?.length
+          ? "pointer"
+          : "default";
     },
     [realtimeLayer, stationsLayer, tenant],
   );
 
   const onSingleClick = useCallback(
-    async (evt: MapBrowserEvent<PointerEvent>) => {
+    (evt: MapBrowserEvent<PointerEvent>) => {
+      // const qeryableLayers = queryablelayers?.split(",");
+      // const featuress = evt.map.getFeaturesAtPixel(evt.pixel, {
+      //   layerFilter: (l) => {
+      //     return qeryableLayers
+      //       ? queryablelayers.includes(l.get("name"))
+      //       : true;
+      //   },
+      // });
+      // console.log("featursss", featuress);
+
       const [realtimeFeature] = evt.map.getFeaturesAtPixel(evt.pixel, {
+        hitTolerance: 5,
         layerFilter: (l) => {
           return l === realtimeLayer;
         },
@@ -72,8 +97,24 @@ function SingleClickListener() {
         setTrainId(null);
         setStationId(null);
       }
+
+      // Send all the features under the cursor
+      const features = evt.map.getFeaturesAtPixel(evt.pixel, {
+        layerFilter: (l) => {
+          return l.get("isQueryable");
+        },
+      }) as Feature[];
+
+      if (newStationId || newTrainId || !features.length) {
+        setSelectedFeature(null);
+        setSelectedFeatures([]);
+      } else {
+        setSelectedFeatures(features);
+        setSelectedFeature(features[0]);
+      }
     },
     [
+      // queryablelayers,
       stationId,
       trainId,
       realtimeLayer,
@@ -81,6 +122,8 @@ function SingleClickListener() {
       tenant,
       setStationId,
       setTrainId,
+      setSelectedFeature,
+      setSelectedFeatures,
     ],
   );
 

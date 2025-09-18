@@ -2,8 +2,6 @@
 import {
   Button,
   Checkbox,
-  MenuItem,
-  Select,
   TextField,
   TextFieldProps,
   Typography,
@@ -26,7 +24,7 @@ export interface AttrConfig {
   defaultValue?: string;
   description: ReactNode;
   props?: TextFieldProps;
-  type: "checkbox" | "date" | "select" | "textfield";
+  type?: "boolean";
 }
 
 function WebComponentDoc({
@@ -175,7 +173,7 @@ function WebComponentDoc({
         HTML code
       </Typography>
       <br />
-      <SyntaxHighlighter className="!m-0" language="xml">
+      <SyntaxHighlighter className="m-0!" language="xml">
         {code}
       </SyntaxHighlighter>
       <br />
@@ -196,9 +194,8 @@ function WebComponentDoc({
       <table className="w-full">
         <thead>
           <tr>
-            <th className="w-[15%] border px-4 py-2">Name</th>
-            <th className="w-2/5 border px-4 py-2">Value</th>
-            <th className="w-[45%] border px-4 py-2">Description</th>
+            <th className="w-1/5 border px-4 py-2">Name</th>
+            <th className="w-4/5 border px-4 py-2">Description</th>
           </tr>
         </thead>
         <tbody>
@@ -218,21 +215,19 @@ function WebComponentDoc({
               } = attrsConfig[key] || {};
               return (
                 <tr key={key}>
-                  <td className="border px-4 py-2">{key}</td>
-                  <td className="border px-4 py-2">
-                    {type === "textfield" && (
-                      <div>
-                        <TextField
-                          defaultValue={attributes[key]}
-                          fullWidth
-                          id={key}
-                          placeholder={defaultValue}
-                          variant="standard"
-                          {...props}
-                        />
-                        <div className="mt-2">
+                  <td className="w-1/5 border p-4">{key}</td>
+                  <td className="w-2/5 border p-4">
+                    <div className="flex flex-col gap-4 justify-start">
+                      {!type && (
+                        <div className="flex gap-2">
+                          <TextField
+                            defaultValue={attributes[key]}
+                            id={key}
+                            placeholder={defaultValue}
+                            variant="outlined"
+                            {...props}
+                          />
                           <Button
-                            fullWidth
                             onClick={() => {
                               onChange(
                                 key,
@@ -247,42 +242,36 @@ function WebComponentDoc({
                             Apply
                           </Button>
                         </div>
+                      )}
+                      {type === "boolean" && (
+                        <Checkbox
+                          className="w-8"
+                          defaultChecked={
+                            (searchParams.get(key) || defaultValue) === "true"
+                          }
+                          onChange={(evt) => {
+                            onChange(
+                              key,
+                              evt.target.checked ? "true" : "false",
+                            );
+                          }}
+                        />
+                      )}
+                      <div>
+                        {typeof description !== "string" ? (
+                          description
+                        ) : (
+                          <Typography
+                            dangerouslySetInnerHTML={{ __html: description }}
+                          />
+                        )}{" "}
+                        {defaultValue && (
+                          <>
+                            <i>Default to &quot;{defaultValue}&quot;</i>
+                          </>
+                        )}
                       </div>
-                    )}
-
-                    {type === "checkbox" && (
-                      <Checkbox
-                        defaultChecked={
-                          (searchParams.get(key) || defaultValue) === "true"
-                        }
-                        onChange={(evt) => {
-                          onChange(key, evt.target.checked ? "true" : "false");
-                        }}
-                      />
-                    )}
-
-                    {type === "select" && (
-                      <Select
-                        defaultValue={searchParams.get(key) || defaultValue}
-                        fullWidth
-                        onChange={(evt) => {
-                          onChange(key, evt.target.value);
-                        }}
-                        variant="standard"
-                      >
-                        <MenuItem value="travic_v2">Travic v2</MenuItem>
-                        <MenuItem value="base_dark_v2">Dark v2</MenuItem>
-                      </Select>
-                    )}
-                  </td>
-                  <td className="border p-4">
-                    {description}{" "}
-                    {defaultValue && (
-                      <>
-                        <br />
-                        <i>Default to &quot;{defaultValue}&quot;</i>
-                      </>
-                    )}
+                    </div>
                   </td>
                 </tr>
               );

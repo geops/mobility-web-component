@@ -1,5 +1,3 @@
-import type { JSX, PreactDOMAttributes } from "preact";
-
 import { Geolocation } from "ol";
 import { unByKey } from "ol/Observable";
 import { fromLonLat } from "ol/proj";
@@ -9,6 +7,8 @@ import { useEffect, useMemo } from "preact/hooks";
 import GeolocationIcon from "../icons/Geolocation";
 import IconButton from "../ui/IconButton";
 import useMapContext from "../utils/hooks/useMapContext";
+
+import type { JSX, PreactDOMAttributes } from "preact";
 
 export type GeolocationButtonProps = JSX.HTMLAttributes<HTMLButtonElement> &
   PreactDOMAttributes;

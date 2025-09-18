@@ -1,12 +1,13 @@
-import type { RealtimeMot, RealtimeTrainId } from "mobility-toolbox-js/types";
-
-import { RealtimeLayer as MtbRealtimeLayer } from "mobility-toolbox-js/ol";
-import { RealtimeLayerOptions } from "mobility-toolbox-js/ol/layers/RealtimeLayer";
+import {
+  getGraphByZoom,
+  RealtimeLayer as MtbRealtimeLayer,
+} from "mobility-toolbox-js/ol";
 import { unByKey } from "ol/Observable";
 import { memo } from "preact/compat";
 import { useEffect, useMemo } from "preact/hooks";
 
 import centerOnVehicle from "../utils/centerOnVehicle";
+import { LAYER_NAME_REALTIME } from "../utils/constants";
 import getDelayColorForVehicle from "../utils/getDelayColorForVehicle";
 import getDelayFontForVehicle from "../utils/getDelayFontForVehicle";
 import getDelayTextForVehicle from "../utils/getDelayTextForVehicle";
@@ -14,17 +15,26 @@ import getTextFontForVehicle from "../utils/getTextFontForVehicle";
 import getTextForVehicle from "../utils/getTextForVehicle";
 import useMapContext from "../utils/hooks/useMapContext";
 
+import type { RealtimeLayerOptions } from "mobility-toolbox-js/ol/layers/RealtimeLayer";
+import type {
+  RealtimeMot,
+  RealtimeStation,
+  RealtimeTrainId,
+  StyleMetadataGraphs,
+} from "mobility-toolbox-js/types";
+
 const TRACKING_ZOOM = 16;
+const useGraphs = false;
 
-export type RealtimeLayerProps = RealtimeLayerOptions;
-
-function RealtimeLayer(props: RealtimeLayerProps) {
+function RealtimeLayer(props: Partial<RealtimeLayerOptions>) {
   const {
     apikey,
+    baseLayer,
     isFollowing,
     isTracking,
     map,
     mots,
+    realtimebboxparameters,
     realtimeurl,
     setIsFollowing,
     setIsTracking,
@@ -41,13 +51,25 @@ function RealtimeLayer(props: RealtimeLayerProps) {
     if (!apikey || !realtimeurl) {
       return null;
     }
-    const layer = new MtbRealtimeLayer({
+    const lay = new MtbRealtimeLayer({
       apiKey: apikey,
+      bboxParameters: realtimebboxparameters
+        ?.split(" ")
+        .reduce((acc, string) => {
+          if (!string) {
+            return acc;
+          }
+          const [key, value] = string.split("=");
+          acc[key] = value;
+          return acc;
+        }, {}),
       getMotsByZoom: mots
         ? () => {
             return mots.split(",") as RealtimeMot[];
           }
         : undefined,
+      isQueryable: true,
+      name: LAYER_NAME_REALTIME,
       tenant,
       url: realtimeurl,
       zIndex: 1,
@@ -62,8 +84,8 @@ function RealtimeLayer(props: RealtimeLayerProps) {
       },
     });
 
-    return layer;
-  }, [apikey, mots, realtimeurl, tenant, props]);
+    return lay;
+  }, [apikey, realtimeurl, realtimebboxparameters, mots, tenant, props]);
 
   useEffect(() => {
     if (!map || !layer) {
@@ -151,11 +173,11 @@ function RealtimeLayer(props: RealtimeLayerProps) {
       // Once the map is zoomed on the vehicle we follow him, only recenter , no zoom changes.
       if (success === true) {
         interval = setInterval(() => {
-          centerOnVehicle(layer?.trajectories?.[stopSequence.id], map);
+          void centerOnVehicle(layer?.trajectories?.[stopSequence.id], map);
         }, 1000);
       }
     };
-    followVehicle(stopSequence.id);
+    void followVehicle(stopSequence.id);
 
     return () => {
       clearInterval(interval);
@@ -177,14 +199,11 @@ function RealtimeLayer(props: RealtimeLayerProps) {
     if (!stationId || !layer?.api) {
       return;
     }
-    const subscribe = async () => {
-      layer?.api?.subscribe(`station ${stationId}`, ({ content }) => {
-        if (content) {
-          setStation(content);
-        }
-      });
-    };
-    subscribe();
+    layer?.api?.subscribe(`station ${stationId}`, ({ content }) => {
+      if (content) {
+        setStation(content as RealtimeStation);
+      }
+    });
 
     return () => {
       setStation(null);
@@ -200,18 +219,19 @@ function RealtimeLayer(props: RealtimeLayerProps) {
       return;
     }
     layer.selectedVehicleId = trainId;
-    layer.highlightTrajectory(trainId);
-    const subscribe = async () => {
-      layer?.api?.subscribeStopSequence(trainId, ({ content }) => {
-        if (content) {
-          const [firstStopSequence] = content;
-          if (firstStopSequence) {
-            setStopSequence(firstStopSequence);
-          }
+    layer.highlightTrajectory(trainId).catch((err) => {
+      // eslint-disable-next-line no-console
+      console.error("Error highlighting trajectory:", err);
+    });
+
+    layer?.api?.subscribeStopSequence(trainId, ({ content }) => {
+      if (content) {
+        const [firstStopSequence] = content;
+        if (firstStopSequence) {
+          setStopSequence(firstStopSequence);
         }
-      });
-    };
-    subscribe();
+      }
+    });
 
     return () => {
       setStopSequence(null);
@@ -222,6 +242,27 @@ function RealtimeLayer(props: RealtimeLayerProps) {
       }
     };
   }, [trainId, layer, layer?.api, setStopSequence]);
+
+  // Get graphs value
+  useEffect(() => {
+    if (!map || !baseLayer || !useGraphs) {
+      return;
+    }
+    const key = map.once("rendercomplete", () => {
+      const metadata = baseLayer.mapLibreMap?.getStyle()?.metadata as {
+        graphs: StyleMetadataGraphs;
+      };
+      const graphByZoom = [];
+      for (let i = 0; i < 26; i++) {
+        graphByZoom.push(getGraphByZoom(i, metadata?.graphs));
+      }
+      layer.engine.graphByZoom = graphByZoom;
+      layer.engine.setBbox();
+    });
+    return () => {
+      unByKey(key);
+    };
+  }, [map, baseLayer, layer]);
 
   return null;
 }

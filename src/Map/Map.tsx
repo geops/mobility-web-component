@@ -1,12 +1,14 @@
 import { Map as OlMap, View } from "ol";
 import { unByKey } from "ol/Observable";
-// @ts-expect-error bad type definition
-import olStyle from "ol/ol.css";
-import { JSX, PreactDOMAttributes } from "preact";
 import { memo } from "preact/compat";
 import { useEffect, useMemo, useRef } from "preact/hooks";
 
 import useMapContext from "../utils/hooks/useMapContext";
+
+// @ts-expect-error bad type definition
+import olStyle from "ol/ol.css";
+
+import type { JSX, PreactDOMAttributes } from "preact";
 
 export type RealtimeMapProps = JSX.HTMLAttributes<HTMLDivElement> &
   PreactDOMAttributes;

@@ -1,8 +1,9 @@
-import { JSX, PreactDOMAttributes } from "preact";
 import { memo } from "preact/compat";
 
 import getHoursAndMinutes from "../utils/getHoursAndMinutes";
 import useRouteStop from "../utils/hooks/useRouteStop";
+
+import type { JSX, PreactDOMAttributes } from "preact";
 
 export type RouteStopTimeProps = JSX.HTMLAttributes<HTMLDivElement> &
   PreactDOMAttributes;
