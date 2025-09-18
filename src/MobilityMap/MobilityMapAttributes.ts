@@ -119,7 +119,7 @@ const attrs: MobilityMapAttributes = {
   permalink: {
     defaultValue: "false",
     description:
-      "Add/remove url parameters to the current window location. These parameters are used to store the current state of the map. They will be used on page load to configure the web-component.",
+      "Update some url parameters x,y,z,layers to the current window location. These parameters are used to store the current state of the map. They will be used on page load to configure the web-component.",
     type: "boolean",
   },
   queryablelayers: {
