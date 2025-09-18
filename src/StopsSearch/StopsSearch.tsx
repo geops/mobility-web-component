@@ -14,15 +14,12 @@ import { MdClose } from "react-icons/md";
 import useI18n from "../utils/hooks/useI18n";
 import MobilityEvent from "../utils/MobilityEvent";
 
-// @ts-expect-error tailwind must be added for the search web component
-import tailwind from "../style.css";
-
 import type { StopsParameters, StopsResponse } from "mobility-toolbox-js/types";
 import type { JSX, PreactDOMAttributes } from "preact";
 
 export type StopsFeature = StopsResponse["features"];
 
-export type MobilityStopsSearchProps = {
+export type StopsSearchProps = {
   apikey: string;
   bbox?: string;
   countrycode?: string;
@@ -60,17 +57,17 @@ function StopsSearch({
   prefagencies,
   reflocation,
   url = "https://api.geops.io/stops/v1/",
-}: MobilityStopsSearchProps) {
+}: StopsSearchProps) {
   const { t } = useI18n();
   const [query, setQuery] = useState("");
-
+  console.log(t("stops_search_placeholder"));
   const [selectedStation, setSelectedStation] = useState<StopsFeature>();
   const [results, setResults] = useState<StopsFeature[] | undefined>();
   const myRef = useRef<HTMLDivElement>();
 
   useEffect(() => {
     myRef.current?.dispatchEvent(
-      new MobilityEvent<MobilityStopsSearchProps>("mwc:attribute", {
+      new MobilityEvent<StopsSearchProps>("mwc:attribute", {
         apikey,
         bbox,
         countrycode,
@@ -199,8 +196,6 @@ function StopsSearch({
 
   return (
     <>
-      <style>{tailwind}</style>
-      {/* <div className="relative z-0 rounded-md bg-white" > */}
       <div
         className={
           "flex h-16 items-center gap-4 rounded-md bg-white p-4 pt-3.5 shadow"

@@ -2,7 +2,7 @@ import register from "preact-custom-element";
 
 import MobilityMap from "./MobilityMap";
 import MobilityMapAttributes from "./MobilityMap/MobilityMapAttributes";
-import MobilitySearch from "./StopsSearch";
+import MobilitySearch, { MobilitySearchAttributes } from "./MobilitySearch";
 
 register(MobilityMap, "geops-mobility", Object.keys(MobilityMapAttributes), {
   mode: "open",
@@ -12,20 +12,7 @@ register(MobilityMap, "geops-mobility", Object.keys(MobilityMapAttributes), {
 register(
   MobilitySearch,
   "geops-mobility-search",
-  [
-    "apikey",
-    "bbox",
-    "countrycode",
-    "event",
-    "field",
-    "limit",
-    "mots",
-    "onselect",
-    "params",
-    "prefagencies",
-    "reflocation",
-    "url",
-  ],
+  Object.keys(MobilitySearchAttributes),
   {
     mode: "open",
     shadow: true,
