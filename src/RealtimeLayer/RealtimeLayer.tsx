@@ -24,6 +24,7 @@ import type {
 } from "mobility-toolbox-js/types";
 
 const TRACKING_ZOOM = 16;
+const useGraphs = false;
 
 function RealtimeLayer(props: Partial<RealtimeLayerOptions>) {
   const {
@@ -244,7 +245,7 @@ function RealtimeLayer(props: Partial<RealtimeLayerOptions>) {
 
   // Get graphs value
   useEffect(() => {
-    if (!map || !baseLayer) {
+    if (!map || !baseLayer || !useGraphs) {
       return;
     }
     const key = map.once("rendercomplete", () => {
