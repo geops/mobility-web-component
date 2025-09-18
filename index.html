@@ -16,6 +16,7 @@
       }
     </script>
     <script type="module" src="./index.js"></script>
+    <script type="module" src="./indexDoc.js"></script>
     <script src="./docutils.js"></script>
     <link rel="stylesheet" type="text/css" href="./output.css" />
     <style>
@@ -30,21 +31,33 @@
   </head>
   <body class="p-8">
     <!-- tailwind hack to add class used in docutils -->
-    <div class="border px-4 py-2 table-auto w-full flex gap-4 p-2 bg-black text-white hover:bg-gray-700" style="display:none;"></div>
+    <div
+      class="absolute inset-0 flex h-full w-full table-auto gap-4 border bg-black p-0 px-4 py-2 pt-2 text-white hover:bg-gray-700"
+      style="display: none"
+    ></div>
+    <div class="pt-2" style="display: none"></div>
     <div id="doc" style="display: none" class="mx-auto max-w-3xl space-y-4">
       <h1 class="text-3xl font-bold">Mobility Web Component</h1>
       <p>This is a demo of the Mobility Web Component.</p>
       <h2 class="text-xl font-bold">Usage example</h2>
-      <pre id="code" class="bg-slate-800 text-slate-200 p-4 rounded"></pre>
+      <pre
+        id="code"
+        class="overflow-auto rounded bg-slate-800 p-4 text-slate-200"
+      ></pre>
 
       <geops-mobility
-        class="max-w-3xl h-96 block resize overflow-auto"
+        class="block h-96 w-full resize overflow-hidden rounded-[16px] border"
       ></geops-mobility>
 
       <br />
       <h2 class="text-xl font-bold">Attributes</h2>
       <div id="attributes"></div>
       <h2 class="text-xl font-bold">Events</h2>
+      <pre id="code" class="rounded bg-slate-800 p-4 text-slate-200">
+document.getElementById('map').addEventListener('mwc:attribute', (event) => {
+  console.log('Display last data received:', event.data);
+});</pre
+      >
       <div id="events"></div>
       <br />
       <br />
@@ -61,45 +74,90 @@
       const pkgSrc = "https://www.unpkg.com/@geops/mobility-web-component";
       const wc = document.querySelector("geops-mobility");
 
-      const attrs = [
-          "apikey",
-          "baselayer",
-          "center",
-          "geolocation",
-          "mapsurl",
-          "mots",
-          "notification",
-          "notificationat",
-          "notificationurl",
-          "notificationbeforelayerid",
-          "realtime",
-          "realtimeUrl",
-          "search",
-          "tenant",
-          "zoom",
-          "permalink",
+      window.addEventListener("load", () => {
+
+        // Add special parameters
+        window.MobilityMapAttributes.fullscreen = {
+          type: "boolean",
+          defaultValue: "false",
+          description: `Load the page in fullscreen mode.`,
+          reload: true,
+        };
+
+        /* Attributes */
+        const attrs = Object.keys(MobilityMapAttributes);
+        const booleanAttrs = Object.entries(MobilityMapAttributes)
+          .filter(([, attr]) => attr.type === "boolean")
+          .map(([key]) => key);
+        const booleanTrueByDefault = booleanAttrs.filter(
+          (key) => MobilityMapAttributes[key].defaultValue === "true",
+        );
+        const reloadAttrs = Object.entries(MobilityMapAttributes)
+          .filter(([key, attr]) => !!attr.reload)
+          .map(([key]) => key);
+
+        const descriptionByAttr = Object.entries(MobilityMapAttributes).reduce((acc, [key, attr]) => {
+            acc[key] = attr.description;
+            return acc;
+          }, {});
+
+        /* Events */
+        const events = [
+          "mwc:selectedfeature",
+          "mwc:stopssearchselect",
+          "mwc:attribute",
+          "mwc:singleclick",
+          "mwc:permalink",
+          "mwc:messageready",
         ];
+        const descriptionByEvent = {
+          "mwc:selectedfeature":
+            "Event fired when a feature is selected on the map. The event data contains the selected feature in GeoJSON format.",
+          "mwc:stopssearchselect":
+            "Only when search attribute is 'true'. Event fired when a stop is selected in the stops search results. The event data contains the selected stop.",
+          "mwc:attribute":
+            "Event fired when an web component's attribute is changed. The event data contains the list of all attributes and their values.",
+          "mwc:permalink":
+            "Event fired when the map's state changes. The event data contains the permalink URL search parameters as string.",
+          "mwc:messageready":
+            "Only if the web-component is embedded in an iframe. Message event fired when the web component is ready to receive messages from parent window. ",
+          "mwc:singleclick":
+            "Event fired when the map is clicked. The event data contains the map coordinates in EPSG:3857 and the pixel coordinates.",
+        };
 
-      const booleanAttrs = [
-        "geolocation",
-        "notification",
-        "realtime",
-        "search",
-        "permalink",
-      ];
-
-      const events = [
-        "mwc:stopssearchselect",
-        "mwc:attribute",
-      ];
-
-      document.querySelector('#attributes').innerHTML = generateAttributesTable(wc, attrs, booleanAttrs);
-      document.querySelector('#events').innerHTML = generateEventsTable(wc, events);
-      document.querySelector('#code').innerHTML = generateCodeText(wc, attrs, pkgSrc);
-      wc.addEventListener('mwc:attribute', (event) => {
-        document.querySelector('#code').innerHTML = generateCodeText(wc, attrs, pkgSrc);
+        document.querySelector("#attributes").innerHTML =
+          generateAttributesTable(
+            wc,
+            attrs,
+            booleanAttrs,
+            booleanTrueByDefault,
+            descriptionByAttr,
+            reloadAttrs,
+          );
+        document.querySelector("#events").innerHTML = generateEventsTable(
+          wc,
+          events,
+          descriptionByEvent,
+        );
+        document.querySelector("#code").innerHTML = generateCodeText(
+          wc,
+          attrs,
+          pkgSrc,
+        );
+        wc.addEventListener("mwc:attribute", (event) => {
+          document.querySelector("#code").innerHTML = generateCodeText(
+            wc,
+            attrs,
+            pkgSrc,
+          );
+        });
+        applyPermalinkParameters(wc);
+        events.forEach((eventName) => {
+          wc.addEventListener(eventName, (event) => {
+            console.log(`${eventName} event`, event);
+          });
+        });
       });
-      applyPermalinkParameters(wc);
     </script>
   </body>
 </html>

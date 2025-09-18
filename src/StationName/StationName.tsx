@@ -1,7 +1,7 @@
-import type { JSX, PreactDOMAttributes } from "preact";
-
-import { RealtimeStation } from "mobility-toolbox-js/types";
 import { memo } from "preact/compat";
+
+import type { RealtimeStation } from "mobility-toolbox-js/types";
+import type { JSX, PreactDOMAttributes } from "preact";
 
 export type StationNameProps = {
   station: RealtimeStation;

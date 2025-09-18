@@ -1,13 +1,13 @@
-import type { JSX, PreactDOMAttributes } from "preact";
-
 import { debounceDeparturesMessages } from "mobility-toolbox-js/ol";
-import { RealtimeDeparture } from "mobility-toolbox-js/types";
 import { memo } from "preact/compat";
 import { useEffect, useRef, useState } from "preact/hooks";
 
 import Departure from "../Departure";
 import StationHeader from "../StationHeader";
 import useMapContext from "../utils/hooks/useMapContext";
+
+import type { RealtimeDeparture } from "mobility-toolbox-js/types";
+import type { JSX, PreactDOMAttributes } from "preact";
 
 export type StationProps = JSX.HTMLAttributes<HTMLDivElement> &
   PreactDOMAttributes;
@@ -24,8 +24,8 @@ function Station(props: StationProps) {
     }
 
     const onMessage = debounceDeparturesMessages(
-      (departures: RealtimeDeparture[]) => {
-        setDepartures(departures);
+      (newDepartures: RealtimeDeparture[]) => {
+        setDepartures(newDepartures);
         return null;
       },
       false,

@@ -1,5 +1,3 @@
-import type { RealtimeDeparture } from "mobility-toolbox-js/types";
-
 import { memo, useMemo } from "preact/compat";
 
 import DebugDeparture from "../DebugDeparture";
@@ -7,6 +5,8 @@ import RouteIcon from "../RouteIcon";
 import getHoursAndMinutes from "../utils/getHoursAndMinutes";
 import { DepartureContext } from "../utils/hooks/useDeparture";
 import useMapContext from "../utils/hooks/useMapContext";
+
+import type { RealtimeDeparture } from "mobility-toolbox-js/types";
 
 export interface DepartureProps {
   departure: RealtimeDeparture;
@@ -28,7 +28,6 @@ function Departure({ departure, index, ...props }: DepartureProps) {
           setTrainId(departure.train_id);
           setStationId();
         }}
-        type="button"
         {...props}
       >
         <div

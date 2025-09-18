@@ -1,5 +1,3 @@
-import type { Metadata } from "next";
-
 import { Container } from "@mui/material";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
 import { ThemeProvider } from "@mui/material/styles";
@@ -7,7 +5,10 @@ import Script from "next/script";
 import { Suspense } from "react";
 
 import { Footer, geopsTheme, Header } from "../geops-ui";
+
 import "./globals.css";
+
+import type { Metadata } from "next";
 
 const tabs = [
   {
@@ -45,6 +46,7 @@ export default function RootLayout({
           </ThemeProvider>
         </AppRouterCacheProvider>
         <Script src="index.js" />
+        <Script src="indexDoc.js" />
       </body>
     </html>
   );

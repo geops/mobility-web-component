@@ -1,11 +1,14 @@
-import { JSX, PreactDOMAttributes } from "preact";
 import { memo } from "preact/compat";
+import { twMerge } from "tailwind-merge";
 
 import RouteStopName from "../RouteStopName";
 import RouteStopServices from "../RouteStopServices";
 import useRouteStop from "../utils/hooks/useRouteStop";
 
+import type { JSX, PreactDOMAttributes } from "preact";
+
 export type RouteStopStationProps = {
+  className?: string;
   classNameCancelled?: string;
 } & JSX.HTMLAttributes<HTMLDivElement> &
   PreactDOMAttributes;
@@ -21,7 +24,10 @@ function RouteStopStation({
   return (
     <div
       {...props}
-      className={`${className} ${status.isCancelled ? classNameCancelled : ""}`}
+      className={twMerge(
+        className,
+        status.isCancelled ? classNameCancelled : "",
+      )}
     >
       <RouteStopName />
       <RouteStopServices className="flex flex-wrap gap-1" />

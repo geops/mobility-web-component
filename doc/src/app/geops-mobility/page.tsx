@@ -1,6 +1,11 @@
 "use client";
-import GeopsMobilityDoc from "../components/GeopsMobilityDoc";
+import dynamic from "next/dynamic";
+
+const DynamicComponentWithNoSSR = dynamic(
+  () => import("../components/GeopsMobilityDoc"),
+  { ssr: false },
+);
 
 export default function GeopsMobility() {
-  return <GeopsMobilityDoc />;
+  return <DynamicComponentWithNoSSR />;
 }

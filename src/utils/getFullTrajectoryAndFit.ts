@@ -1,8 +1,9 @@
-import { RealtimeLayer } from "mobility-toolbox-js/ol";
-import { RealtimeTrainId } from "mobility-toolbox-js/types";
-import { Map } from "ol";
 import { GeoJSON } from "ol/format";
 import { Vector } from "ol/source";
+
+import type { RealtimeLayer } from "mobility-toolbox-js/ol";
+import type { RealtimeTrainId } from "mobility-toolbox-js/types";
+import type { Map } from "ol";
 
 const getFullTrajectoryAndFit = async (
   map: Map,

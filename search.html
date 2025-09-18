@@ -16,6 +16,7 @@
       }
     </script>
     <script type="module" src="./index.js"></script>
+    <script type="module" src="./indexDoc.js"></script>
     <script src="./docutils.js"></script>
     <link rel="stylesheet" type="text/css" href="./output.css" />
     <style>
@@ -82,32 +83,78 @@
       const pkgSrc = "https://www.unpkg.com/@geops/mobility-web-component";
       const wc = document.querySelector("geops-mobility-search");
 
-      const attrs = [
-        "apikey",
-        "bbox",
-        "countrycode",
-        "event",
-        "field",
-        "limit",
-        "mots",
-        "onselect",
-        "params",
-        "prefagencies",
-        "reflocation",
-        "url",
-      ];
+      window.addEventListener("load", () => {
 
-      const events = [
-        "mwc:stopssearchselect",
-      ];
+        // Add special parameters
+        window.MobilityMapAttributes.fullscreen = {
+          type: "boolean",
+          defaultValue: "false",
+          description: `Load the page in fullscreen mode.`,
+          reload: true,
+        };
 
-      document.querySelector('#attributes').innerHTML = generateAttributesTable(wc, attrs);
-      document.querySelector('#events').innerHTML = generateEventsTable(wc, events);
-      document.querySelector('#code').innerHTML = generateCodeText(wc, attrs, pkgSrc);
-      wc.addEventListener('mwc:attribute', (event) => {
-        document.querySelector('#code').innerHTML = generateCodeText(wc, attrs, pkgSrc);
+        /* Attributes */
+        const attrs = Object.keys(MobilitySearchAttributes);
+        const booleanAttrs = Object.entries(MobilitySearchAttributes)
+          .filter(([, attr]) => attr.type === "boolean")
+          .map(([key]) => key);
+        const booleanTrueByDefault = booleanAttrs.filter(
+          (key) => MobilitySearchAttributes[key].defaultValue === "true",
+        );
+        const reloadAttrs = Object.entries(MobilitySearchAttributes)
+          .filter(([key, attr]) => !!attr.reload)
+          .map(([key]) => key);
+
+        const descriptionByAttr = Object.entries(MobilitySearchAttributes).reduce((acc, [key, attr]) => {
+            acc[key] = attr.description;
+            return acc;
+          }, {});
+
+        /* Events */
+        const events = [
+          "mwc:stopssearchselect",
+          "mwc:attribute",
+        ];
+        const descriptionByEvent = {
+          "mwc:stopssearchselect":
+            "Only when search attribute is 'true'. Event fired when a stop is selected in the stops search results. The event data contains the selected stop.",
+          "mwc:attribute":
+            "Event fired when an web component's attribute is changed. The event data contains the list of all attributes and their values.",
+        };
+
+        document.querySelector("#attributes").innerHTML =
+          generateAttributesTable(
+            wc,
+            attrs,
+            booleanAttrs,
+            booleanTrueByDefault,
+            descriptionByAttr,
+            reloadAttrs,
+          );
+        document.querySelector("#events").innerHTML = generateEventsTable(
+          wc,
+          events,
+          descriptionByEvent,
+        );
+        document.querySelector("#code").innerHTML = generateCodeText(
+          wc,
+          attrs,
+          pkgSrc,
+        );
+        wc.addEventListener("mwc:attribute", (event) => {
+          document.querySelector("#code").innerHTML = generateCodeText(
+            wc,
+            attrs,
+            pkgSrc,
+          );
+        });
+        applyPermalinkParameters(wc);
+        events.forEach((eventName) => {
+          wc.addEventListener(eventName, (event) => {
+            console.log(`${eventName} event`, event);
+          });
+        });
       });
-      applyPermalinkParameters(wc);
     </script>
   </body>
 </html>

@@ -1,11 +1,13 @@
 import { CopyrightControl } from "mobility-toolbox-js/ol";
-import { CopyrightControlOptions } from "mobility-toolbox-js/ol/controls/CopyrightControl";
-import { JSX, PreactDOMAttributes } from "preact";
 import { useEffect, useMemo, useState } from "preact/hooks";
 
 import useMapContext from "../utils/hooks/useMapContext";
+
 // @ts-expect-error bad type definition
 import style from "./index.css";
+
+import type { CopyrightControlOptions } from "mobility-toolbox-js/ol/controls/CopyrightControl";
+import type { JSX, PreactDOMAttributes } from "preact";
 
 export type CopyrightProps = {
   options?: CopyrightControlOptions;

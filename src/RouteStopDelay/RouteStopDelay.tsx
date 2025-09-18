@@ -1,9 +1,10 @@
-import { JSX, PreactDOMAttributes } from "preact";
 import { memo } from "preact/compat";
 
 import getDelayColor from "../utils/getDelayColor";
 import getDelayString from "../utils/getDelayString";
 import useRouteStop from "../utils/hooks/useRouteStop";
+
+import type { JSX, PreactDOMAttributes } from "preact";
 
 export type RouteStopDelayProps = JSX.HTMLAttributes<HTMLDivElement> &
   PreactDOMAttributes;

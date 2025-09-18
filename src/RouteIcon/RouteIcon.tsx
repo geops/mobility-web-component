@@ -1,14 +1,14 @@
-import {
+import getMainColorForVehicle from "../utils/getMainColorForVehicle";
+import getTextFontForVehicle from "../utils/getTextFontForVehicle";
+import getTextForVehicle from "../utils/getTextForVehicle";
+
+import type {
   RealtimeDeparture,
   RealtimeLine,
   RealtimeStopSequence,
   RealtimeTrajectory,
 } from "mobility-toolbox-js/types";
-import { JSX, PreactDOMAttributes } from "preact";
-
-import getMainColorForVehicle from "../utils/getMainColorForVehicle";
-import getTextFontForVehicle from "../utils/getTextFontForVehicle";
-import getTextForVehicle from "../utils/getTextForVehicle";
+import type { JSX, PreactDOMAttributes } from "preact";
 
 export type RouteIconProps = {
   departure?: RealtimeDeparture;

@@ -1,12 +1,14 @@
 import { createContext } from "preact";
 import { useContext } from "preact/hooks";
 
-export type I18NContextType = {
-  t: (id: string, templateValues?: { [key: string]: string }) => string;
-};
+export interface I18NContextType {
+  t: (id: string, templateValues?: Record<string, string>) => string;
+}
 
 export const I18nContext = createContext({
-  t: (id, templateValues) => `${id} ${JSON.stringify(templateValues)}`,
+  t: (id, templateValues) => {
+    return `${id} ${JSON.stringify(templateValues)}`;
+  },
 } as I18NContextType);
 
 const useI18n = (): I18NContextType => {
