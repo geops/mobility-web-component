@@ -1,12 +1,18 @@
 import { memo, useMemo } from "preact/compat";
+import { twMerge } from "tailwind-merge";
 
-import type { ButtonHTMLAttributes, PreactDOMAttributes } from "preact";
+import type {
+  AnchorHTMLAttributes,
+  ButtonHTMLAttributes,
+  PreactDOMAttributes,
+} from "preact";
 
 export type ButtonProps = {
   className?: string;
   selected?: boolean;
   theme?: "primary" | "secondary";
-} & ButtonHTMLAttributes<HTMLButtonElement> &
+} & AnchorHTMLAttributes &
+  ButtonHTMLAttributes &
   PreactDOMAttributes;
 
 const baseClasses = "flex";
@@ -25,13 +31,27 @@ export const themes = {
 function Button({
   children,
   className,
+  href,
   selected = false,
   theme = "secondary",
   ...props
 }: ButtonProps) {
   const classes = useMemo(() => {
-    return `${baseClasses} ${themes[theme].classes}  ${selected ? themes[theme].selectedClasses : ""} ${className || ""}`;
+    return twMerge(
+      baseClasses,
+      themes[theme].classes,
+      selected ? themes[theme].selectedClasses : "",
+      className,
+    );
   }, [className, selected, theme]);
+
+  if (href) {
+    return (
+      <a className={classes} href={href} {...props}>
+        {children}
+      </a>
+    );
+  }
 
   return (
     <button className={classes} {...props}>
