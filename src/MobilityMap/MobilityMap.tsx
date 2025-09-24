@@ -161,6 +161,58 @@ function MobilityMap(props: MobilityMapProps) {
 
   return (
     <I18nContext.Provider value={i18n}>
+      {/* There is a bug in tailwindcss@4 , variables are not imported in the shadow dom
+      see  https://github.com/tailwindlabs/tailwindcss/issues/15005*/}
+      <style>
+        {`:host {
+            --tw-divide-y-reverse: 0;
+            --tw-border-style: solid;
+            --tw-font-weight: initial;
+            --tw-tracking: initial;
+            --tw-translate-x: 0;
+            --tw-translate-y: 0;
+            --tw-translate-z: 0;
+            --tw-rotate-x: rotateX(0);
+            --tw-rotate-y: rotateY(0);
+            --tw-rotate-z: rotateZ(0);
+            --tw-skew-x: skewX(0);
+            --tw-skew-y: skewY(0);
+            --tw-space-x-reverse: 0;
+            --tw-gradient-position: initial;
+            --tw-gradient-from: #0000;
+            --tw-gradient-via: #0000;
+            --tw-gradient-to: #0000;
+            --tw-gradient-stops: initial;
+            --tw-gradient-via-stops: initial;
+            --tw-gradient-from-position: 0%;
+            --tw-gradient-via-position: 50%;
+            --tw-gradient-to-position: 100%;
+            --tw-shadow: 0 0 #0000;
+            --tw-shadow-color: initial;
+            --tw-inset-shadow: 0 0 #0000;
+            --tw-inset-shadow-color: initial;
+            --tw-ring-color: initial;
+            --tw-ring-shadow: 0 0 #0000;
+            --tw-inset-ring-color: initial;
+            --tw-inset-ring-shadow: 0 0 #0000;
+            --tw-ring-inset: initial;
+            --tw-ring-offset-width: 0px;
+            --tw-ring-offset-color: #fff;
+            --tw-ring-offset-shadow: 0 0 #0000;
+            --tw-blur: initial;
+            --tw-brightness: initial;
+            --tw-contrast: initial;
+            --tw-grayscale: initial;
+            --tw-hue-rotate: initial;
+            --tw-invert: initial;
+            --tw-opacity: initial;
+            --tw-saturate: initial;
+            --tw-sepia: initial;
+            --tw-drop-shadow: initial;
+            --tw-duration: initial;
+            --tw-ease: initial;
+        }`}
+      </style>
       <style>{tailwind}</style>
       <style>{style}</style>
       <MapContext.Provider value={mapContextValue}>
