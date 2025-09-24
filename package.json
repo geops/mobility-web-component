@@ -7,8 +7,8 @@
   "type": "module",
   "main": "index.js",
   "dependencies": {
-    "maplibre-gl": "^5.7.2",
-    "mobility-toolbox-js": "3.3.4-beta.21",
+    "maplibre-gl": "^5.7.3",
+    "mobility-toolbox-js": "3.3.4",
     "ol": "^10.6.1",
     "preact": "^10.27.2",
     "preact-custom-element": "^4.5.1",
@@ -20,7 +20,7 @@
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
-    "@eslint/js": "^9.35.0",
+    "@eslint/js": "^9.36.0",
     "@geops/eslint-config-react": "^1.5.0",
     "@tailwindcss/cli": "^4.1.13",
     "@tailwindcss/container-queries": "^0.1.1",
@@ -31,7 +31,7 @@
     "concurrently": "^9.2.1",
     "esbuild": "^0.25.10",
     "esbuild-sass-plugin": "^3.3.1",
-    "eslint": "^9.35.0",
+    "eslint": "^9.36.0",
     "eslint-plugin-tailwindcss": "^4.0.0-beta.0",
     "fixpack": "^4.0.0",
     "generact": "^0.4.0",
@@ -47,9 +47,9 @@
     "standard-version": "^9.5.0",
     "tailwind-merge": "^3.3.1",
     "tailwindcss": "^4.1.13",
-    "ts-jest": "^29.4.3",
+    "ts-jest": "^29.4.4",
     "typescript": "^5.9.2",
-    "typescript-eslint": "^8.44.0"
+    "typescript-eslint": "^8.44.1"
   },
   "scripts": {
     "build": "yarn build:css && yarn build:js && cp index*.js* doc/public/",
