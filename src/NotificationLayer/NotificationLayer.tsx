@@ -22,8 +22,11 @@ function NotificationLayer(props?: Partial<MocoLayerOptions>) {
     if (!baseLayer) {
       return null;
     }
-    return new MocoLayer({
+    const mocoLayer = new MocoLayer({
       apiKey: apikey,
+      apiParameters: {
+        contentMedium: true,
+      },
       date: notificationat ? new Date(notificationat) : undefined,
       maplibreLayer: baseLayer,
       name: LAYER_NAME_NOTIFICATION,
@@ -31,7 +34,12 @@ function NotificationLayer(props?: Partial<MocoLayerOptions>) {
       tenant: notificationtenant,
       url: notificationurl,
       ...(props || {}),
+      loadAll: !previewNotifications,
     });
+    if (!!previewNotifications && !mocoLayer.getVisible()) {
+      mocoLayer.setVisible(true);
+    }
+    return mocoLayer;
   }, [
     apikey,
     baseLayer,
