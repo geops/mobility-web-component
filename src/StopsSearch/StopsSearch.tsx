@@ -8,31 +8,46 @@ import {
   useRef,
   useState,
 } from "preact/hooks";
-import { FaSearch } from "react-icons/fa";
-import { MdClose } from "react-icons/md";
+import { twMerge } from "tailwind-merge";
 
+import Cancel from "../icons/Cancel";
+import Search from "../icons/Search";
+import IconButton from "../ui/IconButton";
 import useI18n from "../utils/hooks/useI18n";
 import MobilityEvent from "../utils/MobilityEvent";
 
 import type { StopsParameters, StopsResponse } from "mobility-toolbox-js/types";
-import type { JSX, PreactDOMAttributes } from "preact";
+import type {
+  HTMLAttributes,
+  PreactDOMAttributes,
+  TargetedKeyboardEvent,
+} from "preact";
 
-export type StopsFeature = StopsResponse["features"];
+export type StopsFeature = StopsResponse["features"][0];
 
 export type StopsSearchProps = {
   apikey: string;
   bbox?: string;
+  cancelButtonClassName?: string;
+  className?: string;
   countrycode?: string;
   event?: string;
   field?: string;
+  inputClassName?: string;
+  inputContainerClassName?: string;
   limit?: number;
   mots?: string;
   onselect?: (arg: StopsFeature) => void;
   params?: string; // JSONstring
   prefagencies?: string;
   reflocation?: string;
+  resultClassName?: string;
+  resultsClassName?: string;
+  resultsContainerClassName?: string;
+  searchIconContainerClassName?: string;
   url: string;
-} & JSX.HTMLAttributes<HTMLDivElement> &
+  withResultsClassName?: string;
+} & HTMLAttributes<HTMLDivElement> &
   PreactDOMAttributes;
 
 const getQueryForSelectedStation = (selectedStation?: StopsFeature): string => {
@@ -47,20 +62,28 @@ const getQueryForSelectedStation = (selectedStation?: StopsFeature): string => {
 function StopsSearch({
   apikey,
   bbox,
+  cancelButtonClassName,
+  className,
   countrycode,
   event,
   field,
+  inputClassName,
+  inputContainerClassName,
   limit,
   mots,
   onselect,
   params,
   prefagencies,
   reflocation,
+  resultClassName,
+  resultsClassName,
+  resultsContainerClassName,
+  searchIconContainerClassName,
   url = "https://api.geops.io/stops/v1/",
+  withResultsClassName,
 }: StopsSearchProps) {
   const { t } = useI18n();
   const [query, setQuery] = useState("");
-  console.log(t("stops_search_placeholder"));
   const [selectedStation, setSelectedStation] = useState<StopsFeature>();
   const [results, setResults] = useState<StopsFeature[] | undefined>();
   const myRef = useRef<HTMLDivElement>();
@@ -150,6 +173,7 @@ function StopsSearch({
         .catch((e) => {
           // AbortError is expected
           if (e.code !== 20) {
+            // eslint-disable-next-line no-console
             console.error("Failed to fetch stations", e);
             return;
           }
@@ -197,24 +221,39 @@ function StopsSearch({
   return (
     <>
       <div
-        className={
-          "flex h-16 items-center gap-4 rounded-md bg-white p-4 pt-3.5 shadow"
-        }
+        className={twMerge(
+          "flex h-16 items-center gap-4 rounded-md bg-white p-4 pt-3.5 shadow",
+          className,
+          results ? withResultsClassName : "",
+        )}
         ref={myRef}
       >
-        <div className={"flex items-center"}>
-          <FaSearch />
+        <div
+          className={twMerge(
+            "text-grey flex items-center",
+            searchIconContainerClassName,
+          )}
+        >
+          <Search className="size-4" />
         </div>
-        <div className={"flex grow overflow-hidden border-b-2 border-solid"}>
+        <div
+          className={twMerge(
+            "@container/inputsearch flex grow items-center border-b-2 border-solid",
+            inputContainerClassName,
+          )}
+        >
           <input
             autoComplete="off"
-            className="h-8 flex-1 outline-0 placeholder:text-zinc-400"
+            className={twMerge(
+              "h-8 flex-1 overflow-hidden text-ellipsis outline-0 placeholder:text-zinc-400",
+              inputClassName,
+            )}
             id="searchfield"
             onChange={(evt) => {
               // @ts-expect-error target is missing
               setQuery(evt.target.value);
             }}
-            onKeyUp={(evt: JSX.TargetedKeyboardEvent<HTMLInputElement>) => {
+            onKeyUp={(evt: TargetedKeyboardEvent<HTMLInputElement>) => {
               if (evt.key === "Enter") {
                 if (results?.length > 0) {
                   setSelectedStation(results[0]);
@@ -226,57 +265,74 @@ function StopsSearch({
             value={query || ""}
           />
           {query.length > 0 && (
-            <button
-              className="flex items-center"
+            <IconButton
+              className={twMerge(
+                "flex !size-[32px] items-center rounded-none border-none bg-transparent shadow-none",
+                cancelButtonClassName,
+              )}
               onClick={() => {
                 setQuery("");
                 setResults(undefined);
               }}
             >
-              <MdClose className="size-4" />
-            </button>
+              <Cancel />
+            </IconButton>
           )}
         </div>
       </div>
 
-      <div className="mt-[-4px] flex grow overflow-auto rounded-md rounded-t-none bg-white shadow">
-        {results && results.length === 0 && (
-          <div
-            className={
-              "flex grow gap-3 border border-solid p-3 pt-2 text-zinc-400"
-            }
-            style={{ border: 1 }}
-          >
-            <div className="size-6"></div>
-            <div>{t("no_stops_found")}</div>
-          </div>
-        )}
-        {results && results.length > 0 && (
-          <ul
-            className="grow rounded-md rounded-t-none border border-solid bg-white p-0"
-            style={{ border: 1 }} // without this th ul is displayed 1 px on the right
-          >
-            {results?.map((station) => {
-              return (
-                <li
-                  className="border-b border-dashed border-slate-300 p-3 last:border-0"
-                  key={station.properties.uid}
-                >
-                  <button
-                    className="flex w-full items-center gap-3 text-left"
-                    onClick={() => {
-                      setSelectedStation(station);
-                    }}
+      {results && (
+        <div
+          className={twMerge(
+            "flex grow overflow-auto rounded-md rounded-t-none bg-white shadow",
+            resultsContainerClassName,
+          )}
+        >
+          {results && results.length === 0 && (
+            <div
+              className={twMerge(
+                "flex grow gap-3 border border-solid p-3 pt-2 text-zinc-400",
+                resultsClassName,
+              )}
+              style={{ border: 1 }}
+            >
+              <div className="size-6"></div>
+              <div>{t("no_stops_found")}</div>
+            </div>
+          )}
+          {results && results.length > 0 && (
+            <ul
+              className={twMerge(
+                "grow rounded-md rounded-t-none border border-solid bg-white p-0",
+                resultsClassName,
+              )}
+              style={{ border: 1 }} // without this th ul is displayed 1 px on the right
+            >
+              {results?.map((station) => {
+                return (
+                  <li
+                    className={twMerge(
+                      "border-b border-dashed border-slate-300 p-3 last:border-0",
+                      resultClassName,
+                    )}
+                    key={station.properties.uid}
                   >
-                    <div className="size-6"></div>
-                    <div className="grow">{station.properties.name}</div>
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-        )}
-      </div>
+                    <button
+                      className="flex w-full items-center gap-3 text-left"
+                      onClick={() => {
+                        setSelectedStation(station);
+                      }}
+                    >
+                      <div className="size-6"></div>
+                      <div className="grow">{station.properties.name}</div>
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </div>
+      )}
       {/* </div> */}
     </>
   );

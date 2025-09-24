@@ -2,9 +2,9 @@ function WheelChair({ ...props }) {
   return (
     <svg
       fill="currentColor"
-      width="24px"
       height="24px"
       viewBox="0 0 24 24"
+      width="24px"
       xmlns="http://www.w3.org/2000/svg"
       {...props}
     >

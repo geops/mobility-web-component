@@ -101,6 +101,11 @@ document.getElementById('map').addEventListener('mwc:attribute', (event) => {
             return acc;
           }, {});
 
+        const defaultValueByAttr = Object.entries(MobilityMapAttributes).reduce((acc, [key, attr]) => {
+            acc[key] = attr.defaultValue;
+            return acc;
+          }, {});
+
         /* Events */
         const events = [
           "mwc:selectedfeature",
@@ -132,6 +137,7 @@ document.getElementById('map').addEventListener('mwc:attribute', (event) => {
             booleanAttrs,
             booleanTrueByDefault,
             descriptionByAttr,
+            defaultValueByAttr,
             reloadAttrs,
           );
         document.querySelector("#events").innerHTML = generateEventsTable(
