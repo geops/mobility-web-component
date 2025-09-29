@@ -7,6 +7,8 @@
   "type": "module",
   "main": "index.js",
   "dependencies": {
+    "jspdf": "^3.0.3",
+    "lodash.debounce": "^4.0.8",
     "maplibre-gl": "^5.7.3",
     "mobility-toolbox-js": "3.3.4",
     "ol": "^10.6.1",
@@ -15,6 +17,7 @@
     "react": "npm:@preact/compat@^18.3.1",
     "react-dom": "npm:@preact/compat@^18.3.1",
     "react-icons": "^5.5.0",
+    "react-spatial": "^2.0.0",
     "rosetta": "^1.1.0"
   },
   "devDependencies": {
@@ -27,6 +30,7 @@
     "@testing-library/preact": "^3.2.4",
     "@types/geojson": "^7946.0.16",
     "@types/jest": "^30.0.0",
+    "@types/lodash": "^4.17.20",
     "@types/preact-custom-element": "^4.0.4",
     "concurrently": "^9.2.1",
     "esbuild": "^0.25.10",

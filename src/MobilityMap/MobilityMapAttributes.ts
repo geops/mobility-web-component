@@ -1,6 +1,6 @@
 //type: "checkbox" | "date" | "select" | "textfield";
 
-import { DEFAULT_QUERYABLE_LAYERS } from "../utils/constants";
+import { DEFAULT_QUERYABLE_LAYERS, LAYERS_NAMES } from "../utils/constants";
 
 const geopsApiLink = `<a href="https://developer.geops.io/">geOps API key</a>`;
 const geopsMapsApiLink = `<a href="https://developer.geops.io/apis/maps">geOps Maps API</a>`;
@@ -18,10 +18,14 @@ export type MobilityMapAttributeName =
   | "apikey"
   | "baselayer"
   | "center"
+  | "details"
   | "embed"
   | "extent"
   | "geolocation"
   | "layers"
+  | "layersconfig"
+  | "layertree"
+  | "lnp"
   | "mapsurl"
   | "maxextent"
   | "maxzoom"
@@ -32,14 +36,17 @@ export type MobilityMapAttributeName =
   | "notificationtenant"
   | "notificationurl"
   | "permalink"
+  | "print"
   | "queryablelayers"
   | "realtime"
   | "realtimebboxparameters"
   | "realtimetenant"
   | "realtimeurl"
   | "search"
+  | "share"
   | "stopsurl"
   | "tenant"
+  | "toolbar"
   | "zoom";
 
 export type MobilityMapAttributes = Record<
@@ -60,6 +67,12 @@ const attrs: MobilityMapAttributes = {
     description:
       "The center of the map in EPSG:3857 coordinates.<br/>Parameter required if extent is not set.",
   },
+  details: {
+    defaultValue: "true",
+    description:
+      "When a feature of a queryable layer is clicked, it displays informations about it.",
+    type: "boolean",
+  },
   embed: {
     defaultValue: "false",
     description:
@@ -76,9 +89,50 @@ const attrs: MobilityMapAttributes = {
     type: "boolean",
   },
   layers: {
-    defaultValue: DEFAULT_QUERYABLE_LAYERS,
-    description:
-      "A comma separated list of layers's name to make visible on load, others are hidden. If empty, all layers will be hidden except the baselayer.",
+    defaultValue: DEFAULT_QUERYABLE_LAYERS.toString(),
+    description: `A comma separated list of layers's name to make visible on load, others are hidden. If empty, all layers will be hidden except the baselayer.<br/>Layers available are ${Object.values(LAYERS_NAMES).join(", ")}.`,
+  },
+  layersconfig: {
+    // defaultValue:
+    // JSON.stringify({
+    //   [RVF_LAYERS_NAMES.liniennetz]: {
+    //     link: {
+    //       href: "https://www.rvf.de/fahrtinfo/netzplan",
+    //       show: true,
+    //       text: "Zu den Liniennetzplänen",
+    //     },
+    //     title: "Liniennetzpläne",
+    //   },
+    //   [RVF_LAYERS_NAMES.meldungen]: {
+    //     link: {
+    //       href: "https://moco.geops.io/situation/{{id}}",
+    //       show: true,
+    //       text: "Zum Moco",
+    //     },
+    //   },
+    // } as LayersConfig),
+    description: `A JSON string to configure the layers and other components associated to it.<br/>
+       The layers available are : ${Object.values(LAYERS_NAMES).join(", ")}.<br/>
+       Definition for a layer :
+<pre style="font-size: 12px; overflow: auto;">{
+  networkplans: { // The layer name, here the networkplans layer.
+    link: { // Define the link to display int footer of the details view, if not defined no link is displayed.
+      text: "Zu den Liniennetzplänen",  // The text of the link, if not defined the title is used.
+      href: "https://www.rvf.de/fahrtinfo/netzplan", // The url of the link, if not defined no link is displayed.
+    },
+    title: "Liniennetzpläne", // Text displayed on the layer tree and in the header of the details view.
+  }
+</pre>}`,
+  },
+  layertree: {
+    defaultValue: "true",
+    description: "Show/hide the layers tree button in the toolbar.",
+    type: "boolean",
+  },
+  lnp: {
+    defaultValue: "false",
+    description: `Add the networkplans layer to the map. This layer will display network plans on the map.`,
+    type: "boolean",
   },
   mapsurl: {
     defaultValue: "https://maps.geops.io",
@@ -122,10 +176,15 @@ const attrs: MobilityMapAttributes = {
       "Update some url parameters x,y,z,layers to the current window location. These parameters are used to store the current state of the map. They will be used on page load to configure the web-component.",
     type: "boolean",
   },
+  print: {
+    defaultValue: "true",
+    description: "Show/hide the print button in the toolbar.",
+    type: "boolean",
+  },
   queryablelayers: {
-    defaultValue: DEFAULT_QUERYABLE_LAYERS,
-    description:
-      "A comma separated list of layers's name. The data of these layers will be queryable by click on the map (see selectedfeature event). If empty, all layers will not be queryable.",
+    defaultValue: DEFAULT_QUERYABLE_LAYERS.toString(),
+    description: `A comma separated list of layers's name. The data of these layers will be queryable by click on the map (see selectedfeature event). If empty, all layers will not be queryable.<br/>
+        Layers available are ${Object.values(LAYERS_NAMES).join(", ")}`,
   },
   realtime: {
     defaultValue: "true",
@@ -148,12 +207,22 @@ const attrs: MobilityMapAttributes = {
     description: "Toggle the search stops input.",
     type: "boolean",
   },
+  share: {
+    defaultValue: "true",
+    description: "Show/hide the share button in the toolbar.",
+    type: "boolean",
+  },
   stopsurl: {
     defaultValue: "https://api.geops.io/stops/v1/",
     description: `The ${geopsStopsApiLink} to use.`,
   },
   tenant: {
     description: `The tenant to use by default for all geOps APIs (Stops, Realtime, MOCO ...). Can be override for each API by other XXXXtenant parameters.`,
+  },
+  toolbar: {
+    defaultValue: "true",
+    description: "Show/hide the toolbar on the top left.",
+    type: "boolean",
   },
   zoom: {
     defaultValue: "13",

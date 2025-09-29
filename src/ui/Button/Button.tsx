@@ -15,7 +15,8 @@ export type ButtonProps = {
   ButtonHTMLAttributes &
   PreactDOMAttributes;
 
-const baseClasses = "flex";
+const baseClasses =
+  "flex gap-2 items-center px-4 py-2 rounded-2xl border hover:border-black";
 
 export const themes = {
   primary: {

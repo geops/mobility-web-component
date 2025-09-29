@@ -1,130 +1,65 @@
+import debounce from "lodash.debounce";
+import { getFeatureInfoAtCoordinate } from "mobility-toolbox-js/ol";
 import { unByKey } from "ol/Observable";
 import { useCallback, useEffect } from "preact/hooks";
 
 import useMapContext from "../utils/hooks/useMapContext";
 
-import type { Feature, MapBrowserEvent } from "ol";
+import type { DebounceSettings } from "lodash";
+import type { MapBrowserEvent } from "ol";
+import type { EventsKey } from "ol/events";
 
-function SingleClickListener() {
-  const {
-    map,
-    // queryablelayers,
-    realtimeLayer,
-    setSelectedFeature,
-    setSelectedFeatures,
-    setStationId,
-    setTrainId,
-    stationId,
-    stationsLayer,
-    tenant,
-    trainId,
-  } = useMapContext();
+export interface SingleClickListenerProps {
+  debounceOptions?: DebounceSettings;
+  debounceTimeout?: number;
+  hover?: boolean;
+}
+
+function SingleClickListener({
+  debounceOptions,
+  debounceTimeout = 0,
+  hover = true,
+}: SingleClickListenerProps) {
+  const { map, queryablelayers, setFeaturesInfos, setFeaturesInfosHovered } =
+    useMapContext();
+
+  const getFeaturesInfosAtEvt = useCallback(
+    async (evt: MapBrowserEvent<PointerEvent>) => {
+      const queryableLayers = evt.map.getAllLayers().filter((l) => {
+        return queryablelayers.split(",").includes(l.get("name"));
+      });
+      const featuresInfos = await getFeatureInfoAtCoordinate(
+        evt.coordinate,
+        queryableLayers,
+        5,
+        true,
+      );
+      return featuresInfos;
+    },
+    [queryablelayers],
+  );
 
   const onPointerMove = useCallback(
-    (evt: MapBrowserEvent<PointerEvent>) => {
-      const [realtimeFeature] = evt.map.getFeaturesAtPixel(evt.pixel, {
-        hitTolerance: 5,
-        layerFilter: (l) => {
-          return l === realtimeLayer;
-        },
-      });
-      realtimeLayer?.highlight(realtimeFeature as Feature);
-
-      const stationsFeatures = evt.map.getFeaturesAtPixel(evt.pixel, {
-        layerFilter: (l) => {
-          return l === stationsLayer;
-        },
+    async (evt: MapBrowserEvent<PointerEvent>) => {
+      const featureInfos = await getFeaturesInfosAtEvt(evt);
+      setFeaturesInfosHovered(featureInfos);
+      const features = featureInfos.flatMap((featureInfo) => {
+        return featureInfo.features;
       });
 
-      const [stationFeature] = stationsFeatures.filter((feat) => {
-        return feat.get("tralis_network")?.includes(tenant);
-      });
-
-      // Send all the features under the cursor
-      const features = evt.map.getFeaturesAtPixel(evt.pixel, {
-        layerFilter: (l) => {
-          return l.get("isQueryable");
-        },
-      }) as Feature[];
-
-      evt.map.getTargetElement().style.cursor =
-        realtimeFeature || stationFeature || features?.length
-          ? "pointer"
-          : "default";
+      evt.map.getTargetElement().style.cursor = features?.length
+        ? "pointer"
+        : "default";
     },
-    [realtimeLayer, stationsLayer, tenant],
+    [getFeaturesInfosAtEvt, setFeaturesInfosHovered],
   );
 
   const onSingleClick = useCallback(
-    (evt: MapBrowserEvent<PointerEvent>) => {
-      // const qeryableLayers = queryablelayers?.split(",");
-      // const featuress = evt.map.getFeaturesAtPixel(evt.pixel, {
-      //   layerFilter: (l) => {
-      //     return qeryableLayers
-      //       ? queryablelayers.includes(l.get("name"))
-      //       : true;
-      //   },
-      // });
-      // console.log("featursss", featuress);
-
-      const [realtimeFeature] = evt.map.getFeaturesAtPixel(evt.pixel, {
-        hitTolerance: 5,
-        layerFilter: (l) => {
-          return l === realtimeLayer;
-        },
-      });
-
-      const stationsFeatures = evt.map.getFeaturesAtPixel(evt.pixel, {
-        layerFilter: (l) => {
-          return l === stationsLayer;
-        },
-      });
-      const [stationFeature] = stationsFeatures.filter((feat) => {
-        return feat.get("tralis_network")?.includes(tenant);
-      });
-
-      const newStationId = stationFeature?.get("uid");
-
-      const newTrainId = realtimeFeature?.get("train_id");
-
-      if (newStationId && stationId !== newStationId) {
-        setStationId(newStationId);
-        setTrainId(null);
-      } else if (newTrainId && newTrainId !== trainId) {
-        setTrainId(realtimeFeature.get("train_id"));
-        setStationId(null);
-      } else {
-        setTrainId(null);
-        setStationId(null);
-      }
-
-      // Send all the features under the cursor
-      const features = evt.map.getFeaturesAtPixel(evt.pixel, {
-        layerFilter: (l) => {
-          return l.get("isQueryable");
-        },
-      }) as Feature[];
-
-      if (newStationId || newTrainId || !features.length) {
-        setSelectedFeature(null);
-        setSelectedFeatures([]);
-      } else {
-        setSelectedFeatures(features);
-        setSelectedFeature(features[0]);
-      }
+    async (evt: MapBrowserEvent<PointerEvent>) => {
+      const featuresInfos = await getFeaturesInfosAtEvt(evt);
+      setFeaturesInfos(featuresInfos);
     },
-    [
-      // queryablelayers,
-      stationId,
-      trainId,
-      realtimeLayer,
-      stationsLayer,
-      tenant,
-      setStationId,
-      setTrainId,
-      setSelectedFeature,
-      setSelectedFeatures,
-    ],
+    [getFeaturesInfosAtEvt, setFeaturesInfos],
   );
 
   useEffect(() => {
@@ -135,11 +70,18 @@ function SingleClickListener() {
   }, [map, onSingleClick]);
 
   useEffect(() => {
-    const key = map?.on("pointermove", onPointerMove);
+    let key: EventsKey;
+    if (hover) {
+      let debounced = onPointerMove;
+      if (debounceTimeout) {
+        debounced = debounce(onPointerMove, debounceTimeout, debounceOptions);
+      }
+      key = map?.on("pointermove", debounced);
+    }
     return () => {
       unByKey(key);
     };
-  }, [map, onPointerMove]);
+  }, [debounceOptions, debounceTimeout, hover, map, onPointerMove]);
 
   return null;
 }

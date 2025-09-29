@@ -1,9 +1,9 @@
-import { FaSearch } from "react-icons/fa";
+import { MdOutlineSearch } from "react-icons/md";
 
 import type { IconBaseProps } from "react-icons";
 
 function Search(props: IconBaseProps) {
-  return <FaSearch {...props} />;
+  return <MdOutlineSearch {...props} />;
 }
 
 export default Search;
