@@ -3,7 +3,7 @@ import { twMerge } from "tailwind-merge";
 
 import Email from "../icons/Email";
 import Image from "../icons/Image";
-import Permalink from "../Permalink";
+import PermalinkInput from "../PermalinkInput";
 import Button from "../ui/Button";
 import useMapContext from "../utils/hooks/useMapContext";
 
@@ -33,7 +33,7 @@ function ShareMenu({
           <span>Bild speichern</span>
         </Button>
       </CanvasSaveButton>
-      <Permalink />
+      <PermalinkInput />
     </div>
   );
 }
