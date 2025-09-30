@@ -31,7 +31,7 @@ function LinesNetworkPlanLayer(props: MaplibreStyleLayerOptions) {
   }, [baseLayer, props]);
 
   useEffect(() => {
-    setLinesNetworkPlanLayer(layer);
+    setLinesNetworkPlanLayer?.(layer);
   }, [layer, setLinesNetworkPlanLayer]);
 
   useEffect(() => {

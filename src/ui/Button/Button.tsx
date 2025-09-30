@@ -16,7 +16,7 @@ export type ButtonProps = {
   PreactDOMAttributes;
 
 const baseClasses =
-  "flex gap-2 items-center px-4 py-2 rounded-2xl border hover:border-black";
+  "flex gap-2 items-center px-4 py-2 rounded-2xl border hover:border-black hover:not-disabled:cursor-pointer";
 
 export const themes = {
   primary: {

@@ -5,6 +5,7 @@ import { useContext } from "preact/hooks";
 import type {
   MaplibreLayer,
   MaplibreStyleLayer,
+  MocoLayer,
   RealtimeLayer,
 } from "mobility-toolbox-js/ol";
 import type {
@@ -45,6 +46,7 @@ export type MapContextType = {
   isTracking: boolean;
   linesNetworkPlanLayer: MaplibreStyleLayer;
   map: Map;
+  notificationsLayer?: MocoLayer;
   permalinkUrlSearchParams: URLSearchParams;
   previewNotifications?: SituationType[];
   realtimeLayer: RealtimeLayer;
@@ -77,6 +79,7 @@ export type MapContextType = {
   setIsTracking: (isTracking: boolean) => void;
   setLinesNetworkPlanLayer: (layer?: MaplibreStyleLayer) => void;
   setMap: (map?: Map) => void;
+  setNotificationsLayer: (notificationsLayer?: MocoLayer) => void;
   setPermalinkUrlSearchParams: (
     setPermalinkUrlSearchParams: URLSearchParams,
   ) => void;
@@ -121,7 +124,9 @@ export const MapContext = createContext<MapContextType>({
   setBaseLayer: (baseLayer?: MaplibreLayer) => {},
   setIsFollowing: (isFollowing: boolean) => {},
   setIsTracking: (isTracking: boolean) => {},
+  setLinesNetworkPlanLayer: (linesNetworkPlanLayer: MaplibreStyleLayer) => {},
   setMap: (map?: Map) => {},
+  setNotificationsLayer: (notificationsLayer?: MocoLayer) => {},
   setPermalinkUrlSearchParams: (
     permalinkUrlSearchParams: URLSearchParams,
   ) => {},

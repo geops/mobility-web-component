@@ -133,8 +133,6 @@ function LayoutState() {
       setIsExportMenuOpen(false);
       setIsSearchOpen(false);
       setStationId(null);
-      console.log("SET TRAIN ID NULL 4");
-
       setTrainId(null);
       setFeaturesInfos(null);
     }
@@ -154,8 +152,6 @@ function LayoutState() {
       setIsLayerTreeOpen(isLayerTreeOpen);
       setIsSearchOpen(false);
       setFeaturesInfos(null);
-      console.log("SET TRAIN ID NULL 5");
-
       setTrainId(null);
       setStationId(null);
       setIsShareMenuOpen(false);
@@ -177,8 +173,6 @@ function LayoutState() {
       setIsExportMenuOpen(isExportMenuOpen);
       setIsSearchOpen(false);
       setFeaturesInfos(null);
-      console.log("SET TRAIN ID NULL 6");
-
       setTrainId(null);
       setIsShareMenuOpen(false);
       setStationId(null);
@@ -253,20 +247,6 @@ function LayoutState() {
   ]);
 
   useEffect(() => {
-    console.log("setIsOverlayOpen", {
-      hasDetails,
-      hasLayerTree,
-      hasPrint,
-      hasRealtime,
-      hasShare,
-      isExportMenuOpen,
-      isLayerTreeOpen,
-      isShareMenuOpen,
-      selectedFeature,
-      stationId,
-      tenant,
-      trainId,
-    });
     setIsOverlayOpen(
       (hasDetails && !!selectedFeature) ||
         (hasPrint && isExportMenuOpen) ||

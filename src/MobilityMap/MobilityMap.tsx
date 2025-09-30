@@ -13,7 +13,7 @@ import LayoutState from "../LayoutState";
 import LinesNetworkPlanLayer from "../LinesNetworkPlanLayer";
 import Map from "../Map";
 import MapDispatchEvents from "../MapDispatchEvents";
-import NotificationLayer from "../NotificationLayer";
+import NotificationsLayer from "../NotificationsLayer";
 import Overlay from "../Overlay";
 import OverlayContent from "../OverlayContent";
 import Permalink from "../Permalink";
@@ -41,6 +41,7 @@ import type {
   MaplibreLayer,
   MaplibreStyleLayer,
   RealtimeLayer as MbtRealtimeLayer,
+  MocoLayer,
 } from "mobility-toolbox-js/ol";
 import type {
   LayerGetFeatureInfoResponse,
@@ -90,6 +91,9 @@ function MobilityMap(props: MobilityMapProps) {
   const [stationsLayer, setStationsLayer] = useState<MaplibreStyleLayer>();
   const [station, setStation] = useState<RealtimeStation>();
   const [realtimeLayer, setRealtimeLayer] = useState<MbtRealtimeLayer>();
+  const [notificationsLayer, setNotificationsLayer] = useState<MocoLayer>();
+  const [linesNetworkPlanLayer, setLinesNetworkPlanLayer] =
+    useState<MaplibreStyleLayer>();
   const [map, setMap] = useState<OlMap>();
   const [stationId, setStationId] = useState<RealtimeStationId>();
   const [trainId, setTrainId] = useState<RealtimeTrainId>();
@@ -135,7 +139,9 @@ function MobilityMap(props: MobilityMapProps) {
       isSearchOpen,
       isShareMenuOpen,
       isTracking,
+      linesNetworkPlanLayer,
       map,
+      notificationsLayer,
       permalinkUrlSearchParams,
       previewNotifications,
       realtimeLayer,
@@ -164,7 +170,9 @@ function MobilityMap(props: MobilityMapProps) {
       setIsSearchOpen,
       setIsShareMenuOpen,
       setIsTracking,
+      setLinesNetworkPlanLayer,
       setMap,
+      setNotificationsLayer,
       setPermalinkUrlSearchParams,
       setPreviewNotifications,
       setRealtimeLayer,
@@ -205,7 +213,9 @@ function MobilityMap(props: MobilityMapProps) {
     isSearchOpen,
     isShareMenuOpen,
     isTracking,
+    linesNetworkPlanLayer,
     map,
+    notificationsLayer,
     permalinkUrlSearchParams,
     previewNotifications,
     realtimeLayer,
@@ -217,8 +227,6 @@ function MobilityMap(props: MobilityMapProps) {
     stopSequence,
     trainId,
   ]);
-
-  console.log("Render MobilityMap", hasRealtime, trainId);
 
   return (
     <I18nContext.Provider value={i18n}>
@@ -286,7 +294,7 @@ function MobilityMap(props: MobilityMapProps) {
 
         {/* Layers */}
         <BaseLayer />
-        {hasNotification && <NotificationLayer />}
+        {hasNotification && <NotificationsLayer />}
         {hasRealtime && <RealtimeLayer />}
         {hasStations && <StationsLayer />}
         {hasLnp && <LinesNetworkPlanLayer />}
@@ -327,30 +335,12 @@ function MobilityMap(props: MobilityMapProps) {
                 className={
                   "relative z-10 w-fit rounded-2xl bg-black/10 p-0 backdrop-blur-sm"
                 }
-                //  className="w-fit rounded-2xl bg-black/10 p-1 backdrop-blur-sm">
               >
-                <div
-                  className={twMerge(
-                    "absolute top-12 left-0 h-[40px] w-0 p-0 opacity-0 transition-all @sm:top-0 @sm:left-[calc(100%-43px)] @md:left-[calc(100%-47px)]",
-                    isSearchOpen ? "w-64 opacity-100" : "",
-                  )}
-                >
-                  <Search
-                    className={
-                      "border-grey @container m-0 h-[40px] rounded-2xl border p-2 px-4 text-base @sm/main:h-[44px] @sm/main:rounded-l-none @sm/main:rounded-r-2xl @md/main:h-[48px]"
-                    }
-                    inputClassName="h-6 text-base"
-                    inputContainerClassName="border-none"
-                    resultClassName="text-base  **:hover:cursor-pointer hover:text-red-500 p-2"
-                    resultsContainerClassName="@container rounded-b-2xl max-h-[200px] overflow-y-auto border border-grey border-t-0 "
-                    withResultsClassName="text-base !rounded-b-none"
-                  />
-                </div>
                 {hasToolbar && (
                   <div
                     className={twMerge(
-                      "border-grey relative flex gap-[1px] overflow-hidden rounded-2xl border",
-                      "*:size-[38px] *:rounded-none *:border-none *:@sm/main:size-[42px] *:@md/main:!size-[46px]",
+                      "border-grey relative z-10 flex gap-[1px] overflow-hidden rounded-2xl border",
+                      "*:size-[46px] *:rounded-none *:border-none",
                       "*:first:!rounded-l-2xl",
                       "*:last:!rounded-r-2xl",
                       isSearchOpen
@@ -362,6 +352,26 @@ function MobilityMap(props: MobilityMapProps) {
                     {hasShare && <ShareMenuButton title={"Share"} />}
                     {hasLayerTree && <LayerTreeButton title={"Layers"} />}
                     {hasSearch && <SearchButton title={"Suche"} />}
+                  </div>
+                )}
+
+                {hasToolbar && hasSearch && (
+                  <div
+                    className={twMerge(
+                      "absolute top-14 left-0 z-5 h-[48px] w-0 p-0 opacity-0 transition-all @sm:top-0 @sm:left-[calc(100%-47px)]",
+                      isSearchOpen ? "w-64 opacity-100" : "",
+                    )}
+                  >
+                    <Search
+                      className={
+                        "border-grey @container m-0 h-[40px] gap-4 rounded-2xl border p-2 px-4 text-base @sm/main:h-[48px] @sm/main:rounded-l-none @sm/main:rounded-r-2xl"
+                      }
+                      // inputClassName="h-6 text-base"
+                      inputContainerClassName="border-none"
+                      resultClassName="text-base  **:hover:cursor-pointer p-2"
+                      resultsContainerClassName="@container rounded-b-2xl max-h-[200px] overflow-y-auto border border-t-0 "
+                      withResultsClassName="text-base !rounded-b-none"
+                    />
                   </div>
                 )}
               </div>

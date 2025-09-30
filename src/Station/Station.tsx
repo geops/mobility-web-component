@@ -1,15 +1,18 @@
 import { debounceDeparturesMessages } from "mobility-toolbox-js/ol";
 import { memo } from "preact/compat";
 import { useEffect, useRef, useState } from "preact/hooks";
+import { twMerge } from "tailwind-merge";
 
 import Departure from "../Departure";
 import StationHeader from "../StationHeader";
 import useMapContext from "../utils/hooks/useMapContext";
 
 import type { RealtimeDeparture } from "mobility-toolbox-js/types";
-import type { JSX, PreactDOMAttributes } from "preact";
+import type { HTMLAttributes, PreactDOMAttributes } from "preact";
 
-export type StationProps = JSX.HTMLAttributes<HTMLDivElement> &
+export type StationProps = {
+  className?: string;
+} & HTMLAttributes<HTMLDivElement> &
   PreactDOMAttributes;
 
 function Station(props: StationProps) {
@@ -48,7 +51,11 @@ function Station(props: StationProps) {
   return (
     <>
       <StationHeader />
-      <div className={className} ref={ref}>
+      <div
+        className={twMerge("flex flex-col p-2", className)}
+        ref={ref}
+        {...props}
+      >
         {(departures || [])
           // .filter(hideDepartures)
           .map((departure: RealtimeDeparture, index: number) => {
