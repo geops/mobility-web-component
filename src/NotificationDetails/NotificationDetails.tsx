@@ -182,7 +182,7 @@ function NotificationDetails({
                 <>
                   <div
                     className={
-                      "bg-red w-fit rounded-md px-[12px] py-[9px] leading-none font-bold text-white"
+                      "w-fit rounded-md bg-black px-[12px] py-[9px] leading-none font-bold text-white"
                     }
                     key={name}
                     style={{
@@ -417,7 +417,7 @@ function NotificationDetails({
                         return (
                           <div
                             className={
-                              "bg-red rounded-md px-2 py-1 font-bold text-white"
+                              "rounded-md bg-black px-2 py-1 font-bold text-white"
                             }
                             key={name}
                           >
