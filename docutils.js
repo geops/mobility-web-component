@@ -151,7 +151,12 @@ function generateCodeText(
         (attributeValue === "true" && inputValue === true) ||
         (attributeValue === "false" && inputValue === false))
     ) {
-      codeText += `\n\t${[key, '"' + wc.getAttribute(key) + '"'].join("=")}`;
+      let separator = '"';
+      const value = wc.getAttribute(key);
+      if (value.includes(separator)) {
+        separator = "'"; // for json stringify value
+      }
+      codeText += `\n\t${[key, separator + value + separator].join("=")}`;
     }
   });
 

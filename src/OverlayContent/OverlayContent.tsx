@@ -120,7 +120,7 @@ function OverlayContent({
             }}
             title="Layers"
           ></RvfOverlayHeader> */}
-          <LayerTreeMenu className="relative flex h-full flex-col overflow-x-hidden overflow-y-auto p-2 text-base" />
+          <LayerTreeMenu className="relative flex h-full flex-col overflow-x-hidden overflow-y-auto p-2 text-base *:not-last:border-b" />
         </>
       )}
       {hasShare && isShareMenuOpen && (
@@ -131,7 +131,7 @@ function OverlayContent({
             }}
             title="Share"
           ></RvfOverlayHeader> */}
-          <ShareMenu className="relative flex h-full flex-col overflow-x-hidden overflow-y-auto p-4 text-base" />
+          <ShareMenu className="h-full overflow-x-hidden overflow-y-auto p-4 text-base" />
         </>
       )}
       {hasSearch && isSearchOpen && (

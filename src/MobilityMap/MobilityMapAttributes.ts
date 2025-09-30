@@ -89,40 +89,34 @@ const attrs: MobilityMapAttributes = {
     type: "boolean",
   },
   layers: {
-    defaultValue: DEFAULT_QUERYABLE_LAYERS.toString(),
+    defaultValue: Object.values(LAYERS_NAMES).toString(),
     description: `A comma separated list of layers's name to make visible on load, others are hidden. If empty, all layers will be hidden except the baselayer.<br/>Layers available are ${Object.values(LAYERS_NAMES).join(", ")}.`,
   },
   layersconfig: {
-    // defaultValue:
-    // JSON.stringify({
-    //   [RVF_LAYERS_NAMES.liniennetz]: {
-    //     link: {
-    //       href: "https://www.rvf.de/fahrtinfo/netzplan",
-    //       show: true,
-    //       text: "Zu den Liniennetzplänen",
-    //     },
-    //     title: "Liniennetzpläne",
-    //   },
-    //   [RVF_LAYERS_NAMES.meldungen]: {
-    //     link: {
-    //       href: "https://moco.geops.io/situation/{{id}}",
-    //       show: true,
-    //       text: "Zum Moco",
-    //     },
-    //   },
-    // } as LayersConfig),
     description: `A JSON string to configure the layers and other components associated to it.<br/>
-       The layers available are : ${Object.values(LAYERS_NAMES).join(", ")}.<br/>
+       The layers available are : ${Object.values(LAYERS_NAMES).toString()}.<br/>
        Definition for a layer :
 <pre style="font-size: 12px; overflow: auto;">{
-  networkplans: { // The layer name, here the networkplans layer.
-    link: { // Define the link to display int footer of the details view, if not defined no link is displayed.
-      text: "Zu den Liniennetzplänen",  // The text of the link, if not defined the title is used.
-      href: "https://www.rvf.de/fahrtinfo/netzplan", // The url of the link, if not defined no link is displayed.
+  "notifications": {
+    "link": {
+      "href": "https://moco.geops.io/situation/{{id}}",
+      "show": true,
+      "text": "Zu MOCO"
     },
-    title: "Liniennetzpläne", // Text displayed on the layer tree and in the header of the details view.
+    "title": "Notifications"
   }
-</pre>}`,
+</pre>}
+<br/>
+where:
+<ul style="list-style-type: disc; padding-left: 20px;">
+  <li><i>link</i> defined a external link displayed at the bottom of the detail view</li>
+    <ul style="list-style-type: disc; padding-left: 40px;">
+      <li><i>href</i> is the target of the link. The <i>href</i> can be template, for example for the meldungen layer you can use {{id}} to insert the id of the notification in the url.</li
+      <li><i>text</i> is the text display as a link</li>
+      <li><i>show</i> show/hide the link in the details view</li>
+    </ul>
+  <li><i>title</i> is the title of the layer used in the details view header and in the layer tree, if not defined the layer name will be used.</li>
+</ul>`,
   },
   layertree: {
     defaultValue: "true",
@@ -131,7 +125,7 @@ const attrs: MobilityMapAttributes = {
   },
   lnp: {
     defaultValue: "false",
-    description: `Add the networkplans layer to the map. This layer will display network plans on the map.`,
+    description: `Add the linesnetworkplans layer to the map. This layer will display lines network plans on the map.`,
     type: "boolean",
   },
   mapsurl: {

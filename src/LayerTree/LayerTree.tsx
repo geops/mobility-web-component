@@ -1,5 +1,6 @@
 import { memo } from "preact/compat";
 import { useEffect, useReducer } from "preact/hooks";
+import { twMerge } from "tailwind-merge";
 
 import {
   LayersTreeContext,
@@ -13,11 +14,18 @@ import type { HTMLAttributes, PreactDOMAttributes } from "preact";
 import type { TreeItemProps } from "./TreeItem/TreeItem";
 
 export type LayerTreeProps = {
+  className?: string;
   layers: TreeItemProps[];
+  treeItemClassName?: string;
 } & HTMLAttributes<HTMLDivElement> &
   PreactDOMAttributes;
 
-function LayerTree({ layers, ...props }: LayerTreeProps) {
+function LayerTree({
+  className,
+  layers,
+  treeItemClassName,
+  ...props
+}: LayerTreeProps) {
   const [tree, dispatch] = useReducer(layersTreeReducer, layers);
 
   useEffect(() => {
@@ -27,9 +35,18 @@ function LayerTree({ layers, ...props }: LayerTreeProps) {
   return (
     <LayersTreeContext.Provider value={tree}>
       <LayersTreeDispatchContext.Provider value={dispatch}>
-        <div {...props}>
+        <div
+          className={twMerge("relative flex flex-col", className)}
+          {...props}
+        >
           {layers.map((item) => {
-            return <TreeItem className="w-full" key={item.id} {...item} />;
+            return (
+              <TreeItem
+                className={twMerge("w-full", treeItemClassName)}
+                key={item.id}
+                {...item}
+              />
+            );
           })}
         </div>
       </LayersTreeDispatchContext.Provider>

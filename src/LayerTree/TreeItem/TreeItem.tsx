@@ -1,4 +1,5 @@
 import { useContext, useEffect, useId, useState } from "preact/compat";
+import { twMerge } from "tailwind-merge";
 
 import ArrowDown from "../../icons/ArrowDown";
 import ArrowUp from "../../icons/ArrowUp";
@@ -18,6 +19,7 @@ export enum SelectionType {
 
 export type TreeItemProps = {
   childItems: TreeItemProps[];
+  className?: string;
   Icon?: (props: SVGProps<SVGSVGElement>) => preact.JSX.Element;
   id: string;
   isCollapsedOnControlClick?: boolean;
@@ -31,6 +33,7 @@ export type TreeItemProps = {
 
 function TreeItem({
   childItems,
+  className,
   isCollapsedOnControlClick,
   isControlChecked,
   layer,
@@ -102,8 +105,8 @@ function TreeItem({
   };
 
   return (
-    <div>
-      <div className="flex items-center gap-2 border-b py-2 pr-1">
+    <>
+      <div className={twMerge("flex items-center gap-2 py-2", className)}>
         {selectionType === SelectionType.RADIO ? null : (
           // <RvfRadioButton
           //   checked={isControlChecked}
@@ -137,7 +140,7 @@ function TreeItem({
       {isContainerVisible && renderedLayers.length > 0 && (
         <div className="pl-6">{renderedLayers}</div>
       )}
-    </div>
+    </>
   );
 }
 

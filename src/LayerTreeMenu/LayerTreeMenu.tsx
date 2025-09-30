@@ -10,7 +10,9 @@ import useMapContext from "../utils/hooks/useMapContext";
 
 import type { Group } from "ol/layer";
 import type BaseLayer from "ol/layer/Base";
-import type { JSX, PreactDOMAttributes } from "preact";
+import type { HTMLAttributes, PreactDOMAttributes } from "preact";
+
+import type { LayerTreeProps } from "../LayerTree/LayerTree";
 
 export interface LayerTreeConfig {
   childItems: LayerTreeConfig[];
@@ -22,7 +24,8 @@ export interface LayerTreeConfig {
   title: string;
 }
 
-export type TopicsProps = {} & JSX.HTMLAttributes<HTMLDivElement> &
+export type LayerTreeMenuProps = HTMLAttributes<HTMLDivElement> &
+  LayerTreeProps &
   PreactDOMAttributes;
 
 const getConfigForLayer = (
@@ -46,7 +49,7 @@ const getConfigForLayer = (
   };
 };
 
-function LayerTreeMenu(props: TopicsProps) {
+function LayerTreeMenu(props: LayerTreeMenuProps) {
   const { map } = useMapContext();
   const [revision, setRevision] = useState(0);
 
@@ -95,7 +98,7 @@ function LayerTreeMenu(props: TopicsProps) {
       unByKey(keys);
     };
   }, [map]);
-  console.log(layers);
+
   return <LayerTree layers={layers} {...props} />;
 }
 
