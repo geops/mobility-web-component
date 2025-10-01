@@ -10,13 +10,6 @@ export const LAYERS_NAMES = {
   stations: LAYER_NAME_STATIONS,
 };
 
-export const LAYERS_TITLES: Record<string, string> = {
-  linesnetworkplan: "Liniennetzpläne",
-  notifications: "Notifications",
-  realtime: "Realtime",
-  stations: "Stations",
-};
-
 export const DEFAULT_QUERYABLE_LAYERS = Object.values(LAYERS_NAMES);
 
 export const LAYER_PROP_IS_EXPORTING = "isExporting";

@@ -6,6 +6,7 @@ import Select from "../ui/Select";
 import { LAYER_PROP_IS_EXPORTING, MAX_EXTENT } from "../utils/constants";
 import exportPdf from "../utils/exportPdf";
 import getAllLayers from "../utils/getAllLayers";
+import useI18n from "../utils/hooks/useI18n";
 import useMapContext from "../utils/hooks/useMapContext";
 
 import type { HTMLAttributes, PreactDOMAttributes } from "preact";
@@ -25,6 +26,7 @@ function ExportMenu({ ...props }: ExportMenuButtonProps) {
   const selectId = useId();
   const [isExporting, setIsExporting] = useState(false);
   const [isExportingError, setIsExportingError] = useState(false);
+  const { t } = useI18n();
   return (
     <div {...props}>
       {/* <!-- Content --> */}
@@ -37,10 +39,10 @@ function ExportMenu({ ...props }: ExportMenuButtonProps) {
               return setUseMaxExtent(!useMaxExtent);
             }}
           />
-          <label htmlFor={checkboxId}>Ganze Region exportieren</label>
+          <label htmlFor={checkboxId}>{t("export_all_region")}</label>
         </div>
         <div className={"flex flex-wrap items-center gap-2"}>
-          <label htmlFor={selectId}>Format:</label>
+          <label htmlFor={selectId}>{t("export_format_title")}:</label>
           <Select
             className={"w-24"}
             id={selectId}
@@ -102,10 +104,10 @@ function ExportMenu({ ...props }: ExportMenuButtonProps) {
         >
           {/* eslint-disable-next-line no-nested-ternary */}
           {isExporting
-            ? "Exporting..."
+            ? t("exporting")
             : isExportingError
-              ? "Error"
-              : "Download"}
+              ? t("error")
+              : t("download")}
         </Button>
       </div>
     </div>

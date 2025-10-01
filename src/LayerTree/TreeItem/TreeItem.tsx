@@ -5,6 +5,7 @@ import ArrowDown from "../../icons/ArrowDown";
 import ArrowUp from "../../icons/ArrowUp";
 import minusGrey from "../../icons/Minus/minus.svg";
 import Checkbox from "../../ui/Checkbox";
+import useI18n from "../../utils/hooks/useI18n";
 // import RvfRadioButton from "../../RvfRadioButton";
 import { LayersTreeDispatchContext } from "../layersTreeContext";
 
@@ -46,6 +47,7 @@ function TreeItem({
   const dispatch = useContext(LayersTreeDispatchContext);
   const inputId = useId();
   const buttonId = useId();
+  const { t } = useI18n();
 
   useEffect(() => {
     if (isCollapsedOnControlClick) {
@@ -127,7 +129,7 @@ function TreeItem({
           className={`flex-1 cursor-pointer`}
           htmlFor={renderedLayers.length > 0 ? buttonId : inputId}
         >
-          {title}
+          {typeof title === "string" ? t(title) : title}
         </label>
         {renderedLayers.length > 0 && (
           <button

@@ -6,6 +6,7 @@ import OverlayDetails from "../OverlayDetails";
 import OverlayHeader from "../OverlayHeader";
 import Search from "../Search";
 import ShareMenu from "../ShareMenu";
+import useI18n from "../utils/hooks/useI18n";
 import useMapContext from "../utils/hooks/useMapContext";
 
 const contentClassName = `relative h-full overflow-x-hidden overflow-y-auto text-base bg-white`;
@@ -34,6 +35,7 @@ function OverlayContent({
     setIsLayerTreeOpen,
     setIsShareMenuOpen,
   } = useMapContext();
+  const { t } = useI18n();
 
   return (
     <>
@@ -44,7 +46,7 @@ function OverlayContent({
             onClose={() => {
               setIsExportMenuOpen(false);
             }}
-            title={"Print"}
+            title={t("print_menu_title")}
           ></OverlayHeader>
           <ExportMenu
             className={twMerge(contentClassName, "flex flex-col gap-4 p-4")}
@@ -57,7 +59,7 @@ function OverlayContent({
             onClose={() => {
               setIsLayerTreeOpen(false);
             }}
-            title={"Layers"}
+            title={t("layertree_menu_title")}
           ></OverlayHeader>
           <LayerTreeMenu
             className="relative flex h-full flex-col overflow-x-hidden overflow-y-auto p-2 text-base *:not-last:border-b"
@@ -71,7 +73,7 @@ function OverlayContent({
             onClose={() => {
               setIsShareMenuOpen(false);
             }}
-            title="Share"
+            title={t("share_menu_title")}
           ></OverlayHeader>
           <ShareMenu className="h-full overflow-x-hidden overflow-y-auto p-4 text-base" />
         </>

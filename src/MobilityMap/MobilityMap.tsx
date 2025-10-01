@@ -356,10 +356,10 @@ function MobilityMap(props: MobilityMapProps) {
                         : "",
                     )}
                   >
-                    {hasPrint && <ExportMenuButton title={"Drucken"} />}
-                    {hasShare && <ShareMenuButton title={"Share"} />}
-                    {hasLayerTree && <LayerTreeButton title={"Layers"} />}
-                    {hasSearch && <SearchButton title={"Suche"} />}
+                    {hasPrint && <ExportMenuButton />}
+                    {hasShare && <ShareMenuButton />}
+                    {hasLayerTree && <LayerTreeButton />}
+                    {hasSearch && <SearchButton />}
                   </div>
 
                   {hasSearch && (

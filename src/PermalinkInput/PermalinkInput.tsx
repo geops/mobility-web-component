@@ -1,4 +1,7 @@
+import { memo } from "preact/compat";
+
 import InputCopy from "../ui/InputCopy";
+import useI18n from "../utils/hooks/useI18n";
 
 import type { HTMLAttributes, PreactDOMAttributes } from "preact";
 
@@ -15,14 +18,13 @@ function PermalinkInput({
   inputProps = emptyProps,
   ...props
 }: PermalinkInputProps) {
+  const { t } = useI18n();
   return (
     <div {...props}>
       <InputCopy value={window?.location.href} {...inputProps} />
-      <p className="py-2">
-        Sie können auch den Link aus der Adresszeile des Browsers kopieren.
-      </p>
+      <p className="py-2">{t("permalink_input_hint")}</p>
     </div>
   );
 }
 
-export default PermalinkInput;
+export default memo(PermalinkInput);

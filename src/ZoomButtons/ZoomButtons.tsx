@@ -5,12 +5,14 @@ import { useCallback, useEffect, useState } from "preact/hooks";
 import Minus from "../icons/Minus";
 import Plus from "../icons/Plus";
 import IconButton from "../ui/IconButton";
+import useI18n from "../utils/hooks/useI18n";
 import useMapContext from "../utils/hooks/useMapContext";
 
 function ZoomButtons() {
   const { map } = useMapContext();
   const [isZoomInDisabled, setIsZoomInDisabled] = useState(false);
   const [isZoomOutDisabled, setIsZoomOutDisabled] = useState(false);
+  const { t } = useI18n();
 
   const handleZoomIn = useCallback(() => {
     if (!map?.getView()) {
@@ -56,11 +58,19 @@ function ZoomButtons() {
 
   return (
     <>
-      <IconButton disabled={isZoomInDisabled} onClick={handleZoomIn}>
+      <IconButton
+        disabled={isZoomInDisabled}
+        onClick={handleZoomIn}
+        title={t("zoomin")}
+      >
         <Plus />
       </IconButton>
 
-      <IconButton disabled={isZoomOutDisabled} onClick={handleZoomOut}>
+      <IconButton
+        disabled={isZoomOutDisabled}
+        onClick={handleZoomOut}
+        title={t("zoomout")}
+      >
         <Minus />
       </IconButton>
     </>

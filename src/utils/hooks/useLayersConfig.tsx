@@ -1,6 +1,6 @@
 import { useEffect, useState } from "preact/hooks";
 
-import { LAYERS_NAMES, LAYERS_TITLES } from "../constants";
+import { LAYERS_NAMES } from "../constants";
 
 import useMapContext from "./useMapContext";
 
@@ -25,7 +25,7 @@ function useLayersConfig() {
       // Set the default title if not present in layersconfig
       Object.values(LAYERS_NAMES).forEach((name) => {
         config[name] = {
-          title: LAYERS_TITLES[name],
+          title: name,
           ...(config[name] || {}),
         };
       });

@@ -20,7 +20,7 @@ function OverlayDetails() {
     });
   }, [featuresInfos, selectedFeature]);
 
-  if (!selectedFeature) {
+  if (!selectedFeature || !featuresInfo) {
     return null;
   }
   return (

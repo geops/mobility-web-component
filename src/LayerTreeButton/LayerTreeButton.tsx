@@ -3,22 +3,28 @@ import { useCallback } from "preact/hooks";
 
 import Stack from "../icons/Stack";
 import IconButton from "../ui/IconButton";
+import useI18n from "../utils/hooks/useI18n";
 import useMapContext from "../utils/hooks/useMapContext";
 
-import type { HTMLAttributes, PreactDOMAttributes } from "preact";
+import type { IconButtonProps } from "../ui/IconButton/IconButton";
 
-export type LayerTreeButtonProps = HTMLAttributes<HTMLButtonElement> &
-  PreactDOMAttributes;
+export type LayerTreeButtonProps = IconButtonProps;
 
 function LayerTreeButton({ ...props }: LayerTreeButtonProps) {
   const { isLayerTreeOpen, setIsLayerTreeOpen } = useMapContext();
+  const { t } = useI18n();
 
   const onClick = useCallback(() => {
     setIsLayerTreeOpen(!isLayerTreeOpen);
   }, [isLayerTreeOpen, setIsLayerTreeOpen]);
 
   return (
-    <IconButton {...props} onClick={onClick} selected={isLayerTreeOpen}>
+    <IconButton
+      title={t("layertree_menu_title")}
+      {...props}
+      onClick={onClick}
+      selected={isLayerTreeOpen}
+    >
       <Stack />
     </IconButton>
   );

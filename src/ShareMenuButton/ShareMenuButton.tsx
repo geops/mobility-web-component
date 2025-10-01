@@ -3,22 +3,29 @@ import { useCallback } from "preact/hooks";
 
 import Share from "../icons/Share";
 import IconButton from "../ui/IconButton";
+import useI18n from "../utils/hooks/useI18n";
 import useMapContext from "../utils/hooks/useMapContext";
 
 import type { HTMLAttributes, PreactDOMAttributes } from "preact";
 
-export type RvfShareMenuButtonProps = HTMLAttributes<HTMLButtonElement> &
+export type ShareMenuButtonProps = HTMLAttributes<HTMLButtonElement> &
   PreactDOMAttributes;
 
-function ShareMenuButton({ ...props }: RvfShareMenuButtonProps) {
+function ShareMenuButton({ ...props }: ShareMenuButtonProps) {
   const { isShareMenuOpen, setIsShareMenuOpen } = useMapContext();
+  const { t } = useI18n();
 
   const onClick = useCallback(() => {
     setIsShareMenuOpen(!isShareMenuOpen);
   }, [isShareMenuOpen, setIsShareMenuOpen]);
 
   return (
-    <IconButton {...props} onClick={onClick} selected={isShareMenuOpen}>
+    <IconButton
+      title={t("share_menu_title")}
+      {...props}
+      onClick={onClick}
+      selected={isShareMenuOpen}
+    >
       <Share />
     </IconButton>
   );

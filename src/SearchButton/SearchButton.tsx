@@ -3,22 +3,28 @@ import { useCallback } from "preact/hooks";
 
 import Search from "../icons/Search";
 import IconButton from "../ui/IconButton";
+import useI18n from "../utils/hooks/useI18n";
 import useMapContext from "../utils/hooks/useMapContext";
 
-import type { HTMLAttributes, PreactDOMAttributes } from "preact";
+import type { IconButtonProps } from "../ui/IconButton/IconButton";
 
-export type SearchButtonProps = HTMLAttributes<HTMLButtonElement> &
-  PreactDOMAttributes;
+export type SearchButtonProps = IconButtonProps;
 
 function SearchButton({ ...props }: SearchButtonProps) {
   const { isSearchOpen, setIsSearchOpen } = useMapContext();
+  const { t } = useI18n();
 
   const onClick = useCallback(() => {
     setIsSearchOpen(!isSearchOpen);
   }, [isSearchOpen, setIsSearchOpen]);
 
   return (
-    <IconButton {...props} onClick={onClick} selected={isSearchOpen}>
+    <IconButton
+      title={t("search_menu_title")}
+      {...props}
+      onClick={onClick}
+      selected={isSearchOpen}
+    >
       <Search />
     </IconButton>
   );

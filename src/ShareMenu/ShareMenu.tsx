@@ -5,6 +5,7 @@ import Email from "../icons/Email";
 import Image from "../icons/Image";
 import PermalinkInput from "../PermalinkInput";
 import Button from "../ui/Button";
+import useI18n from "../utils/hooks/useI18n";
 import useMapContext from "../utils/hooks/useMapContext";
 
 import type { HTMLAttributes, PreactDOMAttributes } from "preact";
@@ -14,6 +15,7 @@ function ShareMenu({
   ...props
 }: HTMLAttributes<HTMLDivElement> & PreactDOMAttributes) {
   const { map } = useMapContext();
+  const { t } = useI18n();
 
   return (
     // eslint-disable-next-line @typescript-eslint/no-base-to-string, @typescript-eslint/restrict-template-expressions
@@ -23,12 +25,12 @@ function ShareMenu({
         href={`mailto:?subject=Karte&body=${window?.location.href}`}
       >
         <Email />
-        <span>Email senden</span>
+        <span>{t("share_email_send")}</span>
       </Button>
       <CanvasSaveButton map={map}>
         <Button className={"w-fit"}>
           <Image />
-          <span>Bild speichern</span>
+          <span>{t("share_image_save")}</span>
         </Button>
       </CanvasSaveButton>
       <PermalinkInput />
