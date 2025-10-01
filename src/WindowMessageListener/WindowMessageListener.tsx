@@ -46,6 +46,13 @@ function WindowMessageListener({ eventNode }: { eventNode: HTMLElement }) {
         // @ts-expect-error children is the react property
         delete evt.data.children;
       }
+      if (evt.type === "mwc:selectedfeature") {
+        // @ts-expect-error children is the react property
+        if (evt.data?.properties?.olGeometry) {
+          // @ts-expect-error children is the react property
+          delete evt.data.properties.olGeometry;
+        }
+      }
       window.parent?.postMessage({ data: evt.data, type: evt.type }, "*");
     };
     evtTypes.forEach((eventType) => {

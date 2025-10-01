@@ -16,7 +16,7 @@ export type IconButtonProps = {
   PreactDOMAttributes;
 
 const baseClasses =
-  "flex size-9 items-center justify-center rounded-full bg-white p-1.5 shadow-lg";
+  "flex size-9 items-center justify-center rounded-full bg-white p-1.5 shadow-lg hover:not-disabled:cursor-pointer";
 
 export const themes = {
   primary: {

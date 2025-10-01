@@ -28,7 +28,6 @@ function StationsLayer(props: Partial<MaplibreStyleLayerOptions>) {
     if (!map || !layer) {
       return;
     }
-
     map.addLayer(layer);
     setStationsLayer(layer);
 

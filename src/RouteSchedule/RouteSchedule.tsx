@@ -4,6 +4,7 @@ import { useEffect, useRef } from "preact/hooks";
 import RouteScheduleFooter from "../RouteScheduleFooter";
 import RouteScheduleHeader from "../RouteScheduleHeader";
 import RouteStop from "../RouteStop";
+import ShadowOverflow from "../ShadowOverflow";
 import useMapContext from "../utils/hooks/useMapContext";
 
 import type { RealtimeStop } from "mobility-toolbox-js/types";
@@ -25,7 +26,7 @@ function RouteSchedule(props: RouteScheduleProps) {
       const nextStation = elt.querySelector("[data-station-passed=false]");
       if (nextStation) {
         // We use scrollTo avoid scrolling the entire window.
-        (nextStation.parentNode as Element).scrollTo({
+        (nextStation.parentNode.parentNode as Element).scrollTo({
           behavior: "smooth",
           top: (nextStation as HTMLElement).offsetTop || 0,
         });
@@ -47,23 +48,25 @@ function RouteSchedule(props: RouteScheduleProps) {
   return (
     <>
       <RouteScheduleHeader />
-      <div className={className} ref={ref}>
-        {stopSequence.stations.map((stop: RealtimeStop, index: number) => {
-          const { arrivalTime, departureTime, stationId, stationName } = stop;
-          return (
-            <RouteStop
-              // Train line can go in circle so begin and end have the same id,
-              index={index}
-              // using the time in the key should fix the issue.
-              key={
-                (`${stationId}` || stationName) + arrivalTime + departureTime
-              }
-              stop={stop}
-            />
-          );
-        })}
-        <RouteScheduleFooter />
-      </div>
+      <ShadowOverflow>
+        <div className={className} ref={ref}>
+          {stopSequence.stations.map((stop: RealtimeStop, index: number) => {
+            const { arrivalTime, departureTime, stationId, stationName } = stop;
+            return (
+              <RouteStop
+                // Train line can go in circle so begin and end have the same id,
+                index={index}
+                // using the time in the key should fix the issue.
+                key={
+                  (`${stationId}` || stationName) + arrivalTime + departureTime
+                }
+                stop={stop}
+              />
+            );
+          })}
+          <RouteScheduleFooter />
+        </div>
+      </ShadowOverflow>
     </>
   );
 }
