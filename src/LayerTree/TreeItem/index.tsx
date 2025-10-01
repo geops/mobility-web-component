@@ -1,1 +1,1 @@
-export { default, SelectionType } from "./TreeItem";
+export { default, SelectionType, TreeItemProps } from "./TreeItem";

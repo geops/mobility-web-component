@@ -1,5 +1,6 @@
 import { memo } from "preact/compat";
 import { useEffect, useRef } from "preact/hooks";
+import { twMerge } from "tailwind-merge";
 
 import RouteScheduleFooter from "../RouteScheduleFooter";
 import RouteScheduleHeader from "../RouteScheduleHeader";
@@ -49,7 +50,7 @@ function RouteSchedule(props: RouteScheduleProps) {
     <>
       <RouteScheduleHeader />
       <ShadowOverflow>
-        <div className={className} ref={ref}>
+        <div className={twMerge("text-base", className)} ref={ref}>
           {stopSequence.stations.map((stop: RealtimeStop, index: number) => {
             const { arrivalTime, departureTime, stationId, stationName } = stop;
             return (

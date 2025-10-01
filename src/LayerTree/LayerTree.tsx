@@ -7,23 +7,23 @@ import {
   LayersTreeDispatchContext,
 } from "./layersTreeContext";
 import layersTreeReducer from "./layersTreeReducer";
-import TreeItem from "./TreeItem/TreeItem";
+import TreeItem from "./TreeItem";
 
 import type { HTMLAttributes, PreactDOMAttributes } from "preact";
 
-import type { TreeItemProps } from "./TreeItem/TreeItem";
+import type { TreeItemProps } from "./TreeItem";
 
 export type LayerTreeProps = {
   className?: string;
   layers: TreeItemProps[];
-  treeItemClassName?: string;
+  treeItemProps?: Partial<TreeItemProps>;
 } & HTMLAttributes<HTMLDivElement> &
   PreactDOMAttributes;
 
 function LayerTree({
   className,
   layers,
-  treeItemClassName,
+  treeItemProps,
   ...props
 }: LayerTreeProps) {
   const [tree, dispatch] = useReducer(layersTreeReducer, layers);
@@ -42,7 +42,8 @@ function LayerTree({
           {layers.map((item) => {
             return (
               <TreeItem
-                className={twMerge("w-full", treeItemClassName)}
+                {...(treeItemProps || {})}
+                className={twMerge("w-full", treeItemProps?.className)}
                 key={item.id}
                 {...item}
               />

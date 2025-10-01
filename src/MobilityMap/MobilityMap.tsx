@@ -25,6 +25,7 @@ import ShareMenuButton from "../ShareMenuButton";
 import SingleClickListener from "../SingleClickListener";
 import StationsLayer from "../StationsLayer";
 import { I18nContext } from "../utils/hooks/useI18n";
+import useInitialLayersVisiblity from "../utils/hooks/useInitialLayersVisiblity";
 import { MapContext } from "../utils/hooks/useMapContext";
 import i18n from "../utils/i18n";
 import WindowMessageListener from "../WindowMessageListener";
@@ -110,6 +111,11 @@ function MobilityMap(props: MobilityMapProps) {
 
   const [previewNotifications, setPreviewNotifications] =
     useState<SituationType[]>();
+
+  const { layers } = props;
+
+  // Apply initial visibility of layers
+  useInitialLayersVisiblity(map, layers);
 
   // Object representing all the web-component attributes and the map context values.
   const mapContextValue = useMemo(() => {
@@ -306,7 +312,7 @@ function MobilityMap(props: MobilityMapProps) {
         >
           <div className="relative flex size-full flex-col @lg/main:flex-row-reverse">
             <Map className="relative flex-1 overflow-visible">
-              <EmbedNavigation />
+              {isEmbed && <EmbedNavigation />}
 
               <div className="absolute inset-x-2 bottom-2 z-10 flex items-end justify-between gap-2 text-[10px]">
                 <ScaleLine className="bg-slate-50/70" />

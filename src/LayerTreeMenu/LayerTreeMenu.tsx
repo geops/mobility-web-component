@@ -25,7 +25,7 @@ export interface LayerTreeConfig {
 }
 
 export type LayerTreeMenuProps = HTMLAttributes<HTMLDivElement> &
-  LayerTreeProps &
+  Partial<LayerTreeProps> &
   PreactDOMAttributes;
 
 const getConfigForLayer = (

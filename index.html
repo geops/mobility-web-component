@@ -84,6 +84,14 @@ document.getElementById('map').addEventListener('mwc:attribute', (event) => {
           reload: true,
         };
 
+
+        window.MobilityMapAttributes.debug = {
+          type: "boolean",
+          defaultValue: "false",
+          description: "Displays debug information for vehicles when true, use only for debugging.",
+          reload: true,
+        };
+
         /* Attributes */
         const attrs = Object.keys(MobilityMapAttributes);
         const booleanAttrs = Object.entries(MobilityMapAttributes)

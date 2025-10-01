@@ -1,4 +1,4 @@
-import { getLayersAsFlatArray } from "mobility-toolbox-js/common";
+import { getLayersAsFlatArray } from "mobility-toolbox-js/ol";
 import { unByKey } from "ol/Observable";
 import { useEffect } from "preact/hooks";
 

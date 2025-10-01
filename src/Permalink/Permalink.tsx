@@ -4,8 +4,8 @@ import { unByKey } from "ol/Observable";
 import { memo } from "preact/compat";
 import { useCallback, useEffect } from "preact/hooks";
 
+import { LAYER_PROP_IS_EXPORTING } from "../utils/constants";
 import getPermalinkParameters from "../utils/getPermalinkParameters";
-// import { LAYER_PROP_IS_EXPORTING } from "../constants";
 // import getLayersAsFlatArray from "../getLayersAsFlatArray";
 import useMapContext from "../utils/hooks/useMapContext";
 
@@ -23,9 +23,9 @@ const Permalink = ({ replaceState = false }: { replaceState?: boolean }) => {
   const updatePermalink = useCallback(
     (currentMap: Map) => {
       // No update when exporting
-      // if (map.get(LAYER_PROP_IS_EXPORTING)) {
-      //   return;
-      // }
+      if (map.get(LAYER_PROP_IS_EXPORTING)) {
+        return;
+      }
       const currentUrlParams = new URLSearchParams(window.location.search);
       const urlParams = getPermalinkParameters(currentMap, currentUrlParams);
       urlParams.set("permalink", "true");
@@ -34,7 +34,7 @@ const Permalink = ({ replaceState = false }: { replaceState?: boolean }) => {
         window.history.replaceState(null, null, `?${urlParams.toString()}`);
       }
     },
-    [replaceState, setPermalinkUrlSearchParams],
+    [map, replaceState, setPermalinkUrlSearchParams],
   );
 
   useEffect(() => {

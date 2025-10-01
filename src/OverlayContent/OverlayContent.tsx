@@ -59,7 +59,10 @@ function OverlayContent({
             }}
             title={"Layers"}
           ></OverlayHeader>
-          <LayerTreeMenu className="relative flex h-full flex-col overflow-x-hidden overflow-y-auto p-2 text-base *:not-last:border-b" />
+          <LayerTreeMenu
+            className="relative flex h-full flex-col overflow-x-hidden overflow-y-auto p-2 text-base *:not-last:border-b"
+            treeItemProps={{ childContainerClassName: "*:not-last:border-b" }}
+          />
         </>
       )}
       {hasShare && isShareMenuOpen && (

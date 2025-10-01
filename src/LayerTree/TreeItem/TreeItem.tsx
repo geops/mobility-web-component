@@ -18,6 +18,7 @@ export enum SelectionType {
 }
 
 export type TreeItemProps = {
+  childContainerClassName?: string;
   childItems: TreeItemProps[];
   className?: string;
   Icon?: (props: SVGProps<SVGSVGElement>) => preact.JSX.Element;
@@ -32,6 +33,7 @@ export type TreeItemProps = {
   PreactDOMAttributes;
 
 function TreeItem({
+  childContainerClassName,
   childItems,
   className,
   isCollapsedOnControlClick,
@@ -138,7 +140,9 @@ function TreeItem({
         )}
       </div>
       {isContainerVisible && renderedLayers.length > 0 && (
-        <div className="pl-6">{renderedLayers}</div>
+        <div className={twMerge("pl-6", childContainerClassName)}>
+          {renderedLayers}
+        </div>
       )}
     </>
   );

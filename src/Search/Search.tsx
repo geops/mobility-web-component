@@ -7,7 +7,7 @@ import useMapContext from "../utils/hooks/useMapContext";
 
 import type { StopsSearchProps } from "../StopsSearch/StopsSearch";
 
-function Search(props: StopsSearchProps) {
+function Search(props: Partial<StopsSearchProps>) {
   const { apikey, map, stopsurl } = useMapContext();
 
   const onSelect = useCallback(

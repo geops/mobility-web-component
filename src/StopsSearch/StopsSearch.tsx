@@ -333,7 +333,6 @@ function StopsSearch({
           )}
         </div>
       )}
-      {/* </div> */}
     </>
   );
 }
