@@ -136,6 +136,7 @@ function MobilityMap(props: MobilityMapProps) {
       hasRealtime,
       hasSearch,
       hasShare,
+      hasStations,
       hasToolbar,
       isEmbed,
       isExportMenuOpen,
@@ -201,6 +202,7 @@ function MobilityMap(props: MobilityMapProps) {
     featuresInfos,
     featuresInfosHovered,
     hasDetails,
+    hasStations,
     hasGeolocation,
     hasLayerTree,
     hasLnp,
@@ -337,12 +339,12 @@ function MobilityMap(props: MobilityMapProps) {
             </Map>
 
             <div className="pointer-events-none absolute top-2 bottom-2 left-2 z-10 flex flex-col gap-2 *:pointer-events-auto">
-              <div
-                className={
-                  "relative z-10 w-fit rounded-2xl bg-black/10 p-0 backdrop-blur-sm"
-                }
-              >
-                {hasToolbar && (
+              {hasToolbar && (
+                <div
+                  className={
+                    "relative z-10 w-fit rounded-2xl bg-black/10 p-0 backdrop-blur-sm"
+                  }
+                >
                   <div
                     className={twMerge(
                       "border-grey relative z-10 flex gap-[1px] overflow-hidden rounded-2xl border",
@@ -359,28 +361,28 @@ function MobilityMap(props: MobilityMapProps) {
                     {hasLayerTree && <LayerTreeButton title={"Layers"} />}
                     {hasSearch && <SearchButton title={"Suche"} />}
                   </div>
-                )}
 
-                {hasToolbar && hasSearch && (
-                  <div
-                    className={twMerge(
-                      "absolute top-14 left-0 z-5 h-[48px] w-0 p-0 opacity-0 transition-all @sm:top-0 @sm:left-[calc(100%-47px)]",
-                      isSearchOpen ? "w-64 opacity-100" : "",
-                    )}
-                  >
-                    <Search
-                      className={
-                        "border-grey @container m-0 h-[40px] gap-4 rounded-2xl border p-2 px-4 text-base @sm/main:h-[48px] @sm/main:rounded-l-none @sm/main:rounded-r-2xl"
-                      }
-                      // inputClassName="h-6 text-base"
-                      inputContainerClassName="border-none"
-                      resultClassName="text-base  **:hover:cursor-pointer p-2"
-                      resultsContainerClassName="@container rounded-b-2xl max-h-[200px] overflow-y-auto border border-t-0 "
-                      withResultsClassName="text-base !rounded-b-none"
-                    />
-                  </div>
-                )}
-              </div>
+                  {hasSearch && (
+                    <div
+                      className={twMerge(
+                        "absolute top-14 left-0 z-5 h-[48px] w-0 p-0 opacity-0 transition-all @sm:top-0 @sm:left-[calc(100%-47px)]",
+                        isSearchOpen ? "w-64 opacity-100" : "",
+                      )}
+                    >
+                      <Search
+                        className={
+                          "border-grey @container m-0 h-[40px] gap-4 rounded-2xl border p-2 px-4 text-base @sm/main:h-[48px] @sm/main:rounded-l-none @sm/main:rounded-r-2xl"
+                        }
+                        // inputClassName="h-6 text-base"
+                        inputContainerClassName="border-none"
+                        resultClassName="text-base  **:hover:cursor-pointer p-2"
+                        resultsContainerClassName="@container rounded-b-2xl max-h-[200px] overflow-y-auto border border-t-0 "
+                        withResultsClassName="text-base !rounded-b-none"
+                      />
+                    </div>
+                  )}
+                </div>
+              )}
 
               {/* Desktop (>= lg) */}
               {isOverlayOpen && (
