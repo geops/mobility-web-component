@@ -11,8 +11,17 @@ import useMapContext from "../utils/hooks/useMapContext";
  * in the Overlay component.
  */
 function OverlayDetails() {
-  const { featuresInfos, selectedFeature, setSelectedFeature } =
-    useMapContext();
+  const {
+    featuresInfos,
+    realtimeLayer,
+    selectedFeature,
+    setSelectedFeature,
+    setStationId,
+    setTrainId,
+    stationId,
+    stationsLayer,
+    trainId,
+  } = useMapContext();
 
   const featuresInfo = useMemo(() => {
     return featuresInfos?.find((featureInfo) => {
@@ -20,27 +29,36 @@ function OverlayDetails() {
     });
   }, [featuresInfos, selectedFeature]);
 
-  if (!selectedFeature || !featuresInfo) {
-    return null;
-  }
+  const layer = useMemo(() => {
+    if (featuresInfo?.layer) {
+      return featuresInfo.layer;
+    }
+    if (trainId) {
+      return realtimeLayer;
+    }
+    if (stationId) {
+      return stationsLayer;
+    }
+    return undefined;
+  }, [featuresInfo?.layer, realtimeLayer, stationId, stationsLayer, trainId]);
+
   return (
     <>
       <OverlayDetailsHeader
         feature={selectedFeature}
-        layer={featuresInfo?.layer}
+        layer={layer}
         onClose={() => {
           setSelectedFeature(null);
+          setTrainId(null);
+          setStationId(null);
         }}
       />
       <FeatureDetails
         feature={selectedFeature}
         featuresInfo={featuresInfo}
-        layer={featuresInfo?.layer}
+        layer={layer}
       />
-      <OverlayDetailsFooter
-        feature={selectedFeature}
-        layer={featuresInfo?.layer}
-      />
+      <OverlayDetailsFooter feature={selectedFeature} layer={layer} />
     </>
   );
 }

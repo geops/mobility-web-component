@@ -22,6 +22,7 @@ export type MobilityMapAttributeName =
   | "embed"
   | "extent"
   | "geolocation"
+  | "lang"
   | "layers"
   | "layersconfig"
   | "layertree"
@@ -87,6 +88,11 @@ const attrs: MobilityMapAttributes = {
     defaultValue: "true",
     description: "Toggle the display of the geolocation button or not.",
     type: "boolean",
+  },
+  lang: {
+    defaultValue: "en",
+    description:
+      "The language to use for the map. Supported languages are : de, en, fr, it.",
   },
   layers: {
     defaultValue: Object.values(LAYERS_NAMES).toString(),
