@@ -23,7 +23,10 @@ function OverlayDetailsHeader({
   const { t } = useI18n();
   const layerConfig = useLayerConfig(layer?.get("name"));
   return (
-    <OverlayHeader title={t(layerConfig.title)} {...props}></OverlayHeader>
+    <OverlayHeader
+      title={t(layerConfig?.title || "")}
+      {...props}
+    ></OverlayHeader>
   );
 }
 export default memo(OverlayDetailsHeader);

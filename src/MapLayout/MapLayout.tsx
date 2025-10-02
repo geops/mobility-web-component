@@ -70,7 +70,7 @@ function MapLayout({
           <div
             className={twMerge(
               "absolute top-2 right-2 left-2 z-10 max-w-96",
-              isOverlayOpen && "@lg:left-72",
+              isOverlayOpen && "@lg:left-84",
             )}
           >
             <Search />
@@ -128,7 +128,7 @@ function MapLayout({
         {isOverlayOpen && (
           <div
             className={twMerge(
-              "flex w-0 flex-1 flex-col overflow-hidden rounded-2xl @lg:min-w-64",
+              "flex w-0 flex-1 flex-col overflow-hidden rounded-2xl @lg:min-w-80",
             )}
             style={{ containerType: "normal" }}
           >
