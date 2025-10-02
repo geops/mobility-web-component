@@ -10,6 +10,8 @@ export const LAYERS_NAMES = {
   stations: LAYER_NAME_STATIONS,
 };
 
+export const DEFAULT_VISIBLE_LAYERS = Object.values(LAYERS_NAMES);
+
 export const DEFAULT_QUERYABLE_LAYERS = Object.values(LAYERS_NAMES);
 
 export const LAYER_PROP_IS_EXPORTING = "isExporting";

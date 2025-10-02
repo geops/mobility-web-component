@@ -1,6 +1,10 @@
 //type: "checkbox" | "date" | "select" | "textfield";
 
-import { DEFAULT_QUERYABLE_LAYERS, LAYERS_NAMES } from "../utils/constants";
+import {
+  DEFAULT_QUERYABLE_LAYERS,
+  DEFAULT_VISIBLE_LAYERS,
+  LAYERS_NAMES,
+} from "../utils/constants";
 
 const geopsApiLink = `<a href="https://developer.geops.io/">geOps API key</a>`;
 const geopsMapsApiLink = `<a href="https://developer.geops.io/apis/maps">geOps Maps API</a>`;
@@ -95,7 +99,7 @@ const attrs: MobilityMapAttributes = {
       "The language to use for the map. Supported languages are : de, en, fr, it.",
   },
   layers: {
-    defaultValue: Object.values(LAYERS_NAMES).toString(),
+    defaultValue: DEFAULT_VISIBLE_LAYERS.toString(),
     description: `A comma separated list of layers's name to make visible on load, others are hidden. If empty, all layers will be hidden except the baselayer.<br/>Layers available are ${Object.values(LAYERS_NAMES).join(", ")}.`,
   },
   layersconfig: {

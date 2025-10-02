@@ -15,10 +15,13 @@ function LinesNetworkPlanLayer(props: MaplibreStyleLayerOptions) {
       return null;
     }
     return new MaplibreStyleLayer({
-      layersFilter: ({ metadata }) => {
+      layersFilter: ({ metadata, source }) => {
         return (
+          metadata?.["geops.filter"] === "lnp" ||
+          metadata?.["general.filter"] === "lnp" ||
           metadata?.["rvf.filter"] === "netzplan_lines" ||
-          metadata?.["rvf.filter"] === "netzplan_stations"
+          metadata?.["rvf.filter"] === "netzplan_stations" ||
+          source === "network_plans"
         );
       },
       maplibreLayer: baseLayer,

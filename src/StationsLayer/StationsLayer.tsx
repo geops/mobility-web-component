@@ -16,7 +16,10 @@ function StationsLayer(props: Partial<MaplibreStyleLayerOptions>) {
     }
     return new MaplibreStyleLayer({
       layersFilter: ({ metadata }) => {
-        return metadata?.["tralis.variable"] === "station";
+        return (
+          metadata?.["tralis.variable"] === "station" ||
+          metadata?.["general.filter"] === "stations"
+        );
       },
       maplibreLayer: baseLayer,
       name: LAYER_NAME_STATIONS,
