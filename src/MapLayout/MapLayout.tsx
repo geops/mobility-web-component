@@ -67,7 +67,12 @@ function MapLayout({
         )}
 
         {!hasToolbar && hasSearch && (
-          <div className="absolute top-2 right-12 left-2 z-10 flex max-h-[90%] max-w-96 min-w-64 flex-col">
+          <div
+            className={twMerge(
+              "absolute top-2 right-2 left-2 z-10 max-w-96",
+              isOverlayOpen && "@lg:left-72",
+            )}
+          >
             <Search />
           </div>
         )}
