@@ -451,7 +451,7 @@ function NotificationDetails({
                           "rounded-md bg-black px-2 py-1 font-bold text-white"
                         }
                       >
-                        Alle Bahnhöfe auf dieser Strecke
+                        Alle Haltestellen auf dieser Strecke
                       </div>
                     )}
                   </div>

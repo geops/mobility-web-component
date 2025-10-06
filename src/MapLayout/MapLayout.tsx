@@ -87,7 +87,7 @@ function MapLayout({
           >
             <div
               className={twMerge(
-                "border-grey relative z-10 flex gap-[1px] overflow-hidden rounded-2xl border",
+                "border-grey relative z-10 flex h-[48px] gap-[1px] overflow-hidden rounded-2xl border",
                 "*:size-[46px] *:rounded-none *:border-none",
                 "*:first:!rounded-l-2xl",
                 "*:last:!rounded-r-2xl",
@@ -105,13 +105,13 @@ function MapLayout({
             {hasSearch && (
               <div
                 className={twMerge(
-                  "absolute top-14 left-0 z-5 h-[48px] w-0 p-0 opacity-0 transition-all @sm:top-0 @sm:left-[calc(100%-47px)]",
+                  "absolute top-14 left-0 z-5 w-0 p-0 opacity-0 transition-all @sm:top-0 @sm:left-[calc(100%-47px)]",
                   isSearchOpen ? "w-64 opacity-100" : "",
                 )}
               >
                 <Search
                   className={
-                    "border-grey @container m-0 h-[40px] gap-4 rounded-2xl border p-2 px-4 text-base @sm/main:h-[48px] @sm/main:rounded-l-none @sm/main:rounded-r-2xl"
+                    "border-grey @container m-0 h-[48px] gap-4 rounded-2xl border p-2 px-4 text-base @sm/main:rounded-l-none @sm/main:rounded-r-2xl"
                   }
                   // inputClassName="h-6 text-base"
                   inputContainerClassName="border-none"
