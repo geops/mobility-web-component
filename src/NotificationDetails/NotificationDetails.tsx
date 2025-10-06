@@ -405,7 +405,7 @@ function NotificationDetails({
                   className="mt-4"
                   dangerouslySetInnerHTML={{
                     __html:
-                      textualContent?.description || "Keine Details verfügbar",
+                      textualContent?.description || t("no_details_available"),
                   }}
                 />
                 {!!pubLines?.length && (

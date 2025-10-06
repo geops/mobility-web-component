@@ -18,6 +18,7 @@ const translations = {
     [LAYERS_NAMES.stations]: "Stationen",
     layertree_menu_title: "Ebenen",
     linesnetworkplan: "plan retea linii",
+    no_details_available: "Keine Details verfügbar",
     no_stops_found: "Keine Haltestellen gefunden",
     notifications: "notificari",
     permalink_input_hint:
@@ -50,6 +51,7 @@ const translations = {
     [LAYERS_NAMES.realtime]: "Realtime",
     [LAYERS_NAMES.stations]: "Stations",
     layertree_menu_title: "Layers",
+    no_details_available: "No details available",
     no_stops_found: "No stops found",
     permalink_input_hint:
       "You can also copy the link from the browser address bar.",
@@ -81,6 +83,7 @@ const translations = {
     [LAYERS_NAMES.realtime]: "Temps réel",
     [LAYERS_NAMES.stations]: "Stations",
     layertree_menu_title: "Couches",
+    no_details_available: "Aucun détail disponible",
     no_stops_found: "Aucun arrêt trouvé",
     permalink_input_hint:
       "Vous pouvez aussi copier le lien depuis la barre d'adresse du navigateur.",
@@ -112,6 +115,7 @@ const translations = {
     [LAYERS_NAMES.realtime]: "In tempo reale",
     [LAYERS_NAMES.stations]: "Stazioni",
     layertree_menu_title: "Livelli",
+    no_details_available: "Nessun dettaglio disponibile",
     no_stops_found: "Nessuna fermata trovata",
     permalink_input_hint:
       "Puoi anche copiare il link dalla barra degli indirizzi del browser.",
