@@ -361,6 +361,7 @@ function NotificationDetails({
                     <Warning />
                   </span>
                   <span
+                    className={"*:inline"}
                     dangerouslySetInnerHTML={{
                       __html: textualContent?.summary,
                     }}
