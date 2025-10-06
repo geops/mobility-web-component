@@ -10,6 +10,7 @@ const translations = {
     export_all_region: "Ganze Region exportieren",
     export_format_title: "Format",
     exporting: "Exportieren ...",
+    from_to: "Von {{from}} bis {{to}}",
     geolocation_button_title_off: "Geolokalisierung deaktivieren",
     geolocation_button_title_on: "Geolokalisierung aktivieren",
     [LAYERS_NAMES.linesnetworkplan]: "Liniennetzpläne",

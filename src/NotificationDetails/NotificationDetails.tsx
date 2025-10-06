@@ -390,12 +390,26 @@ function NotificationDetails({
                         key={startTime}
                       >
                         <span>
-                          {`von ${toShortDate(new Date(startTime), !hasDailyTime, !isStartCurrentYear)}`}
-                          {!isEndInfinite &&
-                            ` bis ${toShortDate(new Date(endTime), !hasDailyTime, !isEndCurrentYear)}`}
+                          {t("from_to", {
+                            from: toShortDate(
+                              new Date(startTime),
+                              !hasDailyTime,
+                              !isStartCurrentYear,
+                            ),
+                            to: !isEndInfinite
+                              ? toShortDate(
+                                  new Date(endTime),
+                                  !hasDailyTime,
+                                  !isEndCurrentYear,
+                                )
+                              : undefined,
+                          })}
                         </span>
                         {hasDailyTime && (
-                          <span>{` (täglich von ${dailyStartTime} bis ${dailyEndTime})`}</span>
+                          <span>{` (${t("daily_from_to", {
+                            from: dailyStartTime,
+                            to: dailyEndTime,
+                          })})`}</span>
                         )}
                       </div>
                     );
