@@ -2,6 +2,9 @@ import { LAYERS_NAMES } from "./constants";
 
 const translations = {
   de: {
+    affected_lines: "Betroffene Linien",
+    affected_stops: "Betroffene Haltestellen",
+    all_line_stops: "Alle Haltestellen auf dieser Strecke",
     download: "Herunterladen",
     error: "Fehler",
     export_all_region: "Ganze Region exportieren",
@@ -32,6 +35,9 @@ const translations = {
     zoomout: "Herauszoomen",
   },
   en: {
+    affected_lines: "Affected lines",
+    affected_stops: "Affected stops",
+    all_line_stops: "All stops on this line",
     download: "Download",
     error: "Error",
     export_all_region: "Export entire region",
@@ -60,6 +66,9 @@ const translations = {
     zoomout: "Zoom out",
   },
   fr: {
+    affected_lines: "Lignes affectées",
+    affected_stops: "Arrêts affectés",
+    all_line_stops: "Tous les arrêts sur cette ligne",
     download: "Télécharger",
     error: "Erreur",
     export_all_region: "Exporter toute la région",
@@ -88,6 +97,9 @@ const translations = {
     zoomout: "Dézoomer",
   },
   it: {
+    affected_lines: "Linee interessate",
+    affected_stops: "Fermate interessate",
+    all_line_stops: "Tutte le fermate su questa linea",
     download: "Scarica",
     error: "Errore",
     export_all_region: "Esporta l'intera regione",

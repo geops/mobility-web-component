@@ -411,7 +411,7 @@ function NotificationDetails({
                 {!!pubLines?.length && (
                   <div>
                     <br />
-                    <div className={"font-bold"}>Betroffene Lines:</div>
+                    <div className={"font-bold"}>{t("affected_lines")}:</div>
                     <div className={"flex flex-wrap gap-1 text-sm"}>
                       {pubLines?.map((name) => {
                         return (
@@ -430,7 +430,7 @@ function NotificationDetails({
                 )}
                 <div>
                   <br />
-                  <div className={"font-bold"}>Betroffene Haltestellen:</div>
+                  <div className={"font-bold"}>{t("affected_stops")}:</div>
                   <div className={"flex flex-wrap gap-1 text-sm"}>
                     {stations?.length ? (
                       stations.map((name) => {
@@ -451,7 +451,7 @@ function NotificationDetails({
                           "rounded-md bg-black px-2 py-1 font-bold text-white"
                         }
                       >
-                        Alle Haltestellen auf dieser Strecke
+                        {t("all_line_stops")}
                       </div>
                     )}
                   </div>
