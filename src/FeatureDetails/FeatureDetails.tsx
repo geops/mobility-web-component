@@ -38,9 +38,16 @@ function FeatureDetails({ feature, featuresInfo, layer }: FeatureDetailsProps) {
 
   return (
     <>
-      {feature && layer === realtimeLayer && trainId && <RouteSchedule />}
-      {feature && layer === stationsLayer && tenant && stationId && <Station />}
+      {feature && !!realtimeLayer && layer === realtimeLayer && trainId && (
+        <RouteSchedule />
+      )}
       {feature &&
+        !!stationsLayer &&
+        layer === stationsLayer &&
+        tenant &&
+        stationId && <Station />}
+      {feature &&
+        !!linesNetworkPlanLayer &&
         layer === linesNetworkPlanLayer &&
         featuresInfo?.features?.length && (
           <LinesNetworkPlanDetails
@@ -48,7 +55,7 @@ function FeatureDetails({ feature, featuresInfo, layer }: FeatureDetailsProps) {
             features={featuresInfo?.features || []}
           />
         )}
-      {feature && layer === notificationsLayer && (
+      {feature && !!notificationsLayer && layer === notificationsLayer && (
         <NotificationDetails className={contentClassName} feature={feature} />
       )}
     </>
