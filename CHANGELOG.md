@@ -2,6 +2,58 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.9](https://github.com/geops/mobility-web-component/compare/v0.1.8...v0.1.9) (2025-10-07)
+
+
+### Features
+
+* add conventional pr title workflow ([711af06](https://github.com/geops/mobility-web-component/commit/711af0666a0882050f5e8aa9b5d8bb09c0e7d1c2))
+* add extent and maxextent attribute ([89675e0](https://github.com/geops/mobility-web-component/commit/89675e09cbbfd07e1a0c19accdb6eb226b335392))
+* add layer tree, share, print, and new toolbar ([#26](https://github.com/geops/mobility-web-component/issues/26)) ([475c202](https://github.com/geops/mobility-web-component/commit/475c202b4eceffb8a4fe83b3e12ac01fb3ad2f03))
+* add permalingtemplate attribute ([0c28884](https://github.com/geops/mobility-web-component/commit/0c28884b059b7b56ba7814a689e908440a8b4f7d))
+* add ui components ([69f79a2](https://github.com/geops/mobility-web-component/commit/69f79a269e9bc4057379dbe90f413d7cad64985d))
+* **MapsetLayer:** add parameters to add a mapset layer ([35b9a67](https://github.com/geops/mobility-web-component/commit/35b9a67a2955099707db733170bee83521c0ecb1))
+* **MapsetLayer:** add parameters to add a mapset layer ([0651c0e](https://github.com/geops/mobility-web-component/commit/0651c0e591a8460587dc8a127b4ff96c98a64a19))
+
+
+### Bug Fixes
+
+* activate use of graph bbox parameter ([#25](https://github.com/geops/mobility-web-component/issues/25)) ([56960a1](https://github.com/geops/mobility-web-component/commit/56960a18c672e3ad7a7e76096222d4547a5d5ad2))
+* ad a default visible layers list ([3664a90](https://github.com/geops/mobility-web-component/commit/3664a90188d548e7a10076d58cbae78681ed85de))
+* add extent and maxexten in doc and update deps ([aae94c4](https://github.com/geops/mobility-web-component/commit/aae94c47562b6ae3d797a6d114978c294836cf67))
+* add icons for search ([a7dc19d](https://github.com/geops/mobility-web-component/commit/a7dc19d57be0f2e953e4eaf4444162946a659fac))
+* add more translations ([ea1dff7](https://github.com/geops/mobility-web-component/commit/ea1dff7cc8f905f9a3a1f762fecd06bb2a30b3f7))
+* add more translations ([6d49d2b](https://github.com/geops/mobility-web-component/commit/6d49d2bf9a42b09bb34da71ffbd076f554e522f2))
+* add more translations ([6dfa067](https://github.com/geops/mobility-web-component/commit/6dfa0672face8ed76a1948ea6e9d44d84cb27a6a))
+* add more translations ([9f99968](https://github.com/geops/mobility-web-component/commit/9f9996878006a1ece409fb3ba411a1267ecd9076))
+* add NoRealtimeIcon ([3a4441f](https://github.com/geops/mobility-web-component/commit/3a4441faf8b5c1d508a06c7451411d0370fefc43))
+* add realod attr ([bdcadb8](https://github.com/geops/mobility-web-component/commit/bdcadb840e39ad26a19c8b7025e5c45b2fd7534b))
+* add realod attr ([5946f78](https://github.com/geops/mobility-web-component/commit/5946f78310bf1a7112043cd2708a4c5f456cb85a))
+* add realod attr ([ed1205c](https://github.com/geops/mobility-web-component/commit/ed1205c7865e94377e5cc4880b836c02d0abdcbb))
+* add translations ([d37c94d](https://github.com/geops/mobility-web-component/commit/d37c94dd50078cbb7cb23a744d5f13c822a20369))
+* avoid undefined layer comparaison ([60652b1](https://github.com/geops/mobility-web-component/commit/60652b196c3798e3a9fad049b6a9bade4ad31401))
+* constrain only center when maxextent is defined ([47c3ba8](https://github.com/geops/mobility-web-component/commit/47c3ba8a2c9f48a2fcc3f2d87757ab71aded22a1))
+* display custom html inline ([10cb2ba](https://github.com/geops/mobility-web-component/commit/10cb2bac233a61164662b57e19c20a89825b9f86))
+* display no realtime icon ([5a6c886](https://github.com/geops/mobility-web-component/commit/5a6c88620566134a30a9d224db32c51f8d07929e))
+* do not load all notifications when there is preview notifications ([8716766](https://github.com/geops/mobility-web-component/commit/8716766fdf26a9db04cc2923c899d8aa0dbd0114))
+* fix search css when browser page is zoomed ([60dae1d](https://github.com/geops/mobility-web-component/commit/60dae1dbc0a415cdb401db13b3a3c438652b2f9a))
+* fix tailwindcss 4 variables defs ([c063b72](https://github.com/geops/mobility-web-component/commit/c063b72597ecf4391e34bddf6f0003aeeda4b243))
+* generate better documentation and split code in components to make it more reusable ([#23](https://github.com/geops/mobility-web-component/issues/23)) ([7ee2c3c](https://github.com/geops/mobility-web-component/commit/7ee2c3cbcbc928c77ceb608b83d98d134170be51))
+* handle when selected Feature is a cluster and make overlay bigger ([255caa5](https://github.com/geops/mobility-web-component/commit/255caa5efef33741f566cca0610734135025f9c4))
+* manage boolean attributes ([be816a9](https://github.com/geops/mobility-web-component/commit/be816a9f005a6979af1b0bf02034e9fe1bb22218))
+* memoize onselect callback ([1d7e739](https://github.com/geops/mobility-web-component/commit/1d7e739e08da0d8d2ebb6594f83abdf9a655e658))
+* move up  reading Permalink ([fbf3af4](https://github.com/geops/mobility-web-component/commit/fbf3af4f74e9ed2d16e555024fa80cab486ca5a7))
+* move up  reading Permalink ([978df5b](https://github.com/geops/mobility-web-component/commit/978df5bc88355176f70b560a9e5a2daff9c5a9d2))
+* remove css file ([6ef6b1e](https://github.com/geops/mobility-web-component/commit/6ef6b1eedbf9da3b4cb8dde6564cb3183e9cbd00))
+* remove default value ([0a2e48a](https://github.com/geops/mobility-web-component/commit/0a2e48ad70e6d93e8281fab5eee92e2540bfc9f3))
+* separate map layout from main component adn add lang attributes ([213c252](https://github.com/geops/mobility-web-component/commit/213c2528ab7d2b2910a41d5b55399066e3b145df))
+* set icons size to 24 by default ([eef7342](https://github.com/geops/mobility-web-component/commit/eef734213a4b26d921e20cd8b6296cca0b2606b6))
+* update libs ([641549c](https://github.com/geops/mobility-web-component/commit/641549c7048b7bcc15dd898bff2139fa048d736e))
+* use also default prop when available ([6c0e850](https://github.com/geops/mobility-web-component/commit/6c0e8508a1024abb600d2595bc6d02a22482d81c))
+* use also input.css for components ([1284687](https://github.com/geops/mobility-web-component/commit/128468703b3e1f50b851050870205364f43e5def))
+* use scrollTo instead of scrollIntoView ([f26aa16](https://github.com/geops/mobility-web-component/commit/f26aa16cfa513f445f40aac46ba0e020702c3c61))
+* use smaller font for copyrights ([93cea58](https://github.com/geops/mobility-web-component/commit/93cea589d03b9e0232527df8ac48abf2a305bfae))
+
 ### [0.1.8](https://github.com/geops/mobility-web-component/compare/v0.1.7...v0.1.8) (2024-12-04)
 
 
