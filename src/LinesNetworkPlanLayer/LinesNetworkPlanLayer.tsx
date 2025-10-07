@@ -17,17 +17,14 @@ function LinesNetworkPlanLayer(props: MaplibreStyleLayerOptions) {
     return new MaplibreStyleLayer({
       layersFilter: ({ metadata, source }) => {
         return (
-          metadata?.["geops.filter"] === "lnp" ||
-          metadata?.["general.filter"] === "lnp" ||
-          metadata?.["rvf.filter"] === "netzplan_lines" ||
-          metadata?.["rvf.filter"] === "netzplan_stations" ||
+          metadata?.["geops.filter"]?.startsWith("netzplan") ||
           source === "network_plans"
         );
       },
       maplibreLayer: baseLayer,
       name: LAYERS_NAMES.linesnetworkplan,
       queryRenderedLayersFilter: ({ metadata }) => {
-        return metadata?.["rvf.filter"] === "netzplan_trips_info";
+        return metadata?.["geops.filter"] === "netzplan_trips_info";
       },
       ...(props || {}),
     });
