@@ -185,7 +185,7 @@ where:
     defaultValue: null,
     description: `A template string to read the current browser url. Hash (starting with #) and URL search parameters (starting with ?) are supported.<br/>
      The template supports {{x}}, {{y}}, {{z}} variables.<br/> 
-     Ex: "?x={{x}}&y={{y}}&z={{z}}" or "#map/{{z}}/{{x}}/{{y}}" .`,
+     Ex: "?x={{x}}&y={{y}}&z={{z}}" or "#map/{{x}}/{{y}}/{{z}}" .`,
   },
   print: {
     defaultValue: "true",
