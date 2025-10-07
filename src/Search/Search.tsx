@@ -5,7 +5,9 @@ import StopsSearch from "../StopsSearch";
 import centerOnStation from "../utils/centerOnStation";
 import useMapContext from "../utils/hooks/useMapContext";
 
-function Search() {
+import type { StopsSearchProps } from "../StopsSearch/StopsSearch";
+
+function Search(props: Partial<StopsSearchProps>) {
   const { apikey, map, stopsurl } = useMapContext();
 
   const onSelect = useCallback(
@@ -15,6 +17,13 @@ function Search() {
     [map],
   );
 
-  return <StopsSearch apikey={apikey} onselect={onSelect} url={stopsurl} />;
+  return (
+    <StopsSearch
+      apikey={apikey}
+      onselect={onSelect}
+      url={stopsurl}
+      {...props}
+    />
+  );
 }
 export default memo(Search);

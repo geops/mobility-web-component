@@ -2,10 +2,10 @@ function BarAndRestaurants({ ...props }) {
   return (
     <svg
       fill="currentColor"
-      width="24px"
       height="24px"
-      viewBox="0 -3.84 122.88 122.88"
       version="1.1"
+      viewBox="0 -3.84 122.88 122.88"
+      width="24px"
       xmlns="http://www.w3.org/2000/svg"
       {...props}
     >

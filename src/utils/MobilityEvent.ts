@@ -1,12 +1,10 @@
-import type { MobilityMapProps } from "../MobilityMap/MobilityMap";
-
 export type MobilityEventType =
   | "mwc:attribute"
   | "mwc:stopssearchselect"
   | string;
 
 class MobilityEvent<T> extends Event {
-  data: MobilityMapProps;
+  data: T;
 
   constructor(name: MobilityEventType, data: T, options: EventInit = {}) {
     super(name, { ...options, composed: true });
@@ -14,6 +12,7 @@ class MobilityEvent<T> extends Event {
   }
 
   logImportantData() {
+    // eslint-disable-next-line no-console
     console.log(this.data);
   }
 }

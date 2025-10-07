@@ -1,1 +1,2 @@
-export { default, SearchProps, StationFeature } from "./StopsSearch";
+export { default } from "./StopsSearch";
+export type { StopsFeature, StopsSearchProps } from "./StopsSearch";

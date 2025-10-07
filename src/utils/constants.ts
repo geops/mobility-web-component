@@ -1,5 +1,20 @@
 export const LAYER_NAME_REALTIME = "realtime";
 export const LAYER_NAME_STATIONS = "stations";
-export const LAYER_NAME_NOTIFICATION = "notification";
+export const LAYER_NAME_NOTIFICATIONS = "notifications";
+export const LAYER_NAME_LINESNETWORKPLAN = "linesnetworkplan";
 
-export const DEFAULT_QUERYABLE_LAYERS = "stations,notification,realtime";
+export const LAYERS_NAMES = {
+  linesnetworkplan: LAYER_NAME_LINESNETWORKPLAN,
+  notifications: LAYER_NAME_NOTIFICATIONS,
+  realtime: LAYER_NAME_REALTIME,
+  stations: LAYER_NAME_STATIONS,
+};
+
+export const DEFAULT_VISIBLE_LAYERS = Object.values(LAYERS_NAMES);
+
+export const DEFAULT_QUERYABLE_LAYERS = Object.values(LAYERS_NAMES);
+
+export const LAYER_PROP_IS_EXPORTING = "isExporting";
+export const LAYER_PROP_IS_LOADING = "isLoading";
+
+export const MAX_EXTENT = undefined;

@@ -25,7 +25,7 @@ function RouteScheduleFooter() {
 
   return (
     <>
-      <div className="m-4 mb-0 flex flex-wrap text-sm text-gray-500">
+      <div className="m-4 mb-0 flex flex-wrap text-xs text-gray-500">
         {stopSequence.operator &&
           defaultRenderLink(stopSequence.operator, stopSequence.operatorUrl)}
         {stopSequence.operator && stopSequence.publisher && <span> - </span>}

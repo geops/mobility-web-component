@@ -1,1 +1,1 @@
-export { default } from "./ScrollableHandler";
+export { default, ScrollableHandlerProps } from "./ScrollableHandler";

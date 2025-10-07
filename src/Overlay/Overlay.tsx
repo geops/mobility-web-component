@@ -1,15 +1,22 @@
+import { twMerge } from "tailwind-merge";
+
 import ScrollableHandler from "../ScrollableHandler";
 
-import type { JSX, PreactDOMAttributes } from "preact";
+import type { HTMLAttributes, PreactDOMAttributes } from "preact";
 
 import type { ScrollableHandlerProps } from "../ScrollableHandler";
 
 export type OverlayProps = {
+  className;
   ScrollableHandlerProps?: ScrollableHandlerProps;
-} & JSX.HTMLAttributes<HTMLDivElement> &
+} & HTMLAttributes<HTMLDivElement> &
   PreactDOMAttributes;
 
-function Overlay({ children, ScrollableHandlerProps = {} }: OverlayProps) {
+function Overlay({
+  children,
+  className,
+  ScrollableHandlerProps = {},
+}: OverlayProps) {
   let hasChildren = !!children;
   if (Array.isArray(children)) {
     hasChildren =
@@ -25,16 +32,17 @@ function Overlay({ children, ScrollableHandlerProps = {} }: OverlayProps) {
 
   return (
     <div
-      className={`relative z-50 flex flex-col overflow-hidden transition-[min-height,max-height] @lg:transition-[width] ${
-        children
-          ? "max-h-[70%] min-h-[75px] w-full border-t @lg:h-[100%!important] @lg:max-h-full @lg:w-[350px] @lg:border-t-0 @lg:border-r"
-          : "max-h-0 min-h-0 @lg:w-0"
-      }`}
+      className={
+        (twMerge(
+          `pointer-events-auto relative z-50 flex flex-col overflow-hidden bg-white transition-[min-height,max-height] @lg:transition-[width]`,
+        ),
+        className)
+      }
     >
       {hasChildren && (
         <>
           <ScrollableHandler
-            className="absolute inset-0 flex h-[65px] touch-none justify-center @lg:hidden"
+            className="absolute inset-0 flex h-[65px] touch-none justify-center @lg/main:hidden"
             style={{ width: "100%" }}
             {...ScrollableHandlerProps}
           >

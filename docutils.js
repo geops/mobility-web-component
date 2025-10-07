@@ -65,6 +65,8 @@ function generateAttributesTable(
   booleanAttrs = [],
   booleanTrueByDefault = [],
   descriptionByAttr = {},
+  defaultValueByAttr = {},
+  reloadAttrs = [],
 ) {
   let innerHMTL = `<table class="table-auto w-full" >
     <thead>
@@ -78,6 +80,7 @@ function generateAttributesTable(
     <tbody>`;
   innerHMTL += attrs
     .sort()
+    .filter((key) => descriptionByAttr[key])
     .map((key) => {
       const isBoolean = booleanAttrs.includes(key);
       const defaultChecked = booleanTrueByDefault.includes(key)
@@ -102,7 +105,7 @@ function generateAttributesTable(
           class="border"
           name="${key}"
           ${checked ? "checked" : ""}
-          onchange="document.querySelector('${wc.localName}').setAttribute('${key}', this.checked);onAttributeUpdate(document.querySelector('${wc.localName}'),this.name, this.checked);" 
+          onchange="document.querySelector('${wc.localName}').setAttribute('${key}', this.checked);onAttributeUpdate(document.querySelector('${wc.localName}'),this.name, this.checked, '${reloadAttrs.join(",")}');"
           />`
           : `
         <input
@@ -110,8 +113,9 @@ function generateAttributesTable(
           class="border"
           name="${key}"
           value="${wc.getAttribute(key) || ""}" 
+          placeholder="${defaultValueByAttr[key] || ""}"
           />
-        <button class="border p-2 bg-black hover:bg-gray-700 text-white" onclick="document.querySelector('${wc.localName}').setAttribute('${key}', this.previousElementSibling.value);onAttributeUpdate(document.querySelector('${wc.localName}'),this.previousElementSibling.name, this.previousElementSibling.value);">Update</button>`
+        <button class="border p-2 bg-black hover:bg-gray-700 text-white" onclick="document.querySelector('${wc.localName}').setAttribute('${key}', this.previousElementSibling.value);onAttributeUpdate(document.querySelector('${wc.localName}'),this.previousElementSibling.name, this.previousElementSibling.value, '${reloadAttrs.join(",")}');">Update</button>`
       }
       </div>
       ${descriptionByAttr[key] ? `<div class="pt-2">${descriptionByAttr[key]}</div>` : ``}
@@ -148,7 +152,12 @@ function generateCodeText(
         (attributeValue === "true" && inputValue === true) ||
         (attributeValue === "false" && inputValue === false))
     ) {
-      codeText += `\n\t${[key, '"' + wc.getAttribute(key) + '"'].join("=")}`;
+      let separator = '"';
+      const value = wc.getAttribute(key);
+      if (value.includes(separator)) {
+        separator = "'"; // for json stringify value
+      }
+      codeText += `\n\t${[key, separator + value + separator].join("=")}`;
     }
   });
 
@@ -218,9 +227,18 @@ function generateEventsTable(wc, events, descriptionByEvent = {}) {
 }
 
 // Update url on attributes update via inputs
-function onAttributeUpdate(wc, key, value) {
+function onAttributeUpdate(wc, key, value, reloadAttrs) {
   const params = new URLSearchParams(window.location.search);
   params.set(key, value);
-  wc.setAttribute(key, value);
-  window.history.replaceState({}, "", `${window.location.pathname}?${params}`);
+  if (reloadAttrs.split(",").includes(key)) {
+    window.history.pushState({}, "", `${window.location.pathname}?${params}`);
+    window.location.reload();
+  } else {
+    wc.setAttribute(key, value);
+    window.history.replaceState(
+      {},
+      "",
+      `${window.location.pathname}?${params}`,
+    );
+  }
 }
