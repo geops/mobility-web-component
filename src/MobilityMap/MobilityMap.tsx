@@ -308,7 +308,7 @@ function MobilityMap(props: MobilityMapProps) {
 }
 
 // We creates a wrapper to inject the default props values from MobilityMapAttributes.
-const defaultProps = {};
+const defaultProps: Partial<MobilityMapProps> = {};
 Object.entries(MobilityMapAttributes).forEach(([key]) => {
   defaultProps[key] = MobilityMapAttributes[key].defaultValue || null;
 });
@@ -316,7 +316,10 @@ Object.entries(MobilityMapAttributes).forEach(([key]) => {
 function MobilityMapWithDefaultProps(props: MobilityMapProps) {
   // Apply initial value from permalink, only x,y,z
   const { permalinktemplate } = props;
-  const propsFromPermalink = useInitialPermalink(permalinktemplate);
+  const { permalinktemplate: defaultPermalinkTemplate } = defaultProps;
+  const propsFromPermalink = useInitialPermalink(
+    permalinktemplate || defaultPermalinkTemplate,
+  );
 
   return <MobilityMap {...defaultProps} {...propsFromPermalink} {...props} />;
 }
