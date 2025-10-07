@@ -321,7 +321,7 @@ function MobilityMapWithDefaultProps(props: MobilityMapProps) {
     permalinktemplate || defaultPermalinkTemplate,
   );
 
-  return <MobilityMap {...defaultProps} {...propsFromPermalink} {...props} />;
+  return <MobilityMap {...defaultProps} {...props} {...propsFromPermalink} />;
 }
 
 export default memo(MobilityMapWithDefaultProps);

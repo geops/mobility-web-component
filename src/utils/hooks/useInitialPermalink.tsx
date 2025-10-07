@@ -1,4 +1,4 @@
-import { useMemo } from "preact/hooks";
+import { useMemo, useRef } from "preact/hooks";
 
 import type { MobilityMapProps } from "../../MobilityMap/MobilityMap";
 
@@ -9,6 +9,8 @@ import type { MobilityMapProps } from "../../MobilityMap/MobilityMap";
 const useInitialPermalink = (
   permalinktemplate: string,
 ): null | Partial<MobilityMapProps> => {
+  const prevProps = useRef<Partial<MobilityMapProps>>(null);
+
   const props = useMemo(() => {
     if (!permalinktemplate) {
       return null;
@@ -70,7 +72,12 @@ const useInitialPermalink = (
     return null;
   }, [permalinktemplate]);
 
-  return props;
+  // We want to apply the value from the url only once
+  if (!prevProps.current && props) {
+    prevProps.current = props;
+    return props;
+  }
+  return {};
 };
 
 export default useInitialPermalink;
