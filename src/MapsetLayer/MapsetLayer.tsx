@@ -13,13 +13,8 @@ function MapsetLayer(props?: Partial<MapsetLayerOptions>) {
     baseLayer,
     map,
     mapsetbbox,
-    mapsetdonotrevert32pxscaling,
     mapsetplanid,
-    mapsettags,
     mapsettenants,
-    mapsettimestamp,
-    mapseturl,
-    mapsetzoom,
     setMapsetLayer,
   } = useMapContext();
 
@@ -29,41 +24,17 @@ function MapsetLayer(props?: Partial<MapsetLayerOptions>) {
     }
     return new MtbMapsetLayer({
       apiKey: apikey,
-      bbox: mapsetbbox
-        ? mapsetbbox.split(",").map((coord) => {
-            return Number(coord.trim());
-          })
-        : undefined,
-      doNotRevert32pxScaling: mapsetdonotrevert32pxscaling === "true",
-      // minZoom: 16,
+      bbox: mapsetbbox?.split(",").map((coord) => {
+        return Number(coord.trim());
+      }),
       name: LAYER_NAME_MAPSET,
       planId: mapsetplanid ?? undefined,
-      tags: mapsettags?.split(",").map((t) => {
-        return t.trim();
-      }),
       tenants: mapsettenants?.split(",").map((t) => {
         return t.trim();
       }),
-      timestamp: mapsettimestamp
-        ? new Date(mapsettimestamp).toISOString()
-        : undefined,
-      url: mapseturl,
-      zoom: mapsetzoom ? Number(mapsetzoom) : null,
       ...(props || {}),
     });
-  }, [
-    apikey,
-    baseLayer,
-    mapsetbbox,
-    mapsetdonotrevert32pxscaling,
-    mapsettags,
-    mapsettenants,
-    mapsettimestamp,
-    mapseturl,
-    mapsetplanid,
-    mapsetzoom,
-    props,
-  ]);
+  }, [apikey, baseLayer, mapsetbbox, mapsettenants, mapsetplanid, props]);
 
   useEffect(() => {
     setMapsetLayer?.(layer);

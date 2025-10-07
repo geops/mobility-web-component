@@ -24,6 +24,7 @@ function LayoutState() {
     mapset,
     mapsetbbox,
     mapsetplanid,
+    mapsettenants,
     notification,
     permalink,
     previewNotifications,
@@ -73,8 +74,10 @@ function LayoutState() {
   }, [notification, previewNotifications, setHasNotification]);
 
   useEffect(() => {
-    setHasMapset(mapset === "true" && (!!mapsetbbox || !!mapsetplanid));
-  }, [mapset, mapsetbbox, mapsetplanid, setHasMapset]);
+    setHasMapset(
+      mapset === "true" && (!!(mapsetbbox && mapsettenants) || !!mapsetplanid),
+    );
+  }, [mapset, mapsetbbox, mapsetplanid, mapsettenants, setHasMapset]);
 
   useEffect(() => {
     setHasGeolocation(geolocation === "true");
