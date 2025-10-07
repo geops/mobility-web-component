@@ -24,7 +24,10 @@ function LinesNetworkPlanLayer(props: MaplibreStyleLayerOptions) {
       maplibreLayer: baseLayer,
       name: LAYERS_NAMES.linesnetworkplan,
       queryRenderedLayersFilter: ({ metadata }) => {
-        return metadata?.["geops.filter"] === "netzplan_trips_info";
+        return (
+          metadata?.["geops.filter"] === "netzplan_trips_info" ||
+          metadata?.["rvf.filter"] === "netzplan_trips_info"
+        );
       },
       ...(props || {}),
     });
