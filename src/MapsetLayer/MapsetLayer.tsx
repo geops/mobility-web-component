@@ -14,6 +14,7 @@ function MapsetLayer(props?: Partial<MapsetLayerOptions>) {
     map,
     mapsetbbox,
     mapsetdonotrevert32pxscaling,
+    mapsetplanid,
     mapsettags,
     mapsettenants,
     mapsettimestamp,
@@ -36,6 +37,7 @@ function MapsetLayer(props?: Partial<MapsetLayerOptions>) {
       doNotRevert32pxScaling: mapsetdonotrevert32pxscaling === "true",
       // minZoom: 16,
       name: LAYER_NAME_MAPSET,
+      planId: mapsetplanid ?? undefined,
       tags: mapsettags?.split(",").map((t) => {
         return t.trim();
       }),
@@ -58,8 +60,9 @@ function MapsetLayer(props?: Partial<MapsetLayerOptions>) {
     mapsettenants,
     mapsettimestamp,
     mapseturl,
-    props,
+    mapsetplanid,
     mapsetzoom,
+    props,
   ]);
 
   useEffect(() => {

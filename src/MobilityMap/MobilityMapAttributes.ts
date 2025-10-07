@@ -35,6 +35,7 @@ export type MobilityMapAttributeName =
   | "mapset"
   | "mapsetbbox"
   | "mapsetdonotrevert32pxscaling"
+  | "mapsetplanid"
   | "mapsettags"
   | "mapsettenants"
   | "mapsettimestamp"
@@ -161,6 +162,9 @@ where:
     description:
       "Do not revert the 32px scaling of the icons (for older openlayers versions).",
     type: "boolean",
+  },
+  mapsetplanid: {
+    description: "The id of the mapset plan to display.",
   },
   mapsettags: {
     description:
