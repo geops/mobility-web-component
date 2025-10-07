@@ -25,6 +25,8 @@ import type {
 
 const TRACKING_ZOOM = 16;
 
+const useGraphs = false;
+
 function RealtimeLayer(props: Partial<RealtimeLayerOptions>) {
   const {
     apikey,
@@ -283,7 +285,7 @@ function RealtimeLayer(props: Partial<RealtimeLayerOptions>) {
     if (!layer || !graphByZoom?.length) {
       return;
     }
-    if (isLnpVisible) {
+    if (useGraphs && isLnpVisible) {
       layer.engine.graphByZoom = graphByZoom;
     } else {
       layer.engine.graphByZoom = [];
