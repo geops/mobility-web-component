@@ -7,6 +7,7 @@ import LayoutState from "../LayoutState";
 import LinesNetworkPlanLayer from "../LinesNetworkPlanLayer";
 import MapDispatchEvents from "../MapDispatchEvents";
 import MapLayout from "../MapLayout";
+import MapsetLayer from "../MapsetLayer";
 import NotificationsLayer from "../NotificationsLayer";
 import Permalink from "../Permalink";
 import RealtimeLayer from "../RealtimeLayer";
@@ -26,11 +27,12 @@ import tailwind from "../style.css";
 // @ts-expect-error bad type definition
 import style from "./index.css";
 
+import type { MapsetLayer as MtbMapsetLayer } from "mobility-toolbox-js/ol";
 import type {
   MaplibreLayer,
   MaplibreStyleLayer,
-  RealtimeLayer as MbtRealtimeLayer,
   MocoLayer,
+  RealtimeLayer as MtbRealtimeLayer,
 } from "mobility-toolbox-js/ol";
 import type {
   LayerGetFeatureInfoResponse,
@@ -58,6 +60,7 @@ function MobilityMap(props: MobilityMapProps) {
   const [hasGeolocation, setHasGeolocation] = useState<boolean>(false);
   const [hasLnp, setHasLnp] = useState<boolean>(false);
   const [hasDetails, setHasDetails] = useState<boolean>(false);
+  const [hasMapset, setHasMapset] = useState<boolean>(false);
   const [hasNotification, setHasNotification] = useState<boolean>(false);
   const [hasPermalink, setHasPermalink] = useState<boolean>(false);
   const [hasPrint, setHasPrint] = useState<boolean>(false);
@@ -75,8 +78,9 @@ function MobilityMap(props: MobilityMapProps) {
   const [stopSequence, setStopSequence] = useState<RealtimeStopSequence>();
   const [stationsLayer, setStationsLayer] = useState<MaplibreStyleLayer>();
   const [station, setStation] = useState<RealtimeStation>();
-  const [realtimeLayer, setRealtimeLayer] = useState<MbtRealtimeLayer>();
+  const [realtimeLayer, setRealtimeLayer] = useState<MtbRealtimeLayer>();
   const [notificationsLayer, setNotificationsLayer] = useState<MocoLayer>();
+  const [mapsetLayer, setMapsetLayer] = useState<MtbMapsetLayer>();
   const [linesNetworkPlanLayer, setLinesNetworkPlanLayer] =
     useState<MaplibreStyleLayer>();
   const [map, setMap] = useState<OlMap>();
@@ -114,6 +118,7 @@ function MobilityMap(props: MobilityMapProps) {
       hasGeolocation,
       hasLayerTree,
       hasLnp,
+      hasMapset,
       hasNotification,
       hasPermalink,
       hasPrint,
@@ -132,6 +137,7 @@ function MobilityMap(props: MobilityMapProps) {
       isTracking,
       linesNetworkPlanLayer,
       map,
+      mapsetLayer,
       notificationsLayer,
       permalinkUrlSearchParams,
       previewNotifications,
@@ -145,6 +151,7 @@ function MobilityMap(props: MobilityMapProps) {
       setHasGeolocation,
       setHasLayerTree,
       setHasLnp,
+      setHasMapset,
       setHasNotification,
       setHasPermalink,
       setHasPrint,
@@ -163,6 +170,7 @@ function MobilityMap(props: MobilityMapProps) {
       setIsTracking,
       setLinesNetworkPlanLayer,
       setMap,
+      setMapsetLayer,
       setNotificationsLayer,
       setPermalinkUrlSearchParams,
       setPreviewNotifications,
@@ -190,6 +198,7 @@ function MobilityMap(props: MobilityMapProps) {
     hasGeolocation,
     hasLayerTree,
     hasLnp,
+    hasMapset,
     hasNotification,
     hasPermalink,
     hasPrint,
@@ -208,6 +217,7 @@ function MobilityMap(props: MobilityMapProps) {
     linesNetworkPlanLayer,
     map,
     notificationsLayer,
+    mapsetLayer,
     permalinkUrlSearchParams,
     previewNotifications,
     realtimeLayer,
@@ -294,6 +304,7 @@ function MobilityMap(props: MobilityMapProps) {
         {hasRealtime && <RealtimeLayer />}
         {hasStations && <StationsLayer />}
         {hasLnp && <LinesNetworkPlanLayer />}
+        {hasMapset && <MapsetLayer />}
 
         {/* Layout  */}
         <div

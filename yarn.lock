@@ -1895,6 +1895,13 @@
     globals "^16.0.0"
     typescript-eslint "^8.32.0"
 
+"@geops/geops-ui@0.3.6":
+  version "0.3.6"
+  resolved "https://registry.yarnpkg.com/@geops/geops-ui/-/geops-ui-0.3.6.tgz#f5e3f661d0db24f279a5ef51c62b3410b98647a7"
+  integrity sha512-xj6U73NoXxfyne9yE13zxP5COfp3V9g/JL/LIB/NJkatWsrqzsCfWJoqwKyw7M4gZ/gPTxuzf7Az2epWyzxVJQ==
+  dependencies:
+    prop-types "^15.7.2"
+
 "@geops/geops-ui@0.3.6-beta.0":
   version "0.3.6-beta.0"
   resolved "https://registry.yarnpkg.com/@geops/geops-ui/-/geops-ui-0.3.6-beta.0.tgz#45b29b765b1257078a9228c27c694d37951a1384"
@@ -8657,12 +8664,13 @@ mlly@^1.7.4:
     pkg-types "^1.3.1"
     ufo "^1.6.1"
 
-mobility-toolbox-js@3.4.0:
-  version "3.4.0"
-  resolved "https://registry.yarnpkg.com/mobility-toolbox-js/-/mobility-toolbox-js-3.4.0.tgz#696b779e1de6c002a9c59f475b01e2b813f7206b"
-  integrity sha512-GkhldmrOIAeBs3RRo3epVbDVS0fDvKN/n2d4pJziwzzBFj/zjUCHIrwVnr7qpSTxDqOq62ZQZMw2gAEaScvHqw==
+mobility-toolbox-js@3.4.3:
+  version "3.4.3"
+  resolved "https://registry.yarnpkg.com/mobility-toolbox-js/-/mobility-toolbox-js-3.4.3.tgz#2597c9822764debfd2be0c302bf4322f8df781a2"
+  integrity sha512-+ELcLM32fAnuntPxBJvB9irvutgmbo+GwaICjuKiTH8R6w7aYPoubRhFrz4OJjTiQXh5QSwfzi48k1GfrhoW1g==
   dependencies:
     "@geoblocks/ol-maplibre-layer" "^1.0.3"
+    "@geops/geops-ui" "0.3.6"
     "@turf/helpers" "7.2.0"
     "@turf/transform-rotate" "7.2.0"
     lodash.debounce "4.0.8"
@@ -9501,7 +9509,7 @@ re-resizable@6.11.2:
   resolved "https://registry.yarnpkg.com/re-resizable/-/re-resizable-6.11.2.tgz#2e8f7119ca3881d5b5aea0ffa014a80e5c1252b3"
   integrity sha512-2xI2P3OHs5qw7K0Ud1aLILK6MQxW50TcO+DetD9eIV58j84TqYeHoZcL9H4GXFXXIh7afhH8mv5iUCXII7OW7A==
 
-"react-dom@npm:@preact/compat@^18.3.1", "react@npm:@preact/compat@^18.3.1":
+"react-dom@npm:@preact/compat@^18.3.1":
   version "18.3.1"
   resolved "https://registry.yarnpkg.com/@preact/compat/-/compat-18.3.1.tgz#9eddfe25eb1002f97a6a88fe4e9bcebe58136fe5"
   integrity sha512-Kog4PSRxtT4COtOXjsuQPV1vMXpUzREQfv+6Dmcy9/rMk0HOPK0HTE9fspFjAmY8R80T/T8gtgmZ68u5bOSngw==
@@ -9560,6 +9568,11 @@ react-transition-group@^4.4.5:
     dom-helpers "^5.0.1"
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
+
+"react@npm:@preact/compat@^18.3.1":
+  version "18.3.1"
+  resolved "https://registry.yarnpkg.com/@preact/compat/-/compat-18.3.1.tgz#9eddfe25eb1002f97a6a88fe4e9bcebe58136fe5"
+  integrity sha512-Kog4PSRxtT4COtOXjsuQPV1vMXpUzREQfv+6Dmcy9/rMk0HOPK0HTE9fspFjAmY8R80T/T8gtgmZ68u5bOSngw==
 
 read-pkg-up@^1.0.1:
   version "1.0.1"
@@ -10320,7 +10333,7 @@ string-length@^5.0.1:
     char-regex "^2.0.0"
     strip-ansi "^7.0.1"
 
-"string-width-cjs@npm:string-width@^4.2.0", string-width@^4.1.0, string-width@^4.2.0, string-width@^4.2.3:
+"string-width-cjs@npm:string-width@^4.2.0":
   version "4.2.3"
   resolved "https://registry.yarnpkg.com/string-width/-/string-width-4.2.3.tgz#269c7117d27b05ad2e536830a8ec895ef9c6d010"
   integrity sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==
@@ -10336,6 +10349,15 @@ string-width@^2.0.0, string-width@^2.1.0:
   dependencies:
     is-fullwidth-code-point "^2.0.0"
     strip-ansi "^4.0.0"
+
+string-width@^4.1.0, string-width@^4.2.0, string-width@^4.2.3:
+  version "4.2.3"
+  resolved "https://registry.yarnpkg.com/string-width/-/string-width-4.2.3.tgz#269c7117d27b05ad2e536830a8ec895ef9c6d010"
+  integrity sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==
+  dependencies:
+    emoji-regex "^8.0.0"
+    is-fullwidth-code-point "^3.0.0"
+    strip-ansi "^6.0.1"
 
 string-width@^5.0.1, string-width@^5.1.2:
   version "5.1.2"
@@ -10452,7 +10474,7 @@ stringify-package@^1.0.1:
   resolved "https://registry.yarnpkg.com/stringify-package/-/stringify-package-1.0.1.tgz#e5aa3643e7f74d0f28628b72f3dad5cecfc3ba85"
   integrity sha512-sa4DUQsYciMP1xhKWGuFM04fB0LG/9DlluZoSVywUMRNvzid6XucHK0/90xGxRoHrAaROrcHK1aPKaijCtSrhg==
 
-"strip-ansi-cjs@npm:strip-ansi@^6.0.1", strip-ansi@^6.0.0, strip-ansi@^6.0.1:
+"strip-ansi-cjs@npm:strip-ansi@^6.0.1":
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-6.0.1.tgz#9e26c63d30f53443e9489495b2105d37b67a85d9"
   integrity sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==
@@ -10472,6 +10494,13 @@ strip-ansi@^4.0.0:
   integrity sha512-4XaJ2zQdCzROZDivEVIDPkcQn8LMFSa8kj8Gxb/Lnwzv9A8VctNZ+lfivC/sV3ivW8ElJTERXZoPBRrZKkNKow==
   dependencies:
     ansi-regex "^3.0.0"
+
+strip-ansi@^6.0.0, strip-ansi@^6.0.1:
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-6.0.1.tgz#9e26c63d30f53443e9489495b2105d37b67a85d9"
+  integrity sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==
+  dependencies:
+    ansi-regex "^5.0.1"
 
 strip-ansi@^7.0.1:
   version "7.1.0"
@@ -11341,7 +11370,16 @@ wordwrap@^1.0.0:
   resolved "https://registry.yarnpkg.com/wordwrap/-/wordwrap-1.0.0.tgz#27584810891456a4171c8d0226441ade90cbcaeb"
   integrity sha512-gvVzJFlPycKc5dZN4yPkP8w7Dc37BtP1yczEneOb4uq34pXZcvrtRTmWV8W+Ume+XCxKgbjM+nevkyFPMybd4Q==
 
-"wrap-ansi-cjs@npm:wrap-ansi@^7.0.0", wrap-ansi@^7.0.0:
+"wrap-ansi-cjs@npm:wrap-ansi@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/wrap-ansi/-/wrap-ansi-7.0.0.tgz#67e145cff510a6a6984bdf1152911d69d2eb9e43"
+  integrity sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==
+  dependencies:
+    ansi-styles "^4.0.0"
+    string-width "^4.1.0"
+    strip-ansi "^6.0.0"
+
+wrap-ansi@^7.0.0:
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/wrap-ansi/-/wrap-ansi-7.0.0.tgz#67e145cff510a6a6984bdf1152911d69d2eb9e43"
   integrity sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==

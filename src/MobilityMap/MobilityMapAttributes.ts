@@ -10,6 +10,7 @@ const geopsApiLink = `<a href="https://developer.geops.io/">geOps API key</a>`;
 const geopsMapsApiLink = `<a href="https://developer.geops.io/apis/maps">geOps Maps API</a>`;
 const geopsStopsApiLink = `<a href="https://developer.geops.io/apis/stops">geOps Stops API</a>`;
 const geopsMocoApiLink = `<a href="https://geops.com/en/solution/disruption-information">geOps MOCO API</a>`;
+const geopsMapsetApiLink = `<a href="https://geops.com/en/solution/mapset">geOps Mapset API</a>`;
 const geopsRealtimeApiLink = `<a href="https://developer.geops.io/apis/realtime">geOps Realtime API</a>`;
 
 export interface WebComponentAttributeDoc {
@@ -31,6 +32,10 @@ export type MobilityMapAttributeName =
   | "layersconfig"
   | "layertree"
   | "lnp"
+  | "mapset"
+  | "mapsetbbox"
+  | "mapsetplanid"
+  | "mapsettenants"
   | "mapsurl"
   | "maxextent"
   | "maxzoom"
@@ -138,6 +143,22 @@ where:
     defaultValue: "false",
     description: `Add the linesnetworkplans layer to the map. This layer will display lines network plans on the map.`,
     type: "boolean",
+  },
+  mapset: {
+    defaultValue: "false",
+    description: `Add the mapset layer to the map. This layer will display mapset plans on the map.`,
+    type: "boolean",
+  },
+  mapsetbbox: {
+    description:
+      "The BBOX to constrain the boundary of the mapset layer in EPSG:3857 coordinates. Mandatory for mapset layer. <br/>Ex: 831634,5933959,940649,6173660 .",
+  },
+  mapsetplanid: {
+    description: "The id of the mapset plan to display.",
+  },
+  mapsettenants: {
+    defaultValue: "geopstest",
+    description: `The ${geopsMapsetApiLink} tenant to get the mapset from.`,
   },
   mapsurl: {
     defaultValue: "https://maps.geops.io",

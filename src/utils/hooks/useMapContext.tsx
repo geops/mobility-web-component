@@ -5,6 +5,7 @@ import { useContext } from "preact/hooks";
 import type {
   MaplibreLayer,
   MaplibreStyleLayer,
+  MapsetLayer,
   MocoLayer,
   RealtimeLayer,
 } from "mobility-toolbox-js/ol";
@@ -28,6 +29,7 @@ export type MapContextType = {
   hasGeolocation: boolean;
   hasLayerTree: boolean;
   hasLnp: boolean;
+  hasMapset: boolean;
   hasNotification: boolean;
   hasPermalink: boolean;
   hasPrint: boolean;
@@ -46,6 +48,7 @@ export type MapContextType = {
   isTracking: boolean;
   linesNetworkPlanLayer: MaplibreStyleLayer;
   map: Map;
+  mapsetLayer?: MapsetLayer;
   notificationsLayer?: MocoLayer;
   permalinkUrlSearchParams: URLSearchParams;
   previewNotifications?: SituationType[];
@@ -61,6 +64,7 @@ export type MapContextType = {
   setHasGeolocation: (hasGeolocation: boolean) => void;
   setHasLayerTree: (hasLayerTree: boolean) => void;
   setHasLnp: (hasLnp: boolean) => void;
+  setHasMapset: (hasMapset: boolean) => void;
   setHasNotification: (hasNotification: boolean) => void;
   setHasPermalink: (hasPermalink: boolean) => void;
   setHasPrint: (hasPrint: boolean) => void;
@@ -79,6 +83,7 @@ export type MapContextType = {
   setIsTracking: (isTracking: boolean) => void;
   setLinesNetworkPlanLayer: (layer?: MaplibreStyleLayer) => void;
   setMap: (map?: Map) => void;
+  setMapsetLayer: (mapsetLayer?: MapsetLayer) => void;
   setNotificationsLayer: (notificationsLayer?: MocoLayer) => void;
   setPermalinkUrlSearchParams: (
     setPermalinkUrlSearchParams: URLSearchParams,
@@ -104,6 +109,7 @@ export const MapContext = createContext<MapContextType>({
   hasGeolocation: false,
   hasLayerTree: false,
   hasLnp: false,
+  hasMapset: false,
   hasNotification: false,
   hasPermalink: false,
   hasPrint: false,
@@ -126,6 +132,7 @@ export const MapContext = createContext<MapContextType>({
   setIsTracking: (isTracking: boolean) => {},
   setLinesNetworkPlanLayer: (linesNetworkPlanLayer: MaplibreStyleLayer) => {},
   setMap: (map?: Map) => {},
+  setMapsetLayer: (mapsetLayer?: MapsetLayer) => {},
   setNotificationsLayer: (notificationsLayer?: MocoLayer) => {},
   setPermalinkUrlSearchParams: (
     permalinkUrlSearchParams: URLSearchParams,
