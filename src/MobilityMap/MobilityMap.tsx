@@ -14,6 +14,7 @@ import SingleClickListener from "../SingleClickListener";
 import StationsLayer from "../StationsLayer";
 import { I18nContext } from "../utils/hooks/useI18n";
 import useInitialLayersVisiblity from "../utils/hooks/useInitialLayersVisiblity";
+import useInitialPermalink from "../utils/hooks/useInitialPermalink";
 import { MapContext } from "../utils/hooks/useMapContext";
 import i18n from "../utils/i18n";
 import WindowMessageListener from "../WindowMessageListener";
@@ -95,7 +96,10 @@ function MobilityMap(props: MobilityMapProps) {
   const [previewNotifications, setPreviewNotifications] =
     useState<SituationType[]>();
 
-  const { lang, layers } = props;
+  const { lang, layers, permalinktemplate } = props;
+
+  // Apply initial value from permalink, only x,y,z
+  useInitialPermalink(map, permalinktemplate);
 
   // Apply initial visibility of layers
   useInitialLayersVisiblity(map, layers);

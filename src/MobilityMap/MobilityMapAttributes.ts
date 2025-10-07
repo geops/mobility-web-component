@@ -41,6 +41,7 @@ export type MobilityMapAttributeName =
   | "notificationtenant"
   | "notificationurl"
   | "permalink"
+  | "permalinktemplate"
   | "print"
   | "queryablelayers"
   | "realtime"
@@ -179,6 +180,12 @@ where:
     description:
       "Update some url parameters x,y,z,layers to the current window location. These parameters are used to store the current state of the map. They will be used on page load to configure the web-component.",
     type: "boolean",
+  },
+  permalinktemplate: {
+    defaultValue: null,
+    description: `A template string to read the current browser url. Hash (starting with #) and URL search parameters (starting with ?) are supported.<br/>
+     The template supports {{x}}, {{y}}, {{z}} variables.<br/> 
+     Ex: "?x={{x}}&y={{y}}&z={{z}}" or "#map/{{z}}/{{x}}/{{y}}" .`,
   },
   print: {
     defaultValue: "true",
