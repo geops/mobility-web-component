@@ -21,6 +21,8 @@ function LayoutState() {
     isShareMenuOpen,
     layertree,
     lnp,
+    mapset,
+    mapsetbbox,
     notification,
     permalink,
     previewNotifications,
@@ -33,6 +35,7 @@ function LayoutState() {
     setHasGeolocation,
     setHasLayerTree,
     setHasLnp,
+    setHasMapset,
     setHasNotification,
     setHasPermalink,
     setHasPrint,
@@ -67,6 +70,10 @@ function LayoutState() {
   useEffect(() => {
     setHasNotification(notification === "true" || !!previewNotifications);
   }, [notification, previewNotifications, setHasNotification]);
+
+  useEffect(() => {
+    setHasMapset(mapset === "true" && !!mapsetbbox);
+  }, [mapset, mapsetbbox, setHasMapset]);
 
   useEffect(() => {
     setHasGeolocation(geolocation === "true");

@@ -10,6 +10,7 @@ const geopsApiLink = `<a href="https://developer.geops.io/">geOps API key</a>`;
 const geopsMapsApiLink = `<a href="https://developer.geops.io/apis/maps">geOps Maps API</a>`;
 const geopsStopsApiLink = `<a href="https://developer.geops.io/apis/stops">geOps Stops API</a>`;
 const geopsMocoApiLink = `<a href="https://geops.com/en/solution/disruption-information">geOps MOCO API</a>`;
+const geopsMapsetApiLink = `<a href="https://geops.com/en/solution/mapset">geOps Mapset API</a>`;
 const geopsRealtimeApiLink = `<a href="https://developer.geops.io/apis/realtime">geOps Realtime API</a>`;
 
 export interface WebComponentAttributeDoc {
@@ -31,6 +32,14 @@ export type MobilityMapAttributeName =
   | "layersconfig"
   | "layertree"
   | "lnp"
+  | "mapset"
+  | "mapsetbbox"
+  | "mapsetdonotrevert32pxscaling"
+  | "mapsettags"
+  | "mapsettenants"
+  | "mapsettimestamp"
+  | "mapseturl"
+  | "mapsetzoom"
   | "mapsurl"
   | "maxextent"
   | "maxzoom"
@@ -137,6 +146,40 @@ where:
     defaultValue: "false",
     description: `Add the linesnetworkplans layer to the map. This layer will display lines network plans on the map.`,
     type: "boolean",
+  },
+  mapset: {
+    defaultValue: "false",
+    description: `Add the mapset layer to the map. This layer will display mapset plans on the map.`,
+    type: "boolean",
+  },
+  mapsetbbox: {
+    description:
+      "The BBOX to constrain the boundary of the mapset layer in EPSG:3857 coordinates. Mandatory for mapset layer. <br/>Ex: 831634,5933959,940649,6173660 .",
+  },
+  mapsetdonotrevert32pxscaling: {
+    defaultValue: "false",
+    description:
+      "Do not revert the 32px scaling of the icons (for older openlayers versions).",
+    type: "boolean",
+  },
+  mapsettags: {
+    description:
+      "Commas separated list of tags to display on the Mapset layer.<br/>Ex: rail,bus,coach,foot,tram,subway,gondola,funicular,ferry,car .",
+  },
+  mapsettenants: {
+    defaultValue: "geopstest",
+    description: `The ${geopsMapsetApiLink} tenant to get the mapset from.`,
+  },
+  mapsettimestamp: {
+    description:
+      "An ISO date string used to display active mapset at this date in the mapset layer. If not defined the current date will be used.<br/>Ex: 2025-08-01T00:00:00Z .",
+  },
+  mapseturl: {
+    defaultValue: "https://editor.mapset.io/api/v1/",
+    description: `The ${geopsMapsetApiLink} url to use.`,
+  },
+  mapsetzoom: {
+    description: "The zoom level of the mapset layer.",
   },
   mapsurl: {
     defaultValue: "https://maps.geops.io",
