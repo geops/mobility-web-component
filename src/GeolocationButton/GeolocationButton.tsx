@@ -6,18 +6,19 @@ import { useEffect, useMemo } from "preact/hooks";
 
 import GeolocationIcon from "../icons/Geolocation";
 import IconButton from "../ui/IconButton";
+import useI18n from "../utils/hooks/useI18n";
 import useMapContext from "../utils/hooks/useMapContext";
 
-import type { JSX, PreactDOMAttributes } from "preact";
+import type { IconButtonProps } from "../ui/IconButton/IconButton";
 
-export type GeolocationButtonProps = JSX.HTMLAttributes<HTMLButtonElement> &
-  PreactDOMAttributes;
+export type GeolocationButtonProps = IconButtonProps;
 
 const TRACKING_ZOOM = 16;
 
 function GeolocationButton({ ...props }: GeolocationButtonProps) {
   const mapContext = useMapContext();
   const { isTracking, map, setIsTracking } = mapContext;
+  const { t } = useI18n();
 
   const geolocation = useMemo(() => {
     return new Geolocation();
@@ -60,6 +61,11 @@ function GeolocationButton({ ...props }: GeolocationButtonProps) {
       onClick={() => {
         setIsTracking(!isTracking);
       }}
+      title={
+        isTracking
+          ? t("geolocation_button_title_off")
+          : t("geolocation_button_title_on")
+      }
       {...props}
     >
       <GeolocationIcon className={isTracking ? "animate-pulse" : ""} />

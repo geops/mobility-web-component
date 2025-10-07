@@ -13,6 +13,7 @@ import { twMerge } from "tailwind-merge";
 import Cancel from "../icons/Cancel";
 import Search from "../icons/Search";
 import IconButton from "../ui/IconButton";
+import Input from "../ui/Input";
 import useI18n from "../utils/hooks/useI18n";
 import MobilityEvent from "../utils/MobilityEvent";
 
@@ -242,13 +243,12 @@ function StopsSearch({
             inputContainerClassName,
           )}
         >
-          <input
+          <Input
             autoComplete="off"
             className={twMerge(
-              "h-8 flex-1 overflow-hidden text-ellipsis outline-0 placeholder:text-zinc-400",
+              "h-8 w-1 grow overflow-hidden text-ellipsis placeholder:text-zinc-400",
               inputClassName,
             )}
-            id="searchfield"
             onChange={(evt) => {
               // @ts-expect-error target is missing
               setQuery(evt.target.value);
@@ -333,7 +333,6 @@ function StopsSearch({
           )}
         </div>
       )}
-      {/* </div> */}
     </>
   );
 }

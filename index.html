@@ -46,7 +46,7 @@
       ></pre>
 
       <geops-mobility
-        class="block h-96 w-full resize overflow-hidden rounded-[16px] border"
+        class="block h-128 w-full resize overflow-hidden rounded-[16px] border"
       ></geops-mobility>
 
       <br />
@@ -81,6 +81,13 @@ document.getElementById('map').addEventListener('mwc:attribute', (event) => {
           type: "boolean",
           defaultValue: "false",
           description: `Load the page in fullscreen mode.`,
+          reload: true,
+        };
+
+        window.MobilityMapAttributes.debug = {
+          type: "boolean",
+          defaultValue: "false",
+          description: "Displays debug information for vehicles when true, use only for debugging.",
           reload: true,
         };
 

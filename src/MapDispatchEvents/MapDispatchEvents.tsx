@@ -64,6 +64,13 @@ function MapDispatchEvents({
     const json = selectedFeature
       ? geojson.writeFeatureObject(selectedFeature)
       : null;
+
+    // When the ol feature is a cluster
+    if (json?.properties?.features?.length > 0) {
+      json.properties.features = json.properties.features.map((feature) => {
+        return geojson.writeFeatureObject(feature);
+      });
+    }
     dispatchEvent(node, "mwc:selectedfeature", json);
   }, [node, selectedFeature]);
 

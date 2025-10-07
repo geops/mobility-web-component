@@ -4,7 +4,7 @@ import {
 } from "mobility-toolbox-js/ol";
 import { unByKey } from "ol/Observable";
 import { memo } from "preact/compat";
-import { useEffect, useMemo } from "preact/hooks";
+import { useEffect, useMemo, useState } from "preact/hooks";
 
 import centerOnVehicle from "../utils/centerOnVehicle";
 import { LAYER_NAME_REALTIME } from "../utils/constants";
@@ -24,7 +24,6 @@ import type {
 } from "mobility-toolbox-js/types";
 
 const TRACKING_ZOOM = 16;
-const useGraphs = true;
 
 function RealtimeLayer(props: Partial<RealtimeLayerOptions>) {
   const {
@@ -32,6 +31,7 @@ function RealtimeLayer(props: Partial<RealtimeLayerOptions>) {
     baseLayer,
     isFollowing,
     isTracking,
+    linesNetworkPlanLayer,
     map,
     mots,
     realtimebboxparameters,
@@ -46,6 +46,9 @@ function RealtimeLayer(props: Partial<RealtimeLayerOptions>) {
     tenant,
     trainId,
   } = useMapContext();
+
+  const [graphByZoom, setGraphByZoom] = useState<(null | string)[]>([]);
+  const [isLnpVisible, setIsLnpVisible] = useState(false);
 
   const layer = useMemo(() => {
     if (!apikey || !realtimeurl) {
@@ -245,24 +248,48 @@ function RealtimeLayer(props: Partial<RealtimeLayerOptions>) {
 
   // Get graphs value
   useEffect(() => {
-    if (!map || !baseLayer || !useGraphs) {
+    if (!map || !baseLayer) {
       return;
     }
     const key = map.once("rendercomplete", () => {
       const metadata = baseLayer.mapLibreMap?.getStyle()?.metadata as {
         graphs: StyleMetadataGraphs;
       };
-      const graphByZoom = [];
+      const tmpGraphByZoom = [];
       for (let i = 0; i < 26; i++) {
-        graphByZoom.push(getGraphByZoom(i, metadata?.graphs));
+        tmpGraphByZoom.push(getGraphByZoom(i, metadata?.graphs));
       }
-      layer.engine.graphByZoom = graphByZoom;
-      layer.engine.setBbox();
+      setGraphByZoom(tmpGraphByZoom);
     });
     return () => {
       unByKey(key);
     };
   }, [map, baseLayer, layer]);
+
+  // Watch lnp visibility
+  useEffect(() => {
+    const key = linesNetworkPlanLayer?.on("change:visible", () => {
+      const visible = linesNetworkPlanLayer.getVisible();
+      setIsLnpVisible(visible);
+    });
+    setIsLnpVisible(linesNetworkPlanLayer?.getVisible() || false);
+    return () => {
+      unByKey(key);
+    };
+  }, [linesNetworkPlanLayer]);
+
+  // Apply graphByZoom only when lnp layer is there and visible
+  useEffect(() => {
+    if (!layer || !graphByZoom?.length) {
+      return;
+    }
+    if (isLnpVisible) {
+      layer.engine.graphByZoom = graphByZoom;
+    } else {
+      layer.engine.graphByZoom = [];
+    }
+    layer.engine.setBbox();
+  }, [isLnpVisible, layer, graphByZoom, linesNetworkPlanLayer]);
 
   return null;
 }

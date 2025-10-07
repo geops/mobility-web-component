@@ -2,12 +2,12 @@ import { MocoLayer } from "mobility-toolbox-js/ol";
 import { memo } from "preact/compat";
 import { useEffect, useMemo } from "preact/hooks";
 
-import { LAYER_NAME_NOTIFICATION } from "../utils/constants";
+import { LAYER_NAME_NOTIFICATIONS } from "../utils/constants";
 import useMapContext from "../utils/hooks/useMapContext";
 
 import type { MocoLayerOptions } from "mobility-toolbox-js/ol";
 
-function NotificationLayer(props?: Partial<MocoLayerOptions>) {
+function NotificationsLayer(props?: Partial<MocoLayerOptions>) {
   const {
     apikey,
     baseLayer,
@@ -16,6 +16,7 @@ function NotificationLayer(props?: Partial<MocoLayerOptions>) {
     notificationtenant,
     notificationurl,
     previewNotifications,
+    setNotificationsLayer,
   } = useMapContext();
 
   const layer = useMemo(() => {
@@ -29,7 +30,7 @@ function NotificationLayer(props?: Partial<MocoLayerOptions>) {
       },
       date: notificationat ? new Date(notificationat) : undefined,
       maplibreLayer: baseLayer,
-      name: LAYER_NAME_NOTIFICATION,
+      name: LAYER_NAME_NOTIFICATIONS,
       situations: previewNotifications,
       tenant: notificationtenant,
       url: notificationurl,
@@ -51,6 +52,10 @@ function NotificationLayer(props?: Partial<MocoLayerOptions>) {
   ]);
 
   useEffect(() => {
+    setNotificationsLayer?.(layer);
+  }, [layer, setNotificationsLayer]);
+
+  useEffect(() => {
     if (!map || !layer) {
       return;
     }
@@ -64,4 +69,4 @@ function NotificationLayer(props?: Partial<MocoLayerOptions>) {
   return null;
 }
 
-export default memo(NotificationLayer);
+export default memo(NotificationsLayer);
