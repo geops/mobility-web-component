@@ -1,15 +1,17 @@
-import { useEffect } from "preact/hooks";
+import { useMemo } from "preact/hooks";
 
-import type { Map } from "ol";
+import type { MobilityMapProps } from "../../MobilityMap/MobilityMap";
 
 /**
- * Apply x,y and z values from the url. This hook should not managed more usecases than that.
+ * Return x,y and z values from the url. This hook should not managed more usecases than that.
  * The application should be responsible to read url parameters then provides these parameters as attributes to the web-component.
  */
-const useInitialPermalink = (map: Map, permalinktemplate: string) => {
-  useEffect(() => {
-    if (!permalinktemplate || !map) {
-      return;
+const useInitialPermalink = (
+  permalinktemplate: string,
+): null | Partial<MobilityMapProps> => {
+  const props = useMemo(() => {
+    if (!permalinktemplate) {
+      return null;
     }
     try {
       let x: null | string,
@@ -49,13 +51,14 @@ const useInitialPermalink = (map: Map, permalinktemplate: string) => {
         y = indexY > -1 ? currIndexes[indexY] : null;
         z = indexZ > -1 ? currIndexes[indexZ] : null;
       }
-
+      const propsFromPermalink: Partial<MobilityMapProps> = {};
       if (x && y) {
-        map?.getView().setCenter([parseFloat(x), parseFloat(y)]);
+        propsFromPermalink.center = `${x},${y}`;
       }
       if (z) {
-        map?.getView().setZoom(parseFloat(z));
+        propsFromPermalink.zoom = z;
       }
+      return propsFromPermalink;
     } catch (error) {
       // eslint-disable-next-line no-console
       console.warn(
@@ -64,7 +67,10 @@ const useInitialPermalink = (map: Map, permalinktemplate: string) => {
         error,
       );
     }
-  }, [permalinktemplate, map]);
+    return null;
+  }, [permalinktemplate]);
+
+  return props;
 };
 
 export default useInitialPermalink;

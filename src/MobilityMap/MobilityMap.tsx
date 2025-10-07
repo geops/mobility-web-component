@@ -96,10 +96,7 @@ function MobilityMap(props: MobilityMapProps) {
   const [previewNotifications, setPreviewNotifications] =
     useState<SituationType[]>();
 
-  const { lang, layers, permalinktemplate } = props;
-
-  // Apply initial value from permalink, only x,y,z
-  useInitialPermalink(map, permalinktemplate);
+  const { lang, layers } = props;
 
   // Apply initial visibility of layers
   useInitialLayersVisiblity(map, layers);
@@ -317,7 +314,11 @@ Object.entries(MobilityMapAttributes).forEach(([key]) => {
 });
 
 function MobilityMapWithDefaultProps(props: MobilityMapProps) {
-  return <MobilityMap {...defaultProps} {...props} />;
+  // Apply initial value from permalink, only x,y,z
+  const { permalinktemplate } = props;
+  const propsFromPermalink = useInitialPermalink(permalinktemplate);
+
+  return <MobilityMap {...defaultProps} {...propsFromPermalink} {...props} />;
 }
 
 export default memo(MobilityMapWithDefaultProps);
