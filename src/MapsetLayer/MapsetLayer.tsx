@@ -19,6 +19,7 @@ function MapsetLayer(props?: Partial<MapsetLayerOptions>) {
     mapsetbbox,
     mapsetplanid,
     mapsettenants,
+    mapseturl,
     setMapsetLayer,
   } = useMapContext();
 
@@ -37,6 +38,7 @@ function MapsetLayer(props?: Partial<MapsetLayerOptions>) {
           "EPSG:3857",
           "EPSG:4326",
         ),
+      mapseturl: mapseturl || undefined,
       name: LAYER_NAME_MAPSET,
       planId: mapsetplanid ?? undefined,
       tenants: mapsettenants?.split(",").map((t) => {
@@ -45,7 +47,16 @@ function MapsetLayer(props?: Partial<MapsetLayerOptions>) {
       zoom: map.getView().getZoom(),
       ...(props || {}),
     });
-  }, [apikey, baseLayer, map, mapsetbbox, mapsettenants, mapsetplanid, props]);
+  }, [
+    apikey,
+    baseLayer,
+    map,
+    mapsetbbox,
+    mapsettenants,
+    mapsetplanid,
+    mapseturl,
+    props,
+  ]);
 
   useEffect(() => {
     setMapsetLayer?.(layer);

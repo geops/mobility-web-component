@@ -36,6 +36,7 @@ export type MobilityMapAttributeName =
   | "mapsetbbox"
   | "mapsetplanid"
   | "mapsettenants"
+  | "mapseturl"
   | "mapsurl"
   | "maxextent"
   | "maxzoom"
@@ -159,6 +160,10 @@ where:
   mapsettenants: {
     defaultValue: "geopstest",
     description: `The ${geopsMapsetApiLink} tenant to get the mapset from.`,
+  },
+  mapseturl: {
+    defaultValue: "https://editor.mapset.io/api/v1",
+    description: `The ${geopsMapsetApiLink} url to use.`,
   },
   mapsurl: {
     defaultValue: "https://maps.geops.io",
