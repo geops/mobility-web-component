@@ -21,6 +21,15 @@ export const DEFAULT_QUERYABLE_LAYERS = Object.values([
   LAYER_NAME_REALTIME,
 ]);
 
+// Order of the first level
+export const LAYER_TREE_ORDER = [
+  LAYER_NAME_REALTIME,
+  LAYER_NAME_STATIONS,
+  LAYER_NAME_LINESNETWORKPLAN,
+  LAYER_NAME_MAPSET,
+  LAYER_NAME_NOTIFICATIONS,
+];
+
 export const LAYER_PROP_IS_EXPORTING = "isExporting";
 export const LAYER_PROP_IS_LOADING = "isLoading";
 

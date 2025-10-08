@@ -5,6 +5,7 @@ import RouteIcon from "../RouteIcon";
 import ShadowOverflow from "../ShadowOverflow";
 import useMapContext from "../utils/hooks/useMapContext";
 
+import type { VectorTileSource } from "maplibre-gl";
 import type { RealtimeLine } from "mobility-toolbox-js/types";
 import type { Feature } from "ol";
 import type { PreactDOMAttributes } from "preact";
@@ -66,8 +67,9 @@ function LinesNetworkPlanDetails({
       setLineInfos(cacheLineInfosById);
       setStopInfos(cacheStopInfosById);
     };
-    if (source?.url) {
-      void fetchInfos(source?.url);
+    const url = (source as VectorTileSource)?.url;
+    if (url) {
+      void fetchInfos(url);
     }
     return () => {
       abortController?.abort();

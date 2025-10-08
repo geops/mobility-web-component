@@ -5,6 +5,7 @@ import { memo, useEffect, useMemo, useState } from "preact/compat";
 
 import LayerTree from "../LayerTree";
 import { SelectionType } from "../LayerTree/TreeItem";
+import { LAYER_TREE_ORDER } from "../utils/constants";
 import useLayersConfig from "../utils/hooks/useLayersConfig";
 import useMapContext from "../utils/hooks/useMapContext";
 
@@ -25,7 +26,9 @@ export interface LayerTreeConfig {
   title: string;
 }
 
-export type LayerTreeMenuProps = HTMLAttributes<HTMLDivElement> &
+export type LayerTreeMenuProps = {
+  order: string[];
+} & HTMLAttributes<HTMLDivElement> &
   Partial<LayerTreeProps> &
   PreactDOMAttributes;
 
@@ -58,7 +61,10 @@ const getConfigForLayer = (
   };
 };
 
-function LayerTreeMenu(props: LayerTreeMenuProps) {
+function LayerTreeMenu({
+  order = LAYER_TREE_ORDER,
+  ...props
+}: LayerTreeMenuProps) {
   const { map } = useMapContext();
   const [revision, setRevision] = useState(0);
   const layersConfig = useLayersConfig();
@@ -68,11 +74,21 @@ function LayerTreeMenu(props: LayerTreeMenuProps) {
       map
         ?.getLayers()
         .getArray()
+        .sort((a, b) => {
+          if (
+            order &&
+            order.indexOf(a.get("name")) > order.indexOf(b.get("name"))
+          ) {
+            return 1;
+          } else {
+            return -1;
+          }
+        })
         .map((layer) => {
           return getConfigForLayer(layer, revision, layersConfig);
         }) || [];
     return config;
-  }, [layersConfig, map, revision]);
+  }, [layersConfig, map, order, revision]);
 
   // Force update of config when a layers`s visibility changes progammatically
   useEffect(() => {
