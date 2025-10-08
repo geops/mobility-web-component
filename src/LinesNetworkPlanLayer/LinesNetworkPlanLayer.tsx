@@ -15,19 +15,13 @@ function LinesNetworkPlanLayer(props: MaplibreStyleLayerOptions) {
       return null;
     }
     return new MaplibreStyleLayer({
-      layersFilter: ({ metadata, source }) => {
-        return (
-          metadata?.["geops.filter"]?.startsWith("netzplan") ||
-          source === "network_plans"
-        );
+      layersFilter: ({ metadata }) => {
+        return metadata?.["geops.filter"]?.startsWith("netzplan");
       },
       maplibreLayer: baseLayer,
       name: LAYERS_NAMES.linesnetworkplan,
       queryRenderedLayersFilter: ({ metadata }) => {
-        return (
-          metadata?.["geops.filter"] === "netzplan_trips_info" ||
-          metadata?.["rvf.filter"] === "netzplan_trips_info"
-        );
+        return metadata?.["geops.filter"] === "netzplan_trips_info";
       },
       ...(props || {}),
     });
