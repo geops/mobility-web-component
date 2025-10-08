@@ -79,7 +79,7 @@ function MapsetLayer(props?: Partial<MapsetLayerOptions>) {
       return;
     }
     const handleMoveEnd = () => {
-      if (mapsetplanid) {
+      if (mapsetplanid || !layer.get("visible")) {
         return;
       }
       clearTimeout(moveEndTimeout);
@@ -94,13 +94,15 @@ function MapsetLayer(props?: Partial<MapsetLayerOptions>) {
       }, 100);
     };
 
-    let listeners = [];
-    if (!mapsetplanid) {
-      listeners = [
-        view.on("change:center", handleMoveEnd),
-        view.on("change:resolution", handleMoveEnd),
-      ];
-    }
+    const listeners = [
+      layer.on("change:visible", () => {
+        if (layer.get("visible")) {
+          handleMoveEnd();
+        }
+      }),
+      view.on("change:center", handleMoveEnd),
+      view.on("change:resolution", handleMoveEnd),
+    ];
 
     return () => {
       clearTimeout(moveEndTimeout);
