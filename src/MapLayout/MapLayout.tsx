@@ -78,11 +78,11 @@ function MapLayout({
         )}
       </Map>
 
-      <div className="pointer-events-none absolute top-2 bottom-2 left-2 z-10 flex flex-col gap-2 *:pointer-events-auto">
+      <div className="pointer-events-none absolute top-2 bottom-2 left-2 z-10 flex flex-col gap-2">
         {hasToolbar && (
           <div
             className={
-              "relative z-10 w-fit rounded-2xl bg-black/10 p-0 backdrop-blur-sm"
+              "pointer-events-none relative z-10 w-fit rounded-2xl bg-black/10 p-0 backdrop-blur-sm *:pointer-events-auto"
             }
           >
             <div
