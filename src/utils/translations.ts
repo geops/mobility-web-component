@@ -1,6 +1,9 @@
 import { LAYERS_NAMES } from "./constants";
 
-const translations = {
+export type Locale = "de" | "en" | "fr" | "it";
+export type Translations = Record<Locale, Record<string, string>>;
+
+const translations: Translations = {
   de: {
     affected_lines: "Betroffene Linien",
     affected_stops: "Betroffene Haltestellen",

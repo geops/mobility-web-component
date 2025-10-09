@@ -4,6 +4,8 @@ import { Map } from "ol";
 import { getBottomRight, getTopLeft } from "ol/extent";
 import View from "ol/View";
 
+import { EXPORT_PREFIX } from "./constants";
+
 import type { jsPDFOptions } from "jspdf";
 import type { Coordinate } from "ol/coordinate";
 import type { Extent } from "ol/extent";
@@ -654,7 +656,7 @@ async function exportPdf(
       doc.addImage(canvas, "JPEG", 0, 0, sizePt[0], sizePt[1]);
 
       // Download the pdf
-      doc.save(`rvf-${new Date().toISOString().slice(0, 10)}.pdf`);
+      doc.save(`${EXPORT_PREFIX}-${new Date().toISOString().slice(0, 10)}.pdf`);
     } catch (error) {
       console.error(error);
       return false;

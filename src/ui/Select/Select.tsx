@@ -2,12 +2,12 @@ import ArrowDown from "../../icons/ArrowDown";
 
 import type { HTMLAttributes, PreactDOMAttributes } from "preact";
 
-export type RvfSelectProps = {
+export type SelectProps = {
   className?: string;
 } & HTMLAttributes<HTMLSelectElement> &
   PreactDOMAttributes;
 
-function Select({ children, className, onChange }: RvfSelectProps) {
+function Select({ children, className, onChange }: SelectProps) {
   return (
     <div className="text-grey relative flex items-center">
       <select

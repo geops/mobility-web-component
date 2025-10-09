@@ -25,7 +25,7 @@ function RouteScheduleFooter() {
 
   return (
     <>
-      <div className="m-4 mb-0 flex flex-wrap text-xs text-gray-500">
+      <div className="m-4 mb-0 flex flex-wrap text-[10px] text-gray-500">
         {stopSequence.operator &&
           defaultRenderLink(stopSequence.operator, stopSequence.operatorUrl)}
         {stopSequence.operator && stopSequence.publisher && <span> - </span>}
@@ -36,7 +36,6 @@ function RouteScheduleFooter() {
           defaultRenderLink(stopSequence.license, stopSequence.licenseUrl)}
         {stopSequence.license && ")"}
       </div>
-      <div className="pointer-events-none sticky bottom-0 h-8 w-full bg-gradient-to-b from-transparent to-white" />
     </>
   );
 }

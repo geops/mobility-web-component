@@ -130,7 +130,7 @@ function LinesNetworkPlanDetails({
     return byLineId;
   }, [features]);
 
-  if (!features?.length || !lineInfos) {
+  if (!features?.length) {
     return null;
   }
 

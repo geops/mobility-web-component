@@ -5,6 +5,7 @@ import BaseLayer from "../BaseLayer";
 import FeaturesInfosListener from "../FeaturesInfosListener";
 import LayoutState from "../LayoutState";
 import LinesNetworkPlanLayer from "../LinesNetworkPlanLayer";
+import LinesNetworkPlanLayerHighlight from "../LinesNetworkPlanLayerHighlight";
 import MapDispatchEvents from "../MapDispatchEvents";
 import MapLayout from "../MapLayout";
 import MapsetLayer from "../MapsetLayer";
@@ -233,7 +234,6 @@ function MobilityMap(props: MobilityMapProps) {
   useEffect(() => {
     i18n.locale(lang);
   }, [lang]);
-
   return (
     <I18nContext.Provider value={i18n}>
       {/* There is a bug in tailwindcss@4 , variables are not imported in the shadow dom
@@ -304,6 +304,7 @@ function MobilityMap(props: MobilityMapProps) {
         {hasRealtime && <RealtimeLayer />}
         {hasStations && <StationsLayer />}
         {hasLnp && <LinesNetworkPlanLayer />}
+        {hasLnp && <LinesNetworkPlanLayerHighlight />}
         {hasMapset && <MapsetLayer />}
 
         {/* Layout  */}

@@ -6,7 +6,8 @@ import IconButton from "../ui/IconButton";
 
 import type { HTMLAttributes, PreactDOMAttributes } from "preact";
 
-export type RvfOverlayHeaderProps = {
+export type OverlayFooterProps = {
+  className?: string;
   onClose?: () => void;
   title?: React.ReactNode;
 } & HTMLAttributes<HTMLDivElement> &
@@ -18,7 +19,7 @@ function OverlayFooter({
   onClose,
   title,
   ...props
-}: RvfOverlayHeaderProps) {
+}: OverlayFooterProps) {
   return (
     <div
       {...props}

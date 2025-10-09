@@ -6,7 +6,7 @@ import ArrowUp from "../../icons/ArrowUp";
 import minusGrey from "../../icons/Minus/minus.svg";
 import Checkbox from "../../ui/Checkbox";
 import useI18n from "../../utils/hooks/useI18n";
-// import RvfRadioButton from "../../RvfRadioButton";
+// import RadioButton from "../../RadioButton";
 import { LayersTreeDispatchContext } from "../layersTreeContext";
 
 import type BaseLayer from "ol/layer/Base";
@@ -112,7 +112,7 @@ function TreeItem({
     <>
       <div className={twMerge("flex items-center gap-2 py-2", className)}>
         {selectionType === SelectionType.RADIO ? null : (
-          // <RvfRadioButton
+          // <RadioButton
           //   checked={isControlChecked}
           //   id={inputId}
           //   onChange={handleSelectionChange}

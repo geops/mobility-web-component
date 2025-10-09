@@ -5,12 +5,12 @@ import ok from "../../icons/Ok/ok-grey.svg";
 
 import type { InputHTMLAttributes } from "preact";
 
-export type RvfCheckboxProps = {
+export type CheckboxProps = {
   checkedIconUrl?: string;
   className?: string;
 } & InputHTMLAttributes;
 
-function Checkbox({ className, ...props }: RvfCheckboxProps) {
+function Checkbox({ className, ...props }: CheckboxProps) {
   const checkedIconUrl = props.checkedIconUrl || ok;
   return (
     <input
