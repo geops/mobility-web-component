@@ -24,7 +24,6 @@ function WindowMessageListener({ eventNode }: { eventNode: HTMLElement }) {
   // Listen to parent window message events
   useEffect(() => {
     const onMessage = (event) => {
-      console.log("WindowMessageListener onMessage", event);
       if (event.data.situations) {
         setPreviewNotifications(event.data.situations);
       }

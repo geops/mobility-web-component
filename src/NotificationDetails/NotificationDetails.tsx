@@ -100,7 +100,7 @@ function NotificationDetails({
     const situationParsed: SituationType = JSON.parse(situation) || {};
     const publicationsArr: PublicationType[] =
       situationParsed?.publications || [];
-    console.log(situationParsed);
+
     // Find the current publication(s) at the current date
     publicationsToDisplay =
       publicationsArr?.filter(({ publicationWindows }) => {
@@ -156,7 +156,6 @@ function NotificationDetails({
             if (!textualContent?.summary) {
               textualContent = textualContentMultilingual?.de;
             }
-            console.log(textualContentMultilingual);
 
             const pubLines =
               publicationLines?.flatMap((publication) => {
