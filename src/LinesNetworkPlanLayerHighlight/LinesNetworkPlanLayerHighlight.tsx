@@ -35,6 +35,9 @@ function LinesNetworkPlanLayerHighlight(props: MaplibreStyleLayerOptions) {
   }, [map, layer]);
 
   useEffect(() => {
+    const styleLayer = baseLayer?.mapLibreMap?.getLayer(
+      "netzplan_highlight_trip",
+    );
     if (!layer || !featuresInfos || !linesNetworkPlanLayer) {
       return;
     }
@@ -55,9 +58,6 @@ function LinesNetworkPlanLayerHighlight(props: MaplibreStyleLayerOptions) {
       ),
     ];
     try {
-      const styleLayer = baseLayer?.mapLibreMap?.getLayer(
-        "netzplan_highlight_trip",
-      );
       if (styleLayer) {
         baseLayer?.mapLibreMap?.setFilter(styleLayer.id, [
           "match",
@@ -71,6 +71,18 @@ function LinesNetworkPlanLayerHighlight(props: MaplibreStyleLayerOptions) {
       // eslint-disable-next-line no-console
       console.error("Error setting filter for highlight layer", e);
     }
+    return () => {
+      layer?.setVisible(false);
+      if (styleLayer) {
+        baseLayer?.mapLibreMap?.setFilter(styleLayer.id, [
+          "match",
+          ["get", "id"],
+          [0],
+          true,
+          false,
+        ]);
+      }
+    };
   }, [baseLayer?.mapLibreMap, featuresInfos, layer, linesNetworkPlanLayer]);
   return null;
 }

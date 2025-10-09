@@ -15,7 +15,7 @@ function OverlayDetails() {
     featuresInfos,
     realtimeLayer,
     selectedFeature,
-    setSelectedFeature,
+    setFeaturesInfos,
     setStationId,
     setTrainId,
     stationId,
@@ -48,7 +48,7 @@ function OverlayDetails() {
         feature={selectedFeature}
         layer={layer}
         onClose={() => {
-          setSelectedFeature(null);
+          setFeaturesInfos(null);
           setTrainId(null);
           setStationId(null);
         }}
