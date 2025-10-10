@@ -1,4 +1,97 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+function onLoad(wc, attributes, events, pkgSrc) {
+  /* Show private attributes for dev purpose */
+  const showPrivate =
+    new URLSearchParams(window.location.search).get("private") === "true";
+
+  /* Attributes */
+  const attrs = Object.keys(attributes);
+  const booleanAttrs = Object.entries(attributes)
+    .filter(([, attr]) => attr.type === "boolean")
+    .map(([key]) => key);
+  const booleanTrueByDefault = booleanAttrs.filter(
+    (key) => attributes[key].defaultValue === "true",
+  );
+  const reloadAttrs = Object.entries(attributes)
+    .filter(([key, attr]) => !!attr.reload)
+    .map(([key]) => key);
+
+  const descriptionByAttr = Object.entries(attributes)
+    .filter(([key, attr]) => {
+      if (showPrivate) {
+        return true;
+      }
+      return attr.public;
+    })
+    .reduce((acc, [key, attr]) => {
+      acc[key] = attr.description;
+      return acc;
+    }, {});
+
+  const defaultValueByAttr = Object.entries(attributes).reduce(
+    (acc, [key, attr]) => {
+      acc[key] = attr.defaultValue;
+      return acc;
+    },
+    {},
+  );
+
+  /* Events */
+  const evts = Object.keys(events);
+  const descriptionByEvent = Object.entries(events)
+    .filter(([key, attr]) => {
+      if (showPrivate) {
+        return true;
+      }
+      return attr.public;
+    })
+    .reduce((acc, [key, attr]) => {
+      acc[key] = attr.description;
+      return acc;
+    }, {});
+
+  /* Build HTML */
+  const attrsContent = generateAttributesTable(
+    wc,
+    attrs,
+    booleanAttrs,
+    booleanTrueByDefault,
+    descriptionByAttr,
+    defaultValueByAttr,
+    reloadAttrs,
+  );
+  if (attrsContent) {
+    document.querySelector("#attributes").innerHTML = attrsContent;
+  } else {
+    document.querySelector("#attributesDoc").remove();
+  }
+
+  const evtsContent = generateEventsTable(wc, evts, descriptionByEvent);
+  if (evtsContent) {
+    document.querySelector("#events").innerHTML = evtsContent;
+  } else {
+    document.querySelector("#eventsDoc").remove();
+  }
+
+  document.querySelector("#code").innerHTML = generateCodeText(
+    wc,
+    attrs,
+    pkgSrc,
+  );
+  wc.addEventListener("mwc:attribute", (event) => {
+    document.querySelector("#code").innerHTML = generateCodeText(
+      wc,
+      attrs,
+      pkgSrc,
+    );
+  });
+  applyPermalinkParameters(wc);
+  evts.forEach((eventName) => {
+    wc.addEventListener(eventName, (event) => {
+      console.log(`${eventName} event`, event);
+    });
+  });
+}
+
 function applyPermalinkParameters(wc) {
   const params = new URLSearchParams(window.location.search);
 
@@ -68,6 +161,9 @@ function generateAttributesTable(
   defaultValueByAttr = {},
   reloadAttrs = [],
 ) {
+  if (!attrs?.length) {
+    return null;
+  }
   let innerHMTL = `<table class="table-auto w-full" >
     <thead>
       <tr>
@@ -112,8 +208,7 @@ function generateAttributesTable(
           type="text"
           class="border"
           name="${key}"
-          value="${wc.getAttribute(key) || ""}" 
-          placeholder="${defaultValueByAttr[key] || ""}"
+          value="${wc.getAttribute(key) || defaultValueByAttr[key] || ""}" 
           />
         <button class="border p-2 bg-black hover:bg-gray-700 text-white" onclick="document.querySelector('${wc.localName}').setAttribute('${key}', this.previousElementSibling.value);onAttributeUpdate(document.querySelector('${wc.localName}'),this.previousElementSibling.name, this.previousElementSibling.value, '${reloadAttrs.join(",")}');">Update</button>`
       }
@@ -139,7 +234,7 @@ function generateCodeText(
   let codeText = "";
   codeText = `&lt;script\n\ttype="module"\n\tsrc="${pkgSrc}"&gt;
 &lt;/script&gt;
-&lt;${wc.localName}\n\tid="map"\n\tstyle="display:block;width:100%;height:500px;border:1px solid #e5e7eb;border-radius:16px;"`;
+&lt;${wc.localName}${wc.id ? '\n\tid="' + wc.id + '"' : ""}\n\tstyle="display:block;width:100%;height:500px;border:1px solid #e5e7eb;border-radius:16px;"`;
 
   attrs.forEach((key) => {
     const attributeValue = wc.getAttribute(key);
@@ -166,6 +261,9 @@ function generateCodeText(
 
 // Generates a HTML table with all events of a web component
 function generateEventsTable(wc, events, descriptionByEvent = {}) {
+  if (!events?.length) {
+    return null;
+  }
   let innerHMTL = `<table class="table-auto w-full" >
     <thead>
       <tr>

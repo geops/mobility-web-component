@@ -49,6 +49,7 @@ function LayoutState() {
     setIsOverlayOpen,
     setIsSearchOpen,
     setIsShareMenuOpen,
+    setLinesIds,
     setStationId,
     setTrainId,
     share,
@@ -122,6 +123,7 @@ function LayoutState() {
       setStationId(null);
       setTrainId(null);
       setFeaturesInfos(null);
+      setLinesIds(null);
     }
   }, [
     isSearchOpen,
@@ -129,6 +131,7 @@ function LayoutState() {
     setIsExportMenuOpen,
     setIsLayerTreeOpen,
     setIsShareMenuOpen,
+    setLinesIds,
     setStationId,
     setTrainId,
   ]);
@@ -141,6 +144,7 @@ function LayoutState() {
       setStationId(null);
       setTrainId(null);
       setFeaturesInfos(null);
+      setLinesIds(null);
     }
   }, [
     isShareMenuOpen,
@@ -148,6 +152,7 @@ function LayoutState() {
     setIsExportMenuOpen,
     setIsLayerTreeOpen,
     setIsSearchOpen,
+    setLinesIds,
     setStationId,
     setTrainId,
   ]);
@@ -160,6 +165,7 @@ function LayoutState() {
       setFeaturesInfos(null);
       setTrainId(null);
       setStationId(null);
+      setLinesIds(null);
       setIsShareMenuOpen(false);
     }
   }, [
@@ -169,6 +175,7 @@ function LayoutState() {
     setIsLayerTreeOpen,
     setIsSearchOpen,
     setIsShareMenuOpen,
+    setLinesIds,
     setStationId,
     setTrainId,
   ]);
@@ -180,6 +187,7 @@ function LayoutState() {
       setIsSearchOpen(false);
       setFeaturesInfos(null);
       setTrainId(null);
+      setLinesIds(null);
       setIsShareMenuOpen(false);
       setStationId(null);
     }
@@ -190,6 +198,7 @@ function LayoutState() {
     setIsLayerTreeOpen,
     setIsSearchOpen,
     setIsShareMenuOpen,
+    setLinesIds,
     setStationId,
     setTrainId,
   ]);
@@ -223,6 +232,7 @@ function LayoutState() {
       setIsSearchOpen(false);
       setTrainId(null);
       setIsShareMenuOpen(false);
+      setLinesIds(null);
     }
   }, [
     setFeaturesInfos,
@@ -230,6 +240,7 @@ function LayoutState() {
     setIsLayerTreeOpen,
     setIsSearchOpen,
     setIsShareMenuOpen,
+    setLinesIds,
     setTrainId,
     stationId,
   ]);

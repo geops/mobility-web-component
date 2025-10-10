@@ -87,6 +87,8 @@ function MobilityMap(props: MobilityMapProps) {
   const [map, setMap] = useState<OlMap>();
   const [stationId, setStationId] = useState<RealtimeStationId>();
   const [trainId, setTrainId] = useState<RealtimeTrainId>();
+  const [linesIds, setLinesIds] = useState<string[]>();
+
   const [featuresInfos, setFeaturesInfos] = useState<
     LayerGetFeatureInfoResponse[]
   >([]);
@@ -101,7 +103,7 @@ function MobilityMap(props: MobilityMapProps) {
   const [previewNotifications, setPreviewNotifications] =
     useState<SituationType[]>();
 
-  const { lang, layers } = props;
+  const { lang, layers, lines } = props;
 
   // Apply initial visibility of layers
   useInitialLayersVisiblity(map, layers);
@@ -136,6 +138,7 @@ function MobilityMap(props: MobilityMapProps) {
       isSearchOpen,
       isShareMenuOpen,
       isTracking,
+      linesIds,
       linesNetworkPlanLayer,
       map,
       mapsetLayer,
@@ -169,6 +172,7 @@ function MobilityMap(props: MobilityMapProps) {
       setIsSearchOpen,
       setIsShareMenuOpen,
       setIsTracking,
+      setLinesIds,
       setLinesNetworkPlanLayer,
       setMap,
       setMapsetLayer,
@@ -195,7 +199,6 @@ function MobilityMap(props: MobilityMapProps) {
     featuresInfos,
     featuresInfosHovered,
     hasDetails,
-    hasStations,
     hasGeolocation,
     hasLayerTree,
     hasLnp,
@@ -206,6 +209,7 @@ function MobilityMap(props: MobilityMapProps) {
     hasRealtime,
     hasSearch,
     hasShare,
+    hasStations,
     hasToolbar,
     isEmbed,
     isExportMenuOpen,
@@ -215,10 +219,11 @@ function MobilityMap(props: MobilityMapProps) {
     isSearchOpen,
     isShareMenuOpen,
     isTracking,
+    linesIds,
     linesNetworkPlanLayer,
     map,
-    notificationsLayer,
     mapsetLayer,
+    notificationsLayer,
     permalinkUrlSearchParams,
     previewNotifications,
     realtimeLayer,
@@ -234,6 +239,11 @@ function MobilityMap(props: MobilityMapProps) {
   useEffect(() => {
     i18n.locale(lang);
   }, [lang]);
+
+  useEffect(() => {
+    setLinesIds(lines?.split(","));
+  }, [lines]);
+
   return (
     <I18nContext.Provider value={i18n}>
       {/* There is a bug in tailwindcss@4 , variables are not imported in the shadow dom

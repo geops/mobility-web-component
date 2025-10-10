@@ -46,6 +46,7 @@ export type MapContextType = {
   isSearchOpen: boolean;
   isShareMenuOpen: boolean;
   isTracking: boolean;
+  linesIds: string[];
   linesNetworkPlanLayer: MaplibreStyleLayer;
   map: Map;
   mapsetLayer?: MapsetLayer;
@@ -81,6 +82,7 @@ export type MapContextType = {
   setIsSearchOpen: (isSearchOpen: boolean) => void;
   setIsShareMenuOpen: (isShareMenuOpen: boolean) => void;
   setIsTracking: (isTracking: boolean) => void;
+  setLinesIds: (linesIds: string[]) => void;
   setLinesNetworkPlanLayer: (layer?: MaplibreStyleLayer) => void;
   setMap: (map?: Map) => void;
   setMapsetLayer: (mapsetLayer?: MapsetLayer) => void;

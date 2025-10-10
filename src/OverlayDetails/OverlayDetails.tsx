@@ -16,6 +16,7 @@ function OverlayDetails() {
     realtimeLayer,
     selectedFeature,
     setFeaturesInfos,
+    setLinesIds,
     setStationId,
     setTrainId,
     stationId,
@@ -51,6 +52,7 @@ function OverlayDetails() {
           setFeaturesInfos(null);
           setTrainId(null);
           setStationId(null);
+          setLinesIds(null);
         }}
       />
       <FeatureDetails

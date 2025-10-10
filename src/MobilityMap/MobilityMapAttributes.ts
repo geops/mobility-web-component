@@ -32,6 +32,7 @@ export type MobilityMapAttributeName =
   | "layers"
   | "layersconfig"
   | "layertree"
+  | "lines"
   | "lnp"
   | "mapset"
   | "mapsetbbox"
@@ -151,6 +152,10 @@ where:
     description: "Show/hide the layers tree button in the toolbar.",
     public: true,
     type: "boolean",
+  },
+  lines: {
+    description: `A comma separated list of line ids to highlight on the linesnetworkplan layer. The line ids are the original_line_id property of the lines in the network plan.<br/>Ex: S1,RE10,RE1.`,
+    public: false,
   },
   lnp: {
     defaultValue: "false",
