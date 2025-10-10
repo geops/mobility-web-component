@@ -3,6 +3,12 @@ import { twMerge } from "tailwind-merge";
 
 import RouteIcon from "../RouteIcon";
 import ShadowOverflow from "../ShadowOverflow";
+import {
+  LNP_LINE_ID_PROP,
+  LNP_MD_LINES,
+  LNP_MD_STOPS,
+  LNP_SOURCE_ID,
+} from "../utils/constants";
 import useMapContext from "../utils/hooks/useMapContext";
 
 import type { VectorTileSource } from "maplibre-gl";
@@ -33,11 +39,7 @@ interface StopInfo {
   visibility_level: number;
 }
 
-const LNP_SOURCE_ID = "network_plans";
-const LNP_MD_LINES = "geops.lnp.lines";
-const LNP_MD_STOPS = "geops.lnp.stops";
 const RUNS_PROP = "runs";
-const ORIGINAL_LINE_ID_PROP = "original_line_id";
 
 function LinesNetworkPlanDetails({
   className,
@@ -51,7 +53,9 @@ function LinesNetworkPlanDetails({
   const [stopInfosOpenId, setStopInfosOpenId] = useState<string>(null);
 
   const isRunsDisplay = useMemo(() => {
-    return new URLSearchParams(window.location.search).get("runs") === "true";
+    return (
+      new URLSearchParams(window.location.search).get(RUNS_PROP) === "true"
+    );
   }, []);
 
   useEffect(() => {
@@ -63,6 +67,14 @@ function LinesNetworkPlanDetails({
         const data = await response.json();
         cacheLineInfosById = data[LNP_MD_LINES];
         cacheStopInfosById = data[LNP_MD_STOPS];
+        if (!cacheLineInfosById) {
+          // eslint-disable-next-line no-console
+          console.warn("No lines informations found from ", url);
+        }
+        if (!cacheStopInfosById) {
+          // eslint-disable-next-line no-console
+          console.warn("No stops informations found from ", url);
+        }
       }
       setLineInfos(cacheLineInfosById);
       setStopInfos(cacheStopInfosById);
@@ -82,7 +94,7 @@ function LinesNetworkPlanDetails({
     [
       ...new Set(
         features.map((f) => {
-          return f.get(ORIGINAL_LINE_ID_PROP);
+          return f.get(LNP_LINE_ID_PROP);
         }),
       ),
     ]
@@ -99,7 +111,7 @@ function LinesNetworkPlanDetails({
 
         const runs = features
           .filter((f) => {
-            return f.get(ORIGINAL_LINE_ID_PROP) === id;
+            return f.get(LNP_LINE_ID_PROP) === id;
           })
           .reduce((acc, featuree) => {
             return acc + featuree.get(RUNS_PROP);
@@ -117,12 +129,13 @@ function LinesNetworkPlanDetails({
   const stopInfoIdsByLineId: Record<string, string[]> = useMemo(() => {
     const byLineId = {};
     features.forEach((f) => {
-      const lineId = f.get(ORIGINAL_LINE_ID_PROP);
+      const lineId = f.get(LNP_LINE_ID_PROP);
       if (lineId && !byLineId[lineId] && f.get("stop_ids")) {
         try {
           byLineId[lineId] = JSON.parse(f.get("stop_ids"));
         } catch (e) {
-          console.log(e);
+          // eslint-disable-next-line no-console
+          console.warn("Impossible to parse stop_ids", e);
         }
       }
     });
@@ -139,8 +152,8 @@ function LinesNetworkPlanDetails({
       <div className="space-y-4">
         {Object.entries(lineInfosByOperator)
           .sort(([operatorNameA], [operatorNameB]) => {
-            return lineInfosByOperator[operatorNameA].runs <
-              lineInfosByOperator[operatorNameB].runs
+            return lineInfosByOperator[operatorNameA][RUNS_PROP] <
+              lineInfosByOperator[operatorNameB][RUNS_PROP]
               ? 1
               : -1;
           })
@@ -164,7 +177,7 @@ function LinesNetworkPlanDetails({
                         short_name: shortName,
                         text_color: textColor,
                       } = lineInfo;
-                      let longName = long_name;
+                      let longName = long_name || shortName;
 
                       let stops = null;
                       //stopInfoIdsByLineId?.[id] || null;
@@ -210,7 +223,9 @@ function LinesNetworkPlanDetails({
                           key={shortName}
                         >
                           <div
-                            className={"flex justify-between gap-2"}
+                            className={
+                              "flex items-center justify-between gap-2"
+                            }
                             // onClick={() => {
                             //   setStopInfosOpenId(stopInfosOpenId === id ? null : id);
                             // }}
@@ -219,11 +234,7 @@ function LinesNetworkPlanDetails({
                               <RouteIcon line={line}></RouteIcon>
                             </div>
                             {!!longName && (
-                              <div
-                                className={
-                                  "flex-1 text-left *:before:content-['_–'] *:first:font-semibold *:first:before:!content-[_p] *:last:font-semibold *:last:before:!content-[_p]"
-                                }
-                              >
+                              <div className={"flex-1 text-left"}>
                                 {longName.split("-").map((name) => {
                                   return <div key={name}>{name}</div>;
                                 })}

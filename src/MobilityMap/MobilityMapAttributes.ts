@@ -16,6 +16,7 @@ const geopsRealtimeApiLink = `<a href="https://developer.geops.io/apis/realtime"
 export interface WebComponentAttributeDoc {
   defaultValue?: string;
   description: string;
+  public?: boolean;
   type?: "boolean" | undefined;
 }
 
@@ -69,45 +70,54 @@ export type MobilityMapAttributes = Record<
 const attrs: MobilityMapAttributes = {
   apikey: {
     description: `Your ${geopsApiLink}`,
+    public: true,
   },
   baselayer: {
     defaultValue: "travic_v2",
     description: `The style's name from the ${geopsMapsApiLink}. <br/>Ex: base_dark_v2, base_bright_v2, ...`,
+    public: true,
   },
   center: {
     defaultValue: "831634,5933959",
     description:
       "The center of the map in EPSG:3857 coordinates.<br/>Parameter required if extent is not set.",
+    public: true,
   },
   details: {
     defaultValue: "true",
     description:
       "When a feature of a queryable layer is clicked, it displays informations about it.",
+    public: true,
     type: "boolean",
   },
   embed: {
     defaultValue: "false",
     description:
       "Toggle the embedded navigation mode.<br/>In this mode zooming with mouse wheel is deactivated and, on touch device, you can only navigate with two finger, a warning message is displayed to warn the user.",
+    public: true,
     type: "boolean",
   },
   extent: {
     description:
       "The map's extent in EPSG:3857 coordinates.<br/>Ex: 831634,5933959,940649,6173660 .<br/>Parameter required if center and zoom are not set.",
+    public: true,
   },
   geolocation: {
     defaultValue: "true",
     description: "Toggle the display of the geolocation button or not.",
+    public: true,
     type: "boolean",
   },
   lang: {
     defaultValue: "en",
     description:
       "The language to use for the map. Supported languages are : de, en, fr, it.",
+    public: true,
   },
   layers: {
     defaultValue: DEFAULT_VISIBLE_LAYERS.toString(),
     description: `A comma separated list of layers's name to make visible on load, others are hidden. If empty, all layers will be hidden except the baselayer.<br/>Layers available are ${Object.values(LAYERS_NAMES).join(", ")}.`,
+    public: true,
   },
   layersconfig: {
     description: `A JSON string to configure the layers and other components associated to it.<br/>
@@ -134,77 +144,95 @@ where:
     </ul>
   <li><i>title</i> is the title of the layer used in the details view header and in the layer tree, if not defined the layer name will be used.</li>
 </ul>`,
+    public: true,
   },
   layertree: {
     defaultValue: "true",
     description: "Show/hide the layers tree button in the toolbar.",
+    public: true,
     type: "boolean",
   },
   lnp: {
     defaultValue: "false",
     description: `Add the linesnetworkplans layer to the map. This layer will display lines network plans on the map.`,
+    public: true,
     type: "boolean",
   },
   mapset: {
     defaultValue: "false",
     description: `Add the mapset layer to the map. This layer will display mapset plans on the map.`,
+    public: true,
     type: "boolean",
   },
   mapsetbbox: {
     description:
       "The BBOX to constrain the boundary of the mapset layer in EPSG:3857 coordinates. Mandatory for mapset layer. <br/>Ex: 831634,5933959,940649,6173660 .",
+    public: true,
   },
   mapsetplanid: {
     description: "The id of the mapset plan to display.",
+    public: true,
   },
   mapsettenants: {
     defaultValue: "geopstest",
     description: `The ${geopsMapsetApiLink} tenant to get the mapset from.`,
+    public: true,
   },
   mapseturl: {
     defaultValue: "https://editor.mapset.io/api/v1",
     description: `The ${geopsMapsetApiLink} url to use.`,
+    public: true,
   },
   mapsurl: {
     defaultValue: "https://maps.geops.io",
     description: `The ${geopsMapsApiLink} url to use.`,
+    public: true,
   },
   maxextent: {
     description:
       "The maximum extent of the map in EPSG:3857 coordinates.<br/>Ex: 831634,5933959,940649,6173660 .",
+    public: true,
   },
   maxzoom: {
     description: "The maximal zoom level of the map.",
+    public: true,
   },
   minzoom: {
     description: "The minimal zoom level of the map.",
+    public: true,
   },
   mots: {
     description:
       "Commas separated list of mots to display on the Realtime layer.<br/>Ex: rail,bus,coach,foot,tram,subway,gondola,funicular,ferry,car .",
+    public: true,
   },
   notification: {
     defaultValue: "false",
     description: `Add the notification layer to the map. This layer will display informations about disruptions on the network. Data comes from
         our ${geopsMocoApiLink} .`,
+    public: true,
     type: "boolean",
   },
   notificationat: {
     description:
       "An ISO date string used to display active notification at this date in the notification layer. If not defined the current date will be used.<br/>Ex: 2025-08-01T00:00:00Z .",
+    public: true,
   },
   notificationtenant: {
     defaultValue: "geopstest",
     description: `The ${geopsMocoApiLink} tenant to get the notification from.`,
+    public: true,
   },
   notificationurl: {
     defaultValue: "https://moco.geops.io/api/v2/",
     description: `The ${geopsMocoApiLink} url to use.`,
+    public: true,
   },
   permalink: {
     defaultValue: "false",
     description:
       "Update some url parameters x,y,z,layers to the current window location. These parameters are used to store the current state of the map. They will be used on page load to configure the web-component.",
+    public: true,
     type: "boolean",
   },
   permalinktemplate: {
@@ -212,58 +240,71 @@ where:
     description: `A template string to read the current browser url. Hash (starting with #) and URL search parameters (starting with ?) are supported.<br/>
      The template supports {{x}}, {{y}}, {{z}} variables.<br/> 
      Ex: "?x={{x}}&y={{y}}&z={{z}}" or "#map/{{x}}/{{y}}/{{z}}" .`,
+    public: true,
   },
   print: {
     defaultValue: "true",
     description: "Show/hide the print button in the toolbar.",
+    public: true,
     type: "boolean",
   },
   queryablelayers: {
     defaultValue: DEFAULT_QUERYABLE_LAYERS.toString(),
     description: `A comma separated list of layers's name. The data of these layers will be queryable by click on the map (see selectedfeature event). If empty, all layers will not be queryable.<br/>
         Layers available are ${Object.values(LAYERS_NAMES).join(", ")}`,
+    public: true,
   },
   realtime: {
     defaultValue: "true",
     description: `Add the realtime layer to the map. Data comes from the ${geopsRealtimeApiLink} .`,
+    public: true,
     type: "boolean",
   },
   realtimebboxparameters: {
     description:
       "A space separated list of parameters to add to the realtime BBOX request to define custom behavior.<br/>Ex: graph=XXX line_tags=XXX.",
+    public: true,
   },
   realtimetenant: {
     description: `The ${geopsRealtimeApiLink} tenant to get the realtime data from.`,
+    public: true,
   },
   realtimeurl: {
     defaultValue: "wss://api.geops.io/tracker-ws/v1/ws",
     description: `The ${geopsRealtimeApiLink} url to use.`,
+    public: true,
   },
   search: {
     defaultValue: "true",
     description: "Toggle the search stops input.",
+    public: true,
     type: "boolean",
   },
   share: {
     defaultValue: "true",
     description: "Show/hide the share button in the toolbar.",
+    public: true,
     type: "boolean",
   },
   stopsurl: {
     defaultValue: "https://api.geops.io/stops/v1/",
     description: `The ${geopsStopsApiLink} to use.`,
+    public: true,
   },
   tenant: {
     description: `The tenant to use by default for all geOps APIs (Stops, Realtime, MOCO ...). Can be override for each API by other XXXXtenant parameters.`,
+    public: true,
   },
   toolbar: {
     defaultValue: "true",
     description: "Show/hide the toolbar on the top left.",
+    public: true,
     type: "boolean",
   },
   zoom: {
     defaultValue: "13",
     description: "The zoom level of the map.",
+    public: true,
   },
 };
 

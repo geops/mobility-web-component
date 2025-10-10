@@ -2,6 +2,11 @@ import { MaplibreStyleLayer } from "mobility-toolbox-js/ol";
 import { memo } from "preact/compat";
 import { useEffect, useMemo } from "preact/hooks";
 
+import {
+  LNP_GEOPS_FILTER_HIGHLIGHT,
+  LNP_LINE_ID_PROP,
+} from "../utils/constants";
+import highlightLinesNetworkPlan from "../utils/highlightLinesNetworkPlan";
 import useMapContext from "../utils/hooks/useMapContext";
 
 import type { MaplibreStyleLayerOptions } from "mobility-toolbox-js/ol/layers/MaplibreStyleLayer";
@@ -16,7 +21,9 @@ function LinesNetworkPlanLayerHighlight(props: MaplibreStyleLayerOptions) {
     }
     return new MaplibreStyleLayer({
       layersFilter: ({ metadata }) => {
-        return metadata?.["geops.filter"]?.startsWith("highlightnetzplan");
+        return metadata?.["geops.filter"]?.startsWith(
+          LNP_GEOPS_FILTER_HIGHLIGHT,
+        );
       },
       maplibreLayer: baseLayer,
       ...(props || {}),
@@ -35,9 +42,6 @@ function LinesNetworkPlanLayerHighlight(props: MaplibreStyleLayerOptions) {
   }, [map, layer]);
 
   useEffect(() => {
-    const styleLayer = baseLayer?.mapLibreMap?.getLayer(
-      "netzplan_highlight_trip",
-    );
     if (!layer || !featuresInfos || !linesNetworkPlanLayer) {
       return;
     }
@@ -45,6 +49,7 @@ function LinesNetworkPlanLayerHighlight(props: MaplibreStyleLayerOptions) {
       featuresInfos.find((featuresInfo) => {
         return featuresInfo.layer === linesNetworkPlanLayer;
       })?.features || [];
+
     if (features?.length) {
       layer.setVisible(true);
     } else {
@@ -53,37 +58,30 @@ function LinesNetworkPlanLayerHighlight(props: MaplibreStyleLayerOptions) {
     const ids = [
       ...new Set(
         (features || []).map((f) => {
-          return f.get("id") as string;
+          return f.get(LNP_LINE_ID_PROP) as string;
         }),
       ),
     ];
+
     try {
-      if (styleLayer) {
-        baseLayer?.mapLibreMap?.setFilter(styleLayer.id, [
-          "match",
-          ["get", "id"],
-          ids?.length ? ids : [0],
-          true,
-          false,
-        ]);
-      }
+      highlightLinesNetworkPlan(ids, baseLayer);
     } catch (e) {
       // eslint-disable-next-line no-console
       console.error("Error setting filter for highlight layer", e);
     }
+
     return () => {
       layer?.setVisible(false);
-      if (styleLayer) {
-        baseLayer?.mapLibreMap?.setFilter(styleLayer.id, [
-          "match",
-          ["get", "id"],
-          [0],
-          true,
-          false,
-        ]);
-      }
+      // Reset the filter
+      highlightLinesNetworkPlan(undefined, baseLayer);
     };
-  }, [baseLayer?.mapLibreMap, featuresInfos, layer, linesNetworkPlanLayer]);
+  }, [
+    baseLayer,
+    baseLayer?.mapLibreMap,
+    featuresInfos,
+    layer,
+    linesNetworkPlanLayer,
+  ]);
   return null;
 }
 

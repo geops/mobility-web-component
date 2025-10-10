@@ -74,68 +74,107 @@ document.getElementById('map').addEventListener('mwc:attribute', (event) => {
       const pkgSrc = "https://www.unpkg.com/@geops/mobility-web-component";
       const wc = document.querySelector("geops-mobility");
 
+
       window.addEventListener("load", () => {
+        const attributes = window.MobilityMapAttributes;
+        const events = window.MobilityMapEvents || {
+          "mwc:selectedfeature": {
+            description:
+              "Event fired when a feature is selected on the map. The event data contains the selected feature in GeoJSON format.",
+            public:true
+            },
+          "mwc:stopssearchselect": {
+            description:
+              "Only when search attribute is 'true'. Event fired when a stop is selected in the stops search results. The event data contains the selected stop.",
+            public:true
+
+            },
+          "mwc:attribute": {
+            description:
+              "Event fired when an web component's attribute is changed. The event data contains the list of all attributes and their values.",
+            public:true
+
+            },
+          "mwc:singleclick": {
+            description:
+              "Event fired when the map is clicked. The event data contains the map coordinates in EPSG:3857 and the pixel coordinates.",
+            public:true
+
+            },
+          "mwc:permalink": {
+            description:
+              "Event fired when the map's state changes. The event data contains the permalink URL search parameters as string.",
+            public:true
+
+            },
+          "mwc:messageready": {
+            description:
+              "Only if the web-component is embedded in an iframe. Message event fired when the web component is ready to receive messages from parent window.",
+
+            public:true
+            },
+        };
+
+
 
         // Add special parameters
-        window.MobilityMapAttributes.fullscreen = {
+        attributes.fullscreen = {
           type: "boolean",
           defaultValue: "false",
           description: `Load the page in fullscreen mode.`,
           reload: true,
+          public:false,
         };
 
-        window.MobilityMapAttributes.debug = {
+        attributes.debug = {
           type: "boolean",
           defaultValue: "false",
           description: "Displays debug information for vehicles when true, use only for debugging.",
           reload: true,
+          public:false,
         };
 
+        /* Show private attributes for dev purpose */
+        const showPrivate = new URLSearchParams(window.location.search).get("private") === "true";
+
         /* Attributes */
-        const attrs = Object.keys(MobilityMapAttributes);
-        const booleanAttrs = Object.entries(MobilityMapAttributes)
+        const attrs = Object.keys(attributes);
+        const booleanAttrs = Object.entries(attributes)
           .filter(([, attr]) => attr.type === "boolean")
           .map(([key]) => key);
         const booleanTrueByDefault = booleanAttrs.filter(
-          (key) => MobilityMapAttributes[key].defaultValue === "true",
+          (key) => attributes[key].defaultValue === "true",
         );
-        const reloadAttrs = Object.entries(MobilityMapAttributes)
+        const reloadAttrs = Object.entries(attributes)
           .filter(([key, attr]) => !!attr.reload)
           .map(([key]) => key);
 
-        const descriptionByAttr = Object.entries(MobilityMapAttributes).reduce((acc, [key, attr]) => {
+        const descriptionByAttr = Object.entries(attributes).filter(([key, attr]) => {
+          if (showPrivate) {
+            return true;
+          }
+          return attr.public;
+        }).reduce((acc, [key, attr]) => {
             acc[key] = attr.description;
             return acc;
           }, {});
 
-        const defaultValueByAttr = Object.entries(MobilityMapAttributes).reduce((acc, [key, attr]) => {
+        const defaultValueByAttr = Object.entries(attributes).reduce((acc, [key, attr]) => {
             acc[key] = attr.defaultValue;
             return acc;
           }, {});
 
         /* Events */
-        const events = [
-          "mwc:selectedfeature",
-          "mwc:stopssearchselect",
-          "mwc:attribute",
-          "mwc:singleclick",
-          "mwc:permalink",
-          "mwc:messageready",
-        ];
-        const descriptionByEvent = {
-          "mwc:selectedfeature":
-            "Event fired when a feature is selected on the map. The event data contains the selected feature in GeoJSON format.",
-          "mwc:stopssearchselect":
-            "Only when search attribute is 'true'. Event fired when a stop is selected in the stops search results. The event data contains the selected stop.",
-          "mwc:attribute":
-            "Event fired when an web component's attribute is changed. The event data contains the list of all attributes and their values.",
-          "mwc:permalink":
-            "Event fired when the map's state changes. The event data contains the permalink URL search parameters as string.",
-          "mwc:messageready":
-            "Only if the web-component is embedded in an iframe. Message event fired when the web component is ready to receive messages from parent window. ",
-          "mwc:singleclick":
-            "Event fired when the map is clicked. The event data contains the map coordinates in EPSG:3857 and the pixel coordinates.",
-        };
+        const evts = Object.keys(events);
+        const descriptionByEvent = Object.entries(events).filter(([key, attr]) => {
+          if (showPrivate) {
+            return true;
+          }
+          return attr.public;
+        }).reduce((acc, [key, attr]) => {
+            acc[key] = attr.description;
+            return acc;
+          }, {});
 
         document.querySelector("#attributes").innerHTML =
           generateAttributesTable(
@@ -149,7 +188,7 @@ document.getElementById('map').addEventListener('mwc:attribute', (event) => {
           );
         document.querySelector("#events").innerHTML = generateEventsTable(
           wc,
-          events,
+          evts,
           descriptionByEvent,
         );
         document.querySelector("#code").innerHTML = generateCodeText(
@@ -165,7 +204,7 @@ document.getElementById('map').addEventListener('mwc:attribute', (event) => {
           );
         });
         applyPermalinkParameters(wc);
-        events.forEach((eventName) => {
+        evts.forEach((eventName) => {
           wc.addEventListener(eventName, (event) => {
             console.log(`${eventName} event`, event);
           });
