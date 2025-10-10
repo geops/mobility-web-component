@@ -12,8 +12,15 @@ import useMapContext from "../utils/hooks/useMapContext";
 import type { MaplibreStyleLayerOptions } from "mobility-toolbox-js/ol/layers/MaplibreStyleLayer";
 
 function LinesNetworkPlanLayerHighlight(props: MaplibreStyleLayerOptions) {
-  const { baseLayer, featuresInfos, linesNetworkPlanLayer, map } =
-    useMapContext();
+  const {
+    baseLayer,
+    featuresInfos,
+    lines,
+    linesIds,
+    linesNetworkPlanLayer,
+    map,
+    setLinesIds,
+  } = useMapContext();
 
   const layer = useMemo(() => {
     if (!baseLayer) {
@@ -42,7 +49,7 @@ function LinesNetworkPlanLayerHighlight(props: MaplibreStyleLayerOptions) {
   }, [map, layer]);
 
   useEffect(() => {
-    if (!layer || !featuresInfos || !linesNetworkPlanLayer) {
+    if (!layer || !featuresInfos?.length || !linesNetworkPlanLayer) {
       return;
     }
     const features =
@@ -50,11 +57,6 @@ function LinesNetworkPlanLayerHighlight(props: MaplibreStyleLayerOptions) {
         return featuresInfo.layer === linesNetworkPlanLayer;
       })?.features || [];
 
-    if (features?.length) {
-      layer.setVisible(true);
-    } else {
-      layer.setVisible(false);
-    }
     const ids = [
       ...new Set(
         (features || []).map((f) => {
@@ -62,26 +64,24 @@ function LinesNetworkPlanLayerHighlight(props: MaplibreStyleLayerOptions) {
         }),
       ),
     ];
+    setLinesIds(ids);
+  }, [featuresInfos, layer, linesNetworkPlanLayer, setLinesIds]);
 
-    try {
-      highlightLinesNetworkPlan(ids, baseLayer);
-    } catch (e) {
-      // eslint-disable-next-line no-console
-      console.error("Error setting filter for highlight layer", e);
+  useEffect(() => {
+    if (!layer || !baseLayer?.loaded) {
+      return;
     }
-
+    if (linesIds?.length) {
+      highlightLinesNetworkPlan(linesIds, baseLayer);
+      layer.setVisible(true);
+    }
     return () => {
       layer?.setVisible(false);
       // Reset the filter
       highlightLinesNetworkPlan(undefined, baseLayer);
     };
-  }, [
-    baseLayer,
-    baseLayer?.mapLibreMap,
-    featuresInfos,
-    layer,
-    linesNetworkPlanLayer,
-  ]);
+  }, [baseLayer, baseLayer?.loaded, layer, lines, linesIds]);
+
   return null;
 }
 

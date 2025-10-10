@@ -122,6 +122,7 @@ function LayoutState() {
       setStationId(null);
       setTrainId(null);
       setFeaturesInfos(null);
+      setLinesIds(null);
     }
   }, [
     isSearchOpen,
@@ -141,6 +142,7 @@ function LayoutState() {
       setStationId(null);
       setTrainId(null);
       setFeaturesInfos(null);
+      setLinesIds(null);
     }
   }, [
     isShareMenuOpen,
@@ -160,6 +162,7 @@ function LayoutState() {
       setFeaturesInfos(null);
       setTrainId(null);
       setStationId(null);
+      setLinesIds(null);
       setIsShareMenuOpen(false);
     }
   }, [
@@ -180,6 +183,7 @@ function LayoutState() {
       setIsSearchOpen(false);
       setFeaturesInfos(null);
       setTrainId(null);
+      setLinesIds(null);
       setIsShareMenuOpen(false);
       setStationId(null);
     }
@@ -223,6 +227,7 @@ function LayoutState() {
       setIsSearchOpen(false);
       setTrainId(null);
       setIsShareMenuOpen(false);
+      setLinesIds(null);
     }
   }, [
     setFeaturesInfos,
