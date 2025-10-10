@@ -49,6 +49,7 @@ function LayoutState() {
     setIsOverlayOpen,
     setIsSearchOpen,
     setIsShareMenuOpen,
+    setLinesIds,
     setStationId,
     setTrainId,
     share,
@@ -130,6 +131,7 @@ function LayoutState() {
     setIsExportMenuOpen,
     setIsLayerTreeOpen,
     setIsShareMenuOpen,
+    setLinesIds,
     setStationId,
     setTrainId,
   ]);
@@ -150,6 +152,7 @@ function LayoutState() {
     setIsExportMenuOpen,
     setIsLayerTreeOpen,
     setIsSearchOpen,
+    setLinesIds,
     setStationId,
     setTrainId,
   ]);
@@ -172,6 +175,7 @@ function LayoutState() {
     setIsLayerTreeOpen,
     setIsSearchOpen,
     setIsShareMenuOpen,
+    setLinesIds,
     setStationId,
     setTrainId,
   ]);
@@ -194,6 +198,7 @@ function LayoutState() {
     setIsLayerTreeOpen,
     setIsSearchOpen,
     setIsShareMenuOpen,
+    setLinesIds,
     setStationId,
     setTrainId,
   ]);
@@ -235,6 +240,7 @@ function LayoutState() {
     setIsLayerTreeOpen,
     setIsSearchOpen,
     setIsShareMenuOpen,
+    setLinesIds,
     setTrainId,
     stationId,
   ]);
