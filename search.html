@@ -58,6 +58,7 @@
       <pre id="code" class="bg-slate-800 text-slate-200 p-4 rounded"></pre>
 
       <geops-mobility-search
+        id="search"
         class="max-w-3xl block border"
         limit="5"
         mots="rail,bus"
@@ -85,6 +86,15 @@
 
       window.addEventListener("load", () => {
 
+        const attributes = window.MobilitySearchAttributes;
+        const events = window.MobilitySearchEvents;
+ const descriptionByEvent = {
+          "mwc:stopssearchselect":
+            "Only when search attribute is 'true'. Event fired when a stop is selected in the stops search results. The event data contains the selected stop.",
+          "mwc:attribute":
+            "Event fired when an web component's attribute is changed. The event data contains the list of all attributes and their values.",
+        };
+
         // Add special parameters
         window.MobilityMapAttributes.fullscreen = {
           type: "boolean",
@@ -93,67 +103,7 @@
           reload: true,
         };
 
-        /* Attributes */
-        const attrs = Object.keys(MobilitySearchAttributes);
-        const booleanAttrs = Object.entries(MobilitySearchAttributes)
-          .filter(([, attr]) => attr.type === "boolean")
-          .map(([key]) => key);
-        const booleanTrueByDefault = booleanAttrs.filter(
-          (key) => MobilitySearchAttributes[key].defaultValue === "true",
-        );
-        const reloadAttrs = Object.entries(MobilitySearchAttributes)
-          .filter(([key, attr]) => !!attr.reload)
-          .map(([key]) => key);
-
-        const descriptionByAttr = Object.entries(MobilitySearchAttributes).reduce((acc, [key, attr]) => {
-            acc[key] = attr.description;
-            return acc;
-          }, {});
-
-        /* Events */
-        const events = [
-          "mwc:stopssearchselect",
-          "mwc:attribute",
-        ];
-        const descriptionByEvent = {
-          "mwc:stopssearchselect":
-            "Only when search attribute is 'true'. Event fired when a stop is selected in the stops search results. The event data contains the selected stop.",
-          "mwc:attribute":
-            "Event fired when an web component's attribute is changed. The event data contains the list of all attributes and their values.",
-        };
-
-        document.querySelector("#attributes").innerHTML =
-          generateAttributesTable(
-            wc,
-            attrs,
-            booleanAttrs,
-            booleanTrueByDefault,
-            descriptionByAttr,
-            reloadAttrs,
-          );
-        document.querySelector("#events").innerHTML = generateEventsTable(
-          wc,
-          events,
-          descriptionByEvent,
-        );
-        document.querySelector("#code").innerHTML = generateCodeText(
-          wc,
-          attrs,
-          pkgSrc,
-        );
-        wc.addEventListener("mwc:attribute", (event) => {
-          document.querySelector("#code").innerHTML = generateCodeText(
-            wc,
-            attrs,
-            pkgSrc,
-          );
-        });
-        applyPermalinkParameters(wc);
-        events.forEach((eventName) => {
-          wc.addEventListener(eventName, (event) => {
-            console.log(`${eventName} event`, event);
-          });
-        });
+        onLoad(wc, attributes, events, pkgSrc);
       });
     </script>
   </body>
