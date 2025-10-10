@@ -59,6 +59,7 @@ function onLoad(wc, attributes, events, pkgSrc) {
     defaultValueByAttr,
     reloadAttrs,
   );
+  console.log(attrsContent);
   if (attrsContent) {
     document.querySelector("#attributes").innerHTML = attrsContent;
   } else {
@@ -161,7 +162,7 @@ function generateAttributesTable(
   defaultValueByAttr = {},
   reloadAttrs = [],
 ) {
-  if (!attrs?.length) {
+  if (!attrs.filter((key) => descriptionByAttr[key])?.length) {
     return null;
   }
   let innerHMTL = `<table class="table-auto w-full" >
