@@ -65,10 +65,19 @@
       ></geops-mobility-search>
 
       <br />
-      <h2 class="text-xl font-bold">Attributes</h2>
-      <div id="attributes"></div>
-      <h2 class="text-xl font-bold">Events</h2>
-      <div id="events"></div>
+       <div id="attributesDoc">
+        <h2 class="text-xl font-bold">Attributes</h2>
+        <div id="attributes"></div>
+      </div>
+      <div id="eventsDoc">
+        <h2 class="text-xl font-bold">Events</h2>
+        <pre class="rounded bg-slate-800 p-4 text-slate-200">
+document.getElementById('search').addEventListener('mwc:attribute', (event) => {
+  console.log('Display last data received:', event.data);
+});</pre
+        >
+        <div id="events"></div>
+      </div>
       <br />
       <br />
       <h1 class="text-xl font-bold">More mobility web components</h1>
