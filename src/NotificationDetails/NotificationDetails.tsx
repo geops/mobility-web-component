@@ -235,65 +235,83 @@ function NotificationDetails({
                     );
                   },
                 )}
-                <div
-                  className="mt-4"
-                  dangerouslySetInnerHTML={{
-                    __html:
-                      textualContent?.description || t("no_details_available"),
-                  }}
-                />
-                {!!textualContentMultilingual?.infoLinks?.length && (
-                  <div className="mt-4">
-                    {textualContentMultilingual.infoLinks.map(
-                      ({ label, uri }) => {
-                        const title = label[locale()] || label.de || uri;
-                        return (
-                          <Link href={uri} key={uri} title={title}>
-                            {title}
-                          </Link>
-                        );
-                      },
-                    )}
-                  </div>
-                )}
-                {!!pubLines?.length && (
-                  <div className="mt-4">
-                    <div className={"font-bold"}>{t("affected_lines")}:</div>
-                    <div className={"flex flex-wrap gap-1 text-sm"}>
-                      {pubLines?.map((name) => {
-                        return (
-                          <div
-                            className={
-                              "rounded-md bg-black px-2 py-1 font-bold text-white"
-                            }
-                            key={name}
-                          >
-                            {name}
-                          </div>
-                        );
-                      })}
+                <div className={"my-4 flex flex-col gap-4"}>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html:
+                        textualContent?.description ||
+                        t("no_details_available"),
+                    }}
+                  />
+                  {!!textualContentMultilingual?.images?.length && (
+                    <div className="flex flex-wrap gap-2">
+                      {textualContentMultilingual.images.map(
+                        ({ image: { absoluteUrl, label } }) => {
+                          return (
+                            <img
+                              alt={label}
+                              key={absoluteUrl + label}
+                              src={absoluteUrl}
+                              title={label}
+                            />
+                          );
+                        },
+                      )}
                     </div>
-                  </div>
-                )}
-                {!!stations?.length && (
-                  <div className="mt-4">
-                    <div className={"font-bold"}>{t("affected_stops")}:</div>
-                    <div className={"flex flex-wrap gap-1 text-sm"}>
-                      {stations.map((name) => {
-                        return (
-                          <div
-                            className={
-                              "rounded-md bg-black px-2 py-1 font-bold text-white"
-                            }
-                            key={name}
-                          >
-                            {name}
-                          </div>
-                        );
-                      })}
+                  )}
+                  {!!textualContentMultilingual?.infoLinks?.length && (
+                    <div>
+                      {textualContentMultilingual.infoLinks.map(
+                        ({ label, uri }) => {
+                          const title = label[locale()] || label.de || uri;
+                          return (
+                            <Link href={uri} key={uri} title={title}>
+                              {title}
+                            </Link>
+                          );
+                        },
+                      )}
                     </div>
-                  </div>
-                )}
+                  )}
+                  {!!pubLines?.length && (
+                    <div>
+                      <div className={"font-bold"}>{t("affected_lines")}:</div>
+                      <div className={"flex flex-wrap gap-1 text-sm"}>
+                        {pubLines?.map((name) => {
+                          return (
+                            <div
+                              className={
+                                "rounded-md bg-black px-2 py-1 font-bold text-white"
+                              }
+                              key={name}
+                            >
+                              {name}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+                  {!!stations?.length && (
+                    <div>
+                      <div className={"font-bold"}>{t("affected_stops")}:</div>
+                      <div className={"flex flex-wrap gap-1 text-sm"}>
+                        {stations.map((name) => {
+                          return (
+                            <div
+                              className={
+                                "rounded-md bg-black px-2 py-1 font-bold text-white"
+                              }
+                              key={name}
+                            >
+                              {name}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
             );
           },
