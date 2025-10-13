@@ -33,6 +33,7 @@ function LinesNetworkPlanLayerHighlight(props: MaplibreStyleLayerOptions) {
         );
       },
       maplibreLayer: baseLayer,
+      visible: false,
       ...(props || {}),
     });
   }, [baseLayer, props]);
