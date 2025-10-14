@@ -2,6 +2,7 @@ import { useId, useState } from "preact/hooks";
 import { twMerge } from "tailwind-merge";
 
 import Copy from "../../icons/Copy";
+import useI18n from "../../utils/hooks/useI18n";
 import IconButton from "../IconButton";
 import Input from "../Input";
 
@@ -24,6 +25,7 @@ function InputCopy({
   tooltipProps = emptyProps,
   ...props
 }: InputCopyProps) {
+  const { t } = useI18n();
   const [positionTooltip, setPositionTooltip] = useState<DOMRect>();
   const [isTooptipShowed, setIsTooltipShowed] = useState(false);
   const inputId = useId();
@@ -38,10 +40,12 @@ function InputCopy({
         setIsTooltipShowed(false);
       }, 1000);
     });
+    input?.select();
   };
 
   const handleInputFocus = () => {
-    (document.getElementById(inputId) as HTMLInputElement | null)?.select();
+    const input: HTMLInputElement | null = node.querySelector(`#${inputId}`);
+    input?.select();
   };
 
   return (
@@ -51,7 +55,7 @@ function InputCopy({
       }}
       {...containerProps}
       className={twMerge(
-        "relative flex items-center",
+        "relative flex h-7 items-center",
         containerProps?.className as string,
       )}
     >
@@ -62,12 +66,12 @@ function InputCopy({
         type="text"
         {...props}
         className={twMerge(
-          "h-full flex-1 border border-r-0",
+          "h-7 flex-1 border border-r-0",
           props?.className as string,
         )}
       />
       <IconButton
-        className="h-full rounded-none border p-2 shadow-none"
+        className="size-7 rounded-none border p-2 shadow-none"
         onClick={handleCopyClick}
       >
         <Copy size={20} />
@@ -84,7 +88,7 @@ function InputCopy({
           top: positionTooltip?.top - 30,
         }}
       >
-        Kopiert!
+        {t("input_copy_success")}!
       </div>
     </div>
   );

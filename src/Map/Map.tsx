@@ -38,10 +38,6 @@ function Map({ children, ...props }: RealtimeMapProps) {
     });
   }, [maxextent]);
 
-  const mapView = useMemo(() => {
-    return map?.getView();
-  }, [map]);
-
   useEffect(() => {
     if (!map || !view) {
       return;
@@ -137,6 +133,7 @@ function Map({ children, ...props }: RealtimeMapProps) {
   // This use effect should be called only when the view is set
   useEffect(() => {
     const curr = propsFromPermalinkRef.current;
+    const mapView = map?.getView();
     if (mapView && curr.center) {
       mapView.setCenter(
         curr.center.split(",").map((c) => {
@@ -148,7 +145,7 @@ function Map({ children, ...props }: RealtimeMapProps) {
     if (mapView && curr.zoom) {
       mapView.setZoom(parseFloat(curr.zoom));
     }
-  }, [mapView]);
+  }, [map]);
 
   return (
     <>
