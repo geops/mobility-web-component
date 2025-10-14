@@ -6,8 +6,8 @@ import { useCallback, useEffect } from "preact/hooks";
 
 import { LAYER_PROP_IS_EXPORTING } from "../utils/constants";
 import getPermalinkParameters from "../utils/getPermalinkParameters";
-// import getLayersAsFlatArray from "../getLayersAsFlatArray";
 import useMapContext from "../utils/hooks/useMapContext";
+import usePermalink from "../utils/hooks/usePermalink";
 
 import type { Map } from "ol";
 import type { EventsKey } from "ol/events";
@@ -20,6 +20,9 @@ import type { EventsKey } from "ol/events";
 const Permalink = ({ replaceState = false }: { replaceState?: boolean }) => {
   const { map, setPermalinkUrlSearchParams } = useMapContext();
 
+  const permalink = usePermalink();
+
+  // Update the search parameters when the map moves
   const updatePermalink = useCallback(
     (currentMap: Map) => {
       // No update when exporting
@@ -28,14 +31,22 @@ const Permalink = ({ replaceState = false }: { replaceState?: boolean }) => {
       }
       const currentUrlParams = new URLSearchParams(window.location.search);
       const urlParams = getPermalinkParameters(currentMap, currentUrlParams);
-      urlParams.set("permalink", "true");
       setPermalinkUrlSearchParams(urlParams);
-      if (replaceState) {
-        window.history.replaceState(null, null, `?${urlParams.toString()}`);
-      }
     },
-    [map, replaceState, setPermalinkUrlSearchParams],
+    [map, setPermalinkUrlSearchParams],
   );
+
+  // Replace the window url when permalink changes
+  useEffect(() => {
+    if (
+      replaceState &&
+      permalink &&
+      permalink !== window.location.href &&
+      !permalink.includes(encodeURIComponent("{{"))
+    ) {
+      window.history.replaceState(null, null, permalink);
+    }
+  }, [map, permalink, replaceState]);
 
   useEffect(() => {
     let moveEndKey: EventsKey;

@@ -1,3 +1,5 @@
+const activateAttrUrlParameters = true;
+
 function onLoad(wc, attributes, events, pkgSrc) {
   /* Show private attributes for dev purpose */
   const showPrivate =
@@ -85,7 +87,7 @@ function onLoad(wc, attributes, events, pkgSrc) {
       pkgSrc,
     );
   });
-  applyPermalinkParameters(wc);
+  applyPermalinkParameters(wc, attributes);
   evts.forEach((eventName) => {
     wc.addEventListener(eventName, (event) => {
       console.log(`${eventName} event`, event);
@@ -93,7 +95,7 @@ function onLoad(wc, attributes, events, pkgSrc) {
   });
 }
 
-function applyPermalinkParameters(wc) {
+function applyPermalinkParameters(wc, attributes) {
   const params = new URLSearchParams(window.location.search);
 
   // Apply fullscreen mode
@@ -126,20 +128,26 @@ function applyPermalinkParameters(wc) {
   }
 
   // Apply all url parameters as attribute of the web component and fill the input fields.
-  params.forEach((value, key) => {
-    wc.setAttribute(key, value);
-    const input = document.querySelector(`[name=${key}]`);
-    if (input) {
-      if (input.type === "checkbox") {
-        input.checked = value !== "false";
-      } else {
-        input.value = value;
+  if (activateAttrUrlParameters) {
+    params.forEach((value, key) => {
+      if (!(key in attributes)) {
+        return;
       }
-    }
-  });
+      wc.setAttribute(key, value);
+
+      const input = document.querySelector(`[name=${key}]`);
+      if (input) {
+        if (input.type === "checkbox") {
+          input.checked = value !== "false";
+        } else {
+          input.value = value;
+        }
+      }
+    });
+  }
 
   // Get an apikey if there is none defined
-  if (!wc.getAttribute("apikey")) {
+  if (!wc.getAttribute("apikey") && !attributes.apikey.defaultValue) {
     fetch("https://backend.developer.geops.io/publickey")
       .then((response) => {
         return response.json();
@@ -334,10 +342,12 @@ function onAttributeUpdate(wc, key, value, reloadAttrs) {
     window.location.reload();
   } else {
     wc.setAttribute(key, value);
-    window.history.replaceState(
-      {},
-      "",
-      `${window.location.pathname}?${params}`,
-    );
+    if (activateAttrUrlParameters) {
+      window.history.replaceState(
+        {},
+        "",
+        `${window.location.pathname}?${params}`,
+      );
+    }
   }
 }

@@ -2,6 +2,7 @@ import { memo } from "preact/compat";
 
 import InputCopy from "../ui/InputCopy";
 import useI18n from "../utils/hooks/useI18n";
+import usePermalink from "../utils/hooks/usePermalink";
 
 import type { HTMLAttributes, PreactDOMAttributes } from "preact";
 
@@ -19,9 +20,11 @@ function PermalinkInput({
   ...props
 }: PermalinkInputProps) {
   const { t } = useI18n();
+  const permalink = usePermalink();
+
   return (
     <div {...props}>
-      <InputCopy value={window?.location.href} {...inputProps} />
+      <InputCopy value={permalink} {...inputProps} readonly={true} />
       <p className="py-2">{t("permalink_input_hint")}</p>
     </div>
   );

@@ -7,6 +7,7 @@ import PermalinkInput from "../PermalinkInput";
 import Button from "../ui/Button";
 import useI18n from "../utils/hooks/useI18n";
 import useMapContext from "../utils/hooks/useMapContext";
+import usePermalink from "../utils/hooks/usePermalink";
 
 import type { HTMLAttributes, PreactDOMAttributes } from "preact";
 
@@ -16,13 +17,14 @@ function ShareMenu({
 }: HTMLAttributes<HTMLDivElement> & PreactDOMAttributes) {
   const { map } = useMapContext();
   const { t } = useI18n();
+  const permalink = usePermalink();
 
   return (
     // eslint-disable-next-line @typescript-eslint/no-base-to-string, @typescript-eslint/restrict-template-expressions
     <div className={twMerge(`flex flex-col gap-4 ${className}`)} {...props}>
       <Button
         className="w-fit"
-        href={`mailto:?subject=Karte&body=${window?.location.href}`}
+        href={`mailto:?subject=Karte&body=${permalink}`}
       >
         <Email />
         <span>{t("share_email_send")}</span>

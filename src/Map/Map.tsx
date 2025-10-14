@@ -3,12 +3,15 @@ import { unByKey } from "ol/Observable";
 import { memo } from "preact/compat";
 import { useEffect, useMemo, useRef } from "preact/hooks";
 
+import useInitialPermalink from "../utils/hooks/useInitialPermalink";
 import useMapContext from "../utils/hooks/useMapContext";
 
 // @ts-expect-error bad type definition
 import olStyle from "ol/ol.css";
 
 import type { JSX, PreactDOMAttributes } from "preact";
+
+import type { MobilityMapProps } from "../MobilityMap/MobilityMap";
 
 export type RealtimeMapProps = JSX.HTMLAttributes<HTMLDivElement> &
   PreactDOMAttributes;
@@ -17,6 +20,10 @@ function Map({ children, ...props }: RealtimeMapProps) {
   const mapRef = useRef();
   const { center, extent, map, maxextent, maxzoom, minzoom, setMap, zoom } =
     useMapContext();
+
+  const propsFromPermalinkRef = useRef<null | Partial<MobilityMapProps>>(
+    useInitialPermalink(),
+  );
 
   const view = useMemo(() => {
     if (!maxextent) {
@@ -30,6 +37,10 @@ function Map({ children, ...props }: RealtimeMapProps) {
       extent: bbox,
     });
   }, [maxextent]);
+
+  const mapView = useMemo(() => {
+    return map?.getView();
+  }, [map]);
 
   useEffect(() => {
     if (!map || !view) {
@@ -62,7 +73,7 @@ function Map({ children, ...props }: RealtimeMapProps) {
     }
 
     return () => {
-      newMap?.setTarget();
+      newMap?.setTarget(undefined);
       setMap();
     };
   }, [setMap]);
@@ -120,6 +131,24 @@ function Map({ children, ...props }: RealtimeMapProps) {
       map.getView().setMinZoom(number);
     }
   }, [map, minzoom]);
+
+  // Apply permalink parameters when the view is set after that the default attribute is set
+  // Order of useEffect is important here.
+  // This use effect should be called only when the view is set
+  useEffect(() => {
+    const curr = propsFromPermalinkRef.current;
+    if (mapView && curr.center) {
+      mapView.setCenter(
+        curr.center.split(",").map((c) => {
+          return parseFloat(c);
+        }),
+      );
+    }
+
+    if (mapView && curr.zoom) {
+      mapView.setZoom(parseFloat(curr.zoom));
+    }
+  }, [mapView]);
 
   return (
     <>

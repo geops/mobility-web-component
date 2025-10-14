@@ -236,14 +236,14 @@ where:
   permalink: {
     defaultValue: "false",
     description:
-      "Update some url parameters x,y,z,layers to the current window location. These parameters are used to store the current state of the map. They will be used on page load to configure the web-component.",
+      "if true, the url parameters  x,y,z and layers of the current browser window will be updated automatically. They will be used on page load to initilize the map. <br/> Works only if a the `permalinktemplate` attribute is set, otherwise do nothing.",
     public: true,
     type: "boolean",
   },
   permalinktemplate: {
-    defaultValue: null,
+    defaultValue: "?x={{x}}&y={{y}}&z={{z}}&layers={{layers}}",
     description: `A template string to read the current browser url. Hash (starting with #) and URL search parameters (starting with ?) are supported.<br/>
-     The template supports {{x}}, {{y}}, {{z}} variables.<br/> 
+     The template supports {{x}}, {{y}}, {{z}} and {{layers}} variables.<br/>
      Ex: "?x={{x}}&y={{y}}&z={{z}}" or "#map/{{x}}/{{y}}/{{z}}" .`,
     public: true,
   },

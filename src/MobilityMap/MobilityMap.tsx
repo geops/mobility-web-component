@@ -16,7 +16,6 @@ import SingleClickListener from "../SingleClickListener";
 import StationsLayer from "../StationsLayer";
 import { I18nContext } from "../utils/hooks/useI18n";
 import useInitialLayersVisiblity from "../utils/hooks/useInitialLayersVisiblity";
-import useInitialPermalink from "../utils/hooks/useInitialPermalink";
 import { MapContext } from "../utils/hooks/useMapContext";
 import i18n from "../utils/i18n";
 import WindowMessageListener from "../WindowMessageListener";
@@ -329,6 +328,8 @@ function MobilityMap(props: MobilityMapProps) {
   );
 }
 
+const MemoMobilityMap = memo(MobilityMap);
+
 // We creates a wrapper to inject the default props values from MobilityMapAttributes.
 const defaultProps: Partial<MobilityMapProps> = {};
 Object.entries(MobilityMapAttributes).forEach(([key]) => {
@@ -336,14 +337,7 @@ Object.entries(MobilityMapAttributes).forEach(([key]) => {
 });
 
 function MobilityMapWithDefaultProps(props: MobilityMapProps) {
-  // Apply initial value from permalink, only x,y,z
-  const { permalinktemplate } = props;
-  const { permalinktemplate: defaultPermalinkTemplate } = defaultProps;
-  const propsFromPermalink = useInitialPermalink(
-    permalinktemplate || defaultPermalinkTemplate,
-  );
-
-  return <MobilityMap {...defaultProps} {...props} {...propsFromPermalink} />;
+  return <MemoMobilityMap {...defaultProps} {...props} />;
 }
 
 export default memo(MobilityMapWithDefaultProps);

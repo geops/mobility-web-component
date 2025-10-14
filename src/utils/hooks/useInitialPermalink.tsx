@@ -1,4 +1,6 @@
-import { useMemo, useRef } from "preact/hooks";
+import { useMemo } from "preact/hooks";
+
+import useMapContext from "./useMapContext";
 
 import type { MobilityMapProps } from "../../MobilityMap/MobilityMap";
 
@@ -6,19 +8,17 @@ import type { MobilityMapProps } from "../../MobilityMap/MobilityMap";
  * Return x,y and z values from the url. This hook should not managed more usecases than that.
  * The application should be responsible to read url parameters then provides these parameters as attributes to the web-component.
  */
-const useInitialPermalink = (
-  permalinktemplate: string,
-): null | Partial<MobilityMapProps> => {
-  const prevProps = useRef<Partial<MobilityMapProps>>(null);
-
+const useInitialPermalink = (): null | Partial<MobilityMapProps> => {
+  const { permalinktemplate } = useMapContext();
   const props = useMemo(() => {
     if (!permalinktemplate) {
       return null;
     }
     try {
-      let x: null | string,
+      let layers: null | string,
+        x: null | string,
         y: null | string,
-        z: null | string = null;
+        z: null | string;
 
       if (permalinktemplate?.startsWith("?")) {
         const urlSearchParams = new URLSearchParams(permalinktemplate);
@@ -32,10 +32,14 @@ const useInitialPermalink = (
         const nameZ = names.find((name) => {
           return urlSearchParams.get(name).includes("{{z}}");
         });
+        const nameLayers = names.find((name) => {
+          return urlSearchParams.get(name).includes("{{layers}}");
+        });
         const currSearchParams = new URLSearchParams(window.location.search);
         x = currSearchParams.get(nameX);
         y = currSearchParams.get(nameY);
         z = currSearchParams.get(nameZ);
+        layers = currSearchParams.get(nameLayers);
       } else if (permalinktemplate?.startsWith("#")) {
         const values = permalinktemplate.substring(1).split("/");
         const currHash = window.location.hash;
@@ -49,9 +53,13 @@ const useInitialPermalink = (
         const indexZ = values.findIndex((name) => {
           return name.includes("{{z}}");
         });
+        const indexLayers = values.findIndex((name) => {
+          return name.includes("{{layers}}");
+        });
         x = indexX > -1 ? currIndexes[indexX] : null;
         y = indexY > -1 ? currIndexes[indexY] : null;
         z = indexZ > -1 ? currIndexes[indexZ] : null;
+        layers = indexLayers > -1 ? currIndexes[indexLayers] : null;
       }
       const propsFromPermalink: Partial<MobilityMapProps> = {};
       if (x && y) {
@@ -59,6 +67,9 @@ const useInitialPermalink = (
       }
       if (z) {
         propsFromPermalink.zoom = z;
+      }
+      if (layers) {
+        propsFromPermalink.layers = layers;
       }
       return propsFromPermalink;
     } catch (error) {
@@ -72,12 +83,7 @@ const useInitialPermalink = (
     return null;
   }, [permalinktemplate]);
 
-  // We want to apply the value from the url only once
-  if (!prevProps.current && props) {
-    prevProps.current = props;
-    return props;
-  }
-  return {};
+  return props;
 };
 
 export default useInitialPermalink;

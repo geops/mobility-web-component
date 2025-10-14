@@ -3,11 +3,9 @@ import { useContext } from "preact/hooks";
 
 import type { Rosetta } from "rosetta";
 
-import type { Translations } from "../translations";
+export type I18NContextType = Rosetta<Record<string, string>>;
 
-export type I18NContextType = Rosetta<Translations>;
-
-export const I18nContext = createContext({
+export const I18nContext = createContext<I18NContextType>({
   t: (id: string, templateValues?: Record<string, string>) => {
     return `${id} ${JSON.stringify(templateValues)}`;
   },

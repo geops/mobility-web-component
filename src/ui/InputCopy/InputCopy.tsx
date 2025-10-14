@@ -27,16 +27,17 @@ function InputCopy({
   const [positionTooltip, setPositionTooltip] = useState<DOMRect>();
   const [isTooptipShowed, setIsTooltipShowed] = useState(false);
   const inputId = useId();
+  const [node, setNode] = useState<HTMLDivElement | null>(null);
 
   const handleCopyClick = (event) => {
     setPositionTooltip(event.currentTarget.getBoundingClientRect());
-    void navigator.clipboard.writeText(window?.location.href).then(() => {
+    const input: HTMLInputElement | null = node.querySelector(`#${inputId}`);
+    void navigator.clipboard.writeText(input?.value).then(() => {
       setIsTooltipShowed(true);
       setTimeout(() => {
         setIsTooltipShowed(false);
       }, 1000);
     });
-    (document.getElementById(inputId) as HTMLInputElement | null)?.select();
   };
 
   const handleInputFocus = () => {
@@ -45,10 +46,13 @@ function InputCopy({
 
   return (
     <div
+      ref={(elt) => {
+        setNode(elt);
+      }}
       {...containerProps}
       className={twMerge(
         "relative flex items-center",
-        containerProps?.className,
+        containerProps?.className as string,
       )}
     >
       <Input
@@ -57,20 +61,23 @@ function InputCopy({
         readOnly
         type="text"
         {...props}
-        className={twMerge("h-full flex-1 border border-r-0", props?.className)}
+        className={twMerge(
+          "h-full flex-1 border border-r-0",
+          props?.className as string,
+        )}
       />
       <IconButton
         className="h-full rounded-none border p-2 shadow-none"
         onClick={handleCopyClick}
       >
-        <Copy />
+        <Copy size={20} />
       </IconButton>
       <div
         {...tooltipProps}
         className={twMerge(
           `fixed hidden rounded bg-gray-600 p-1 text-sm text-white`,
           isTooptipShowed && "block",
-          tooltipProps?.className,
+          tooltipProps?.className as string,
         )}
         style={{
           left: positionTooltip?.left - 30,
