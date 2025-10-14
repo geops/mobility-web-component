@@ -236,7 +236,7 @@ where:
   permalink: {
     defaultValue: "false",
     description:
-      "if true, the url parameters  x,y,z and layers of the current browser window will be updated automatically. They will be used on page load to initilize the map. <br/> Works only if a the `permalinktemplate` attribute is set, otherwise do nothing.",
+      "if true, the current browser window url will be updated automatically with the parameters defined in the `permalinktemplate` attribute.",
     public: true,
     type: "boolean",
   },

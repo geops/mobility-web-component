@@ -102,10 +102,10 @@ function MobilityMap(props: MobilityMapProps) {
   const [previewNotifications, setPreviewNotifications] =
     useState<SituationType[]>();
 
-  const { lang, layers, lines } = props;
+  const { lang, layers, lines, permalinktemplate } = props;
 
   // Apply initial visibility of layers
-  useInitialLayersVisiblity(map, layers);
+  useInitialLayersVisiblity(map, layers, permalinktemplate);
 
   // Object representing all the web-component attributes and the map context values.
   const mapContextValue = useMemo(() => {

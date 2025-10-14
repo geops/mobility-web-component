@@ -4,12 +4,19 @@ import { useEffect, useRef } from "preact/hooks";
 
 import applyInitialLayerVisibility from "../applyInitialLayerVisibility";
 
+import useInitialPermalink from "./useInitialPermalink";
+
 import type { Map } from "ol";
-const layersParam = window.location.search
-  ? new URLSearchParams(window.location.search).get("layers")
-  : null;
-const useInitialLayersVisiblity = (map: Map, layers: string) => {
+const useInitialLayersVisiblity = (
+  map: Map,
+  layers: string,
+  permalinkTemplate: string,
+) => {
   const isPermalinkAlreadyUsed = useRef(false);
+  const permalinkLayersRef = useRef(
+    useInitialPermalink(permalinkTemplate)?.layers,
+  );
+
   // Apply initial visibility of layers from layers attribute
   useEffect(() => {
     if (!map) {
@@ -19,11 +26,11 @@ const useInitialLayersVisiblity = (map: Map, layers: string) => {
 
     // We use the permalink param only once, at the first render
     if (
-      layersParam !== null &&
-      layersParam !== undefined &&
+      permalinkLayersRef.current !== null &&
+      permalinkLayersRef.current !== undefined &&
       !isPermalinkAlreadyUsed.current
     ) {
-      layersToUse = layersParam;
+      layersToUse = permalinkLayersRef.current;
       isPermalinkAlreadyUsed.current = true;
     }
 

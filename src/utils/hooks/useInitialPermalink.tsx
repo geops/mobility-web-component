@@ -5,13 +5,17 @@ import useMapContext from "./useMapContext";
 import type { MobilityMapProps } from "../../MobilityMap/MobilityMap";
 
 /**
- * Return x,y and z values from the url. This hook should not managed more usecases than that.
+ * Return x,y,z and layers values from the url. This hook should not managed more usecases than that.
  * The application should be responsible to read url parameters then provides these parameters as attributes to the web-component.
  */
-const useInitialPermalink = (): null | Partial<MobilityMapProps> => {
+const useInitialPermalink = (
+  permalinkTemplate?: string,
+): null | Partial<MobilityMapProps> => {
   const { permalinktemplate } = useMapContext();
   const props = useMemo(() => {
-    if (!permalinktemplate) {
+    const template = permalinkTemplate || permalinktemplate;
+
+    if (!template) {
       return null;
     }
     try {
@@ -20,8 +24,8 @@ const useInitialPermalink = (): null | Partial<MobilityMapProps> => {
         y: null | string,
         z: null | string;
 
-      if (permalinktemplate?.startsWith("?")) {
-        const urlSearchParams = new URLSearchParams(permalinktemplate);
+      if (template?.startsWith("?")) {
+        const urlSearchParams = new URLSearchParams(template);
         const names = [...urlSearchParams.keys()];
         const nameX = names.find((name) => {
           return urlSearchParams.get(name).includes("{{x}}");
@@ -40,8 +44,8 @@ const useInitialPermalink = (): null | Partial<MobilityMapProps> => {
         y = currSearchParams.get(nameY);
         z = currSearchParams.get(nameZ);
         layers = currSearchParams.get(nameLayers);
-      } else if (permalinktemplate?.startsWith("#")) {
-        const values = permalinktemplate.substring(1).split("/");
+      } else if (template?.startsWith("#")) {
+        const values = template.substring(1).split("/");
         const currHash = window.location.hash;
         const currIndexes = currHash.substring(1).split("/");
         const indexX = values.findIndex((name) => {
@@ -68,20 +72,20 @@ const useInitialPermalink = (): null | Partial<MobilityMapProps> => {
       if (z) {
         propsFromPermalink.zoom = z;
       }
-      if (layers) {
+      if (layers !== null && layers !== undefined) {
         propsFromPermalink.layers = layers;
       }
       return propsFromPermalink;
     } catch (error) {
       // eslint-disable-next-line no-console
       console.warn(
-        "Impossible to read x,y,z from the url with permalinktemplate",
-        permalinktemplate,
+        "Impossible to read x,y,z and layers from the url with template",
+        template,
         error,
       );
     }
     return null;
-  }, [permalinktemplate]);
+  }, [permalinktemplate, permalinkTemplate]);
 
   return props;
 };
