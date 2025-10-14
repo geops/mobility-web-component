@@ -128,7 +128,7 @@ function MapLayout({
         {isOverlayOpen && (
           <div
             className={twMerge(
-              "flex w-0 flex-1 flex-col overflow-hidden rounded-2xl @lg:min-w-80",
+              "flex w-0 flex-1 flex-col overflow-hidden rounded-2xl @lg:min-w-[320px]",
             )}
             style={{ containerType: "normal" }}
           >
