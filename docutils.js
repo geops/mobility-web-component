@@ -1,4 +1,4 @@
-const activateAttrUrlParameters = true;
+const activateAttrUrlParameters = false;
 
 function onLoad(wc, attributes, events, pkgSrc) {
   /* Show private attributes for dev purpose */
