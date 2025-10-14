@@ -9,7 +9,13 @@ import type { MaplibreLayerOptions } from "mobility-toolbox-js/ol/layers/Maplibr
 export type BaseLayerProps = MaplibreLayerOptions;
 
 function BaseLayer(props: BaseLayerProps) {
-  const { apikey, baselayer, map, mapsurl, setBaseLayer } = useMapContext();
+  const { apikey, baselayer, hasPrint, hasShare, map, mapsurl, setBaseLayer } =
+    useMapContext();
+
+  // For printing purpose and bild saving purpose otherwise can be false.
+  const preserveDrawingBuffer = useMemo(() => {
+    return hasShare || hasPrint;
+  }, [hasShare, hasPrint]);
 
   const layer = useMemo(() => {
     if (!baselayer || !apikey) {
@@ -20,9 +26,19 @@ function BaseLayer(props: BaseLayerProps) {
       style: baselayer,
       url: mapsurl,
       zIndex: 0,
+
       ...(props || {}),
+      mapLibreOptions: {
+        // For printing purpose
+        maxCanvasSize: [20000, 20000], // remove 4096 limitations
+        ...(props?.mapLibreOptions || {}),
+        canvasContextAttributes: {
+          preserveDrawingBuffer: preserveDrawingBuffer,
+          ...(props?.mapLibreOptions?.canvasContextAttributes || {}),
+        },
+      },
     });
-  }, [baselayer, apikey, props, mapsurl]);
+  }, [baselayer, apikey, mapsurl, props, preserveDrawingBuffer]);
 
   useEffect(() => {
     setBaseLayer(layer);
