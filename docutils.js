@@ -59,7 +59,7 @@ function onLoad(wc, attributes, events, pkgSrc) {
     defaultValueByAttr,
     reloadAttrs,
   );
-  console.log(attrsContent);
+
   if (attrsContent) {
     document.querySelector("#attributes").innerHTML = attrsContent;
   } else {
