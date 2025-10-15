@@ -261,7 +261,6 @@ function generateAttributesTable(
       <!--td class="border px-4 py-2"></td>
       <td class="border px-4 py-2"></td-->
       <td class="border px-4 py-2 space-y-2">
-      <div>
       ${
         isBoolean
           ? `<input
@@ -273,7 +272,7 @@ function generateAttributesTable(
           onchange="document.querySelector('${wc.localName}').setAttribute('${key}', this.checked);onAttributeUpdate(document.querySelector('${wc.localName}'),this.name, this.checked, '${reloadAttrs.join(",")}');"
           />`
           : `
-        <div class="flex gap-4">
+        <div class="flex gap-4 mb-2">
           <input
             type="text"
             class="border px-2"
@@ -285,8 +284,7 @@ function generateAttributesTable(
         </div>`
       }
       
-      ${descriptionByAttr[key] ? `<label for="${key}" class="pt-2 cursor-pointer">${descriptionByAttr[key]}</label>` : ``}
-      </div>
+      ${descriptionByAttr[key] ? `<label for="${key}" class="cursor-pointer">${descriptionByAttr[key]}</label>` : ``}
       </td>
     </tr>
   `;
