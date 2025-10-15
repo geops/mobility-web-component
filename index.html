@@ -104,6 +104,13 @@ document.getElementById('map').addEventListener('mwc:attribute', (event) => {
             description: `Load the map in fullscreen mode.`,
             public: true,
           },
+          noapply: {
+            type: "boolean",
+            defaultValue: "false",
+            description:
+              "Will not apply web component attributes defined as url parameters. Useful to test the permalink functionality of the web component.",
+            public: true,
+          },
 
           debug: {
             type: "boolean",

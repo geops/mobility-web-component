@@ -1,4 +1,6 @@
-const activateAttrUrlParameters = true;
+/* Will ignore web component attributes defined as url parameters */
+const doNotApplyAttributesUrlParameters =
+  new URLSearchParams(window.location.search).get("noapply") === "true";
 
 function onLoad(wc, attributes, events, pkgSrc, urlParameters = {}) {
   /* Show private attributes for dev purpose */
@@ -183,7 +185,7 @@ function applyPermalinkParameters(wc, attributes) {
   }
 
   // Apply all url parameters as attribute of the web component and fill the input fields.
-  if (activateAttrUrlParameters) {
+  if (!doNotApplyAttributesUrlParameters) {
     params.forEach((value, key) => {
       if (!(key in attributes)) {
         return;
@@ -404,7 +406,7 @@ function onAttributeUpdate(wc, key, value, reloadAttrs) {
     window.location.reload();
   } else {
     wc.setAttribute(key, value);
-    if (activateAttrUrlParameters) {
+    if (!doNotApplyAttributesUrlParameters) {
       window.history.replaceState(
         {},
         "",
