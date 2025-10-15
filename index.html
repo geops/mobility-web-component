@@ -32,7 +32,7 @@
   <body class="p-8">
     <!-- tailwind hack to add class used in docutils -->
     <div
-      class="absolute inset-0 flex h-full w-full table-auto gap-4 border bg-black p-0 px-4 py-2 pt-2 text-white hover:bg-gray-700"
+      class="absolute inset-0 flex h-full w-full table-auto mr-4 gap-4 space-y-4 border bg-black p-0 px-4 py-2 pt-2 text-white hover:bg-gray-700"
       style="display: none"
     ></div>
     <div class="pt-2" style="display: none"></div>
@@ -50,19 +50,32 @@
         zoom="12"
       ></geops-mobility>
 
-      <br />
-      <div id="attributesDoc">
+      <div id="attributesDoc" class="space-y-4">
         <h2 class="text-xl font-bold">Attributes</h2>
+
+        <pre class="rounded bg-slate-800 p-4 text-slate-200">
+// Modify an attribute
+document.getElementById('map').setAttribute("zoom", "15");
+</pre
+        >
         <div id="attributes"></div>
       </div>
-      <div id="eventsDoc">
+      <div id="eventsDoc" class="space-y-4">
         <h2 class="text-xl font-bold">Events</h2>
         <pre class="rounded bg-slate-800 p-4 text-slate-200">
+// Listen to an event
 document.getElementById('map').addEventListener('mwc:attribute', (event) => {
   console.log('Display last data received:', event.data);
-});</pre
+});
+</pre
         >
         <div id="events"></div>
+      </div>
+
+      <div id="urlParametersDoc" class="space-y-4">
+        <h2 class="text-xl font-bold">Documentation URL parameters</h2>
+        <p>The following parameters are only used by this documentation webpage.</p>
+        <div id="urlParameters"></div>
       </div>
       <br />
       <br />
@@ -84,24 +97,32 @@ document.getElementById('map').addEventListener('mwc:attribute', (event) => {
         const events = window.MobilityMapEvents;
 
         // Add page parameters
-        attributes.fullscreen = {
-          type: "boolean",
-          defaultValue: "false",
-          description: `Load the page in fullscreen mode.`,
-          reload: true,
-          public: false,
+        const urlParameters = {
+          fullscreen: {
+            type: "boolean",
+            defaultValue: "false",
+            description: `Load the map in fullscreen mode.`,
+            public: true,
+          },
+
+          debug: {
+            type: "boolean",
+            defaultValue: "false",
+            description:
+              "Displays debug information for vehicles when true, use only for debugging.",
+            public: true,
+          },
+
+          private: {
+            type: "boolean",
+            defaultValue: "false",
+            description:
+              "Displays all private attributes, if there are some, use only for development purpose.",
+            public: true,
+          },
         };
 
-        attributes.debug = {
-          type: "boolean",
-          defaultValue: "false",
-          description:
-            "Displays debug information for vehicles when true, use only for debugging.",
-          reload: true,
-          public: false,
-        };
-
-        onLoad(wc, attributes, events, pkgSrc);
+        onLoad(wc, attributes, events, pkgSrc, urlParameters);
       });
     </script>
   </body>

@@ -64,12 +64,11 @@
         mots="rail,bus"
       ></geops-mobility-search>
 
-      <br />
-       <div id="attributesDoc">
+      <div id="attributesDoc" class="space-y-4">
         <h2 class="text-xl font-bold">Attributes</h2>
         <div id="attributes"></div>
       </div>
-      <div id="eventsDoc">
+      <div id="eventsDoc" class="space-y-4">
         <h2 class="text-xl font-bold">Events</h2>
         <pre class="rounded bg-slate-800 p-4 text-slate-200">
 document.getElementById('search').addEventListener('mwc:attribute', (event) => {
@@ -86,6 +85,8 @@ document.getElementById('search').addEventListener('mwc:attribute', (event) => {
           >&gt;&gt; Usage example Map Component</a
         >
       </p>
+      <br />
+      <br />
     </div>
     <br />
     <br />
@@ -102,14 +103,6 @@ document.getElementById('search').addEventListener('mwc:attribute', (event) => {
             "Only when search attribute is 'true'. Event fired when a stop is selected in the stops search results. The event data contains the selected stop.",
           "mwc:attribute":
             "Event fired when an web component's attribute is changed. The event data contains the list of all attributes and their values.",
-        };
-
-        // Add special parameters
-        window.MobilityMapAttributes.fullscreen = {
-          type: "boolean",
-          defaultValue: "false",
-          description: `Load the page in fullscreen mode.`,
-          reload: true,
         };
 
         onLoad(wc, attributes, events, pkgSrc);

@@ -1,6 +1,6 @@
 const activateAttrUrlParameters = true;
 
-function onLoad(wc, attributes, events, pkgSrc) {
+function onLoad(wc, attributes, events, pkgSrc, urlParameters = {}) {
   /* Show private attributes for dev purpose */
   const showPrivate =
     new URLSearchParams(window.location.search).get("private") === "true";
@@ -10,7 +10,7 @@ function onLoad(wc, attributes, events, pkgSrc) {
   const booleanAttrs = Object.entries(attributes)
     .filter(([, attr]) => attr.type === "boolean")
     .map(([key]) => key);
-  const booleanTrueByDefault = booleanAttrs.filter(
+  const booleanTrueByDefaultAttrs = booleanAttrs.filter(
     (key) => attributes[key].defaultValue === "true",
   );
   const reloadAttrs = Object.entries(attributes)
@@ -37,6 +37,25 @@ function onLoad(wc, attributes, events, pkgSrc) {
     {},
   );
 
+  const attrsContent = generateAttributesTable(
+    wc,
+    attrs,
+    booleanAttrs,
+    booleanTrueByDefaultAttrs,
+    descriptionByAttr,
+    defaultValueByAttr,
+    reloadAttrs,
+  );
+
+  if (attrsContent) {
+    const elt = document.querySelector("#attributes");
+    if (elt) {
+      elt.innerHTML = attrsContent;
+    }
+  } else {
+    document.querySelector("#attributesDoc")?.remove();
+  }
+
   /* Events */
   const evts = Object.keys(events);
   const descriptionByEvent = Object.entries(events)
@@ -51,29 +70,65 @@ function onLoad(wc, attributes, events, pkgSrc) {
       return acc;
     }, {});
 
-  /* Build HTML */
-  const attrsContent = generateAttributesTable(
-    wc,
-    attrs,
-    booleanAttrs,
-    booleanTrueByDefault,
-    descriptionByAttr,
-    defaultValueByAttr,
-    reloadAttrs,
-  );
-
-  if (attrsContent) {
-    document.querySelector("#attributes").innerHTML = attrsContent;
-  } else {
-    document.querySelector("#attributesDoc").remove();
-  }
-
   const evtsContent = generateEventsTable(wc, evts, descriptionByEvent);
   if (evtsContent) {
-    document.querySelector("#events").innerHTML = evtsContent;
+    const elt = document.querySelector("#events");
+    if (elt) {
+      elt.innerHTML = evtsContent;
+    }
   } else {
-    document.querySelector("#eventsDoc").remove();
+    document.querySelector("#eventsDoc")?.remove();
   }
+
+  /* URL Parameters */
+  const params = Object.keys(urlParameters);
+  const booleanParams = Object.entries(urlParameters)
+    .filter(([, attr]) => attr.type === "boolean")
+    .map(([key]) => key);
+  const booleanTrueByDefaultParams = booleanParams.filter(
+    (key) => urlParameters[key].defaultValue === "true",
+  );
+  const reloadParams = Object.entries(urlParameters).map(([key]) => key);
+
+  const descriptionByParam = Object.entries(urlParameters)
+    .filter(([key, attr]) => {
+      if (showPrivate) {
+        return true;
+      }
+      return attr.public;
+    })
+    .reduce((acc, [key, attr]) => {
+      acc[key] = attr.description;
+      return acc;
+    }, {});
+
+  const defaultValueByParam = Object.entries(urlParameters).reduce(
+    (acc, [key, attr]) => {
+      acc[key] = attr.defaultValue;
+      return acc;
+    },
+    {},
+  );
+
+  const urlParamsContent = generateAttributesTable(
+    wc,
+    params,
+    booleanParams,
+    booleanTrueByDefaultParams,
+    descriptionByParam,
+    defaultValueByParam,
+    reloadParams,
+  );
+  if (urlParamsContent) {
+    const elt = document.querySelector("#urlParameters");
+    if (elt) {
+      elt.innerHTML = urlParamsContent;
+    }
+  } else {
+    document.querySelector("#urlParamtersDoc")?.remove();
+  }
+
+  /* Build HTML */
 
   document.querySelector("#code").innerHTML = generateCodeText(
     wc,
@@ -191,7 +246,11 @@ function generateAttributesTable(
       const defaultChecked = booleanTrueByDefault.includes(key)
         ? "checked"
         : "";
-      const currValue = wc.getAttribute(key);
+      let currValue = wc.getAttribute(key);
+      const isUrlParameters = reloadAttrs?.includes(key);
+      if (isUrlParameters) {
+        currValue = new URLSearchParams(window.location.search).get(key);
+      }
       let checked = currValue === "true" ? "checked" : "";
       if (currValue !== "true" && currValue !== "false") {
         checked = defaultChecked;
@@ -201,28 +260,33 @@ function generateAttributesTable(
       <td class="border px-4 py-2">${key}</td>
       <!--td class="border px-4 py-2"></td>
       <td class="border px-4 py-2"></td-->
-      <td class="border px-4 py-2">
-      <div class="flex gap-4">
+      <td class="border px-4 py-2 space-y-2">
+      <div>
       ${
         isBoolean
           ? `<input
           type="checkbox"
-          class="border"
+          id="${key}"
+          class="border mr-4 cursor-pointer inline-block"
           name="${key}"
           ${checked ? "checked" : ""}
           onchange="document.querySelector('${wc.localName}').setAttribute('${key}', this.checked);onAttributeUpdate(document.querySelector('${wc.localName}'),this.name, this.checked, '${reloadAttrs.join(",")}');"
           />`
           : `
-        <input
-          type="text"
-          class="border"
-          name="${key}"
-          value="${wc.getAttribute(key) || defaultValueByAttr[key] || ""}" 
-          />
-        <button class="border p-2 bg-black hover:bg-gray-700 text-white" onclick="document.querySelector('${wc.localName}').setAttribute('${key}', this.previousElementSibling.value);onAttributeUpdate(document.querySelector('${wc.localName}'),this.previousElementSibling.name, this.previousElementSibling.value, '${reloadAttrs.join(",")}');">Update</button>`
+        <div class="flex gap-4">
+          <input
+            type="text"
+            class="border px-2"
+            name="${key}"
+            placeholder="${defaultValueByAttr[key] || ""}"
+            value="${wc.getAttribute(key) || defaultValueByAttr[key] || ""}" 
+            />
+          <button class="border cursor-pointer p-2 bg-black hover:bg-gray-700 text-white" onclick="document.querySelector('${wc.localName}').setAttribute('${key}', this.previousElementSibling.value);onAttributeUpdate(document.querySelector('${wc.localName}'),this.previousElementSibling.name, this.previousElementSibling.value, '${reloadAttrs.join(",")}');">Update</button>
+        </div>`
       }
+      
+      ${descriptionByAttr[key] ? `<label for="${key}" class="pt-2 cursor-pointer">${descriptionByAttr[key]}</label>` : ``}
       </div>
-      ${descriptionByAttr[key] ? `<div class="pt-2">${descriptionByAttr[key]}</div>` : ``}
       </td>
     </tr>
   `;
