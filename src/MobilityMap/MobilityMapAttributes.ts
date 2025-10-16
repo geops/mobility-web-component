@@ -174,7 +174,7 @@ where:
   mapsetbbox: {
     description:
       "The BBOX to constrain the boundary of the mapset layer in EPSG:3857 coordinates. Mandatory for mapset layer. <br/>Ex: 831634,5933959,940649,6173660 .",
-    public: true,
+    public: false,
   },
   mapsetplanid: {
     description:
@@ -192,7 +192,7 @@ where:
   },
   mapsettimestamp: {
     description: `The ${geopsMapsetApiLink} timestamp used to load valid standard plan. If not defined it will use the current time.`,
-    public: true,
+    public: false,
   },
   mapseturl: {
     defaultValue: "https://editor.mapset.io/api/v1",

@@ -27,6 +27,7 @@ export interface LayerTreeConfig {
 }
 
 export type LayerTreeMenuProps = {
+  filter?: (layer: BaseLayer) => boolean;
   order: string[];
 } & HTMLAttributes<HTMLDivElement> &
   Partial<LayerTreeProps> &
@@ -62,6 +63,7 @@ const getConfigForLayer = (
 };
 
 function LayerTreeMenu({
+  filter,
   order = LAYER_TREE_ORDER,
   ...props
 }: LayerTreeMenuProps) {
@@ -74,6 +76,12 @@ function LayerTreeMenu({
       map
         ?.getLayers()
         .getArray()
+        .filter(
+          filter ??
+            (() => {
+              return true;
+            }),
+        )
         .sort((a, b) => {
           if (
             order &&
@@ -88,7 +96,7 @@ function LayerTreeMenu({
           return getConfigForLayer(layer, revision, layersConfig);
         }) || [];
     return config;
-  }, [layersConfig, map, order, revision]);
+  }, [filter, layersConfig, map, order, revision]);
 
   // Force update of config when a layers`s visibility changes progammatically
   useEffect(() => {

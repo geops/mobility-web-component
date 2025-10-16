@@ -11,6 +11,13 @@ import type { MapsetLayerOptions } from "mobility-toolbox-js/ol";
 
 let moveEndTimeout: ReturnType<typeof setTimeout>;
 
+export const isFeatureOutsideZoomLimit = (feature, map) => {
+  const zoom = map?.getView()?.getZoom();
+  const minZoom = feature.get("minZoom");
+  const maxZoom = feature.get("maxZoom");
+  return minZoom > zoom || zoom > maxZoom;
+};
+
 function MapsetLayer(props?: Partial<MapsetLayerOptions>) {
   const {
     apikey,
@@ -130,6 +137,35 @@ function MapsetLayer(props?: Partial<MapsetLayerOptions>) {
       unByKey(listeners);
     };
   }, [map, layer, mapsetplanid]);
+
+  // Apply fetaure's minzoom and maxzoom to its style
+  // TODO should be done by the mapset layer itself
+  useEffect(() => {
+    let key = null;
+    if (layer) {
+      key = layer.on("updatefeatures", () => {
+        const features = layer.getSource()?.getFeatures();
+        if (!features?.length) {
+          return;
+        }
+        features.forEach((feature) => {
+          const styleFunction = feature.getStyleFunction();
+          if (styleFunction) {
+            (feature as Feature).setStyle((feat, resolution) => {
+              if (isFeatureOutsideZoomLimit(feat, layer.getMapInternal())) {
+                return null;
+              }
+              return styleFunction(feature, resolution);
+            });
+          }
+        });
+      });
+    }
+
+    return () => {
+      unByKey(key);
+    };
+  }, [layer]);
 
   return null;
 }
