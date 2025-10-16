@@ -20,8 +20,14 @@ function SingleClickListener({
   debounceTimeout = 0,
   hover = true,
 }: SingleClickListenerProps) {
-  const { map, queryablelayers, setFeaturesInfos, setFeaturesInfosHovered } =
-    useMapContext();
+  const {
+    map,
+    queryablelayers,
+    setFeaturesInfos,
+    setFeaturesInfosHovered,
+    stationsLayer,
+    tenant,
+  } = useMapContext();
 
   const getFeaturesInfosAtEvt = useCallback(
     async (evt: MapBrowserEvent<PointerEvent>) => {
@@ -34,9 +40,30 @@ function SingleClickListener({
         5,
         true,
       );
+
+      // Filter the features clicked in the stations layer by the tenant
+      if (stationsLayer) {
+        // Clean the features infos stations clicked
+        const featuresInfoStations = featuresInfos?.find((info) => {
+          return info.layer === stationsLayer;
+        });
+        const stationsFeatures = featuresInfoStations?.features || [];
+
+        const [stationFeature] = stationsFeatures.filter((feat) => {
+          return feat.get("tralis_network")?.includes(tenant);
+        });
+
+        // Replace the features clicked in the stations layer by the filtered one
+        if (featuresInfoStations) {
+          featuresInfoStations.features = stationFeature
+            ? [stationFeature]
+            : [];
+        }
+      }
+
       return featuresInfos;
     },
-    [queryablelayers],
+    [queryablelayers, stationsLayer, tenant],
   );
 
   const onPointerMove = useCallback(

@@ -32,14 +32,10 @@ function FeaturesInfosListener() {
         return info.layer === realtimeLayer;
       })?.features || [];
 
-    const stationsFeatures =
+    const [stationFeature] =
       featuresInfos?.find((info) => {
         return info.layer === stationsLayer;
       })?.features || [];
-
-    const [stationFeature] = stationsFeatures.filter((feat) => {
-      return feat.get("tralis_network")?.includes(tenant);
-    });
 
     const features =
       featuresInfos?.flatMap((info) => {
