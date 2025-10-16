@@ -37,6 +37,7 @@ export type MobilityMapAttributeName =
   | "mapset"
   | "mapsetbbox"
   | "mapsetplanid"
+  | "mapsettags"
   | "mapsettenants"
   | "mapseturl"
   | "mapsurl"
@@ -178,9 +179,13 @@ where:
     description: "The id of the mapset plan to display.",
     public: true,
   },
+  mapsettags: {
+    description: `The ${geopsMapsetApiLink} tags to get the plans from.`,
+    public: true,
+  },
   mapsettenants: {
     defaultValue: "geopstest",
-    description: `The ${geopsMapsetApiLink} tenant to get the mapset from.`,
+    description: `The ${geopsMapsetApiLink} tenant to get the plans from.`,
     public: true,
   },
   mapseturl: {

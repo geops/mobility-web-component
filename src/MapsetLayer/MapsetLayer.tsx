@@ -18,6 +18,7 @@ function MapsetLayer(props?: Partial<MapsetLayerOptions>) {
     map,
     mapsetbbox,
     mapsetplanid,
+    mapsettags,
     mapsettenants,
     mapseturl,
     setMapsetLayer,
@@ -27,20 +28,36 @@ function MapsetLayer(props?: Partial<MapsetLayerOptions>) {
     if (!baseLayer || !map) {
       return null;
     }
+
+    let bbox = undefined;
+    if (mapsetbbox) {
+      bbox = mapsetbbox?.split(",").map((coord) => {
+        return Number(coord.trim());
+      });
+      if (
+        bbox.length === 4 &&
+        !bbox.some((coord) => {
+          return Number.isNaN(coord);
+        })
+      ) {
+        bbox = transformExtent(bbox, "EPSG:3857", "EPSG:4326");
+      }
+    } else {
+      bbox = transformExtent(
+        map.getView()?.calculateExtent(map.getSize()),
+        "EPSG:3857",
+        "EPSG:4326",
+      );
+    }
     return new MtbMapsetLayer({
       apiKey: apikey,
-      bbox:
-        mapsetbbox?.split(",").map((coord) => {
-          return Number(coord.trim());
-        }) ||
-        transformExtent(
-          map.getView()?.calculateExtent(map.getSize()),
-          "EPSG:3857",
-          "EPSG:4326",
-        ),
+      bbox,
       mapseturl: mapseturl || undefined,
       name: LAYER_NAME_MAPSET,
       planId: mapsetplanid ?? undefined,
+      tags: mapsettags?.split(",").map((t) => {
+        return t.trim();
+      }),
       tenants: mapsettenants?.split(",").map((t) => {
         return t.trim();
       }),
@@ -48,13 +65,14 @@ function MapsetLayer(props?: Partial<MapsetLayerOptions>) {
       ...(props || {}),
     });
   }, [
-    apikey,
     baseLayer,
     map,
     mapsetbbox,
-    mapsettenants,
-    mapsetplanid,
+    apikey,
     mapseturl,
+    mapsetplanid,
+    mapsettags,
+    mapsettenants,
     props,
   ]);
 
