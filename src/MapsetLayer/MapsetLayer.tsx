@@ -51,11 +51,19 @@ function MapsetLayer(props?: Partial<MapsetLayerOptions>) {
         bbox = transformExtent(bbox, "EPSG:3857", "EPSG:4326");
       }
     } else {
-      bbox = transformExtent(
-        map.getView()?.calculateExtent(map.getSize()),
-        "EPSG:3857",
-        "EPSG:4326",
-      );
+      // we have to wait that the map is well sized to get the extent
+      // It triggers an erro in FF without this
+      if (
+        map.getView()?.getCenter() &&
+        map.getSize()[0] > 0 &&
+        map.getSize()[1] > 0
+      ) {
+        bbox = transformExtent(
+          map.getView()?.calculateExtent(),
+          "EPSG:3857",
+          "EPSG:4326",
+        );
+      }
     }
     return new MtbMapsetLayer({
       apiKey: apikey,
