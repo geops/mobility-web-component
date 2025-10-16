@@ -242,6 +242,7 @@ function RealtimeLayer(props: Partial<RealtimeLayerOptions>) {
       setStopSequence(null);
       if (trainId && layer) {
         layer.api?.unsubscribeStopSequence(trainId);
+        layer.api?.unsubscribeFullTrajectory(layer.selectedVehicleId);
         layer.selectedVehicleId = null;
         layer.vectorLayer.getSource().clear();
       }
