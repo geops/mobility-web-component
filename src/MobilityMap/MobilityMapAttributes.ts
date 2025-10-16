@@ -39,6 +39,7 @@ export type MobilityMapAttributeName =
   | "mapsetplanid"
   | "mapsettags"
   | "mapsettenants"
+  | "mapsettimestamp"
   | "mapseturl"
   | "mapsurl"
   | "maxextent"
@@ -166,7 +167,7 @@ where:
   },
   mapset: {
     defaultValue: "false",
-    description: `Add the mapset layer to the map. This layer will display mapset plans on the map.`,
+    description: `Add the mapset layer to the map. This layer will display mapset plans on the map. By default, it will load only the standard plans valid at the current time.`,
     public: true,
     type: "boolean",
   },
@@ -176,8 +177,9 @@ where:
     public: true,
   },
   mapsetplanid: {
-    description: "The id of the mapset plan to display.",
-    public: true,
+    description:
+      "The id of the mapset plan to display. Mostly for debugging purposes.",
+    public: false,
   },
   mapsettags: {
     description: `The ${geopsMapsetApiLink} tags to get the plans from.`,
@@ -186,6 +188,10 @@ where:
   mapsettenants: {
     defaultValue: "geopstest",
     description: `The ${geopsMapsetApiLink} tenant to get the plans from.`,
+    public: true,
+  },
+  mapsettimestamp: {
+    description: `The ${geopsMapsetApiLink} timestamp used to load valid standard plan. If not defined it will use the current time.`,
     public: true,
   },
   mapseturl: {

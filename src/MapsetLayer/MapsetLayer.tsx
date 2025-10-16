@@ -20,6 +20,7 @@ function MapsetLayer(props?: Partial<MapsetLayerOptions>) {
     mapsetplanid,
     mapsettags,
     mapsettenants,
+    mapsettimestamp,
     mapseturl,
     setMapsetLayer,
   } = useMapContext();
@@ -61,6 +62,7 @@ function MapsetLayer(props?: Partial<MapsetLayerOptions>) {
       tenants: mapsettenants?.split(",").map((t) => {
         return t.trim();
       }),
+      timestamp: mapsettimestamp || new Date().toISOString(), // Load only standard plan
       zoom: map.getView().getZoom(),
       ...(props || {}),
     });
@@ -73,6 +75,7 @@ function MapsetLayer(props?: Partial<MapsetLayerOptions>) {
     mapsetplanid,
     mapsettags,
     mapsettenants,
+    mapsettimestamp,
     props,
   ]);
 
