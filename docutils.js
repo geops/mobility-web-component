@@ -280,7 +280,7 @@ function generateAttributesTable(
             class="border px-2"
             name="${key}"
             placeholder="${defaultValueByAttr[key] || ""}"
-            value="${wc.getAttribute(key) || defaultValueByAttr[key] || ""}" 
+            value="${(wc.getAttribute(key) || defaultValueByAttr[key] || "").replace(/"/g, "&quot;")}"
             />
           <button class="border cursor-pointer p-2 bg-black hover:bg-gray-700 text-white" onclick="document.querySelector('${wc.localName}').setAttribute('${key}', this.previousElementSibling.value);onAttributeUpdate(document.querySelector('${wc.localName}'),this.previousElementSibling.name, this.previousElementSibling.value, '${reloadAttrs.join(",")}');">Update</button>
         </div>`
