@@ -25,7 +25,7 @@ import type {
 
 const TRACKING_ZOOM = 16;
 
-const useGraphs = false;
+const useGraphs = window.location?.href?.includes("graphs=true");
 
 function RealtimeLayer(props: Partial<RealtimeLayerOptions>) {
   const {
