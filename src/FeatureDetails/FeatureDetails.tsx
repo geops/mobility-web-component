@@ -23,33 +23,28 @@ export interface FeatureDetailsProps {
  */
 function FeatureDetails({ feature, featuresInfo, layer }: FeatureDetailsProps) {
   const {
+    linesIds,
     linesNetworkPlanLayer,
     notificationsLayer,
     realtimeLayer,
     stationId,
     stationsLayer,
-    tenant,
     trainId,
   } = useMapContext();
 
-  if (!feature) {
+  if (!layer) {
     return null;
   }
 
   return (
     <>
-      {feature && !!realtimeLayer && layer === realtimeLayer && trainId && (
+      {!!realtimeLayer && layer === realtimeLayer && trainId && (
         <RouteSchedule />
       )}
-      {feature &&
-        !!stationsLayer &&
-        layer === stationsLayer &&
-        tenant &&
-        stationId && <Station />}
-      {feature &&
-        !!linesNetworkPlanLayer &&
+      {!!stationsLayer && layer === stationsLayer && stationId && <Station />}
+      {!!linesNetworkPlanLayer &&
         layer === linesNetworkPlanLayer &&
-        featuresInfo?.features?.length && (
+        linesIds && (
           <LinesNetworkPlanDetails
             className={contentClassName}
             features={featuresInfo?.features || []}

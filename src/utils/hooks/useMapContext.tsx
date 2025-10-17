@@ -50,6 +50,7 @@ export type MapContextType = {
   linesNetworkPlanLayer: MaplibreStyleLayer;
   map: Map;
   mapsetLayer?: MapsetLayer;
+  notificationId?: string;
   notificationsLayer?: MocoLayer;
   permalinkUrlSearchParams: URLSearchParams;
   previewNotifications?: SituationType[];
@@ -86,6 +87,7 @@ export type MapContextType = {
   setLinesNetworkPlanLayer: (layer?: MaplibreStyleLayer) => void;
   setMap: (map?: Map) => void;
   setMapsetLayer: (mapsetLayer?: MapsetLayer) => void;
+  setNotificationId: (notificationId?: string) => void;
   setNotificationsLayer: (notificationsLayer?: MocoLayer) => void;
   setPermalinkUrlSearchParams: (
     setPermalinkUrlSearchParams: URLSearchParams,
@@ -132,9 +134,11 @@ export const MapContext = createContext<MapContextType>({
   setBaseLayer: (baseLayer?: MaplibreLayer) => {},
   setIsFollowing: (isFollowing: boolean) => {},
   setIsTracking: (isTracking: boolean) => {},
+  setLinesIds: (linesIds: string[]) => {},
   setLinesNetworkPlanLayer: (linesNetworkPlanLayer: MaplibreStyleLayer) => {},
   setMap: (map?: Map) => {},
   setMapsetLayer: (mapsetLayer?: MapsetLayer) => {},
+  setNotificationId: (notificationId?: string) => {},
   setNotificationsLayer: (notificationsLayer?: MocoLayer) => {},
   setPermalinkUrlSearchParams: (
     permalinkUrlSearchParams: URLSearchParams,

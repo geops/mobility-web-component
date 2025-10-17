@@ -102,7 +102,7 @@ function MobilityMap(props: MobilityMapProps) {
   const [previewNotifications, setPreviewNotifications] =
     useState<SituationType[]>();
 
-  const { lang, layers, lines, permalinktemplate } = props;
+  const { lang, layers, permalinktemplate } = props;
 
   // Apply initial visibility of layers
   useInitialLayersVisiblity(map, layers, permalinktemplate);
@@ -238,10 +238,6 @@ function MobilityMap(props: MobilityMapProps) {
   useEffect(() => {
     i18n.locale(lang);
   }, [lang]);
-
-  useEffect(() => {
-    setLinesIds(lines?.split(","));
-  }, [lines]);
 
   return (
     <I18nContext.Provider value={i18n}>

@@ -22,6 +22,9 @@ function OverlayDetailsHeader({
 }: OverlayDetailsHeaderProps) {
   const { t } = useI18n();
   const layerConfig = useLayerConfig(layer?.get("name"));
+  if (!layer) {
+    return null;
+  }
   return (
     <OverlayHeader
       title={t(layerConfig?.title || "")}

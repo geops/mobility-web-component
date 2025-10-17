@@ -1,5 +1,6 @@
 import { useEffect } from "preact/hooks";
 
+import useLnpLineInfo from "../utils/hooks/useLnp";
 import useMapContext from "../utils/hooks/useMapContext";
 
 /**
@@ -12,6 +13,7 @@ function LayoutState() {
     geolocation,
     hasDetails,
     hasLayerTree,
+    hasLnp,
     hasPrint,
     hasRealtime,
     hasShare,
@@ -20,7 +22,9 @@ function LayoutState() {
     isSearchOpen,
     isShareMenuOpen,
     layertree,
+    linesIds,
     lnp,
+    lnpid,
     mapset,
     notification,
     permalink,
@@ -58,6 +62,8 @@ function LayoutState() {
     toolbar,
     trainId,
   } = useMapContext();
+
+  const lineInfo = useLnpLineInfo(lnpid);
 
   useEffect(() => {
     setHasStations(!!tenant);
@@ -114,6 +120,10 @@ function LayoutState() {
   useEffect(() => {
     setHasLayerTree(layertree === "true");
   }, [layertree, setHasLayerTree]);
+
+  useEffect(() => {
+    setLinesIds(lineInfo ? [lineInfo.external_id] : null);
+  }, [lineInfo, setLinesIds]);
 
   useEffect(() => {
     if (isSearchOpen) {
@@ -270,7 +280,8 @@ function LayoutState() {
         (hasLayerTree && isLayerTreeOpen) ||
         (hasShare && isShareMenuOpen) ||
         (hasRealtime && !!trainId) ||
-        (tenant && !!stationId),
+        (tenant && !!stationId) ||
+        (hasLnp && !!linesIds),
     );
   }, [
     hasDetails,
@@ -286,6 +297,8 @@ function LayoutState() {
     tenant,
     stationId,
     setIsOverlayOpen,
+    hasLnp,
+    linesIds,
   ]);
 
   return null;

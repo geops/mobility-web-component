@@ -30,7 +30,6 @@ function OverlayContent({
     isLayerTreeOpen,
     isSearchOpen,
     isShareMenuOpen,
-    selectedFeature,
     setIsExportMenuOpen,
     setIsLayerTreeOpen,
     setIsShareMenuOpen,
@@ -39,7 +38,7 @@ function OverlayContent({
 
   return (
     <>
-      {hasDetails && selectedFeature && <OverlayDetails />}
+      {hasDetails && <OverlayDetails />}
       {hasPrint && isExportMenuOpen && (
         <>
           <OverlayHeader

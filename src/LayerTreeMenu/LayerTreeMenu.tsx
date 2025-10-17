@@ -28,7 +28,7 @@ export interface LayerTreeConfig {
 
 export type LayerTreeMenuProps = {
   filter?: (layer: BaseLayer) => boolean;
-  order: string[];
+  order?: string[];
 } & HTMLAttributes<HTMLDivElement> &
   Partial<LayerTreeProps> &
   PreactDOMAttributes;

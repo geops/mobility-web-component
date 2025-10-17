@@ -13,10 +13,15 @@ import useMapContext from "../utils/hooks/useMapContext";
 function OverlayDetails() {
   const {
     featuresInfos,
+    linesIds,
+    linesNetworkPlanLayer,
+    notificationId,
+    notificationsLayer,
     realtimeLayer,
     selectedFeature,
     setFeaturesInfos,
     setLinesIds,
+    setNotificationId,
     setStationId,
     setTrainId,
     stationId,
@@ -40,9 +45,24 @@ function OverlayDetails() {
     if (stationId) {
       return stationsLayer;
     }
+    if (linesIds) {
+      return linesNetworkPlanLayer;
+    }
+    if (notificationId) {
+      return notificationsLayer;
+    }
     return undefined;
-  }, [featuresInfo?.layer, realtimeLayer, stationId, stationsLayer, trainId]);
-
+  }, [
+    featuresInfo?.layer,
+    trainId,
+    stationId,
+    linesIds,
+    notificationId,
+    realtimeLayer,
+    stationsLayer,
+    linesNetworkPlanLayer,
+    notificationsLayer,
+  ]);
   return (
     <>
       <OverlayDetailsHeader
@@ -53,6 +73,7 @@ function OverlayDetails() {
           setTrainId(null);
           setStationId(null);
           setLinesIds(null);
+          setNotificationId(null);
         }}
       />
       <FeatureDetails

@@ -1,43 +1,17 @@
-import { useEffect, useMemo, useState } from "preact/hooks";
+import { useMemo, useState } from "preact/hooks";
 import { twMerge } from "tailwind-merge";
 
 import RouteIcon from "../RouteIcon";
 import ShadowOverflow from "../ShadowOverflow";
-import {
-  LNP_LINE_ID_PROP,
-  LNP_MD_LINES,
-  LNP_MD_STOPS,
-  LNP_SOURCE_ID,
-} from "../utils/constants";
+import { LNP_LINE_ID_PROP } from "../utils/constants";
+import { useLnpLinesInfos, useLnpStopsInfos } from "../utils/hooks/useLnp";
 import useMapContext from "../utils/hooks/useMapContext";
 
-import type { VectorTileSource } from "maplibre-gl";
 import type { RealtimeLine } from "mobility-toolbox-js/types";
 import type { Feature } from "ol";
 import type { PreactDOMAttributes } from "preact";
 
-let cacheLineInfosById = null;
-let cacheStopInfosById = null;
-
-interface LineInfo {
-  color: string;
-  external_id: string;
-  id: string;
-  long_name: string;
-  mot: string;
-  operator_name: string;
-  runs: number;
-  short_name: string;
-  text_color: string;
-}
-
-interface StopInfo {
-  external_id: string;
-  importance: number;
-  long_name: string;
-  short_name: string;
-  visibility_level: number;
-}
+import type { LineInfo } from "../utils/hooks/useLnp";
 
 const RUNS_PROP = "runs";
 
@@ -46,9 +20,10 @@ function LinesNetworkPlanDetails({
   features,
   ...props
 }: { className?: string; features: Feature[] } & PreactDOMAttributes) {
-  const { baseLayer } = useMapContext();
-  const [lineInfos, setLineInfos] = useState<LineInfo[]>(null);
-  const [stopInfos, setStopInfos] = useState<StopInfo[]>(null);
+  const { linesIds } = useMapContext();
+  const lineInfos = useLnpLinesInfos();
+  const stopInfos = useLnpStopsInfos();
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [stopInfosOpenId, setStopInfosOpenId] = useState<string>(null);
 
@@ -58,40 +33,11 @@ function LinesNetworkPlanDetails({
     );
   }, []);
 
-  useEffect(() => {
-    const source = baseLayer?.mapLibreMap?.getSource(LNP_SOURCE_ID);
-    const abortController = new AbortController();
-    const fetchInfos = async (url) => {
-      if (!cacheLineInfosById) {
-        const response = await fetch(url, { signal: abortController.signal });
-        const data = await response.json();
-        cacheLineInfosById = data[LNP_MD_LINES];
-        cacheStopInfosById = data[LNP_MD_STOPS];
-        if (!cacheLineInfosById) {
-          // eslint-disable-next-line no-console
-          console.warn("No lines informations found from ", url);
-        }
-        if (!cacheStopInfosById) {
-          // eslint-disable-next-line no-console
-          console.warn("No stops informations found from ", url);
-        }
-      }
-      setLineInfos(cacheLineInfosById);
-      setStopInfos(cacheStopInfosById);
-    };
-    const url = (source as VectorTileSource)?.url;
-    if (url) {
-      void fetchInfos(url);
-    }
-    return () => {
-      abortController?.abort();
-    };
-  }, [baseLayer?.mapLibreMap]);
-
   const lineInfosByOperator: Record<string, LineInfo[]> = useMemo(() => {
     const byOperators = {};
 
     [
+      ...(linesIds || []),
       ...new Set(
         features.map((f) => {
           return f.get(LNP_LINE_ID_PROP);
@@ -110,7 +56,7 @@ function LinesNetworkPlanDetails({
         lineInfos[id].id = id;
 
         const runs = features
-          .filter((f) => {
+          ?.filter((f) => {
             return f.get(LNP_LINE_ID_PROP) === id;
           })
           .reduce((acc, featuree) => {
@@ -123,7 +69,7 @@ function LinesNetworkPlanDetails({
       });
 
     return byOperators;
-  }, [features, lineInfos]);
+  }, [features, lineInfos, linesIds]);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const stopInfoIdsByLineId: Record<string, string[]> = useMemo(() => {
@@ -143,7 +89,7 @@ function LinesNetworkPlanDetails({
     return byLineId;
   }, [features]);
 
-  if (!features?.length) {
+  if (!features?.length && !linesIds?.length) {
     return null;
   }
 

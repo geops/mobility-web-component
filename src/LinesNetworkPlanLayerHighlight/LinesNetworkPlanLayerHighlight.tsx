@@ -65,7 +65,7 @@ function LinesNetworkPlanLayerHighlight(props: MaplibreStyleLayerOptions) {
         }),
       ),
     ];
-    setLinesIds(ids);
+    setLinesIds(ids?.length ? ids : null);
   }, [featuresInfos, layer, linesNetworkPlanLayer, setLinesIds]);
 
   useEffect(() => {

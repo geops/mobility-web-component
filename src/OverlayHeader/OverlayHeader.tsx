@@ -24,7 +24,7 @@ function OverlayHeader({
       {...props}
       className={twMerge(
         `flex flex-row items-center justify-between gap-2 border-b p-2 pl-4`,
-        className,
+        className as string,
       )}
     >
       {/* We set text-base so the clamp works on overlay container, not main */}
