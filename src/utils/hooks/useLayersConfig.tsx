@@ -5,6 +5,9 @@ import { LAYERS_NAMES } from "../constants";
 import useMapContext from "./useMapContext";
 
 export interface LayerConfig {
+  featurelink?: {
+    href?: string;
+  };
   link?: {
     href?: string;
     show?: boolean;
