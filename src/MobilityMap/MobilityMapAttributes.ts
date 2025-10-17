@@ -126,24 +126,34 @@ const attrs: MobilityMapAttributes = {
     description: `A JSON string to configure the layers and other components associated to it.<br/>
        The layers available are : ${Object.values(LAYERS_NAMES).toString()}.<br/>
        Definition for a layer :
-<pre style="font-size: 12px; overflow: auto;">{
-  "notifications": {
+<pre style="font-size: 12px; overflow: auto;">
+{
+  "${LAYERS_NAMES.linesnetworkplan}": {
+    "featurelink": {
+      "href": "https://www.mysite.de/my-line/?id={{id}}"
+    }
+  },
+  "${LAYERS_NAMES.notifications}": {
     "link": {
       "href": "https://moco.geops.io/situation/{{id}}",
       "show": true,
       "text": "Zu MOCO"
     },
     "title": "Notifications"
-  }
-</pre>}
+}
+</pre>
 <br/>
 where:
 <ul style="list-style-type: disc; padding-left: 20px;">
   <li><i>link</i> defined a external link displayed at the bottom of the detail view</li>
     <ul style="list-style-type: disc; padding-left: 40px;">
-      <li><i>href</i> is the target of the link. The <i>href</i> can be template, for example for the meldungen layer you can use {{id}} to insert the id of the notification in the url.</li
+      <li><i>href</i> is the target of the link. The <i>href</i> can be template, for example for the meldungen layer you can use {{id}} to insert the id of the notification in the url.</li>
       <li><i>text</i> is the text display as a link</li>
       <li><i>show</i> show/hide the link in the details view</li>
+    </ul>
+  <li><i>featurelink</i> defined a external link used when you click on single feature in detail view</li>
+    <ul style="list-style-type: disc; padding-left: 40px;">
+      <li><i>href</i> is the target of the link. The <i>href</i> can be template, for example for the meldungen layer you can use {{id}} to insert the id of the notification in the url.</li>
     </ul>
   <li><i>title</i> is the title of the layer used in the details view header and in the layer tree, if not defined the layer name will be used.</li>
 </ul>`,

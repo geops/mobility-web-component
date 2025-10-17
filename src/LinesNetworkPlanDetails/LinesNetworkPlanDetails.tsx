@@ -1,9 +1,10 @@
-import { useMemo, useState } from "preact/hooks";
+import { useCallback, useMemo, useState } from "preact/hooks";
 import { twMerge } from "tailwind-merge";
 
 import RouteIcon from "../RouteIcon";
 import ShadowOverflow from "../ShadowOverflow";
-import { LNP_LINE_ID_PROP } from "../utils/constants";
+import { LAYERS_NAMES, LNP_LINE_ID_PROP } from "../utils/constants";
+import useLayerConfig from "../utils/hooks/useLayerConfig";
 import { useLnpLinesInfos, useLnpStopsInfos } from "../utils/hooks/useLnp";
 import useMapContext from "../utils/hooks/useMapContext";
 
@@ -23,6 +24,7 @@ function LinesNetworkPlanDetails({
   const { linesIds } = useMapContext();
   const lineInfos = useLnpLinesInfos();
   const stopInfos = useLnpStopsInfos();
+  const layerConfig = useLayerConfig(LAYERS_NAMES.linesnetworkplan);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [stopInfosOpenId, setStopInfosOpenId] = useState<string>(null);
@@ -32,6 +34,17 @@ function LinesNetworkPlanDetails({
       new URLSearchParams(window.location.search).get(RUNS_PROP) === "true"
     );
   }, []);
+
+  const getLink = useCallback(
+    (id: string) => {
+      const href = layerConfig?.link?.href;
+      if (href) {
+        return href.replace(`{{id}}`, id);
+      }
+      return null;
+    },
+    [layerConfig],
+  );
 
   const lineInfosByOperator: Record<string, LineInfo[]> = useMemo(() => {
     const byOperators = {};
@@ -177,7 +190,17 @@ function LinesNetworkPlanDetails({
                             // }}
                           >
                             <div>
-                              <RouteIcon line={line}></RouteIcon>
+                              {getLink(lineInfo.id) ? (
+                                <a
+                                  href={getLink(lineInfo.id)}
+                                  rel="noreferrer"
+                                  target="_blank"
+                                >
+                                  <RouteIcon line={line}></RouteIcon>
+                                </a>
+                              ) : (
+                                <RouteIcon line={line}></RouteIcon>
+                              )}
                             </div>
                             {!!longName && (
                               <div className={"flex-1 text-left"}>
