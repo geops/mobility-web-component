@@ -37,12 +37,12 @@ function LinesNetworkPlanDetails({
     const byOperators = {};
 
     [
-      ...new Set(
+      ...new Set([
         ...(linesIds || []),
-        features.map((f) => {
+        ...features.map((f) => {
           return f.get(LNP_LINE_ID_PROP);
         }),
-      ),
+      ]),
     ]
       .filter((id) => {
         return !!id && !!lineInfos?.[id];
