@@ -9,7 +9,7 @@ import type {
 } from "mobility-toolbox-js/types";
 
 function useMocoSituation(situationId?: string, params?: MocoExportParameters) {
-  const { notificationsLayer } = useMapContext();
+  const { lang, notificationsLayer } = useMapContext();
   const [situation, setSituation] = useState<SituationType>();
 
   const api: MocoAPI | undefined = useMemo(() => {
@@ -24,6 +24,10 @@ function useMocoSituation(situationId?: string, params?: MocoExportParameters) {
         contentMedium: true,
         contentSmall: true,
         includeGeoms: false,
+        includeLines: true,
+        includeStops: true,
+        [lang]: true,
+        limit: 1,
         ...(params || {}),
       })
       .then((response) => {
@@ -42,7 +46,7 @@ function useMocoSituation(situationId?: string, params?: MocoExportParameters) {
     return () => {
       abortController.abort();
     };
-  }, [api, situationId, params]);
+  }, [api, situationId, params, lang]);
 
   return situation;
 }
