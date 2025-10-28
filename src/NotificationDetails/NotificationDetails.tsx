@@ -1,7 +1,6 @@
 import {
   type AffectedTimeIntervalType,
   type PublicationType,
-  type SituationType,
   type TextualContentType,
 } from "mobility-toolbox-js/types";
 import { twMerge } from "tailwind-merge";
@@ -10,6 +9,7 @@ import Warning from "../icons/Warning";
 import ShadowOverflow from "../ShadowOverflow";
 import Link from "../ui/Link";
 import useI18n from "../utils/hooks/useI18n";
+import useMocoSituation from "../utils/hooks/useMocoSituation";
 
 import type {
   MultilingualTextualContentType,
@@ -64,30 +64,8 @@ function NotificationDetails({
   feature: Feature;
 }) {
   const { locale, t } = useI18n();
-  const { situation } = feature.getProperties();
-
-  // useEffect(() => {
-  //   const abortController = new AbortController();
-  //   if (!notificationtenant) {
-  //     setLines([]);
-  //   }
-  //   fetch(
-  //     `https://tralis-tracker-api.geops.io/api/lines/${notificationtenant}/`,
-  //   )
-  //     .then((res) => {
-  //       return res.json();
-  //     })
-  //     .then((data) => {
-  //       setLines(data);
-  //     })
-  //     .catch((err) => {
-  //       // eslint-disable-next-line no-console
-  //       console.error("Failed to fetch lines", err);
-  //     });
-  //   return () => {
-  //     abortController?.abort();
-  //   };
-  // }, [notificationtenant]);
+  const { situationId } = feature.getProperties();
+  const situationParsed = useMocoSituation(situationId);
 
   // moco export v2
   let textualContentMultilingual: Partial<MultilingualTextualContentType> = {};
@@ -96,41 +74,36 @@ function NotificationDetails({
   let publicationsToDisplay: PublicationType[] = [];
   let reasonsToDisplay: string[] = [];
 
-  try {
-    const situationParsed: SituationType = JSON.parse(situation) || {};
-    const publicationsArr: PublicationType[] =
-      situationParsed?.publications || [];
+  // const situationParsed: SituationType = JSON.parse(situation) || {};
+  const publicationsArr: PublicationType[] =
+    situationParsed?.publications || [];
 
-    // Find the current publication(s) at the current date
-    publicationsToDisplay =
-      publicationsArr?.filter(({ publicationWindows }) => {
-        return publicationWindows.find(({ endTime, startTime }) => {
-          const now = new Date();
-          const startT = new Date(startTime);
-          const endT = new Date(endTime);
-          return startT <= now && now <= endT;
-        });
-      }) || [];
+  // Find the current publication(s) at the current date
+  publicationsToDisplay =
+    publicationsArr?.filter(({ publicationWindows }) => {
+      return publicationWindows.find(({ endTime, startTime }) => {
+        const now = new Date();
+        const startT = new Date(startTime);
+        const endT = new Date(endTime);
+        return startT <= now && now <= endT;
+      });
+    }) || [];
 
-    // Display the current and next affected time intervals not the one in the past
-    timeIntervalsToDisplay =
-      (situationParsed?.affectedTimeIntervals || []).filter(
-        ({ endTime, startTime }) => {
-          const now = new Date();
-          const startT = new Date(startTime);
-          const endT = new Date(endTime);
-          return (startT <= now && now <= endT) || now < startT;
-        },
-      ) || [];
+  // Display the current and next affected time intervals not the one in the past
+  timeIntervalsToDisplay =
+    (situationParsed?.affectedTimeIntervals || []).filter(
+      ({ endTime, startTime }) => {
+        const now = new Date();
+        const startT = new Date(startTime);
+        const endT = new Date(endTime);
+        return (startT <= now && now <= endT) || now < startT;
+      },
+    ) || [];
 
-    // Display the reasons
-    reasonsToDisplay = (situationParsed?.reasons || []).map(({ name }) => {
-      return name;
-    });
-  } catch (e) {
-    // eslint-disable-next-line no-console
-    console.error("Failed to parse publications", e);
-  }
+  // Display the reasons
+  reasonsToDisplay = (situationParsed?.reasons || []).map(({ name }) => {
+    return name;
+  });
 
   return (
     <ShadowOverflow {...props} className={twMerge("px-4 text-base", className)}>
