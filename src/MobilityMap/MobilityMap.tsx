@@ -87,6 +87,7 @@ function MobilityMap(props: MobilityMapProps) {
   const [stationId, setStationId] = useState<RealtimeStationId>();
   const [trainId, setTrainId] = useState<RealtimeTrainId>();
   const [linesIds, setLinesIds] = useState<string[]>();
+  const [notificationId, setNotificationId] = useState<string>();
 
   const [featuresInfos, setFeaturesInfos] = useState<
     LayerGetFeatureInfoResponse[]
@@ -141,6 +142,7 @@ function MobilityMap(props: MobilityMapProps) {
       linesNetworkPlanLayer,
       map,
       mapsetLayer,
+      notificationId,
       notificationsLayer,
       permalinkUrlSearchParams,
       previewNotifications,
@@ -175,6 +177,7 @@ function MobilityMap(props: MobilityMapProps) {
       setLinesNetworkPlanLayer,
       setMap,
       setMapsetLayer,
+      setNotificationId,
       setNotificationsLayer,
       setPermalinkUrlSearchParams,
       setPreviewNotifications,
@@ -222,6 +225,7 @@ function MobilityMap(props: MobilityMapProps) {
     linesNetworkPlanLayer,
     map,
     mapsetLayer,
+    notificationId,
     notificationsLayer,
     permalinkUrlSearchParams,
     previewNotifications,
