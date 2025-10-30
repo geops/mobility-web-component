@@ -54,7 +54,16 @@ function SingleClickListener({
         const stationsFeatures = featuresInfoStations?.features || [];
 
         const [stationFeature] = stationsFeatures.filter((feat) => {
-          return feat.get("tralis_network")?.includes(tenant);
+          // TODO: think how to do better. LNP stations should have a tralis_network property?
+          // travic stations has a tralis_network property
+          if (feat.get("tralis_network")) {
+            return feat.get("tralis_network").includes(tenant);
+          }
+          if (!feat.get("uid") && feat.get("external_id")) {
+            feat.set("uid", feat.get("external_id"));
+          }
+          // LNP stations has no tralis_network property
+          return true;
         });
 
         // Replace the features clicked in the stations layer by the filtered one
