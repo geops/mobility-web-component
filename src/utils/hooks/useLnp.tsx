@@ -109,4 +109,26 @@ function useLnpLineInfo(text: string): LineInfo {
   });
 }
 
+/**
+ * This hook search line informations from lnp data. It takes a string in
+ * parameter then it will search if there is a property that exactly match this value.
+ */
+export function useLnpStopInfo(text: string): StopInfo {
+  const stationsInfos = useLnpStopsInfos();
+
+  if (!stationsInfos || !text) {
+    return null;
+  }
+
+  if (stationsInfos[text]) {
+    return stationsInfos[text];
+  }
+
+  return Object.values(stationsInfos).find((info) => {
+    return ["id", "external_id", "short_name", "long_name"].find((key) => {
+      return !!info[key] && info[key].toLowerCase() === text.toLowerCase();
+    });
+  });
+}
+
 export default useLnpLineInfo;

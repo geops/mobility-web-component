@@ -1,7 +1,8 @@
 import { useEffect } from "preact/hooks";
 
-import useLnpLineInfo from "../utils/hooks/useLnp";
+import useLnpLineInfo, { useLnpStopInfo } from "../utils/hooks/useLnp";
 import useMapContext from "../utils/hooks/useMapContext";
+import useRealtimeRenderedTrajectories from "../utils/hooks/useRealtimeRenderedTrajectory";
 
 /**
  * This component is responsible for updating the layout state in the context.
@@ -14,6 +15,7 @@ function LayoutState() {
     hasDetails,
     hasLayerTree,
     hasLnp,
+    hasNotification,
     hasPrint,
     hasRealtime,
     hasShare,
@@ -27,6 +29,8 @@ function LayoutState() {
     lnpid,
     mapset,
     notification,
+    notificationid,
+    notificationId,
     permalink,
     previewNotifications,
     print,
@@ -54,16 +58,21 @@ function LayoutState() {
     setIsSearchOpen,
     setIsShareMenuOpen,
     setLinesIds,
+    setNotificationId,
     setStationId,
     setTrainId,
     share,
     stationId,
+    stationid,
     tenant,
     toolbar,
+    trainid,
     trainId,
   } = useMapContext();
 
   const lineInfo = useLnpLineInfo(lnpid);
+  const stopInfo = useLnpStopInfo(stationid);
+  const trainInfo = useRealtimeRenderedTrajectories(trainid);
 
   useEffect(() => {
     setHasStations(!!tenant);
@@ -126,6 +135,19 @@ function LayoutState() {
   }, [lineInfo, setLinesIds]);
 
   useEffect(() => {
+    // @ts-expect-error bad typing
+    setStationId(stopInfo?.external_id);
+  }, [stopInfo, setStationId]);
+
+  useEffect(() => {
+    setNotificationId(notificationid);
+  }, [notificationid, setNotificationId]);
+
+  useEffect(() => {
+    setTrainId(trainInfo?.properties?.train_id);
+  }, [setTrainId, trainInfo]);
+
+  useEffect(() => {
     if (isSearchOpen) {
       setIsLayerTreeOpen(false);
       setIsExportMenuOpen(false);
@@ -134,6 +156,7 @@ function LayoutState() {
       setTrainId(null);
       setFeaturesInfos(null);
       setLinesIds(null);
+      setNotificationId(null);
     }
   }, [
     isSearchOpen,
@@ -142,6 +165,7 @@ function LayoutState() {
     setIsLayerTreeOpen,
     setIsShareMenuOpen,
     setLinesIds,
+    setNotificationId,
     setStationId,
     setTrainId,
   ]);
@@ -155,6 +179,7 @@ function LayoutState() {
       setTrainId(null);
       setFeaturesInfos(null);
       setLinesIds(null);
+      setNotificationId(null);
     }
   }, [
     isShareMenuOpen,
@@ -163,6 +188,7 @@ function LayoutState() {
     setIsLayerTreeOpen,
     setIsSearchOpen,
     setLinesIds,
+    setNotificationId,
     setStationId,
     setTrainId,
   ]);
@@ -172,11 +198,12 @@ function LayoutState() {
       setIsExportMenuOpen(false);
       setIsLayerTreeOpen(isLayerTreeOpen);
       setIsSearchOpen(false);
+      setIsShareMenuOpen(false);
       setFeaturesInfos(null);
       setTrainId(null);
       setStationId(null);
       setLinesIds(null);
-      setIsShareMenuOpen(false);
+      setNotificationId(null);
     }
   }, [
     isLayerTreeOpen,
@@ -186,6 +213,7 @@ function LayoutState() {
     setIsSearchOpen,
     setIsShareMenuOpen,
     setLinesIds,
+    setNotificationId,
     setStationId,
     setTrainId,
   ]);
@@ -200,6 +228,7 @@ function LayoutState() {
       setLinesIds(null);
       setIsShareMenuOpen(false);
       setStationId(null);
+      setNotificationId(null);
     }
   }, [
     isExportMenuOpen,
@@ -209,6 +238,7 @@ function LayoutState() {
     setIsSearchOpen,
     setIsShareMenuOpen,
     setLinesIds,
+    setNotificationId,
     setStationId,
     setTrainId,
   ]);
@@ -221,9 +251,7 @@ function LayoutState() {
       setIsShareMenuOpen(false);
       setTrainId(selectedFeature?.get("train_id") || null);
       setStationId(selectedFeature?.get("uid") || null);
-    } else if (!selectedFeature) {
-      setTrainId(null);
-      setStationId(null);
+      setNotificationId(selectedFeature?.get("situationId") || null);
     }
   }, [
     selectedFeature,
@@ -233,16 +261,21 @@ function LayoutState() {
     setIsShareMenuOpen,
     setStationId,
     setTrainId,
+    setNotificationId,
   ]);
 
   useEffect(() => {
     if (stationId) {
+      // Close tools
       setIsLayerTreeOpen(false);
       setIsExportMenuOpen(false);
       setIsSearchOpen(false);
-      setTrainId(null);
       setIsShareMenuOpen(false);
+
+      // Close overlay details
+      setTrainId(null);
       setLinesIds(null);
+      setNotificationId(null);
     }
   }, [
     setFeaturesInfos,
@@ -251,17 +284,23 @@ function LayoutState() {
     setIsSearchOpen,
     setIsShareMenuOpen,
     setLinesIds,
+    setNotificationId,
     setTrainId,
     stationId,
   ]);
 
   useEffect(() => {
     if (trainId) {
+      // Close tools
       setIsLayerTreeOpen(false);
       setIsExportMenuOpen(false);
       setIsSearchOpen(false);
-      setStationId(null);
       setIsShareMenuOpen(false);
+
+      // Close overlay details
+      setStationId(null);
+      setLinesIds(null);
+      setNotificationId(null);
     }
   }, [
     setFeaturesInfos,
@@ -269,8 +308,63 @@ function LayoutState() {
     setIsLayerTreeOpen,
     setIsSearchOpen,
     setIsShareMenuOpen,
+    setLinesIds,
+    setNotificationId,
     setStationId,
     trainId,
+  ]);
+
+  useEffect(() => {
+    if (notificationId) {
+      // Close tools
+      setIsLayerTreeOpen(false);
+      setIsExportMenuOpen(false);
+      setIsSearchOpen(false);
+      setIsShareMenuOpen(false);
+
+      // Close overlay details
+      setStationId(null);
+      setLinesIds(null);
+      setTrainId(null);
+    }
+  }, [
+    notificationId,
+    setFeaturesInfos,
+    setIsExportMenuOpen,
+    setIsLayerTreeOpen,
+    setIsSearchOpen,
+    setIsShareMenuOpen,
+    setLinesIds,
+    setNotificationId,
+    setStationId,
+    setTrainId,
+  ]);
+
+  useEffect(() => {
+    if (linesIds?.length) {
+      // Close tools
+      setIsLayerTreeOpen(false);
+      setIsExportMenuOpen(false);
+      setIsSearchOpen(false);
+      setIsShareMenuOpen(false);
+
+      // Close overlay details
+      setStationId(null);
+      setNotificationId(null);
+      setTrainId(null);
+    }
+  }, [
+    linesIds?.length,
+    notificationId,
+    setFeaturesInfos,
+    setIsExportMenuOpen,
+    setIsLayerTreeOpen,
+    setIsSearchOpen,
+    setIsShareMenuOpen,
+    setLinesIds,
+    setNotificationId,
+    setStationId,
+    setTrainId,
   ]);
 
   useEffect(() => {
@@ -281,7 +375,8 @@ function LayoutState() {
         (hasShare && isShareMenuOpen) ||
         (hasRealtime && !!trainId) ||
         (tenant && !!stationId) ||
-        (hasLnp && !!linesIds),
+        (hasLnp && !!linesIds) ||
+        (hasNotification && !!notificationId),
     );
   }, [
     hasDetails,
@@ -299,6 +394,8 @@ function LayoutState() {
     setIsOverlayOpen,
     hasLnp,
     linesIds,
+    hasNotification,
+    notificationId,
   ]);
 
   return null;

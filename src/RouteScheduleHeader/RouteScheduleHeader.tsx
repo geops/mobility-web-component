@@ -6,8 +6,14 @@ import RouteInfos from "../RouteInfos";
 import IconButton from "../ui/IconButton";
 import useMapContext from "../utils/hooks/useMapContext";
 
-function RouteScheduleHeader() {
-  const { isFollowing, setIsFollowing, stopSequence } = useMapContext();
+import type { RealtimeStopSequence } from "mobility-toolbox-js/types";
+
+function RouteScheduleHeader({
+  stopSequence,
+}: {
+  stopSequence: RealtimeStopSequence;
+}) {
+  const { isFollowing, setIsFollowing } = useMapContext();
   return (
     <div className="flex items-center gap-x-4 bg-slate-100 p-4">
       <RouteIcon stopSequence={stopSequence} />

@@ -9,6 +9,7 @@ import Warning from "../icons/Warning";
 import ShadowOverflow from "../ShadowOverflow";
 import Link from "../ui/Link";
 import useI18n from "../utils/hooks/useI18n";
+import useMapContext from "../utils/hooks/useMapContext";
 import useMocoSituation from "../utils/hooks/useMocoSituation";
 
 import type {
@@ -36,18 +37,6 @@ const toShortDate = (date: Date, showTime, showYear?: boolean) => {
     .replace(/\.$/, "");
 };
 
-// const getLine = (name: string, lines: NotificationLine[]): NotificationLine => {
-//   if (lines?.length) {
-//     const line = lines.find((linee) => {
-//       return linee.name === name;
-//     });
-//     if (line) {
-//       return line;
-//     }
-//   }
-//   return { mot: "bus", name } as NotificationLine;
-// };
-
 export type NotificationLine = {
   mot?: RealtimeMot;
   operator_name?: string;
@@ -57,15 +46,14 @@ export type NotificationLine = {
 
 function NotificationDetails({
   className,
-  feature,
   ...props
 }: {
   className?: string;
   feature: Feature;
 }) {
   const { locale, t } = useI18n();
-  const { situationId } = feature.getProperties();
-  const situationParsed = useMocoSituation(situationId);
+  const { notificationId } = useMapContext();
+  const situationParsed = useMocoSituation(notificationId);
 
   // moco export v2
   let textualContentMultilingual: Partial<MultilingualTextualContentType> = {};

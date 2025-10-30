@@ -47,6 +47,7 @@ export type MobilityMapAttributeName =
   | "mots"
   | "notification"
   | "notificationat"
+  | "notificationid"
   | "notificationtenant"
   | "notificationurl"
   | "permalink"
@@ -59,9 +60,11 @@ export type MobilityMapAttributeName =
   | "realtimeurl"
   | "search"
   | "share"
+  | "stationid"
   | "stopsurl"
   | "tenant"
   | "toolbar"
+  | "trainid"
   | "zoom";
 
 export type MobilityMapAttributes = Record<
@@ -238,6 +241,10 @@ where:
       "An ISO date string used to display active notification at this date in the notification layer. If not defined the current date will be used.<br/>Ex: 2025-08-01T00:00:00Z .",
     public: true,
   },
+  notificationid: {
+    description: `The notification id to show details of.`,
+    public: false,
+  },
   notificationtenant: {
     defaultValue: "geopstest",
     description: `The ${geopsMocoApiLink} tenant to get the notification from.`,
@@ -306,6 +313,10 @@ where:
     public: true,
     type: "boolean",
   },
+  stationid: {
+    description: `The station uid to show details of.`,
+    public: false,
+  },
   stopsurl: {
     defaultValue: "https://api.geops.io/stops/v1/",
     description: `The ${geopsStopsApiLink} to use.`,
@@ -320,6 +331,10 @@ where:
     description: "Show/hide the toolbar on the top left.",
     public: true,
     type: "boolean",
+  },
+  trainid: {
+    description: `The train id to highlight on the map and to show details of.`,
+    public: true,
   },
   zoom: {
     defaultValue: "13",

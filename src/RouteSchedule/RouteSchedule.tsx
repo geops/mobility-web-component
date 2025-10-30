@@ -7,15 +7,19 @@ import RouteScheduleHeader from "../RouteScheduleHeader";
 import RouteStop from "../RouteStop";
 import ShadowOverflow from "../ShadowOverflow";
 import useMapContext from "../utils/hooks/useMapContext";
+import useRealtimeStopSequences from "../utils/hooks/useRealtimeStopSequences";
 
 import type { RealtimeStop } from "mobility-toolbox-js/types";
-import type { JSX, PreactDOMAttributes } from "preact";
+import type { HTMLAttributes, PreactDOMAttributes } from "preact";
 
-export type RouteScheduleProps = JSX.HTMLAttributes<HTMLDivElement> &
+export type RouteScheduleProps = {
+  className?: string;
+} & HTMLAttributes<HTMLDivElement> &
   PreactDOMAttributes;
 
-function RouteSchedule(props: RouteScheduleProps) {
-  const { stopSequence } = useMapContext();
+function RouteSchedule({ className }: RouteScheduleProps) {
+  const { trainId } = useMapContext();
+  const stopSequences = useRealtimeStopSequences(trainId);
   const ref = useRef();
 
   useEffect(() => {
@@ -38,17 +42,15 @@ function RouteSchedule(props: RouteScheduleProps) {
       clearTimeout(interval);
     };
     // Scroll automatically when a new scroll infos is set.
-  }, [stopSequence]);
+  }, [stopSequences]);
 
-  if (!stopSequence) {
+  if (!stopSequences?.[0]) {
     return null;
   }
-
-  const { className } = props;
-
+  const stopSequence = stopSequences[0];
   return (
     <>
-      <RouteScheduleHeader />
+      <RouteScheduleHeader stopSequence={stopSequence} />
       <ShadowOverflow>
         <div className={twMerge("text-base", className)} ref={ref}>
           {stopSequence.stations.map((stop: RealtimeStop, index: number) => {
@@ -62,10 +64,11 @@ function RouteSchedule(props: RouteScheduleProps) {
                   (`${stationId}` || stationName) + arrivalTime + departureTime
                 }
                 stop={stop}
+                stopSequence={stopSequence}
               />
             );
           })}
-          <RouteScheduleFooter />
+          <RouteScheduleFooter stopSequence={stopSequence} />
         </div>
       </ShadowOverflow>
     </>

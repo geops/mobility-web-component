@@ -1,7 +1,11 @@
 import { createContext } from "preact";
 import { useContext } from "preact/hooks";
 
-import type { RealtimeStation, RealtimeStop } from "mobility-toolbox-js/types";
+import type {
+  RealtimeStation,
+  RealtimeStop,
+  RealtimeStopSequence,
+} from "mobility-toolbox-js/types";
 
 import type { StopStatus } from "../getStopStatus";
 
@@ -13,6 +17,7 @@ export interface RouteStopContextType {
   stop?: {
     platform?: string;
   } & RealtimeStop;
+  stopSequence?: RealtimeStopSequence;
 }
 
 export const RouteStopContext = createContext({
@@ -21,6 +26,7 @@ export const RouteStopContext = createContext({
   station: null,
   status: null,
   stop: null,
+  stopSequence: null,
 } as RouteStopContextType);
 
 const useRouteStop = (): RouteStopContextType => {

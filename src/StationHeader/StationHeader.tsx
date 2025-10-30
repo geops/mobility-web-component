@@ -2,10 +2,10 @@ import { memo } from "preact/compat";
 
 import StationName from "../StationName";
 import StationServices from "../StationServices";
-import useMapContext from "../utils/hooks/useMapContext";
 
-function StationHeader() {
-  const { station } = useMapContext();
+import type { RealtimeStation } from "mobility-toolbox-js/types";
+
+function StationHeader({ station }: { station: RealtimeStation }) {
   return (
     <div className="flex items-center gap-x-4 bg-slate-100 p-4">
       <div className="flex grow flex-col">

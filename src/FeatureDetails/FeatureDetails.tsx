@@ -25,6 +25,7 @@ function FeatureDetails({ feature, featuresInfo, layer }: FeatureDetailsProps) {
   const {
     linesIds,
     linesNetworkPlanLayer,
+    notificationId,
     notificationsLayer,
     realtimeLayer,
     stationId,
@@ -50,9 +51,11 @@ function FeatureDetails({ feature, featuresInfo, layer }: FeatureDetailsProps) {
             features={featuresInfo?.features || []}
           />
         )}
-      {feature && !!notificationsLayer && layer === notificationsLayer && (
-        <NotificationDetails className={contentClassName} feature={feature} />
-      )}
+      {!!notificationsLayer &&
+        layer === notificationsLayer &&
+        notificationId && (
+          <NotificationDetails className={contentClassName} feature={feature} />
+        )}
     </>
   );
 }

@@ -39,15 +39,19 @@ function OverlayDetails() {
     if (featuresInfo?.layer) {
       return featuresInfo.layer;
     }
+
     if (trainId) {
       return realtimeLayer;
     }
+
     if (stationId) {
       return stationsLayer;
     }
+
     if (linesIds) {
       return linesNetworkPlanLayer;
     }
+
     if (notificationId) {
       return notificationsLayer;
     }
@@ -63,6 +67,7 @@ function OverlayDetails() {
     linesNetworkPlanLayer,
     notificationsLayer,
   ]);
+
   return (
     <>
       <OverlayDetailsHeader

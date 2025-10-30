@@ -25,6 +25,10 @@ function SingleClickListener({
     queryablelayers,
     setFeaturesInfos,
     setFeaturesInfosHovered,
+    setLinesIds,
+    setNotificationId,
+    setStationId,
+    setTrainId,
     stationsLayer,
     tenant,
   } = useMapContext();
@@ -85,8 +89,28 @@ function SingleClickListener({
     async (evt: MapBrowserEvent<PointerEvent>) => {
       const featuresInfos = await getFeaturesInfosAtEvt(evt);
       setFeaturesInfos(featuresInfos);
+      // When user click we close the overlay
+      if (
+        featuresInfos?.flatMap((fi) => {
+          return fi.features;
+        }).length === 0
+      ) {
+        // It means no feature selectable were clicked so we set all ids to null
+        // to close the overlay
+        setTrainId(null);
+        setStationId(null);
+        setNotificationId(null);
+        setLinesIds(null);
+      }
     },
-    [getFeaturesInfosAtEvt, setFeaturesInfos],
+    [
+      getFeaturesInfosAtEvt,
+      setFeaturesInfos,
+      setLinesIds,
+      setNotificationId,
+      setStationId,
+      setTrainId,
+    ],
   );
 
   useEffect(() => {

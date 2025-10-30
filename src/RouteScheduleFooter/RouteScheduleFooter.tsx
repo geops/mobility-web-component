@@ -1,6 +1,6 @@
 import { memo } from "preact/compat";
 
-import useMapContext from "../utils/hooks/useMapContext";
+import type { RealtimeStopSequence } from "mobility-toolbox-js/types";
 
 const defaultRenderLink = (text: string, url: string) => {
   return url ? (
@@ -17,8 +17,11 @@ const defaultRenderLink = (text: string, url: string) => {
   );
 };
 
-function RouteScheduleFooter() {
-  const { stopSequence } = useMapContext();
+function RouteScheduleFooter({
+  stopSequence,
+}: {
+  stopSequence: RealtimeStopSequence;
+}) {
   if (!stopSequence.operator && !stopSequence.publisher) {
     return null;
   }
