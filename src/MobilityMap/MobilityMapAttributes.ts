@@ -185,8 +185,8 @@ where:
   },
   mapsetplanid: {
     description:
-      "The id of the mapset plan to display. Mostly for debugging purposes.",
-    public: false,
+      "An id of the mapset plan to display. Mostly for debugging purposes.",
+    public: true,
   },
   mapsettags: {
     description: `The ${geopsMapsetApiLink} tags to get the plans from.`,
@@ -199,7 +199,7 @@ where:
   },
   mapsettimestamp: {
     description: `The ${geopsMapsetApiLink} timestamp used to load valid standard plan. If not defined it will use the current time.`,
-    public: false,
+    public: true,
   },
   mapseturl: {
     defaultValue: "https://editor.mapset.io/api/v1/",
@@ -242,8 +242,8 @@ where:
     public: true,
   },
   notificationid: {
-    description: `The notification id to show details of.`,
-    public: false,
+    description: `An id of a notification to show details of.`,
+    public: true,
   },
   notificationtenant: {
     defaultValue: "geopstest",
@@ -314,8 +314,8 @@ where:
     type: "boolean",
   },
   stationid: {
-    description: `The station uid to show details of.`,
-    public: false,
+    description: `An id or a short/long name of a station to show details of.`,
+    public: true,
   },
   stopsurl: {
     defaultValue: "https://api.geops.io/stops/v1/",
@@ -333,7 +333,7 @@ where:
     type: "boolean",
   },
   trainid: {
-    description: `The train id to highlight on the map and to show details of.`,
+    description: `An id of a route to highlight on the map and to show details of.`,
     public: true,
   },
   zoom: {

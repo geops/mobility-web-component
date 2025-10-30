@@ -59,10 +59,13 @@ function SingleClickListener({
           if (feat.get("tralis_network")) {
             return feat.get("tralis_network").includes(tenant);
           }
+
+          // We move the external_id to uid to be consistent across all stations (lnp and others)
           if (!feat.get("uid") && feat.get("external_id")) {
             feat.set("uid", feat.get("external_id"));
           }
-          // LNP stations has no tralis_network property
+
+          // LNP stations have no tralis_network property
           return true;
         });
 
