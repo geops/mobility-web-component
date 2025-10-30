@@ -5,11 +5,14 @@ import SearchLinesResult from "../SearchLinesResult";
 import SearchResults from "../SearchResults";
 import SearchResultsHeader from "../SearchResultsHeader";
 import SearchStopsResult from "../SearchStopsResult";
+import SearchTrajectoriesResult from "../SearchTrajectoriesResult";
 import InputSearch from "../ui/InputSearch";
 import useI18n from "../utils/hooks/useI18n";
 import useSearchLines from "../utils/hooks/useSearchLines";
 import useSearchStops from "../utils/hooks/useSearchStops";
+import useSearchTrajectories from "../utils/hooks/useSearchTrajectories";
 
+import type { RealtimeTrajectory } from "mobility-toolbox-js/types";
 import type { TargetedInputEvent } from "preact";
 
 import type { StopsFeature } from "../SearchResults";
@@ -41,6 +44,7 @@ function Search({
   const [open, setOpen] = useState(false);
   const stops = useSearchStops(query);
   const lines = useSearchLines(query);
+  const trajectories = useSearchTrajectories(query);
   const { t } = useI18n();
 
   const inputPropss: InputProps = useMemo(() => {
@@ -80,9 +84,19 @@ function Search({
     setOpen(false);
   }, []);
 
+  const onSelectTrajectory = useCallback((trajectory) => {
+    setSelectedQuery(trajectory.properties.route_identifier);
+    setOpen(false);
+  }, []);
+
   const showResults = useMemo(() => {
-    return open && (!!stops?.results?.length || !!lines?.results?.length);
-  }, [open, stops, lines]);
+    return (
+      open &&
+      (!!stops?.results?.length ||
+        !!lines?.results?.length ||
+        !!trajectories?.results?.length)
+    );
+  }, [open, stops, lines, trajectories]);
 
   const showStopsResults = useMemo(() => {
     return open && !!stops?.results?.length;
@@ -91,6 +105,10 @@ function Search({
   const showLinesResults = useMemo(() => {
     return open && !!lines?.results?.length;
   }, [open, lines]);
+
+  const showTrajectoriesResults = useMemo(() => {
+    return open && !!trajectories?.results?.length;
+  }, [open, trajectories]);
 
   return (
     <>
@@ -142,6 +160,29 @@ function Search({
                       key={line.external_id}
                       line={line}
                       onSelect={onSelectLine}
+                    />
+                  );
+                })}
+              </SearchResults>
+            </>
+          )}
+          {showTrajectoriesResults && (
+            <>
+              <SearchResultsHeader>
+                {t("search_trajectories_results") || "Trajectories"}
+              </SearchResultsHeader>
+              <SearchResults
+                className={resultsContainerClassName}
+                resultsClassName={resultsClassName}
+                resultsContainerClassName={"grow"}
+                searchResponse={trajectories}
+              >
+                {trajectories.results.map((trajectory: RealtimeTrajectory) => {
+                  return (
+                    <SearchTrajectoriesResult
+                      key={trajectory.properties.route_identifier}
+                      onSelect={onSelectTrajectory}
+                      trajectory={trajectory}
                     />
                   );
                 })}
