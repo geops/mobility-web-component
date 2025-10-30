@@ -1,6 +1,5 @@
 import { MapsetLayer as MtbMapsetLayer } from "mobility-toolbox-js/ol";
 import { unByKey } from "ol/Observable";
-import { transformExtent } from "ol/proj";
 import { memo } from "preact/compat";
 import { useEffect, useMemo } from "preact/hooks";
 
@@ -8,8 +7,8 @@ import { LAYER_NAME_MAPSET } from "../utils/constants";
 import useMapContext from "../utils/hooks/useMapContext";
 
 import type { MapsetLayerOptions } from "mobility-toolbox-js/ol";
-
-let moveEndTimeout: ReturnType<typeof setTimeout>;
+import type { Feature } from "ol";
+import type { EventTypes } from "ol/Observable";
 
 export const isFeatureOutsideZoomLimit = (feature, map) => {
   const zoom = map?.getView()?.getZoom();
@@ -23,7 +22,6 @@ function MapsetLayer(props?: Partial<MapsetLayerOptions>) {
     apikey,
     baseLayer,
     map,
-    mapsetbbox,
     mapsetplanid,
     mapsettags,
     mapsettenants,
@@ -37,38 +35,8 @@ function MapsetLayer(props?: Partial<MapsetLayerOptions>) {
       return null;
     }
 
-    let bbox = undefined;
-    if (mapsetbbox) {
-      bbox = mapsetbbox?.split(",").map((coord) => {
-        return Number(coord.trim());
-      });
-      if (
-        bbox.length === 4 &&
-        !bbox.some((coord) => {
-          return Number.isNaN(coord);
-        })
-      ) {
-        bbox = transformExtent(bbox, "EPSG:3857", "EPSG:4326");
-      }
-    } else {
-      // we have to wait that the map is well sized to get the extent
-      // It triggers an erro in FF without this
-      if (
-        map.getView()?.getCenter() &&
-        map.getSize()[0] > 0 &&
-        map.getSize()[1] > 0
-      ) {
-        bbox = transformExtent(
-          map.getView()?.calculateExtent(),
-          "EPSG:3857",
-          "EPSG:4326",
-        );
-      }
-    }
     return new MtbMapsetLayer({
       apiKey: apikey,
-      bbox,
-      mapseturl: mapseturl || undefined,
       name: LAYER_NAME_MAPSET,
       planId: mapsetplanid ?? undefined,
       tags: mapsettags?.split(",").map((t) => {
@@ -77,14 +45,13 @@ function MapsetLayer(props?: Partial<MapsetLayerOptions>) {
       tenants: mapsettenants?.split(",").map((t) => {
         return t.trim();
       }),
-      timestamp: mapsettimestamp || new Date().toISOString(), // Load only standard plan
-      zoom: map.getView().getZoom(),
+      timestamp: mapsettimestamp, // Load only standard plan
+      url: mapseturl,
       ...(props || {}),
     });
   }, [
     baseLayer,
     map,
-    mapsetbbox,
     apikey,
     mapseturl,
     mapsetplanid,
@@ -109,49 +76,12 @@ function MapsetLayer(props?: Partial<MapsetLayerOptions>) {
     };
   }, [map, layer]);
 
-  useEffect(() => {
-    const view = map?.getView();
-    if (!view || !layer) {
-      return;
-    }
-    const handleMoveEnd = () => {
-      if (mapsetplanid || !layer.get("visible")) {
-        return;
-      }
-      clearTimeout(moveEndTimeout);
-      moveEndTimeout = setTimeout(() => {
-        const currentBbox = transformExtent(
-          view.calculateExtent(map.getSize()),
-          "EPSG:3857",
-          "EPSG:4326",
-        );
-        layer.bbox = currentBbox;
-        layer.zoom = view.getZoom();
-      }, 100);
-    };
-
-    const listeners = [
-      layer.on("change:visible", () => {
-        if (layer.get("visible")) {
-          handleMoveEnd();
-        }
-      }),
-      view.on("change:center", handleMoveEnd),
-      view.on("change:resolution", handleMoveEnd),
-    ];
-
-    return () => {
-      clearTimeout(moveEndTimeout);
-      unByKey(listeners);
-    };
-  }, [map, layer, mapsetplanid]);
-
-  // Apply fetaure's minzoom and maxzoom to its style
+  // Apply feature's minzoom and maxzoom to its style
   // TODO should be done by the mapset layer itself
   useEffect(() => {
     let key = null;
     if (layer) {
-      key = layer.on("updatefeatures", () => {
+      key = layer.on("updatefeatures" as EventTypes, () => {
         const features = layer.getSource()?.getFeatures();
         if (!features?.length) {
           return;

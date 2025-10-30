@@ -35,7 +35,6 @@ export type MobilityMapAttributeName =
   | "lnp"
   | "lnpid"
   | "mapset"
-  | "mapsetbbox"
   | "mapsetplanid"
   | "mapsettags"
   | "mapsettenants"
@@ -181,11 +180,6 @@ where:
     public: true,
     type: "boolean",
   },
-  mapsetbbox: {
-    description:
-      "The BBOX to constrain the boundary of the mapset layer in EPSG:3857 coordinates. Mandatory for mapset layer. <br/>Ex: 831634,5933959,940649,6173660 .",
-    public: false,
-  },
   mapsetplanid: {
     description:
       "The id of the mapset plan to display. Mostly for debugging purposes.",
@@ -205,7 +199,7 @@ where:
     public: false,
   },
   mapseturl: {
-    defaultValue: "https://editor.mapset.io/api/v1",
+    defaultValue: "https://editor.mapset.io/api/v1/",
     description: `The ${geopsMapsetApiLink} url to use.`,
     public: true,
   },
