@@ -34,6 +34,7 @@ export const LAYER_PROP_IS_EXPORTING = "isExporting";
 export const LAYER_PROP_IS_LOADING = "isLoading";
 
 export const MAX_EXTENT = undefined;
+export const MAX_EXTENT_4326 = undefined;
 
 export const EXPORT_PREFIX = "mwc";
 

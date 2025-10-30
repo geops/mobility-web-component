@@ -40,11 +40,6 @@ function FeaturesInfosListener() {
         return info.layer === stationsLayer;
       })?.features || [];
 
-    console.log(
-      "FeaturesInfosListener - stationFeature before tenant filter :",
-      stationFeature,
-    );
-
     // Find the line to highlight in the LNP layer
     const linesFeatures =
       featuresInfos?.find((featuresInfo) => {
