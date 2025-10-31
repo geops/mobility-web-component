@@ -17,7 +17,6 @@ function useSearchTrajectories(
     }
     return Object.values(realtimeLayer.trajectories || {}).filter(
       (trajectory) => {
-        console.log("Searching trajectories for query:", trajectory);
         return trajectory?.properties.route_identifier
           ?.toLowerCase()
           .includes(query.toLowerCase());
