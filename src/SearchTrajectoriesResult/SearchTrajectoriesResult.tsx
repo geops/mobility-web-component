@@ -20,7 +20,7 @@ function SearchTrajectoriesResult({
   trajectory,
   ...props
 }: SearchTrajectoriesResultProps) {
-  const { setTrainId } = useMapContext();
+  const { realtimeLayer, setTrainId } = useMapContext();
   return (
     <button
       {...props}
@@ -29,6 +29,7 @@ function SearchTrajectoriesResult({
         className,
       )}
       onClick={() => {
+        realtimeLayer?.setVisible(true);
         onSelect?.(trajectory);
         setTrainId(trajectory.properties.train_id);
       }}

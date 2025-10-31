@@ -1,15 +1,17 @@
 import { useMemo } from "preact/hooks";
 
 import { useLnpLinesInfos } from "./useLnp";
+import useMapContext from "./useMapContext";
 
 import type { LnpLineInfo } from "./useLnp";
 import type { SearchResponse } from "./useSearchStops";
 
 function useSearchLines(query: string): SearchResponse<LnpLineInfo> {
+  const { hasLnp } = useMapContext();
   const linesInfos = useLnpLinesInfos();
 
   const results = useMemo(() => {
-    if (!query || !linesInfos) {
+    if (!query || !linesInfos || !hasLnp) {
       return [];
     }
     return Object.values(linesInfos || {}).filter((line: LnpLineInfo) => {
@@ -21,7 +23,7 @@ function useSearchLines(query: string): SearchResponse<LnpLineInfo> {
         line?.mot?.toLowerCase().includes(query.toLowerCase())
       );
     });
-  }, [linesInfos, query]);
+  }, [hasLnp, linesInfos, query]);
 
   return {
     isLoading: false,

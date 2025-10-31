@@ -21,7 +21,7 @@ function SearchLinesResult({
   onSelect,
   ...props
 }: SearchLinesResultProps) {
-  const { setLinesIds } = useMapContext();
+  const { linesNetworkPlanLayer, setLinesIds } = useMapContext();
   return (
     <button
       {...props}
@@ -30,6 +30,7 @@ function SearchLinesResult({
         className,
       )}
       onClick={() => {
+        linesNetworkPlanLayer?.setVisible(true);
         onSelect?.(line);
         setLinesIds([line.external_id]);
       }}

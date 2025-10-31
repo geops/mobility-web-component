@@ -21,7 +21,7 @@ function SearchStopsResult({
   stop,
   ...props
 }: SearchStopsResultProps) {
-  const { map } = useMapContext();
+  const { map, stationsLayer } = useMapContext();
 
   return (
     <button
@@ -31,6 +31,7 @@ function SearchStopsResult({
         className,
       )}
       onClick={() => {
+        stationsLayer?.setVisible(true);
         centerOnStation(stop, map);
         onSelect?.(stop);
       }}

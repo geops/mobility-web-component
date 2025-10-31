@@ -9,10 +9,10 @@ import type { SearchResponse } from "./useSearchStops";
 function useSearchTrajectories(
   query: string,
 ): SearchResponse<RealtimeTrajectory> {
-  const { realtimeLayer } = useMapContext();
+  const { hasRealtime, realtimeLayer } = useMapContext();
 
   const results = useMemo(() => {
-    if (!query || !realtimeLayer?.trajectories) {
+    if (!query || !realtimeLayer?.trajectories || !hasRealtime) {
       return [];
     }
     return Object.values(realtimeLayer.trajectories || {}).filter(
@@ -22,7 +22,7 @@ function useSearchTrajectories(
           .includes(query.toLowerCase());
       },
     );
-  }, [realtimeLayer, query]);
+  }, [query, realtimeLayer?.trajectories, hasRealtime]);
 
   return {
     isLoading: false,
