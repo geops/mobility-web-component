@@ -14,11 +14,14 @@ import type {
 } from "mobility-toolbox-js/types";
 import type { HTMLAttributes, PreactDOMAttributes } from "preact";
 
+import type { LnpLineInfo } from "../utils/hooks/useLnp";
+
 export type RouteIconProps = {
   className?: string;
   departure?: RealtimeDeparture;
   displayNoRealtimeIcon?: boolean;
   line?: RealtimeLine;
+  lineInfo?: LnpLineInfo;
   stopSequence?: RealtimeStopSequence;
   trajectory?: RealtimeTrajectory;
 } & HTMLAttributes<HTMLSpanElement> &
@@ -31,23 +34,25 @@ function RouteIcon({
   departure,
   displayNoRealtimeIcon = false,
   line,
+  lineInfo,
   stopSequence,
   trajectory,
   ...props
 }: RouteIconProps) {
   const lineToUse =
     line ||
+    lineInfo ||
     departure?.line ||
     stopSequence?.line ||
     trajectory?.properties?.line;
   const type = lineToUse?.type || stopSequence?.type || trajectory?.type;
   const backgroundColor = getMainColorForVehicle(
-    line || departure || stopSequence || trajectory,
+    line || lineInfo || departure || stopSequence || trajectory,
   );
   const color = lineToUse?.text_color || getTextColor(type);
   let borderColor = lineToUse?.stroke || "black";
   const text = getTextForVehicle(
-    line || departure || stopSequence || trajectory,
+    line || lineInfo || departure || stopSequence || trajectory,
   );
 
   const fontSize = fontSizesByNbLetters[text.length] || 12;

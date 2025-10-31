@@ -4,7 +4,7 @@ import { twMerge } from "tailwind-merge";
 import centerOnStation from "../utils/centerOnStation";
 import useMapContext from "../utils/hooks/useMapContext";
 
-import type { HTMLAttributes, PreactDOMAttributes } from "preact";
+import type { ButtonHTMLAttributes, PreactDOMAttributes } from "preact";
 
 import type { StopsFeature } from "../StopsSearch";
 
@@ -12,7 +12,7 @@ export type SearchStopsResultProps = {
   className?: string;
   onSelect?: (stop: StopsFeature) => void;
   stop: StopsFeature;
-} & HTMLAttributes<HTMLLIElement> &
+} & ButtonHTMLAttributes<HTMLButtonElement> &
   PreactDOMAttributes;
 
 function SearchStopsResult({
@@ -24,24 +24,20 @@ function SearchStopsResult({
   const { map } = useMapContext();
 
   return (
-    <li
+    <button
       {...props}
       className={twMerge(
-        "border-b border-dashed border-slate-300 p-3 last:border-0",
+        "flex w-full cursor-pointer items-center gap-3 text-left",
         className,
       )}
+      onClick={() => {
+        centerOnStation(stop, map);
+        onSelect?.(stop);
+      }}
     >
-      <button
-        className="flex w-full cursor-pointer items-center gap-3 text-left"
-        onClick={() => {
-          centerOnStation(stop, map);
-          onSelect?.(stop);
-        }}
-      >
-        <div className="size-6"></div>
-        <div className="grow">{stop.properties.name}</div>
-      </button>
-    </li>
+      <div className="size-6"></div>
+      <div className="grow">{stop.properties.name}</div>
+    </button>
   );
 }
 

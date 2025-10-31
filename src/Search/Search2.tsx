@@ -2,6 +2,7 @@ import { memo } from "preact/compat";
 import { useCallback, useMemo, useState } from "preact/hooks";
 
 import SearchLinesResult from "../SearchLinesResult";
+import SearchResult from "../SearchResult";
 import SearchResults from "../SearchResults";
 import SearchResultsHeader from "../SearchResultsHeader";
 import SearchStopsResult from "../SearchStopsResult";
@@ -18,7 +19,7 @@ import type { TargetedInputEvent } from "preact";
 import type { StopsFeature } from "../SearchResults";
 import type { IconButtonProps } from "../ui/IconButton/IconButton";
 import type { InputProps } from "../ui/Input/Input";
-import type { LineInfo } from "../utils/hooks/useLnp";
+import type { LnpLineInfo } from "../utils/hooks/useLnp";
 
 export interface SearchProps {
   cancelButtonProps?: IconButtonProps;
@@ -122,7 +123,7 @@ function Search({
           {showStopsResults && (
             <>
               <SearchResultsHeader>
-                {t("search_stops_results") || "Stops"}
+                {t("search_stops_results")}
               </SearchResultsHeader>
               <SearchResults
                 className={resultsContainerClassName}
@@ -132,12 +133,12 @@ function Search({
               >
                 {stops.results.map((stop: StopsFeature) => {
                   return (
-                    <SearchStopsResult
+                    <SearchResult
                       className={resultClassName}
                       key={stop.properties.uid}
-                      onSelect={onSelectStop}
-                      stop={stop}
-                    />
+                    >
+                      <SearchStopsResult onSelect={onSelectStop} stop={stop} />
+                    </SearchResult>
                   );
                 })}
               </SearchResults>
@@ -146,7 +147,7 @@ function Search({
           {showLinesResults && (
             <>
               <SearchResultsHeader>
-                {t("search_lines_results") || "Lines"}
+                {t("search_lines_results")}
               </SearchResultsHeader>
               <SearchResults
                 className={resultsContainerClassName}
@@ -154,22 +155,33 @@ function Search({
                 resultsContainerClassName={"grow"}
                 searchResponse={lines}
               >
-                {lines.results.map((line: LineInfo) => {
-                  return (
-                    <SearchLinesResult
-                      key={line.external_id}
-                      line={line}
-                      onSelect={onSelectLine}
-                    />
-                  );
-                })}
+                {[...lines.results]
+                  .sort((a, b) => {
+                    if (a.long_name === b.long_name) {
+                      return a.long_name < b.long_name ? 1 : -1;
+                    }
+                    return a.short_name < b.short_name ? 1 : -1;
+                  })
+                  .map((line: LnpLineInfo) => {
+                    return (
+                      <SearchResult
+                        className={resultClassName}
+                        key={line.external_id}
+                      >
+                        <SearchLinesResult
+                          line={line}
+                          onSelect={onSelectLine}
+                        />
+                      </SearchResult>
+                    );
+                  })}
               </SearchResults>
             </>
           )}
           {showTrajectoriesResults && (
             <>
               <SearchResultsHeader>
-                {t("search_trajectories_results") || "Trajectories"}
+                {t("search_trajectories_results")}
               </SearchResultsHeader>
               <SearchResults
                 className={resultsContainerClassName}
@@ -179,11 +191,15 @@ function Search({
               >
                 {trajectories.results.map((trajectory: RealtimeTrajectory) => {
                   return (
-                    <SearchTrajectoriesResult
+                    <SearchResult
+                      className={resultClassName}
                       key={trajectory.properties.route_identifier}
-                      onSelect={onSelectTrajectory}
-                      trajectory={trajectory}
-                    />
+                    >
+                      <SearchTrajectoriesResult
+                        onSelect={onSelectTrajectory}
+                        trajectory={trajectory}
+                      />
+                    </SearchResult>
                   );
                 })}
               </SearchResults>

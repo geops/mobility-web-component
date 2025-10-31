@@ -4,15 +4,15 @@ import { twMerge } from "tailwind-merge";
 import RouteIcon from "../RouteIcon";
 import useMapContext from "../utils/hooks/useMapContext";
 
-import type { HTMLAttributes, PreactDOMAttributes } from "preact";
+import type { ButtonHTMLAttributes, PreactDOMAttributes } from "preact";
 
-import type { LineInfo } from "../utils/hooks/useLnp";
+import type { LnpLineInfo } from "../utils/hooks/useLnp";
 
 export type SearchLinesResultProps = {
   className?: string;
-  line: LineInfo;
-  onSelect?: (line: LineInfo) => void;
-} & HTMLAttributes<HTMLLIElement> &
+  line: LnpLineInfo;
+  onSelect?: (line: LnpLineInfo) => void;
+} & ButtonHTMLAttributes<HTMLButtonElement> &
   PreactDOMAttributes;
 
 function SearchLinesResult({
@@ -23,24 +23,20 @@ function SearchLinesResult({
 }: SearchLinesResultProps) {
   const { setLinesIds } = useMapContext();
   return (
-    <li
+    <button
       {...props}
       className={twMerge(
-        "border-b border-dashed border-slate-300 p-3 last:border-0",
+        "flex w-full cursor-pointer items-center gap-3 text-left",
         className,
       )}
+      onClick={() => {
+        onSelect?.(line);
+        setLinesIds([line.external_id]);
+      }}
     >
-      <button
-        className="flex w-full cursor-pointer items-center gap-3 text-left"
-        onClick={() => {
-          onSelect?.(line);
-          setLinesIds([line.external_id]);
-        }}
-      >
-        <RouteIcon line={{ ...line, name: line.short_name }}></RouteIcon>
-        <div className="grow">{line.short_name || line.long_name}</div>
-      </button>
-    </li>
+      <RouteIcon lineInfo={line}></RouteIcon>
+      <div className="grow">{line.long_name || line.short_name}</div>
+    </button>
   );
 }
 
