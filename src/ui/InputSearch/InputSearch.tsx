@@ -9,7 +9,7 @@ import IconButton from "../IconButton";
 import Input from "../Input";
 
 import type { PreactDOMAttributes } from "preact";
-import type { HTMLAttributes } from "preact/compat";
+import type { HTMLAttributes, ReactNode } from "preact/compat";
 
 import type { IconButtonProps } from "../IconButton/IconButton";
 import type { InputProps } from "../Input/Input";
@@ -17,6 +17,7 @@ import type { InputProps } from "../Input/Input";
 export type InputSearchProps = {
   cancelButtonClassName?: string;
   cancelButtonProps?: IconButtonProps;
+  cancelIcon?: ReactNode;
   className?: string;
   inputClassName?: string;
   inputContainerClassName?: string;
@@ -24,6 +25,7 @@ export type InputSearchProps = {
   resultClassName?: string;
   resultsClassName?: string;
   resultsContainerClassName?: string;
+  searchIcon?: ReactNode;
   searchIconContainerClassName?: string;
   withResultsClassName?: string;
 } & HTMLAttributes<HTMLDivElement> &
@@ -35,11 +37,13 @@ export type InputSearchProps = {
 function InputSearch({
   cancelButtonClassName,
   cancelButtonProps,
+  cancelIcon,
   children,
   className,
   inputClassName,
   inputContainerClassName,
   inputProps,
+  searchIcon,
   searchIconContainerClassName,
   withResultsClassName,
 }: InputSearchProps) {
@@ -62,7 +66,7 @@ function InputSearch({
             searchIconContainerClassName,
           )}
         >
-          <Search className="size-4" />
+          {searchIcon || <Search className="size-4" />}
         </div>
         <div
           className={twMerge(
@@ -88,7 +92,7 @@ function InputSearch({
               title={t("search_input_cancel")}
               {...(cancelButtonProps || {})}
             >
-              <Cancel />
+              {cancelIcon || <Cancel />}
             </IconButton>
           )}
         </div>

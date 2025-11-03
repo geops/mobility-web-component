@@ -130,7 +130,6 @@ function Search({
         <div className={"flex max-h-[300px] flex-col"}>
           {showStopsResults && (
             <>
-              c
               <SearchResultsHeader>
                 {t("search_stops_results")}
               </SearchResultsHeader>
