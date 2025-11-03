@@ -5,7 +5,11 @@ import { memo, useEffect, useMemo, useState } from "preact/compat";
 
 import LayerTree from "../LayerTree";
 import { SelectionType } from "../LayerTree/TreeItem";
-import { LAYER_TREE_ORDER } from "../utils/constants";
+import {
+  LAYER_TREE_HIDE_PROP,
+  LAYER_TREE_ORDER,
+  LAYER_TREE_TITLE_FUNC_PROP,
+} from "../utils/constants";
 import useLayersConfig from "../utils/hooks/useLayersConfig";
 import useMapContext from "../utils/hooks/useMapContext";
 
@@ -39,7 +43,7 @@ const getConfigForLayer = (
   layersConfig: Record<string, LayerConfig> = {},
 ): LayerTreeConfig => {
   const defaultTitle = layersConfig[layer.get("name")]?.title || "";
-  const customTitleFunction = layer.get("layerTreeTitle");
+  const customTitleFunction = layer.get(LAYER_TREE_TITLE_FUNC_PROP);
   let title = defaultTitle;
   if (typeof customTitleFunction === "function") {
     title = customTitleFunction(title);
@@ -78,8 +82,12 @@ function LayerTreeMenu({
         .getArray()
         .filter(
           filter ??
-            (() => {
-              return true;
+            ((layer) => {
+              return (
+                (layer.get(LAYER_TREE_HIDE_PROP) ||
+                  layersConfig[layer.get("name")]?.[LAYER_TREE_HIDE_PROP]) !==
+                true
+              );
             }),
         )
         .sort((a, b) => {

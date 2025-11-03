@@ -4,10 +4,13 @@ import { LAYERS_NAMES } from "../constants";
 
 import useMapContext from "./useMapContext";
 
+import type { LAYER_TREE_HIDE_PROP } from "../constants";
+
 export interface LayerConfig {
   featurelink?: {
     href?: string;
   };
+  [LAYER_TREE_HIDE_PROP]?: boolean;
   link?: {
     href?: string;
     show?: boolean;

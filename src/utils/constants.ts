@@ -56,3 +56,7 @@ export const LNP_GEOPS_FILTER_HIGHLIGHT = "highlightnetzplan";
 
 // LNP style layer id where the dynamic filtering will apply
 export const LNP_LAYER_ID_HIGHLIGHT = "netzplan_highlight_trip";
+
+// Layer props used by layer and/or layerConfig
+export const LAYER_TREE_HIDE_PROP = "layerTreeHidden";
+export const LAYER_TREE_TITLE_FUNC_PROP = "layerTreeTitleRenderFunc";
