@@ -24,9 +24,9 @@ function LayoutState() {
     isSearchOpen,
     isShareMenuOpen,
     layertree,
+    lineid,
     linesIds,
     lnp,
-    lnpid,
     mapset,
     notification,
     notificationid,
@@ -70,7 +70,7 @@ function LayoutState() {
     trainId,
   } = useMapContext();
 
-  const lineInfo = useLnpLineInfo(lnpid);
+  const lineInfo = useLnpLineInfo(lineid);
   const stopInfo = useLnpStopInfo(stationid);
   const trainInfo = useRealtimeRenderedTrajectories(trainid);
 
@@ -131,7 +131,7 @@ function LayoutState() {
   }, [layertree, setHasLayerTree]);
 
   useEffect(() => {
-    setLinesIds(lineInfo ? [lineInfo.external_id] : null);
+    setLinesIds(lineInfo?.external_id ? [lineInfo.external_id] : null);
   }, [lineInfo, setLinesIds]);
 
   useEffect(() => {

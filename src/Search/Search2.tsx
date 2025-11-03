@@ -11,15 +11,16 @@ import InputSearch from "../ui/InputSearch";
 import useI18n from "../utils/hooks/useI18n";
 import useSearchLines from "../utils/hooks/useSearchLines";
 import useSearchStops from "../utils/hooks/useSearchStops";
-import useSearchTrajectories from "../utils/hooks/useSearchTrajectories";
 
 import type { RealtimeTrajectory } from "mobility-toolbox-js/types";
+// import useSearchTrajectories from "../utils/hooks/useSearchTrajectories";
 import type { TargetedInputEvent } from "preact";
 
 import type { StopsFeature } from "../SearchResults";
 import type { IconButtonProps } from "../ui/IconButton/IconButton";
 import type { InputProps } from "../ui/Input/Input";
 import type { LnpLineInfo } from "../utils/hooks/useLnp";
+import type { SearchResponse } from "../utils/hooks/useSearchStops";
 
 export interface SearchProps {
   cancelButtonProps?: IconButtonProps;
@@ -29,6 +30,11 @@ export interface SearchProps {
   resultsContainerClassName?: string;
   withResultsClassName?: string;
 }
+
+const emptyResultsSearchResults: SearchResponse<RealtimeTrajectory> = {
+  isLoading: false,
+  results: [],
+};
 
 function Search({
   cancelButtonProps,
@@ -45,12 +51,14 @@ function Search({
   const [open, setOpen] = useState(false);
   const stops = useSearchStops(query);
   const lines = useSearchLines(query);
-  const trajectories = useSearchTrajectories(query);
+
+  // TODO: we deactivate it for now until backend allow searches on vehicle journeys using the route identifier
+  const trajectories = emptyResultsSearchResults; //useSearchTrajectories(query);
   const { t } = useI18n();
 
   const inputPropss: InputProps = useMemo(() => {
     return {
-      placeholder: t("stops_search_placeholder"),
+      placeholder: t("search_placeholder"),
       ...(inputProps || {}),
       onChange: (evt: TargetedInputEvent<HTMLInputElement>) => {
         setQuery((evt.target as HTMLInputElement).value);
@@ -122,6 +130,7 @@ function Search({
         <div className={"flex max-h-[300px] flex-col"}>
           {showStopsResults && (
             <>
+              c
               <SearchResultsHeader>
                 {t("search_stops_results")}
               </SearchResultsHeader>

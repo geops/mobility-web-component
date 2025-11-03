@@ -32,8 +32,8 @@ export type MobilityMapAttributeName =
   | "layers"
   | "layersconfig"
   | "layertree"
+  | "lineid"
   | "lnp"
-  | "lnpid"
   | "mapset"
   | "mapsetplanid"
   | "mapsettags"
@@ -167,15 +167,15 @@ where:
     public: true,
     type: "boolean",
   },
+  lineid: {
+    description: `An id or a short/long name of a line to highlight. <br/>Ex: S1`,
+    public: true,
+  },
   lnp: {
     defaultValue: "true",
     description: `Add the linesnetworkplans layer to the map. This layer will display lines network plans on the map.`,
     public: true,
     type: "boolean",
-  },
-  lnpid: {
-    description: `An id or a short/long name of a line to highlight. <br/>Ex: S1`,
-    public: true,
   },
   mapset: {
     defaultValue: "false",
