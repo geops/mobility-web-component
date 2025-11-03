@@ -5,6 +5,7 @@ import getMainColorForVehicle from "../utils/getMainColorForVehicle";
 import getTextColor from "../utils/getTextColor";
 import getTextFontForVehicle from "../utils/getTextFontForVehicle";
 import getTextForVehicle from "../utils/getTextForVehicle";
+import useMapContext from "../utils/hooks/useMapContext";
 
 import type {
   RealtimeDeparture,
@@ -39,12 +40,16 @@ function RouteIcon({
   trajectory,
   ...props
 }: RouteIconProps) {
+  const { realtimeLayer } = useMapContext();
   const lineToUse =
     line ||
     lineInfo ||
     departure?.line ||
     stopSequence?.line ||
     trajectory?.properties?.line;
+  const trainId = stopSequence?.id || departure?.train_id;
+  const trajectoryToUse = trajectory || realtimeLayer?.trajectories[trainId];
+
   const type = lineToUse?.type || stopSequence?.type || trajectory?.type;
   const backgroundColor = getMainColorForVehicle(
     line || lineInfo || departure || stopSequence || trajectory,
@@ -59,8 +64,13 @@ function RouteIcon({
   const font = getTextFontForVehicle(fontSize, text);
 
   // RealtimeIcon only for stopsequence for now
-  const hasRealtime = stopSequence?.has_realtime_journey === true;
-  const showNoRealtimeIcon = !!stopSequence;
+  const hasRealtime =
+    stopSequence?.has_realtime_journey ||
+    departure?.has_realtime_journey ||
+    trajectoryToUse?.properties?.has_realtime_journey ||
+    (stopSequence?.stations?.[0]?.state &&
+      stopSequence?.stations?.[0]?.state !== "TIME_BASED");
+  const showNoRealtimeIcon = !!stopSequence || !!departure || !!trajectoryToUse;
   const isCancelled = stopSequence?.stations[0]?.state === "JOURNEY_CANCELLED";
 
   if (borderColor === backgroundColor) {
@@ -86,7 +96,7 @@ function RouteIcon({
       {displayNoRealtimeIcon &&
         showNoRealtimeIcon &&
         !isCancelled &&
-        !hasRealtime && <NoRealtime className={"absolute -top-2 -left-2"} />}
+        !hasRealtime && <NoRealtime className={"absolute -top-3 -right-3"} />}
     </span>
   );
 }
