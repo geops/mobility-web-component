@@ -1,4 +1,4 @@
-import { useEffect } from "preact/hooks";
+import { useCallback, useEffect } from "preact/hooks";
 
 import useLnpLineInfo, { useLnpStopInfo } from "../utils/hooks/useLnp";
 import useMapContext from "../utils/hooks/useMapContext";
@@ -147,27 +147,50 @@ function LayoutState() {
     setTrainId(trainInfo?.properties?.train_id);
   }, [setTrainId, trainInfo]);
 
+  // Close all menus
+  const closeMenus = useCallback(() => {
+    setIsLayerTreeOpen(false);
+    setIsExportMenuOpen(false);
+    setIsSearchOpen(false);
+    setIsShareMenuOpen(false);
+  }, [
+    setIsExportMenuOpen,
+    setIsLayerTreeOpen,
+    setIsSearchOpen,
+    setIsShareMenuOpen,
+  ]);
+
+  // Close all features details
+  const closeFeatureDetails = useCallback(() => {
+    setStationId(null);
+    setTrainId(null);
+    setNotificationId(null);
+    setLinesIds(null);
+    setFeaturesInfos(null);
+  }, [
+    setStationId,
+    setTrainId,
+    setNotificationId,
+    setLinesIds,
+    setFeaturesInfos,
+  ]);
+
   useEffect(() => {
     if (isSearchOpen) {
       setIsLayerTreeOpen(false);
       setIsExportMenuOpen(false);
       setIsShareMenuOpen(false);
       setStationId(null);
-      setTrainId(null);
-      setFeaturesInfos(null);
-      setLinesIds(null);
-      setNotificationId(null);
+
+      closeFeatureDetails();
     }
   }, [
+    closeFeatureDetails,
     isSearchOpen,
-    setFeaturesInfos,
     setIsExportMenuOpen,
     setIsLayerTreeOpen,
     setIsShareMenuOpen,
-    setLinesIds,
-    setNotificationId,
     setStationId,
-    setTrainId,
   ]);
 
   useEffect(() => {
@@ -175,22 +198,15 @@ function LayoutState() {
       setIsLayerTreeOpen(false);
       setIsExportMenuOpen(false);
       setIsSearchOpen(false);
-      setStationId(null);
-      setTrainId(null);
-      setFeaturesInfos(null);
-      setLinesIds(null);
-      setNotificationId(null);
+
+      closeFeatureDetails();
     }
   }, [
     isShareMenuOpen,
-    setFeaturesInfos,
+    closeFeatureDetails,
     setIsExportMenuOpen,
     setIsLayerTreeOpen,
     setIsSearchOpen,
-    setLinesIds,
-    setNotificationId,
-    setStationId,
-    setTrainId,
   ]);
 
   useEffect(() => {
@@ -199,23 +215,16 @@ function LayoutState() {
       setIsLayerTreeOpen(isLayerTreeOpen);
       setIsSearchOpen(false);
       setIsShareMenuOpen(false);
-      setFeaturesInfos(null);
-      setTrainId(null);
-      setStationId(null);
-      setLinesIds(null);
-      setNotificationId(null);
+
+      closeFeatureDetails();
     }
   }, [
     isLayerTreeOpen,
-    setFeaturesInfos,
+    closeFeatureDetails,
     setIsExportMenuOpen,
     setIsLayerTreeOpen,
     setIsSearchOpen,
     setIsShareMenuOpen,
-    setLinesIds,
-    setNotificationId,
-    setStationId,
-    setTrainId,
   ]);
 
   useEffect(() => {
@@ -223,42 +232,29 @@ function LayoutState() {
       setIsLayerTreeOpen(false);
       setIsExportMenuOpen(isExportMenuOpen);
       setIsSearchOpen(false);
-      setFeaturesInfos(null);
-      setTrainId(null);
-      setLinesIds(null);
       setIsShareMenuOpen(false);
-      setStationId(null);
-      setNotificationId(null);
+
+      closeFeatureDetails();
     }
   }, [
+    closeFeatureDetails,
     isExportMenuOpen,
-    setFeaturesInfos,
     setIsExportMenuOpen,
     setIsLayerTreeOpen,
     setIsSearchOpen,
     setIsShareMenuOpen,
-    setLinesIds,
-    setNotificationId,
-    setStationId,
-    setTrainId,
   ]);
 
   useEffect(() => {
     if (selectedFeature) {
-      setIsLayerTreeOpen(false);
-      setIsSearchOpen(false);
-      setIsExportMenuOpen(false);
-      setIsShareMenuOpen(false);
+      closeMenus();
       setTrainId(selectedFeature?.get("train_id") || null);
       setStationId(selectedFeature?.get("uid") || null);
       setNotificationId(selectedFeature?.get("situationId") || null);
     }
   }, [
     selectedFeature,
-    setIsExportMenuOpen,
-    setIsLayerTreeOpen,
-    setIsSearchOpen,
-    setIsShareMenuOpen,
+    closeMenus,
     setStationId,
     setTrainId,
     setNotificationId,
@@ -266,23 +262,15 @@ function LayoutState() {
 
   useEffect(() => {
     if (stationId) {
-      // Close tools
-      setIsLayerTreeOpen(false);
-      setIsExportMenuOpen(false);
-      setIsSearchOpen(false);
-      setIsShareMenuOpen(false);
+      closeMenus();
 
-      // Close overlay details
       setTrainId(null);
       setLinesIds(null);
       setNotificationId(null);
     }
   }, [
     setFeaturesInfos,
-    setIsExportMenuOpen,
-    setIsLayerTreeOpen,
-    setIsSearchOpen,
-    setIsShareMenuOpen,
+    closeMenus,
     setLinesIds,
     setNotificationId,
     setTrainId,
@@ -291,11 +279,7 @@ function LayoutState() {
 
   useEffect(() => {
     if (trainId) {
-      // Close tools
-      setIsLayerTreeOpen(false);
-      setIsExportMenuOpen(false);
-      setIsSearchOpen(false);
-      setIsShareMenuOpen(false);
+      closeMenus();
 
       // Close overlay details
       setStationId(null);
@@ -303,11 +287,8 @@ function LayoutState() {
       setNotificationId(null);
     }
   }, [
+    closeMenus,
     setFeaturesInfos,
-    setIsExportMenuOpen,
-    setIsLayerTreeOpen,
-    setIsSearchOpen,
-    setIsShareMenuOpen,
     setLinesIds,
     setNotificationId,
     setStationId,
@@ -316,11 +297,7 @@ function LayoutState() {
 
   useEffect(() => {
     if (notificationId) {
-      // Close tools
-      setIsLayerTreeOpen(false);
-      setIsExportMenuOpen(false);
-      setIsSearchOpen(false);
-      setIsShareMenuOpen(false);
+      closeMenus();
 
       // Close overlay details
       setStationId(null);
@@ -328,12 +305,9 @@ function LayoutState() {
       setTrainId(null);
     }
   }, [
+    closeMenus,
     notificationId,
     setFeaturesInfos,
-    setIsExportMenuOpen,
-    setIsLayerTreeOpen,
-    setIsSearchOpen,
-    setIsShareMenuOpen,
     setLinesIds,
     setNotificationId,
     setStationId,
@@ -342,11 +316,7 @@ function LayoutState() {
 
   useEffect(() => {
     if (linesIds?.length) {
-      // Close tools
-      setIsLayerTreeOpen(false);
-      setIsExportMenuOpen(false);
-      setIsSearchOpen(false);
-      setIsShareMenuOpen(false);
+      closeMenus();
 
       // Close overlay details
       setStationId(null);
@@ -357,10 +327,8 @@ function LayoutState() {
     linesIds?.length,
     notificationId,
     setFeaturesInfos,
-    setIsExportMenuOpen,
-    setIsLayerTreeOpen,
-    setIsSearchOpen,
-    setIsShareMenuOpen,
+    closeMenus,
+
     setLinesIds,
     setNotificationId,
     setStationId,

@@ -47,7 +47,7 @@ export const LNP_LINE_ID_PROP = "original_line_id";
 // LNP data source id in the style
 export const LNP_SOURCE_ID = "network_plans";
 
-// Metadata key in the lnp data source
+// LNP metadata key in the lnp data source
 export const LNP_MD_LINES = "geops.lnp.lines";
 export const LNP_MD_STOPS = "geops.lnp.stops";
 
