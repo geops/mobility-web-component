@@ -2,9 +2,9 @@ import { fromLonLat } from "ol/proj";
 
 import type { Map } from "ol";
 
-import type { StationFeature } from "../StopsSearch";
+import type { StopsFeature } from "./hooks/useSearchStops";
 
-const centerOnStation = (selectedStation: StationFeature, map: Map) => {
+const centerOnStation = (selectedStation: StopsFeature, map: Map) => {
   const center = selectedStation?.geometry?.coordinates;
   if (center) {
     map?.getView()?.animate({

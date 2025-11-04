@@ -27,6 +27,7 @@ function SearchStopsResults({
 
   const onSelectStop = useCallback(
     (stop: StopsFeature) => {
+      console.log("ici");
       setSelectedQuery(stop.properties.name);
       setOpen(false);
       onSelect?.(stop);
@@ -73,7 +74,7 @@ function SearchStopsResults({
         {results.map((item: StopsFeature) => {
           return (
             <SearchResult className={resultClassName} key={item.properties.uid}>
-              <SearchStopsResult onSelect={void onSelectStop} stop={item} />
+              <SearchStopsResult onSelect={onSelectStop} stop={item} />
             </SearchResult>
           );
         })}

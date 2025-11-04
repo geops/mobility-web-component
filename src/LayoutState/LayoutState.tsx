@@ -135,7 +135,6 @@ function LayoutState() {
   }, [lineInfo, setLinesIds]);
 
   useEffect(() => {
-    // @ts-expect-error bad typing
     setStationId(stopInfo?.external_id);
   }, [stopInfo, setStationId]);
 

@@ -60,3 +60,6 @@ export const LNP_LAYER_ID_HIGHLIGHT = "netzplan_highlight_trip";
 // Layer props used by layer and/or layerConfig
 export const LAYER_TREE_HIDE_PROP = "layerTreeHidden";
 export const LAYER_TREE_TITLE_FUNC_PROP = "layerTreeTitleRenderFunc";
+
+/** FIT ON FEATURES */
+export const FIT_ON_FEATURES_MAX_ZOOM_POINT = 16;
