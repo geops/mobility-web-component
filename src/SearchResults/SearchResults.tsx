@@ -7,7 +7,7 @@ import type { HTMLAttributes, PreactDOMAttributes } from "preact";
 
 import type { SearchResponse } from "../utils/hooks/useSearchStops";
 
-export type SearchStopsResultsProps = {
+export type SearchResultsProps = {
   resultsClassName?: string;
   resultsContainerClassName?: string;
   searchResponse: SearchResponse<unknown>;
@@ -15,14 +15,14 @@ export type SearchStopsResultsProps = {
   PreactDOMAttributes;
 
 /**
- * Results list of stops search.
+ * Results list of search.
  */
 function SearchResults({
   children,
   resultsClassName,
   resultsContainerClassName,
   searchResponse,
-}: SearchStopsResultsProps) {
+}: SearchResultsProps) {
   const { t } = useI18n();
 
   if (!(searchResponse?.results?.length >= 0)) {
