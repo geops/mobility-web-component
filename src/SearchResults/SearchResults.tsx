@@ -7,28 +7,32 @@ import type { HTMLAttributes, PreactDOMAttributes } from "preact";
 
 import type { SearchResponse } from "../utils/hooks/useSearchStops";
 
-export type SearchResultsProps = {
+export type SearchResultsProps<T> = {
   className?: string;
-  filter?: (item: unknown) => boolean;
-  onSelect?: (item: unknown) => void;
+  filter?: (item: T) => boolean;
   resultClassName?: string;
   resultsClassName?: string;
   resultsContainerClassName?: string;
-  searchResponse?: SearchResponse<unknown>;
-  sort?: (a: unknown, b: unknown) => number;
+  searchResponse?: SearchResponse<T>;
+  sort?: (a: T, b: T) => number;
 } & HTMLAttributes<HTMLDivElement> &
   PreactDOMAttributes;
+
+export interface SearchResultsChildProps<T> {
+  item: T;
+  onSelectItem?: (item: T, evt: Event) => void;
+}
 
 /**
  * Results list of search.
  */
-function SearchResults({
+function SearchResults<T>({
   children,
   className,
   resultsClassName,
   searchResponse,
   ...props
-}: SearchResultsProps) {
+}: SearchResultsProps<T>) {
   const { t } = useI18n();
 
   if (!(searchResponse?.results?.length >= 0)) {

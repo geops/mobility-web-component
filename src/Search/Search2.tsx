@@ -3,32 +3,27 @@ import { useMemo, useState } from "preact/hooks";
 
 import InputSearch from "../ui/InputSearch";
 import useI18n from "../utils/hooks/useI18n";
-import useSearchLines from "../utils/hooks/useSearchLines";
-import useSearchStops from "../utils/hooks/useSearchStops";
 
-import type { RealtimeTrajectory } from "mobility-toolbox-js/types";
-// import useSearchTrajectories from "../utils/hooks/useSearchTrajectories";
 import type { TargetedInputEvent } from "preact";
+import type { ReactElement } from "preact/compat";
 
 import type { IconButtonProps } from "../ui/IconButton/IconButton";
 import type { InputProps } from "../ui/Input/Input";
 import type { InputSearchProps } from "../ui/InputSearch/InputSearch";
-import type { SearchResponse } from "../utils/hooks/useSearchStops";
 
 export type SearchProps = {
   cancelButtonProps?: IconButtonProps;
   inputProps?: InputProps;
-  resultClassName?: string;
-  resultsClassName?: string;
-  resultsContainerClassName?: string;
   withResultsClassName?: string;
-} & InputSearchProps;
+} & InputSearchProps &
+  Pick<
+    Partial<SearchResultsProps<unknown>>,
+    "resultClassName" | "resultsClassName" | "resultsContainerClassName"
+  >;
 
-const emptyResultsSearchResults: SearchResponse<RealtimeTrajectory> = {
-  isLoading: false,
-  results: [],
-};
-import { createContext } from "preact";
+import { cloneElement, createContext, toChildArray } from "preact";
+
+import type { SearchResultsProps } from "../SearchResults/SearchResults";
 
 export interface SearchContextType {
   open: boolean;
@@ -52,22 +47,17 @@ function Search({
   cancelButtonProps,
   children,
   inputProps,
-  // resultClassName,
-  // resultsClassName,
-  // resultsContainerClassName,
+  resultClassName,
+  resultsClassName,
+  resultsContainerClassName,
   withResultsClassName,
   ...props
 }: SearchProps) {
+  const { t } = useI18n();
   // We use a selectedQuery state to avoid making a new request when we select a result.
   const [selectedQuery, setSelectedQuery] = useState("");
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
-  const stops = useSearchStops(query);
-  const lines = useSearchLines(query);
-
-  // TODO: we deactivate it for now until backend allow searches on vehicle journeys using the route identifier
-  const trajectories = emptyResultsSearchResults; //useSearchTrajectories(query);
-  const { t } = useI18n();
 
   const value = useMemo(() => {
     return {
@@ -107,41 +97,9 @@ function Search({
     };
   }, [cancelButtonProps]);
 
-  // const onSelectStop = useCallback((stop) => {
-  //   setSelectedQuery(stop.properties.name);
-  //   setOpen(false);
-  // }, []);
-
-  // const onSelectLine = useCallback((line) => {
-  //   setSelectedQuery(line.short_name || line.long_name);
-  //   setOpen(false);
-  // }, []);
-
-  // const onSelectTrajectory = useCallback((trajectory) => {
-  //   setSelectedQuery(trajectory.properties.route_identifier);
-  //   setOpen(false);
-  // }, []);
-
   const showResults = useMemo(() => {
-    return (
-      open &&
-      (!!stops?.results?.length ||
-        !!lines?.results?.length ||
-        !!trajectories?.results?.length)
-    );
-  }, [open, stops, lines, trajectories]);
-
-  // const showStopsResults = useMemo(() => {
-  //   return open && !!stops?.results?.length;
-  // }, [open, stops]);
-
-  // const showLinesResults = useMemo(() => {
-  //   return open && !!lines?.results?.length;
-  // }, [open, lines]);
-
-  // const showTrajectoriesResults = useMemo(() => {
-  //   return open && !!trajectories?.results?.length;
-  // }, [open, trajectories]);
+    return open;
+  }, [open]);
 
   return (
     <SearchContext.Provider value={value}>
@@ -152,42 +110,14 @@ function Search({
         withResultsClassName={showResults ? withResultsClassName : ""}
       >
         <div className={"flex max-h-[300px] flex-col"}>
-          {children}
-          {/* {showLinesResults && (
-            <>
-              <SearchResultsHeader>
-                {t("search_lines_results")}
-              </SearchResultsHeader>
-              <SearchResults
-                className={resultsContainerClassName}
-                resultsClassName={resultsClassName}
-                resultsContainerClassName={"grow"}
-                searchResponse={lines}
-              >
-                {[...lines.results]
-                  .sort((a, b) => {
-                    if (a.long_name === b.long_name) {
-                      return a.long_name < b.long_name ? 1 : -1;
-                    }
-                    return a.short_name < b.short_name ? 1 : -1;
-                  })
-                  .map((line: LnpLineInfo) => {
-                    return (
-                      <SearchResult
-                        className={resultClassName}
-                        key={line.external_id}
-                      >
-                        <SearchLinesResult
-                          line={line}
-                          onSelect={onSelectLine}
-                        />
-                      </SearchResult>
-                    );
-                  })}
-              </SearchResults>
-            </>
-          )}
-          {showTrajectoriesResults && (
+          {toChildArray(children)?.map((child: ReactElement) => {
+            return cloneElement(child, {
+              resultClassName,
+              resultsClassName,
+              resultsContainerClassName,
+            });
+          })}
+          {/*}          {showTrajectoriesResults && (
             <>
               <SearchResultsHeader>
                 {t("search_trajectories_results")}

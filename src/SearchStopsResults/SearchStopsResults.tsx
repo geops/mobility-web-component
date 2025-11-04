@@ -1,3 +1,4 @@
+import { cloneElement, toChildArray } from "preact";
 import { memo } from "preact/compat";
 import { useCallback, useContext, useMemo } from "preact/hooks";
 
@@ -5,34 +6,36 @@ import { SearchContext } from "../Search/Search2";
 import SearchResult from "../SearchResult";
 import SearchResults from "../SearchResults";
 import SearchResultsHeader from "../SearchResultsHeader";
-import SearchStopsResult from "../SearchStopsResult";
 import useI18n from "../utils/hooks/useI18n";
 import useSearchStops from "../utils/hooks/useSearchStops";
 
-import type { SearchResultsProps } from "../SearchResults/SearchResults";
+import type { ReactElement } from "preact/compat";
+
+import type {
+  SearchResultsChildProps,
+  SearchResultsProps,
+} from "../SearchResults/SearchResults";
 import type { StopsFeature } from "../utils/hooks/useSearchStops";
 
 function SearchStopsResults({
+  children,
   filter,
-  onSelect,
   resultClassName,
   resultsClassName,
   resultsContainerClassName,
   sort,
-}: SearchResultsProps) {
+}: SearchResultsProps<StopsFeature>) {
   const { open, query, setOpen, setSelectedQuery } = useContext(SearchContext);
   const searchResponse = useSearchStops(query);
 
   const { t } = useI18n();
 
-  const onSelectStop = useCallback(
-    (stop: StopsFeature) => {
-      console.log("ici");
-      setSelectedQuery(stop.properties.name);
+  const onSelectResult = useCallback(
+    (item: StopsFeature) => {
+      setSelectedQuery(item.properties.name);
       setOpen(false);
-      onSelect?.(stop);
     },
-    [onSelect, setOpen, setSelectedQuery],
+    [setOpen, setSelectedQuery],
   );
 
   const results = useMemo(() => {
@@ -74,7 +77,20 @@ function SearchStopsResults({
         {results.map((item: StopsFeature) => {
           return (
             <SearchResult className={resultClassName} key={item.properties.uid}>
-              <SearchStopsResult onSelect={onSelectStop} stop={item} />
+              {toChildArray(children).map(
+                (
+                  child: ReactElement<SearchResultsChildProps<StopsFeature>>,
+                ) => {
+                  const onSelectItem = (itemm: StopsFeature, evt: Event) => {
+                    onSelectResult(itemm);
+                    child.props?.onSelectItem?.(itemm, evt);
+                  };
+                  return cloneElement(child, {
+                    item: item,
+                    onSelectItem,
+                  });
+                },
+              )}
             </SearchResult>
           );
         })}

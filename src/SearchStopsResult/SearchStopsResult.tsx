@@ -1,29 +1,26 @@
 import { memo } from "preact/compat";
 import { twMerge } from "tailwind-merge";
 
-import useFitOnFeatures from "../utils/hooks/useFitOnFeatures";
 import useMapContext from "../utils/hooks/useMapContext";
 
-import type { GeoJSONFeature } from "maplibre-gl";
 import type { ButtonHTMLAttributes, PreactDOMAttributes } from "preact";
 
 import type { StopsFeature } from "../utils/hooks/useSearchStops";
 
 export type SearchStopsResultProps = {
   className?: string;
-  onSelect?: (stop: StopsFeature) => void;
-  stop: StopsFeature;
+  item?: StopsFeature;
+  onSelectItem?: (stop: StopsFeature, evt: MouseEvent) => void;
 } & ButtonHTMLAttributes<HTMLButtonElement> &
   PreactDOMAttributes;
 
 function SearchStopsResult({
   className,
-  onSelect,
-  stop,
+  item,
+  onSelectItem,
   ...props
 }: SearchStopsResultProps) {
-  const { setStationId, stationsLayer } = useMapContext();
-  const fitOnFeatures = useFitOnFeatures();
+  const { stationsLayer } = useMapContext();
 
   return (
     <button
@@ -31,16 +28,14 @@ function SearchStopsResult({
         "flex w-full cursor-pointer items-center gap-3 text-left",
         className,
       )}
-      onClick={() => {
-        onSelect?.(stop);
-        setStationId(stop.properties.uid);
+      onClick={(evt) => {
         stationsLayer?.setVisible(true);
-        fitOnFeatures([stop as GeoJSONFeature]);
+        onSelectItem?.(item, evt);
       }}
       {...props}
     >
       <div className="size-6"></div>
-      <div className="grow">{stop.properties.name}</div>
+      <div className="grow">{item?.properties.name}</div>
     </button>
   );
 }

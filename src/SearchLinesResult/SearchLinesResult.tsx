@@ -10,18 +10,18 @@ import type { LnpLineInfo } from "../utils/hooks/useLnp";
 
 export type SearchLinesResultProps = {
   className?: string;
-  line: LnpLineInfo;
-  onSelect?: (line: LnpLineInfo) => void;
+  item?: LnpLineInfo;
+  onSelectItem?: (line: LnpLineInfo) => void;
 } & ButtonHTMLAttributes<HTMLButtonElement> &
   PreactDOMAttributes;
 
 function SearchLinesResult({
   className,
-  line,
-  onSelect,
+  item,
+  onSelectItem,
   ...props
 }: SearchLinesResultProps) {
-  const { linesNetworkPlanLayer, setLinesIds } = useMapContext();
+  const { linesNetworkPlanLayer } = useMapContext();
   return (
     <button
       {...props}
@@ -31,12 +31,11 @@ function SearchLinesResult({
       )}
       onClick={() => {
         linesNetworkPlanLayer?.setVisible(true);
-        onSelect?.(line);
-        setLinesIds([line.external_id]);
+        onSelectItem?.(item);
       }}
     >
-      <RouteIcon lineInfo={line}></RouteIcon>
-      <div className="grow">{line.long_name || line.short_name}</div>
+      <RouteIcon lineInfo={item}></RouteIcon>
+      <div className="grow">{item?.long_name || item?.short_name}</div>
     </button>
   );
 }

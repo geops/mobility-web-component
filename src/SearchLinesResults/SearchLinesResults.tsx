@@ -1,15 +1,20 @@
+import { cloneElement, toChildArray } from "preact";
 import { memo } from "preact/compat";
 import { useCallback, useContext, useMemo } from "preact/hooks";
 
 import { SearchContext } from "../Search/Search2";
-import SearchLinesResult from "../SearchLinesResult/SearchLinesResult";
 import SearchResult from "../SearchResult";
 import SearchResults from "../SearchResults";
 import SearchResultsHeader from "../SearchResultsHeader";
 import useI18n from "../utils/hooks/useI18n";
 import useSearchLines from "../utils/hooks/useSearchLines";
 
-import type { SearchResultsProps } from "../Search/Search2";
+import type { ReactElement } from "preact/compat";
+
+import type {
+  SearchResultsChildProps,
+  SearchResultsProps,
+} from "../SearchResults/SearchResults";
 import type { LnpLineInfo } from "../utils/hooks/useLnp";
 
 const defaultSort = (a: LnpLineInfo, b: LnpLineInfo) => {
@@ -20,25 +25,24 @@ const defaultSort = (a: LnpLineInfo, b: LnpLineInfo) => {
 };
 
 function SearchLinesResults({
+  children,
   filter,
-  onSelect,
   resultClassName,
   resultsClassName,
   resultsContainerClassName,
   sort = defaultSort,
-}: SearchResultsProps) {
+}: SearchResultsProps<LnpLineInfo>) {
   const { open, query, setOpen, setSelectedQuery } = useContext(SearchContext);
   const searchResponse = useSearchLines(query);
 
   const { t } = useI18n();
 
-  const onSelectLine = useCallback(
-    (line) => {
-      setSelectedQuery(line.short_name || line.long_name);
+  const onSelectResult = useCallback(
+    (item: LnpLineInfo) => {
+      setSelectedQuery(item.short_name || item.long_name);
       setOpen(false);
-      onSelect?.(line);
     },
-    [onSelect, setOpen, setSelectedQuery],
+    [setOpen, setSelectedQuery],
   );
 
   const results = useMemo(() => {
@@ -79,8 +83,19 @@ function SearchLinesResults({
       >
         {results.map((item: LnpLineInfo) => {
           return (
-            <SearchResult className={resultClassName} key={item.external_id}>
-              <SearchLinesResult line={item} onSelect={onSelectLine} />
+            <SearchResult className={resultClassName} key={item.short_name}>
+              {toChildArray(children).map(
+                (child: ReactElement<SearchResultsChildProps<LnpLineInfo>>) => {
+                  const onSelectItem = (itemm: LnpLineInfo, evt: Event) => {
+                    onSelectResult(itemm);
+                    child.props?.onSelectItem?.(itemm, evt);
+                  };
+                  return cloneElement(child, {
+                    item: item,
+                    onSelectItem,
+                  });
+                },
+              )}
             </SearchResult>
           );
         })}
