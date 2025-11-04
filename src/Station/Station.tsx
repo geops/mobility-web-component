@@ -20,14 +20,6 @@ function Station({ className, ...props }: StationProps) {
   const { stationId } = useMapContext();
   const station = useRealtimeStation(stationId);
   const departures = useRealtimeDepartures(stationId);
-  // const fit = useFitOnFeatures();
-
-  // useEffect(() => {
-  //   if (!selectedFeature && station && station?.properties?.uid !== stationId) {
-  //     console.log("station changed, centering on station", station);
-  //     fit([station], map);
-  //   }
-  // }, [fit, map, selectedFeature, station, stationId]);
 
   if (!station) {
     return null;
