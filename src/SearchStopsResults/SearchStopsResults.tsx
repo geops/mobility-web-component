@@ -74,7 +74,7 @@ function SearchStopsResults({
         {results.map((item: StopsFeature) => {
           return (
             <SearchResult className={resultClassName} key={item.properties.uid}>
-              <SearchStopsResult onSelect={onSelectStop} stop={item} />
+              <SearchStopsResult onSelect={void onSelectStop} stop={item} />
             </SearchResult>
           );
         })}

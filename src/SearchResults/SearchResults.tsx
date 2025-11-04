@@ -3,12 +3,9 @@ import { twMerge } from "tailwind-merge";
 
 import useI18n from "../utils/hooks/useI18n";
 
-import type { StopsResponse } from "mobility-toolbox-js/types";
 import type { HTMLAttributes, PreactDOMAttributes } from "preact";
 
 import type { SearchResponse } from "../utils/hooks/useSearchStops";
-
-export type StopsFeature = StopsResponse["features"][0];
 
 export type SearchStopsResultsProps = {
   resultsClassName?: string;
