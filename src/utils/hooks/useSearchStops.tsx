@@ -8,7 +8,7 @@ import useMapContext from "./useMapContext";
 
 import type { StopsParameters, StopsResponse } from "mobility-toolbox-js/types";
 
-import type { StopsFeature } from "../../StopsSearch";
+export type StopsFeature = StopsResponse["features"][0];
 
 export interface SearchResponse<T> {
   isLoading: boolean;

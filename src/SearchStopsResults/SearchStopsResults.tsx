@@ -10,7 +10,7 @@ import useI18n from "../utils/hooks/useI18n";
 import useSearchStops from "../utils/hooks/useSearchStops";
 
 import type { SearchResultsProps } from "../Search/Search2";
-import type { StopsFeature } from "../SearchResults";
+import type { StopsFeature } from "../utils/hooks/useSearchStops";
 
 function SearchStopsResults({
   filter,
@@ -26,7 +26,7 @@ function SearchStopsResults({
   const { t } = useI18n();
 
   const onSelectStop = useCallback(
-    (stop) => {
+    (stop: StopsFeature) => {
       setSelectedQuery(stop.properties.name);
       setOpen(false);
       onSelect?.(stop);

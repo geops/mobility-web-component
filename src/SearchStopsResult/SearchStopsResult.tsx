@@ -6,7 +6,7 @@ import useMapContext from "../utils/hooks/useMapContext";
 
 import type { ButtonHTMLAttributes, PreactDOMAttributes } from "preact";
 
-import type { StopsFeature } from "../StopsSearch";
+import type { StopsFeature } from "../utils/hooks/useSearchStops";
 
 export type SearchStopsResultProps = {
   className?: string;
