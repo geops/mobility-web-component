@@ -8,9 +8,14 @@ import type { HTMLAttributes, PreactDOMAttributes } from "preact";
 import type { SearchResponse } from "../utils/hooks/useSearchStops";
 
 export type SearchResultsProps = {
+  className?: string;
+  filter?: (item: unknown) => boolean;
+  onSelect?: (item: unknown) => void;
+  resultClassName?: string;
   resultsClassName?: string;
   resultsContainerClassName?: string;
-  searchResponse: SearchResponse<unknown>;
+  searchResponse?: SearchResponse<unknown>;
+  sort?: (a: unknown, b: unknown) => number;
 } & HTMLAttributes<HTMLDivElement> &
   PreactDOMAttributes;
 
@@ -19,9 +24,10 @@ export type SearchResultsProps = {
  */
 function SearchResults({
   children,
+  className,
   resultsClassName,
-  resultsContainerClassName,
   searchResponse,
+  ...props
 }: SearchResultsProps) {
   const { t } = useI18n();
 
@@ -33,8 +39,9 @@ function SearchResults({
     <div
       className={twMerge(
         "flex grow overflow-auto rounded-md rounded-t-none bg-white shadow",
-        resultsContainerClassName,
+        className,
       )}
+      {...props}
     >
       {searchResponse.results.length === 0 && (
         <div

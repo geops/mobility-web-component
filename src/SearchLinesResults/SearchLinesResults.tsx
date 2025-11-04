@@ -75,7 +75,6 @@ function SearchLinesResults({
       <SearchResults
         className={resultsContainerClassName}
         resultsClassName={resultsClassName}
-        resultsContainerClassName={"grow"}
         searchResponse={searchResponseFiltered}
       >
         {results.map((item: LnpLineInfo) => {

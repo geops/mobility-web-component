@@ -9,7 +9,7 @@ import SearchStopsResult from "../SearchStopsResult";
 import useI18n from "../utils/hooks/useI18n";
 import useSearchStops from "../utils/hooks/useSearchStops";
 
-import type { SearchResultsProps } from "../Search/Search2";
+import type { SearchResultsProps } from "../SearchResults/SearchResults";
 import type { StopsFeature } from "../utils/hooks/useSearchStops";
 
 function SearchStopsResults({
@@ -68,7 +68,6 @@ function SearchStopsResults({
       <SearchResults
         className={resultsContainerClassName}
         resultsClassName={resultsClassName}
-        resultsContainerClassName={"grow"}
         searchResponse={searchResponseFiltered}
       >
         {results.map((item: StopsFeature) => {

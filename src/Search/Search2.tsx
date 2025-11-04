@@ -30,15 +30,6 @@ const emptyResultsSearchResults: SearchResponse<RealtimeTrajectory> = {
 };
 import { createContext } from "preact";
 
-export interface SearchResultsProps {
-  filter?: (item: unknown) => boolean;
-  onSelect?: (item: unknown) => void;
-  resultClassName?: string;
-  resultsClassName?: string;
-  resultsContainerClassName?: string;
-  sort?: (a: unknown, b: unknown) => number;
-}
-
 export interface SearchContextType {
   open: boolean;
   query: string;
