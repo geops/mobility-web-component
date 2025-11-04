@@ -29,6 +29,9 @@ function useSearchStops(
   const [isLoading, setIsLoading] = useState(false);
 
   const api: StopsAPI = useMemo(() => {
+    if (!apikey || !stopsurl) {
+      return null;
+    }
     return new StopsAPI({ apiKey: apikey, url: stopsurl });
   }, [apikey, stopsurl]);
 
@@ -66,12 +69,12 @@ function useSearchStops(
   }, [api, mots, params]);
 
   useEffect(() => {
-    if (!query) {
+    if (!query || !api) {
       setResults([]);
       return;
     }
     debouncedSearch(query);
-  }, [debouncedSearch, query]);
+  }, [api, debouncedSearch, query]);
 
   return {
     isLoading,

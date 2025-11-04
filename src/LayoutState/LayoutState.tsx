@@ -1,8 +1,12 @@
 import { useCallback, useEffect } from "preact/hooks";
 
+import useFitOnFeatures from "../utils/hooks/useFitOnFeatures";
 import useLnpLineInfo, { useLnpStopInfo } from "../utils/hooks/useLnp";
 import useMapContext from "../utils/hooks/useMapContext";
 import useRealtimeRenderedTrajectories from "../utils/hooks/useRealtimeRenderedTrajectory";
+import useSearchStops from "../utils/hooks/useSearchStops";
+
+import type { GeoJSONFeature } from "ol/format/GeoJSON";
 
 /**
  * This component is responsible for updating the layout state in the context.
@@ -73,6 +77,8 @@ function LayoutState() {
   const lineInfo = useLnpLineInfo(lineid);
   const stopInfo = useLnpStopInfo(stationid);
   const trainInfo = useRealtimeRenderedTrajectories(trainid);
+  const stopForCoordinate = useSearchStops(stationid);
+  const fitOnFeatures = useFitOnFeatures();
 
   useEffect(() => {
     setHasStations(!!tenant);
@@ -136,7 +142,15 @@ function LayoutState() {
 
   useEffect(() => {
     setStationId(stopInfo?.external_id);
-  }, [stopInfo, setStationId]);
+
+    // Center and zoom on th station
+    const result = (stopForCoordinate?.results || []).find((stop) => {
+      return stop.properties.uid === stopInfo?.external_id;
+    });
+    if (result) {
+      fitOnFeatures([result] as GeoJSONFeature[]);
+    }
+  }, [stopInfo, setStationId, fitOnFeatures, stopForCoordinate.results]);
 
   useEffect(() => {
     setNotificationId(notificationid);

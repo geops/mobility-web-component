@@ -22,6 +22,7 @@ function useRealtimeStation(stationId: number | string) {
 
     api.subscribe(`station ${stationId}`, ({ content }) => {
       if (content) {
+        console.log("Received station update", content);
         setStation(content as RealtimeStation);
       }
     });
