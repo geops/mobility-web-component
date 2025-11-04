@@ -1,6 +1,6 @@
 import { GeoJSON } from "ol/format";
 import { Vector } from "ol/source";
-import { useCallback } from "preact/hooks";
+import { useCallback, useEffect, useRef } from "preact/hooks";
 
 import { FIT_ON_FEATURES_MAX_ZOOM_POINT } from "../constants";
 
@@ -12,6 +12,13 @@ const geojson = new GeoJSON();
 
 const useFitOnFeatures = () => {
   const { isOverlayOpen, map: contextMap } = useMapContext();
+
+  const isOverlayOpenRef = useRef(isOverlayOpen);
+
+  useEffect(() => {
+    isOverlayOpenRef.current = isOverlayOpen;
+  }, [isOverlayOpen]);
+
   const fitOnFeatures = useCallback(
     (features: (Feature | GeoJSONFeature)[], map?: Map) => {
       if ((!map && !contextMap) || !features?.length) {
@@ -40,13 +47,13 @@ const useFitOnFeatures = () => {
           extent[0] === extent[2] || extent[1] === extent[3]
             ? FIT_ON_FEATURES_MAX_ZOOM_POINT
             : undefined,
-        padding: [100, 100, 100, isOverlayOpen ? 400 : 100],
+        padding: [100, 100, 100, isOverlayOpenRef.current ? 400 : 100],
       });
       return () => {
         mapToUse?.getView().cancelAnimations();
       };
     },
-    [contextMap, isOverlayOpen],
+    [contextMap],
   );
   return fitOnFeatures;
 };

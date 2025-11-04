@@ -141,6 +141,7 @@ function LayoutState() {
   }, [lineInfo, setLinesIds]);
 
   useEffect(() => {
+    console.log("ici");
     setStationId(stopInfo?.external_id);
 
     // Center and zoom on th station
