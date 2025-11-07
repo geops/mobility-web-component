@@ -6,6 +6,10 @@ import type {
 
 import type { LnpLineInfo } from "./hooks/useLnp";
 
+/**
+ * Return the text depending on an object representing a vehicle or a line.
+ * This function is used to have the same text on the map and on other components.
+ */
 const getTextForVehicle = (object: unknown = ""): string => {
   const name =
     (object as RealtimeTrajectory)?.properties?.line?.name ||

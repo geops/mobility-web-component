@@ -69,6 +69,17 @@ function NotificationDetails({
   // Find the current publication(s) at the current date
   publicationsToDisplay =
     publicationsArr?.filter(({ publicationWindows }) => {
+      // In some cases publicationWindows can be undefined here but defined at the
+      // root of the object so we apply the root publicationWindows to all publications with empty one
+      if (
+        !publicationWindows?.length &&
+        situationParsed?.publicationWindows?.length
+      ) {
+        // @ts-expect-error we should not set this value directly
+        // eslint-disable-next-line no-param-reassign
+        publicationWindows = situationParsed.publicationWindows;
+      }
+
       return publicationWindows.find(({ endTime, startTime }) => {
         const now = new Date();
         const startT = new Date(startTime);
@@ -197,13 +208,13 @@ function NotificationDetails({
                   },
                 )}
                 <div className={"my-4 flex flex-col gap-4"}>
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html:
-                        textualContent?.description ||
-                        t("no_details_available"),
-                    }}
-                  />
+                  {textualContent?.description && (
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: textualContent?.description,
+                      }}
+                    />
+                  )}
                   {!!textualContentMultilingual?.images?.length && (
                     <div className="flex flex-wrap gap-2">
                       {textualContentMultilingual.images.map(

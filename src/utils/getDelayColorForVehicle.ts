@@ -1,13 +1,15 @@
 import getDelayColor from "./getDelayColor";
 
+import type { ViewState } from "mobility-toolbox-js/types";
+
 /**
- * @private
- * @param {number} delayInMs Delay in milliseconds.
- * @param {boolean} cancelled true if the journey is cancelled.
- * @param {boolean} isDelayText true if the color is used for delay text of the symbol.
+ * Return the delay color depending on an object representing a vehicle or a line.
+ * This function is used to have the same color on the map and on other components.
  */
 const getDelayColorForVehicle = (
-  delayInMs: null | number,
+  object?: unknown,
+  viewState?: ViewState,
+  delayInMs?: number,
   cancelled?: boolean,
   isDelayText?: boolean,
 ): string => {

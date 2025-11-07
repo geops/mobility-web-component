@@ -56,12 +56,12 @@ function RouteIcon({
   );
   const color = lineToUse?.text_color || getTextColor(type);
   let borderColor = lineToUse?.stroke || "black";
-  const text = getTextForVehicle(
-    line || lineInfo || departure || stopSequence || trajectory,
-  );
+  const objectToUse =
+    line || lineInfo || departure || stopSequence || trajectory;
+  const text = getTextForVehicle(objectToUse);
 
   const fontSize = fontSizesByNbLetters[text.length] || 12;
-  const font = getTextFontForVehicle(fontSize, text);
+  const font = getTextFontForVehicle(objectToUse, null, fontSize, text);
 
   // RealtimeIcon only for stopsequence for now
   const hasRealtime =

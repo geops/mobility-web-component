@@ -9,8 +9,8 @@ import { useEffect, useMemo, useState } from "preact/hooks";
 import centerOnVehicle from "../utils/centerOnVehicle";
 import { LAYER_NAME_REALTIME } from "../utils/constants";
 import getDelayColorForVehicle from "../utils/getDelayColorForVehicle";
-import getDelayFontForVehicle from "../utils/getDelayFontForVehicle";
 import getDelayTextForVehicle from "../utils/getDelayTextForVehicle";
+import getMainColorForVehicle from "../utils/getMainColorForVehicle";
 import getTextFontForVehicle from "../utils/getTextFontForVehicle";
 import getTextForVehicle from "../utils/getTextForVehicle";
 import useMapContext from "../utils/hooks/useMapContext";
@@ -70,14 +70,15 @@ function RealtimeLayer(props: Partial<RealtimeLayerOptions>) {
           }
         : undefined,
       isQueryable: true,
+      minZoom: 5, // It depends fo the radius mapping in realtimeStyleUtils
       name: LAYER_NAME_REALTIME,
       tenant,
       url: realtimeurl,
       zIndex: 1,
       ...props,
       styleOptions: {
+        getColor: getMainColorForVehicle,
         getDelayColor: getDelayColorForVehicle,
-        getDelayFont: getDelayFontForVehicle,
         getDelayText: getDelayTextForVehicle,
         getText: getTextForVehicle,
         getTextFont: getTextFontForVehicle,
