@@ -15,7 +15,7 @@ export type RouteStopStationProps = {
 
 function RouteStopStation({
   children,
-  className = "flex items-center gap-2",
+  className = "flex items-center gap-2 w-full",
   classNameCancelled = "text-red-600 line-through",
   ...props
 }: RouteStopStationProps) {
@@ -29,8 +29,8 @@ function RouteStopStation({
         status.isCancelled ? classNameCancelled : "",
       )}
     >
-      <RouteStopName />
-      <RouteStopServices className="flex flex-wrap gap-1" />
+      <RouteStopName className={"grow"} />
+      <RouteStopServices className="flex shrink-0 flex-wrap gap-1" />
       {children}
     </div>
   );
