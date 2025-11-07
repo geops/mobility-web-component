@@ -11,6 +11,7 @@ import { LAYER_NAME_REALTIME } from "../utils/constants";
 import getDelayColorForVehicle from "../utils/getDelayColorForVehicle";
 import getDelayTextForVehicle from "../utils/getDelayTextForVehicle";
 import getMainColorForVehicle from "../utils/getMainColorForVehicle";
+import getTextColorForVehicle from "../utils/getTextColorForVehicle";
 import getTextFontForVehicle from "../utils/getTextFontForVehicle";
 import getTextForVehicle from "../utils/getTextForVehicle";
 import useMapContext from "../utils/hooks/useMapContext";
@@ -81,6 +82,7 @@ function RealtimeLayer(props: Partial<RealtimeLayerOptions>) {
         getDelayColor: getDelayColorForVehicle,
         getDelayText: getDelayTextForVehicle,
         getText: getTextForVehicle,
+        getTextColor: getTextColorForVehicle,
         getTextFont: getTextFontForVehicle,
         ...(props?.styleOptions || {}),
       },

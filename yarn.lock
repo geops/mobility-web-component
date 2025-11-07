@@ -8710,10 +8710,10 @@ mlly@^1.7.4:
     pkg-types "^1.3.1"
     ufo "^1.6.1"
 
-mobility-toolbox-js@3.4.8-beta.11:
-  version "3.4.8-beta.11"
-  resolved "https://registry.yarnpkg.com/mobility-toolbox-js/-/mobility-toolbox-js-3.4.8-beta.11.tgz#b3e83f770e6bfb17454f1ccbe11695d74d33c7d4"
-  integrity sha512-w9edNxk0qZpsIhwESOy981PAnxnGueT7ZdgNNbfBkYML5MCGLUz6rLqCS/z7SeSOA1Nfa8q2rJ8JAY18HYtQ8g==
+mobility-toolbox-js@3.4.8-beta.14:
+  version "3.4.8-beta.14"
+  resolved "https://registry.yarnpkg.com/mobility-toolbox-js/-/mobility-toolbox-js-3.4.8-beta.14.tgz#9c8e0ed330465200f3525d0489a90b06dc79b79b"
+  integrity sha512-CCgrhneYTQPO8ZPzlJvkkGGfOX+UMT39DxOETCcB8WRiYXlz7e7W9shwDNAj6tMZ6pKFO7FhBWx/oO0ogdzaEw==
   dependencies:
     "@geoblocks/ol-maplibre-layer" "^1.0.3"
     "@geops/geops-ui" "0.3.6"
