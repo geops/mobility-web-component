@@ -38,10 +38,7 @@ function RouteStop({
   ...props
 }: RouteScheduleStopProps) {
   const { map } = useMapContext();
-  const {
-    // @ts-expect-error bad type definition
-    stopUID,
-  } = stop;
+  const { stopUID } = stop;
   const [status, setStatus] = useState(getStopStatus(stopSequence, index));
   const station = useRealtimeStation(stopUID);
 
