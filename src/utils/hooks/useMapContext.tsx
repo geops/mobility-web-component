@@ -97,12 +97,12 @@ export type MapContextType = {
   setSelectedFeature: (feature: Feature) => void;
   setSelectedFeatures: (features: Feature[]) => void;
   setStation: (station?: RealtimeStation) => void;
-  setStationId: (stationId?: RealtimeStationId) => void;
+  setStationId: (stationId?: RealtimeStationId | string) => void;
   setStationsLayer: (stationsLayer?: MaplibreStyleLayer) => void;
   setStopSequence: (stopSequence?: RealtimeStopSequence) => void;
   setTrainId: (trainId?: RealtimeTrainId) => void;
   station: RealtimeStation;
-  stationId: RealtimeStationId;
+  stationId: RealtimeStationId | string;
   stationsLayer: MaplibreStyleLayer;
   stopSequence: RealtimeStopSequence;
   trainId: RealtimeTrainId;

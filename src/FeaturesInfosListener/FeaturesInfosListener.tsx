@@ -1,5 +1,6 @@
 import { useEffect } from "preact/hooks";
 
+import { LNP_LINE_ID_PROP } from "../utils/constants";
 import useMapContext from "../utils/hooks/useMapContext";
 
 /**
@@ -9,7 +10,9 @@ function FeaturesInfosListener() {
   const {
     featuresInfos,
     featuresInfosHovered,
+    linesNetworkPlanLayer,
     realtimeLayer,
+    setLinesIds,
     setSelectedFeature,
     setSelectedFeatures,
     setStationId,
@@ -37,6 +40,20 @@ function FeaturesInfosListener() {
         return info.layer === stationsLayer;
       })?.features || [];
 
+    // Find the line to highlight in the LNP layer
+    const linesFeatures =
+      featuresInfos?.find((featuresInfo) => {
+        return featuresInfo.layer === linesNetworkPlanLayer;
+      })?.features || [];
+
+    const linesIds = [
+      ...new Set(
+        (linesFeatures || []).map((f) => {
+          return f.get(LNP_LINE_ID_PROP) as string;
+        }),
+      ),
+    ];
+
     const features =
       featuresInfos?.flatMap((info) => {
         return info.features;
@@ -52,10 +69,15 @@ function FeaturesInfosListener() {
     } else {
       setSelectedFeatures(features);
       setSelectedFeature(realtimeFeature || stationFeature || features[0]);
+      if (linesIds.length) {
+        setLinesIds(linesIds?.length ? linesIds : null);
+      }
     }
   }, [
     featuresInfos,
+    linesNetworkPlanLayer,
     realtimeLayer,
+    setLinesIds,
     setSelectedFeature,
     setSelectedFeatures,
     setStationId,

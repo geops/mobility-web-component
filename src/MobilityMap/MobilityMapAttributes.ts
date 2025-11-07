@@ -32,8 +32,8 @@ export type MobilityMapAttributeName =
   | "layers"
   | "layersconfig"
   | "layertree"
+  | "lineid"
   | "lnp"
-  | "lnpid"
   | "mapset"
   | "mapsetplanid"
   | "mapsettags"
@@ -47,6 +47,7 @@ export type MobilityMapAttributeName =
   | "mots"
   | "notification"
   | "notificationat"
+  | "notificationid"
   | "notificationtenant"
   | "notificationurl"
   | "permalink"
@@ -59,9 +60,11 @@ export type MobilityMapAttributeName =
   | "realtimeurl"
   | "search"
   | "share"
+  | "stationid"
   | "stopsurl"
   | "tenant"
   | "toolbar"
+  | "trainid"
   | "zoom";
 
 export type MobilityMapAttributes = Record<
@@ -164,15 +167,15 @@ where:
     public: true,
     type: "boolean",
   },
+  lineid: {
+    description: `An id or a short/long name of a line to highlight. <br/>Ex: S1`,
+    public: true,
+  },
   lnp: {
     defaultValue: "true",
     description: `Add the linesnetworkplans layer to the map. This layer will display lines network plans on the map.`,
     public: true,
     type: "boolean",
-  },
-  lnpid: {
-    description: `An id or a short/long name of a line to highlight. <br/>Ex: S1`,
-    public: true,
   },
   mapset: {
     defaultValue: "false",
@@ -182,8 +185,8 @@ where:
   },
   mapsetplanid: {
     description:
-      "The id of the mapset plan to display. Mostly for debugging purposes.",
-    public: false,
+      "An id of the mapset plan to display. Mostly for debugging purposes.",
+    public: true,
   },
   mapsettags: {
     description: `The ${geopsMapsetApiLink} tags to get the plans from.`,
@@ -196,7 +199,7 @@ where:
   },
   mapsettimestamp: {
     description: `The ${geopsMapsetApiLink} timestamp used to load valid standard plan. If not defined it will use the current time.`,
-    public: false,
+    public: true,
   },
   mapseturl: {
     defaultValue: "https://editor.mapset.io/api/v1/",
@@ -236,6 +239,10 @@ where:
   notificationat: {
     description:
       "An ISO date string used to display active notification at this date in the notification layer. If not defined the current date will be used.<br/>Ex: 2025-08-01T00:00:00Z .",
+    public: true,
+  },
+  notificationid: {
+    description: `An id of a notification to show details of.`,
     public: true,
   },
   notificationtenant: {
@@ -306,6 +313,10 @@ where:
     public: true,
     type: "boolean",
   },
+  stationid: {
+    description: `An id or a short/long name of a station to show details of.`,
+    public: true,
+  },
   stopsurl: {
     defaultValue: "https://api.geops.io/stops/v1/",
     description: `The ${geopsStopsApiLink} to use.`,
@@ -320,6 +331,10 @@ where:
     description: "Show/hide the toolbar on the top left.",
     public: true,
     type: "boolean",
+  },
+  trainid: {
+    description: `An id of a route to highlight on the map and to show details of.`,
+    public: true,
   },
   zoom: {
     defaultValue: "13",

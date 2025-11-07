@@ -34,6 +34,7 @@ export const LAYER_PROP_IS_EXPORTING = "isExporting";
 export const LAYER_PROP_IS_LOADING = "isLoading";
 
 export const MAX_EXTENT = undefined;
+export const MAX_EXTENT_4326 = undefined;
 
 export const EXPORT_PREFIX = "mwc";
 
@@ -46,7 +47,7 @@ export const LNP_LINE_ID_PROP = "original_line_id";
 // LNP data source id in the style
 export const LNP_SOURCE_ID = "network_plans";
 
-// Metadata key in the lnp data source
+// LNP metadata key in the lnp data source
 export const LNP_MD_LINES = "geops.lnp.lines";
 export const LNP_MD_STOPS = "geops.lnp.stops";
 
@@ -55,3 +56,10 @@ export const LNP_GEOPS_FILTER_HIGHLIGHT = "highlightnetzplan";
 
 // LNP style layer id where the dynamic filtering will apply
 export const LNP_LAYER_ID_HIGHLIGHT = "netzplan_highlight_trip";
+
+// Layer props used by layer and/or layerConfig
+export const LAYER_TREE_HIDE_PROP = "layerTreeHidden";
+export const LAYER_TREE_TITLE_FUNC_PROP = "layerTreeTitleRenderFunc";
+
+/** FIT ON FEATURES */
+export const FIT_ON_FEATURES_MAX_ZOOM_POINT = 16;

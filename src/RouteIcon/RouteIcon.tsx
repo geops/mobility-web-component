@@ -2,9 +2,10 @@ import { twMerge } from "tailwind-merge";
 
 import NoRealtime from "../icons/NoRealtime";
 import getMainColorForVehicle from "../utils/getMainColorForVehicle";
-import getTextColor from "../utils/getTextColor";
+import getTextColorForVehicle from "../utils/getTextColorForVehicle";
 import getTextFontForVehicle from "../utils/getTextFontForVehicle";
 import getTextForVehicle from "../utils/getTextForVehicle";
+import useMapContext from "../utils/hooks/useMapContext";
 
 import type {
   RealtimeDeparture,
@@ -14,11 +15,14 @@ import type {
 } from "mobility-toolbox-js/types";
 import type { HTMLAttributes, PreactDOMAttributes } from "preact";
 
+import type { LnpLineInfo } from "../utils/hooks/useLnp";
+
 export type RouteIconProps = {
   className?: string;
   departure?: RealtimeDeparture;
   displayNoRealtimeIcon?: boolean;
   line?: RealtimeLine;
+  lineInfo?: LnpLineInfo;
   stopSequence?: RealtimeStopSequence;
   trajectory?: RealtimeTrajectory;
 } & HTMLAttributes<HTMLSpanElement> &
@@ -31,33 +35,40 @@ function RouteIcon({
   departure,
   displayNoRealtimeIcon = false,
   line,
+  lineInfo,
   stopSequence,
   trajectory,
   ...props
 }: RouteIconProps) {
+  const { realtimeLayer } = useMapContext();
   const lineToUse =
     line ||
+    lineInfo ||
     departure?.line ||
     stopSequence?.line ||
     trajectory?.properties?.line;
-  const type = lineToUse?.type || stopSequence?.type || trajectory?.type;
-  const backgroundColor = getMainColorForVehicle(
-    line || departure || stopSequence || trajectory,
-  );
-  const color = lineToUse?.text_color || getTextColor(type);
-  let borderColor = lineToUse?.stroke || "black";
-  const text = getTextForVehicle(
-    line || departure || stopSequence || trajectory,
-  );
+  const trainId = stopSequence?.id || departure?.train_id;
+  const trajectoryToUse = trajectory || realtimeLayer?.trajectories[trainId];
+  const objectToUse =
+    line || lineInfo || departure || stopSequence || trajectory;
 
+  const backgroundColor = getMainColorForVehicle(objectToUse);
+  const color = getTextColorForVehicle(objectToUse);
+  const text = getTextForVehicle(objectToUse);
   const fontSize = fontSizesByNbLetters[text.length] || 12;
-  const font = getTextFontForVehicle(fontSize, text);
+  const font = getTextFontForVehicle(objectToUse, null, fontSize, text);
 
   // RealtimeIcon only for stopsequence for now
-  const hasRealtime = stopSequence?.has_realtime_journey === true;
-  const showNoRealtimeIcon = !!stopSequence;
+  const hasRealtime =
+    stopSequence?.has_realtime_journey ||
+    departure?.has_realtime_journey ||
+    trajectoryToUse?.properties?.has_realtime_journey ||
+    (stopSequence?.stations?.[0]?.state &&
+      stopSequence?.stations?.[0]?.state !== "TIME_BASED");
+  const showNoRealtimeIcon = !!stopSequence || !!departure || !!trajectoryToUse;
   const isCancelled = stopSequence?.stations[0]?.state === "JOURNEY_CANCELLED";
 
+  let borderColor = lineToUse?.stroke || "black";
   if (borderColor === backgroundColor) {
     borderColor = "black";
   }
@@ -81,7 +92,7 @@ function RouteIcon({
       {displayNoRealtimeIcon &&
         showNoRealtimeIcon &&
         !isCancelled &&
-        !hasRealtime && <NoRealtime className={"absolute -top-2 -left-2"} />}
+        !hasRealtime && <NoRealtime className={"absolute -top-3 -right-3"} />}
     </span>
   );
 }

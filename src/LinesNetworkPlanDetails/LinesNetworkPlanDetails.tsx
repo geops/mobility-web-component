@@ -12,7 +12,7 @@ import type { RealtimeLine } from "mobility-toolbox-js/types";
 import type { Feature } from "ol";
 import type { PreactDOMAttributes } from "preact";
 
-import type { LineInfo } from "../utils/hooks/useLnp";
+import type { LnpLineInfo } from "../utils/hooks/useLnp";
 
 const RUNS_PROP = "runs";
 
@@ -46,7 +46,7 @@ function LinesNetworkPlanDetails({
     [layerConfig],
   );
 
-  const lineInfosByOperator: Record<string, LineInfo[]> = useMemo(() => {
+  const lineInfosByOperator: Record<string, LnpLineInfo[]> = useMemo(() => {
     const byOperators = {};
 
     [

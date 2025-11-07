@@ -24,7 +24,7 @@ import type {
   TargetedKeyboardEvent,
 } from "preact";
 
-export type StopsFeature = StopsResponse["features"][0];
+import type { StopsFeature } from "../utils/hooks/useSearchStops";
 
 export type StopsSearchProps = {
   apikey: string;

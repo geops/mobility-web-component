@@ -29,10 +29,9 @@ function OverlayDetailsFooter({
   }
 
   let id = feature?.get("id");
-  const situation = feature?.get("situation");
-  if (situation) {
-    const situationParsed = JSON.parse(situation);
-    id = situationParsed?.id || id;
+  const situationId = feature?.get("situationId");
+  if (situationId) {
+    id = situationId;
   }
   return (
     <div {...props} className={twMerge("flex flex-row p-4", className)}>

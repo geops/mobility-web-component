@@ -9,8 +9,9 @@ import { useEffect, useMemo, useState } from "preact/hooks";
 import centerOnVehicle from "../utils/centerOnVehicle";
 import { LAYER_NAME_REALTIME } from "../utils/constants";
 import getDelayColorForVehicle from "../utils/getDelayColorForVehicle";
-import getDelayFontForVehicle from "../utils/getDelayFontForVehicle";
 import getDelayTextForVehicle from "../utils/getDelayTextForVehicle";
+import getMainColorForVehicle from "../utils/getMainColorForVehicle";
+import getTextColorForVehicle from "../utils/getTextColorForVehicle";
 import getTextFontForVehicle from "../utils/getTextFontForVehicle";
 import getTextForVehicle from "../utils/getTextForVehicle";
 import useMapContext from "../utils/hooks/useMapContext";
@@ -18,7 +19,6 @@ import useMapContext from "../utils/hooks/useMapContext";
 import type { RealtimeLayerOptions } from "mobility-toolbox-js/ol/layers/RealtimeLayer";
 import type {
   RealtimeMot,
-  RealtimeStation,
   RealtimeTrainId,
   StyleMetadataGraphs,
 } from "mobility-toolbox-js/types";
@@ -41,9 +41,6 @@ function RealtimeLayer(props: Partial<RealtimeLayerOptions>) {
     setIsFollowing,
     setIsTracking,
     setRealtimeLayer,
-    setStation,
-    setStopSequence,
-    stationId,
     stopSequence,
     tenant,
     trainId,
@@ -74,16 +71,18 @@ function RealtimeLayer(props: Partial<RealtimeLayerOptions>) {
           }
         : undefined,
       isQueryable: true,
+      minZoom: 5, // It depends fo the radius mapping in realtimeStyleUtils
       name: LAYER_NAME_REALTIME,
       tenant,
       url: realtimeurl,
       zIndex: 1,
       ...props,
       styleOptions: {
+        getColor: getMainColorForVehicle,
         getDelayColor: getDelayColorForVehicle,
-        getDelayFont: getDelayFontForVehicle,
         getDelayText: getDelayTextForVehicle,
         getText: getTextForVehicle,
+        getTextColor: getTextColorForVehicle,
         getTextFont: getTextFontForVehicle,
         ...(props?.styleOptions || {}),
       },
@@ -199,25 +198,6 @@ function RealtimeLayer(props: Partial<RealtimeLayerOptions>) {
     }
   }, [map, trainId, layer]);
 
-  // Ask the station using the stationId to the Realtime API.
-  useEffect(() => {
-    if (!stationId || !layer?.api) {
-      return;
-    }
-    layer?.api?.subscribe(`station ${stationId}`, ({ content }) => {
-      if (content) {
-        setStation(content as RealtimeStation);
-      }
-    });
-
-    return () => {
-      setStation(null);
-      if (stationId) {
-        layer?.api?.unsubscribe(`station ${stationId}`);
-      }
-    };
-  }, [stationId, layer?.api, setStation]);
-
   // Subscribe to the stop sequence of the selected vehicle.
   useEffect(() => {
     if (!trainId || !layer?.api) {
@@ -229,25 +209,14 @@ function RealtimeLayer(props: Partial<RealtimeLayerOptions>) {
       console.error("Error highlighting trajectory:", err);
     });
 
-    layer?.api?.subscribeStopSequence(trainId, ({ content }) => {
-      if (content) {
-        const [firstStopSequence] = content;
-        if (firstStopSequence) {
-          setStopSequence(firstStopSequence);
-        }
-      }
-    });
-
     return () => {
-      setStopSequence(null);
-      if (trainId && layer) {
-        layer.api?.unsubscribeStopSequence(trainId);
+      if (layer?.selectedVehicleId) {
         layer.api?.unsubscribeFullTrajectory(layer.selectedVehicleId);
         layer.selectedVehicleId = null;
         layer.vectorLayer.getSource().clear();
       }
     };
-  }, [trainId, layer, layer?.api, setStopSequence]);
+  }, [trainId, layer, layer?.api]);
 
   // Get graphs value
   useEffect(() => {

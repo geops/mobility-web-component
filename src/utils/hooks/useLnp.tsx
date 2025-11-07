@@ -6,7 +6,7 @@ import useMapContext from "./useMapContext";
 
 import type { VectorTileSource } from "maplibre-gl";
 
-export interface LineInfo {
+export interface LnpLineInfo {
   color: string;
   external_id: string;
   id: string;
@@ -18,7 +18,7 @@ export interface LineInfo {
   text_color: string;
 }
 
-export interface StopInfo {
+export interface LnpStopInfo {
   external_id: string;
   importance: number;
   long_name: string;
@@ -26,8 +26,8 @@ export interface StopInfo {
   visibility_level: number;
 }
 
-export type LinesInfos = Record<string, LineInfo>;
-export type StopsInfos = Record<string, StopInfo>;
+export type LinesInfos = Record<string, LnpLineInfo>;
+export type StopsInfos = Record<string, LnpStopInfo>;
 
 let cacheLnpSourceInfo: {
   [LNP_MD_LINES]: LinesInfos;
@@ -91,7 +91,7 @@ export function useLnpStopsInfos(): StopsInfos {
  * This hook search line informations from lnp data. It takes a string in
  * parameter then it will search if there is a property that exactly match this value.
  */
-function useLnpLineInfo(text: string): LineInfo {
+function useLnpLineInfo(text: string): LnpLineInfo {
   const linesInfos = useLnpLinesInfos();
 
   if (!linesInfos || !text) {
@@ -105,6 +105,28 @@ function useLnpLineInfo(text: string): LineInfo {
   return Object.values(linesInfos).find((info) => {
     return ["id", "external_id", "short_name", "long_name"].find((key) => {
       return !!info[key] && info[key] === text;
+    });
+  });
+}
+
+/**
+ * This hook search line informations from lnp data. It takes a string in
+ * parameter then it will search if there is a property that exactly match this value.
+ */
+export function useLnpStopInfo(text: string): LnpStopInfo {
+  const stationsInfos = useLnpStopsInfos();
+
+  if (!stationsInfos || !text) {
+    return null;
+  }
+
+  if (stationsInfos[text]) {
+    return stationsInfos[text];
+  }
+
+  return Object.values(stationsInfos).find((info) => {
+    return ["id", "external_id", "short_name", "long_name"].find((key) => {
+      return !!info[key] && info[key].toLowerCase() === text.toLowerCase();
     });
   });
 }

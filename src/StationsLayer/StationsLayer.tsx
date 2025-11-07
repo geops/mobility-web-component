@@ -18,11 +18,19 @@ function StationsLayer(props: Partial<MaplibreStyleLayerOptions>) {
       layersFilter: ({ metadata }) => {
         return (
           metadata?.["tralis.variable"] === "station" ||
-          metadata?.["general.filter"] === "stations"
+          metadata?.["general.filter"] === "stations" ||
+          metadata?.["geops.filter"] === "netzplan_stops"
         );
       },
       maplibreLayer: baseLayer,
       name: LAYER_NAME_STATIONS,
+      // queryRenderedLayersFilter: ({ metadata }) => {
+      //   return (
+      //     metadata?.["tralis.variable"] === "station" ||
+      //     metadata?.["general.filter"] === "stations" ||
+      //     metadata?.["geops.filter"] === "netzplan_stops" // we include lnp stations only on click
+      //   );
+      // },
       ...(props || {}),
     });
   }, [baseLayer, props]);

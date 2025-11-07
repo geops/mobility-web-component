@@ -1,19 +1,17 @@
 import { memo } from "preact/compat";
 
 import getMainColorForVehicle from "../utils/getMainColorForVehicle";
-import useMapContext from "../utils/hooks/useMapContext";
 import useRouteStop from "../utils/hooks/useRouteStop";
 
-import type { JSX, PreactDOMAttributes } from "preact";
+import type { HTMLAttributes, PreactDOMAttributes } from "preact";
 
 export type RouteStopProgressProps = {
-  svgProps?: JSX.HTMLAttributes<SVGElement> & PreactDOMAttributes;
-} & JSX.HTMLAttributes<HTMLDivElement> &
+  svgProps?: HTMLAttributes<SVGElement> & PreactDOMAttributes;
+} & HTMLAttributes<HTMLDivElement> &
   PreactDOMAttributes;
 
 function RouteStopProgress({ svgProps, ...props }: RouteStopProgressProps) {
-  const { stopSequence } = useMapContext();
-  const { invertColor, status } = useRouteStop();
+  const { invertColor, status, stopSequence } = useRouteStop();
   const { isBoarding, isFirst, isLast, isLeft, isPassed, progress } = status;
   const y1 = isFirst ? "50%" : "-100%";
   const y2 = isLast ? "50%" : "100%";

@@ -14,7 +14,8 @@ export interface DepartureProps {
 }
 
 function Departure({ departure, index, ...props }: DepartureProps) {
-  const { setStationId, setTrainId } = useMapContext();
+  const { realtimeLayer, setFeaturesInfos, setStationId, setTrainId } =
+    useMapContext();
 
   const departureState = useMemo(() => {
     return { departure, index };
@@ -23,10 +24,12 @@ function Departure({ departure, index, ...props }: DepartureProps) {
   return (
     <DepartureContext.Provider value={departureState}>
       <button
-        className="w-full border-b"
+        className="w-full cursor-pointer border-b"
         onClick={() => {
-          setTrainId(departure.train_id);
+          setFeaturesInfos(undefined);
           setStationId();
+          realtimeLayer?.setVisible(true);
+          setTrainId(departure.train_id);
         }}
         {...props}
       >

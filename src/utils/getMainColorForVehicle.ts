@@ -1,4 +1,4 @@
-import getBgColor from "./getBgColor";
+import { realtimeStyleUtils } from "mobility-toolbox-js/ol";
 
 import type {
   RealtimeDeparture,
@@ -8,7 +8,10 @@ import type {
   RealtimeTrajectory,
 } from "mobility-toolbox-js/types";
 
-// This function returns the main color of a line using a line, trajectory, stopsequence or departure object.
+/**
+ * Return the color depending on an object representing a vehicle or a line.
+ * This function is used to have the same color on the map and on other components.
+ */
 const getMainColorForVehicle = (object: unknown = null): string => {
   let color =
     (object as RealtimeTrajectory)?.properties?.line?.color ||
@@ -34,10 +37,12 @@ const getMainColorForVehicle = (object: unknown = null): string => {
         type = "rail";
       }
     }
-    color = getBgColor(type) || getBgColor("rail");
+    color =
+      realtimeStyleUtils.getColorForType(type) ||
+      realtimeStyleUtils.getColorForType("rail");
   }
 
-  if (color && color[0] !== "#") {
+  if (color && !color.startsWith("#")) {
     color = `#${color}`;
   }
 

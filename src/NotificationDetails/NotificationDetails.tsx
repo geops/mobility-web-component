@@ -9,6 +9,7 @@ import Warning from "../icons/Warning";
 import ShadowOverflow from "../ShadowOverflow";
 import Link from "../ui/Link";
 import useI18n from "../utils/hooks/useI18n";
+import useMapContext from "../utils/hooks/useMapContext";
 import useMocoSituation from "../utils/hooks/useMocoSituation";
 
 import type {
@@ -36,18 +37,6 @@ const toShortDate = (date: Date, showTime, showYear?: boolean) => {
     .replace(/\.$/, "");
 };
 
-// const getLine = (name: string, lines: NotificationLine[]): NotificationLine => {
-//   if (lines?.length) {
-//     const line = lines.find((linee) => {
-//       return linee.name === name;
-//     });
-//     if (line) {
-//       return line;
-//     }
-//   }
-//   return { mot: "bus", name } as NotificationLine;
-// };
-
 export type NotificationLine = {
   mot?: RealtimeMot;
   operator_name?: string;
@@ -57,15 +46,14 @@ export type NotificationLine = {
 
 function NotificationDetails({
   className,
-  feature,
   ...props
 }: {
   className?: string;
   feature: Feature;
 }) {
   const { locale, t } = useI18n();
-  const { situationId } = feature.getProperties();
-  const situationParsed = useMocoSituation(situationId);
+  const { notificationId } = useMapContext();
+  const situationParsed = useMocoSituation(notificationId);
 
   // moco export v2
   let textualContentMultilingual: Partial<MultilingualTextualContentType> = {};
@@ -81,6 +69,17 @@ function NotificationDetails({
   // Find the current publication(s) at the current date
   publicationsToDisplay =
     publicationsArr?.filter(({ publicationWindows }) => {
+      // In some cases publicationWindows can be undefined here but defined at the
+      // root of the object so we apply the root publicationWindows to all publications with empty one
+      if (
+        !publicationWindows?.length &&
+        situationParsed?.publicationWindows?.length
+      ) {
+        // @ts-expect-error we should not set this value directly
+        // eslint-disable-next-line no-param-reassign
+        publicationWindows = situationParsed.publicationWindows;
+      }
+
       return publicationWindows.find(({ endTime, startTime }) => {
         const now = new Date();
         const startT = new Date(startTime);
@@ -209,13 +208,13 @@ function NotificationDetails({
                   },
                 )}
                 <div className={"my-4 flex flex-col gap-4"}>
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html:
-                        textualContent?.description ||
-                        t("no_details_available"),
-                    }}
-                  />
+                  {textualContent?.description && (
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: textualContent?.description,
+                      }}
+                    />
+                  )}
                   {!!textualContentMultilingual?.images?.length && (
                     <div className="flex flex-wrap gap-2">
                       {textualContentMultilingual.images.map(

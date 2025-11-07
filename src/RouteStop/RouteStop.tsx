@@ -8,10 +8,14 @@ import RouteStopStation from "../RouteStopStation";
 import RouteStopTime from "../RouteStopTime";
 import getStopStatus from "../utils/getStopStatus";
 import useMapContext from "../utils/hooks/useMapContext";
+import useRealtimeStation from "../utils/hooks/useRealtimeStation";
 import { RouteStopContext } from "../utils/hooks/useRouteStop";
 
-import type { RealtimeStation, RealtimeStop } from "mobility-toolbox-js/types";
-import type { JSX, PreactDOMAttributes } from "preact";
+import type {
+  RealtimeStop,
+  RealtimeStopSequence,
+} from "mobility-toolbox-js/types";
+import type { HTMLAttributes, PreactDOMAttributes } from "preact";
 
 export type RouteScheduleStopProps = {
   classNameGreyOut?: string;
@@ -20,7 +24,8 @@ export type RouteScheduleStopProps = {
   stop?: {
     platform?: string;
   } & RealtimeStop;
-} & JSX.HTMLAttributes<HTMLButtonElement> &
+  stopSequence: RealtimeStopSequence;
+} & HTMLAttributes<HTMLButtonElement> &
   PreactDOMAttributes;
 
 function RouteStop({
@@ -29,15 +34,16 @@ function RouteStop({
   index,
   invertColor = false,
   stop,
+  stopSequence,
   ...props
 }: RouteScheduleStopProps) {
-  const { map, realtimeLayer, stopSequence } = useMapContext();
+  const { map } = useMapContext();
   const {
     // @ts-expect-error bad type definition
     stopUID,
   } = stop;
-  const [station, setStation] = useState<RealtimeStation>();
   const [status, setStatus] = useState(getStopStatus(stopSequence, index));
+  const station = useRealtimeStation(stopUID);
 
   useEffect(() => {
     let interval = null;
@@ -54,27 +60,9 @@ function RouteStop({
     };
   }, [index, status.isInBetween, stopSequence]);
 
-  useEffect(() => {
-    if (!stopUID || !realtimeLayer?.api) {
-      return;
-    }
-    realtimeLayer?.api?.subscribe(`station ${stopUID}`, ({ content }) => {
-      if (content) {
-        setStation(content);
-      }
-    });
-
-    return () => {
-      setStation(null);
-      if (stopUID) {
-        realtimeLayer?.api?.unsubscribe(`station ${stopUID}`);
-      }
-    };
-  }, [stopUID, realtimeLayer?.api]);
-
   const routeStopState = useMemo(() => {
-    return { index, invertColor, station, status, stop };
-  }, [stop, status, index, invertColor, station]);
+    return { index, invertColor, station, status, stop, stopSequence };
+  }, [stop, status, index, invertColor, station, stopSequence]);
 
   let colorScheme = status.isPassed || status.isLeft ? classNameGreyOut : "";
 

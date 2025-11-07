@@ -102,7 +102,7 @@ function MapLayout({
               {hasSearch && <SearchButton />}
             </div>
 
-            {hasSearch && (
+            {hasSearch && isSearchOpen && (
               <div
                 className={twMerge(
                   "absolute top-14 left-0 z-5 w-0 p-0 opacity-0 transition-all @sm:top-0 @sm:left-[calc(100%-47px)]",
