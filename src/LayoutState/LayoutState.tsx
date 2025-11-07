@@ -140,17 +140,38 @@ function LayoutState() {
     setLinesIds(lineInfo?.external_id ? [lineInfo.external_id] : null);
   }, [lineInfo, setLinesIds]);
 
+  // Zoom when linesids attribute changes
+  useEffect(() => {
+    // @ts-expect-error not implemented yet
+    const extent = lineInfo?.extent as [number, number, number, number];
+    if (extent) {
+      const feature = {
+        geometry: {
+          coordinates: [
+            [extent[0], extent[1]],
+            [extent[2], extent[3]],
+          ],
+          type: "LineString",
+        },
+        type: "Feature",
+      };
+      fitOnFeatures.current([feature] as GeoJSONFeature[]);
+    }
+  }, [lineInfo, fitOnFeatures]);
+
   useEffect(() => {
     setStationId(stopInfo?.external_id);
+  }, [stopInfo, setStationId]);
 
-    // Center and zoom on th station
+  // Center and zoom when stationid attribute changes
+  useEffect(() => {
     const result = (stopForCoordinate?.results || []).find((stop) => {
       return stop.properties.uid === stopInfo?.external_id;
     });
     if (result) {
-      fitOnFeatures([result] as GeoJSONFeature[]);
+      fitOnFeatures.current([result] as GeoJSONFeature[]);
     }
-  }, [stopInfo, setStationId, fitOnFeatures, stopForCoordinate.results]);
+  }, [stopInfo, fitOnFeatures, stopForCoordinate.results]);
 
   useEffect(() => {
     setNotificationId(notificationid);
