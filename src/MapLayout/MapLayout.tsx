@@ -112,7 +112,7 @@ function MapLayout({
                 <Search
                   childrenContainerClassName="max-h-[300px] rounded-b-2xl bg-white shadow overflow-hidden"
                   className={
-                    "border-grey gap-2rounded-2xl @container m-0 h-[48px] border p-2 text-base @sm/main:rounded-l-none @sm/main:rounded-r-2xl"
+                    "border-grey @container m-0 h-[48px] gap-2 rounded-2xl border p-2 text-base @sm/main:gap-4 @sm/main:rounded-l-none @sm/main:rounded-r-2xl"
                   }
                   inputContainerClassName="border-none"
                   resultClassName="text-base  **:hover:cursor-pointer p-2"
