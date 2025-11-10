@@ -11,7 +11,7 @@ import type { IconButtonProps } from "../ui/IconButton/IconButton";
 import type { InputProps } from "../ui/Input/Input";
 import type { InputSearchProps } from "../ui/InputSearch/InputSearch";
 
-export type SearchProps2 = {
+export type SearchBaseProps = {
   cancelButtonProps?: IconButtonProps;
   childrenContainerClassName?: string;
   inputProps?: InputProps;
@@ -47,7 +47,7 @@ export const SearchContext = createContext<null | SearchContextType>({
   setSelectedQuery: () => {},
 });
 
-function Search({
+function SearchBase({
   cancelButtonProps,
   children,
   childrenContainerClassName,
@@ -57,7 +57,7 @@ function Search({
   resultsContainerClassName,
   withResultsClassName,
   ...props
-}: SearchProps2) {
+}: SearchBaseProps) {
   const { t } = useI18n();
   // We use a selectedQuery state to avoid making a new request when we select a result.
   const [selectedQuery, setSelectedQuery] = useState("");
@@ -166,4 +166,4 @@ function Search({
     </SearchContext.Provider>
   );
 }
-export default memo(Search);
+export default memo(SearchBase);

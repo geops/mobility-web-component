@@ -1,7 +1,7 @@
 import { memo } from "preact/compat";
 import { twMerge } from "tailwind-merge";
 
-import SearchHeadless from "./SearchHeadless";
+import { SearchHeadless } from ".";
 
 import type { SearchProps } from "./SearchHeadless";
 

@@ -7,14 +7,14 @@ import SearchStopsResults from "../SearchStopsResults";
 import centerOnStation from "../utils/centerOnStation";
 import useMapContext from "../utils/hooks/useMapContext";
 
-import Search2 from "./SearchBase";
+import { SearchBase } from ".";
 
 import type { IconButtonProps } from "../ui/IconButton/IconButton";
 import type { InputProps } from "../ui/Input/Input";
 import type { LnpLineInfo } from "../utils/hooks/useLnp";
 import type { StopsFeature } from "../utils/hooks/useSearchStops";
 
-import type { SearchProps2 } from "./SearchBase";
+import type { SearchBaseProps } from "./SearchBase";
 
 export type SearchProps = {
   cancelButtonProps?: IconButtonProps;
@@ -24,7 +24,7 @@ export type SearchProps = {
   resultsClassName?: string;
   resultsContainerClassName?: string;
   withResultsClassName?: string;
-} & SearchProps2;
+} & SearchBaseProps;
 
 /**
  * The search logic. To modifiy default classNames look the Search class.
@@ -48,14 +48,14 @@ function SearchHeadless({ ...props }: SearchProps) {
   );
 
   return (
-    <Search2 {...props}>
+    <SearchBase {...props}>
       <SearchStopsResults>
         <SearchStopsResult onSelectItem={onSelectStop} />
       </SearchStopsResults>
       <SearchLinesResults>
         <SearchLinesResult onSelectItem={onSelectLine} />
       </SearchLinesResults>
-    </Search2>
+    </SearchBase>
   );
 }
 export default memo(SearchHeadless);
