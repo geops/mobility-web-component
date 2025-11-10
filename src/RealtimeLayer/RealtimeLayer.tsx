@@ -155,7 +155,7 @@ function RealtimeLayer(props: Partial<RealtimeLayerOptions>) {
       // layer.useRequestAnimationFrame = isFollowing;
       layer.allowRenderWhenAnimating = !!isFollowing;
     }
-    if (!isFollowing || !stopSequence || !map || !layer) {
+    if (!isFollowing || !trainId || !map || !layer) {
       return;
     }
 
@@ -165,10 +165,7 @@ function RealtimeLayer(props: Partial<RealtimeLayerOptions>) {
       let vehicle = id && layer?.trajectories?.[id];
 
       if (!vehicle) {
-        const message = await layer.api.getTrajectory(
-          stopSequence.id,
-          layer.mode,
-        );
+        const message = await layer.api.getTrajectory(trainId, layer.mode);
         vehicle = message?.content;
       }
 
@@ -177,16 +174,15 @@ function RealtimeLayer(props: Partial<RealtimeLayerOptions>) {
       // Once the map is zoomed on the vehicle we follow him, only recenter , no zoom changes.
       if (success === true) {
         interval = setInterval(() => {
-          void centerOnVehicle(layer?.trajectories?.[stopSequence.id], map);
+          void centerOnVehicle(layer?.trajectories?.[trainId], map);
         }, 1000);
       }
     };
-    void followVehicle(stopSequence.id);
-
+    void followVehicle(trainId);
     return () => {
       clearInterval(interval);
     };
-  }, [isFollowing, map, layer, stopSequence, setIsTracking]);
+  }, [isFollowing, map, layer, trainId, setIsTracking]);
 
   useEffect(() => {
     if (trainId) {
