@@ -2,7 +2,7 @@ import { cloneElement, toChildArray } from "preact";
 import { memo } from "preact/compat";
 import { useCallback, useContext, useMemo } from "preact/hooks";
 
-import { SearchContext } from "../Search/Search2";
+import { SearchContext } from "../Search/SearchBase";
 import SearchResult from "../SearchResult";
 import SearchResults from "../SearchResults";
 import SearchResultsHeader from "../SearchResultsHeader";

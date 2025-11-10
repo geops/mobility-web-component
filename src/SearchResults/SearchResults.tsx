@@ -1,7 +1,7 @@
 import { memo, useContext, useEffect, useId } from "preact/compat";
 import { twMerge } from "tailwind-merge";
 
-import { SearchContext } from "../Search/Search2";
+import { SearchContext } from "../Search/SearchBase";
 import useI18n from "../utils/hooks/useI18n";
 
 import type { HTMLAttributes, PreactDOMAttributes } from "preact";

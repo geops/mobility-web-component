@@ -1,29 +1,50 @@
 import { memo } from "preact/compat";
-import { useCallback } from "preact/hooks";
+import { twMerge } from "tailwind-merge";
 
-import StopsSearch from "../StopsSearch";
-import centerOnStation from "../utils/centerOnStation";
-import useMapContext from "../utils/hooks/useMapContext";
+import SearchHeadless from "./SearchHeadless";
 
-import type { StopsSearchProps } from "../StopsSearch/StopsSearch";
+import type { SearchProps } from "./SearchHeadless";
 
-function Search(props: Partial<StopsSearchProps>) {
-  const { apikey, map, stopsurl } = useMapContext();
-
-  const onSelect = useCallback(
-    (selected) => {
-      return centerOnStation(selected, map);
-    },
-    [map],
-  );
-
+/**
+ * This compoennt only define defult classNames for the Search component.
+ *
+ * Since the Search component could be used in different places (with or without toolbar),
+ * but the logic behind stays the same, we separate the logic and the styles in 2 components.
+ */
+function Search({
+  childrenContainerClassName,
+  className,
+  inputContainerClassName,
+  resultClassName,
+  resultsContainerClassName,
+  withResultsClassName,
+  ...props
+}: SearchProps) {
   return (
-    <StopsSearch
-      apikey={apikey}
-      onselect={onSelect}
-      url={stopsurl}
+    <SearchHeadless
+      childrenContainerClassName={twMerge(
+        "max-h-[300px] rounded-b-2xl bg-white shadow overflow-hidden",
+        childrenContainerClassName,
+      )}
+      className={twMerge(
+        "border-grey @container m-0 h-[48px] gap-2 rounded-2xl border p-2 text-base",
+        className,
+      )}
+      inputContainerClassName={twMerge("border-none", inputContainerClassName)}
+      resultClassName={twMerge(
+        "text-base  **:hover:cursor-pointer p-2",
+        resultClassName,
+      )}
+      resultsContainerClassName={twMerge(
+        "min-h-[100px] max-h-[200px] border border-t-0",
+        resultsContainerClassName,
+      )}
+      withResultsClassName={twMerge(
+        "text-base !rounded-b-none",
+        withResultsClassName,
+      )}
       {...props}
-    />
+    ></SearchHeadless>
   );
 }
 export default memo(Search);
