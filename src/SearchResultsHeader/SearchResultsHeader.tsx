@@ -17,11 +17,14 @@ function SearchResultsHeader({
   className,
   ...props
 }: SearchResultsHeaderProps) {
+  if (!children) {
+    return null;
+  }
   return (
     <div
       {...props}
       className={twMerge(
-        "bg-zinc-100 px-2 py-1 text-xs font-semibold",
+        "border-x bg-zinc-100 px-2 py-1 text-xs font-semibold",
         className,
       )}
     >

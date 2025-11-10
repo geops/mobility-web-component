@@ -235,7 +235,7 @@ function StopsSearch({
             searchIconContainerClassName,
           )}
         >
-          <Search className="size-4" />
+          <Search />
         </div>
         <div
           className={twMerge(

@@ -1,6 +1,7 @@
-import { memo } from "preact/compat";
+import { memo, useContext, useEffect, useId } from "preact/compat";
 import { twMerge } from "tailwind-merge";
 
+import { SearchContext } from "../Search/Search2";
 import useI18n from "../utils/hooks/useI18n";
 
 import type { HTMLAttributes, PreactDOMAttributes } from "preact";
@@ -34,19 +35,25 @@ function SearchResults<T>({
   ...props
 }: SearchResultsProps<T>) {
   const { t } = useI18n();
+  const id = useId();
+  const { setResults } = useContext(SearchContext);
+
+  // Notify parent about results change
+  useEffect(() => {
+    if (!searchResponse.isLoading) {
+      setResults(id, searchResponse?.results || []);
+    }
+    return () => {
+      setResults(id, []);
+    };
+  }, [searchResponse, id, setResults]);
 
   if (!(searchResponse?.results?.length >= 0)) {
     return null;
   }
 
   return (
-    <div
-      className={twMerge(
-        "flex grow overflow-auto rounded-md rounded-t-none bg-white shadow",
-        className,
-      )}
-      {...props}
-    >
+    <div className={twMerge("flex grow overflow-hidden", className)} {...props}>
       {searchResponse.results.length === 0 && (
         <div
           className={twMerge(
@@ -61,10 +68,7 @@ function SearchResults<T>({
       )}
       {searchResponse.results.length > 0 && (
         <ul
-          className={twMerge(
-            "grow rounded-md rounded-t-none border border-solid bg-white p-0",
-            resultsClassName,
-          )}
+          className={twMerge("grow overflow-y-auto", resultsClassName)}
           style={{ border: 1 }} // without this th ul is displayed 1 px on the right
         >
           {children}

@@ -1,5 +1,5 @@
 import { memo } from "preact/compat";
-import { useMemo, useState } from "preact/hooks";
+import { useCallback, useMemo, useRef, useState } from "preact/hooks";
 
 import InputSearch from "../ui/InputSearch";
 import useI18n from "../utils/hooks/useI18n";
@@ -11,8 +11,9 @@ import type { IconButtonProps } from "../ui/IconButton/IconButton";
 import type { InputProps } from "../ui/Input/Input";
 import type { InputSearchProps } from "../ui/InputSearch/InputSearch";
 
-export type SearchProps = {
+export type SearchProps2 = {
   cancelButtonProps?: IconButtonProps;
+  childrenContainerClassName?: string;
   inputProps?: InputProps;
   withResultsClassName?: string;
 } & InputSearchProps &
@@ -22,6 +23,7 @@ export type SearchProps = {
   >;
 
 import { cloneElement, createContext, toChildArray } from "preact";
+import { twMerge } from "tailwind-merge";
 
 import type { SearchResultsProps } from "../SearchResults/SearchResults";
 
@@ -31,6 +33,7 @@ export interface SearchContextType {
   selectedQuery: string;
   setOpen: (open: boolean) => void;
   setQuery: (query: string) => void;
+  setResults: (id: string, results: unknown[]) => void;
   setSelectedQuery: (query: string) => void;
 }
 
@@ -40,24 +43,41 @@ export const SearchContext = createContext<null | SearchContextType>({
   selectedQuery: "",
   setOpen: () => {},
   setQuery: () => {},
+  setResults: () => {},
   setSelectedQuery: () => {},
 });
 
 function Search({
   cancelButtonProps,
   children,
+  childrenContainerClassName,
   inputProps,
   resultClassName,
   resultsClassName,
   resultsContainerClassName,
   withResultsClassName,
   ...props
-}: SearchProps) {
+}: SearchProps2) {
   const { t } = useI18n();
   // We use a selectedQuery state to avoid making a new request when we select a result.
   const [selectedQuery, setSelectedQuery] = useState("");
   const [query, setQuery] = useState("");
+  const [showResults, setShowResults] = useState(false);
   const [open, setOpen] = useState(false);
+  const resultsBySearchRef = useRef<Record<string, unknown[]>>({});
+
+  const setResults = useCallback(
+    (id: string, results: unknown[]) => {
+      resultsBySearchRef.current[id] = results;
+      setShowResults(
+        open &&
+          Object.values(resultsBySearchRef.current).some((r) => {
+            return r.length > 0;
+          }),
+      );
+    },
+    [open],
+  );
 
   const value = useMemo(() => {
     return {
@@ -66,9 +86,10 @@ function Search({
       selectedQuery,
       setOpen,
       setQuery,
+      setResults: setResults,
       setSelectedQuery,
     };
-  }, [open, query, selectedQuery]);
+  }, [open, query, selectedQuery, setResults]);
 
   const inputPropss: InputProps = useMemo(() => {
     return {
@@ -97,10 +118,6 @@ function Search({
     };
   }, [cancelButtonProps]);
 
-  const showResults = useMemo(() => {
-    return open;
-  }, [open]);
-
   return (
     <SearchContext.Provider value={value}>
       <InputSearch
@@ -109,7 +126,7 @@ function Search({
         inputProps={inputPropss}
         withResultsClassName={showResults ? withResultsClassName : ""}
       >
-        <div className={"flex max-h-[300px] flex-col"}>
+        <div className={twMerge("flex flex-col", childrenContainerClassName)}>
           {toChildArray(children)?.map((child: ReactElement) => {
             return cloneElement(child, {
               resultClassName,

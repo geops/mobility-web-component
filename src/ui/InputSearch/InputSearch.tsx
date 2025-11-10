@@ -66,11 +66,11 @@ function InputSearch({
             searchIconContainerClassName,
           )}
         >
-          {searchIcon || <Search className="size-4" />}
+          {searchIcon || <Search />}
         </div>
         <div
           className={twMerge(
-            "@container/inputsearch flex grow items-center border-b-2 border-solid",
+            "@container/inputsearch flex grow items-center gap-2 border-b-2 border-solid",
             inputContainerClassName,
           )}
         >
@@ -86,7 +86,7 @@ function InputSearch({
           {!!inputProps.value && (
             <IconButton
               className={twMerge(
-                "flex !size-[32px] items-center rounded-none border-none bg-transparent shadow-none",
+                "flex size-4 items-center rounded-none border-none bg-transparent p-0 shadow-none",
                 cancelButtonClassName,
               )}
               title={t("search_input_cancel")}
