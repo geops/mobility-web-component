@@ -73,7 +73,16 @@ function MapLayout({
               isOverlayOpen && "@lg:left-84",
             )}
           >
-            <Search />
+            <Search
+              childrenContainerClassName="max-h-[300px] rounded-b-2xl bg-white shadow overflow-hidden"
+              className={
+                "border-grey @container m-0 h-[48px] gap-2 rounded-2xl border p-2 text-base"
+              }
+              inputContainerClassName="border-none"
+              resultClassName="text-base  **:hover:cursor-pointer p-2"
+              resultsContainerClassName="min-h-[100px] max-h-[200px] border border-t-0"
+              withResultsClassName="text-base !rounded-b-none"
+            />
           </div>
         )}
       </Map>
