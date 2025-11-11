@@ -38,7 +38,6 @@ import type {
   LayerGetFeatureInfoResponse,
   RealtimeStation,
   RealtimeStationId,
-  RealtimeStopSequence,
   RealtimeTrainId,
   SituationType,
 } from "mobility-toolbox-js/types";
@@ -75,7 +74,6 @@ function MobilityMap(props: MobilityMapProps) {
   const [isShareMenuOpen, setIsShareMenuOpen] = useState<boolean>(false);
   const [isLayerTreeOpen, setIsLayerTreeOpen] = useState<boolean>(false);
   const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);
-  const [stopSequence, setStopSequence] = useState<RealtimeStopSequence>();
   const [stationsLayer, setStationsLayer] = useState<MaplibreStyleLayer>();
   const [station, setStation] = useState<RealtimeStation>();
   const [realtimeLayer, setRealtimeLayer] = useState<MtbRealtimeLayer>();
@@ -84,7 +82,7 @@ function MobilityMap(props: MobilityMapProps) {
   const [linesNetworkPlanLayer, setLinesNetworkPlanLayer] =
     useState<MaplibreStyleLayer>();
   const [map, setMap] = useState<OlMap>();
-  const [stationId, setStationId] = useState<RealtimeStationId>();
+  const [stationId, setStationId] = useState<RealtimeStationId | string>();
   const [trainId, setTrainId] = useState<RealtimeTrainId>();
   const [linesIds, setLinesIds] = useState<string[]>();
   const [notificationId, setNotificationId] = useState<string>();
@@ -187,12 +185,10 @@ function MobilityMap(props: MobilityMapProps) {
       setStation,
       setStationId,
       setStationsLayer,
-      setStopSequence,
       setTrainId,
       station,
       stationId,
       stationsLayer,
-      stopSequence,
       trainId,
     };
   }, [
@@ -235,7 +231,6 @@ function MobilityMap(props: MobilityMapProps) {
     station,
     stationId,
     stationsLayer,
-    stopSequence,
     trainId,
   ]);
 

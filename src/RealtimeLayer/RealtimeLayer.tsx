@@ -2,7 +2,9 @@ import {
   getGraphByZoom,
   RealtimeLayer as MtbRealtimeLayer,
 } from "mobility-toolbox-js/ol";
+import GeoJSON from "ol/format/GeoJSON";
 import { unByKey } from "ol/Observable";
+import { Vector } from "ol/source";
 import { memo } from "preact/compat";
 import { useEffect, useMemo, useState } from "preact/hooks";
 
@@ -26,6 +28,7 @@ import type {
 const TRACKING_ZOOM = 16;
 
 const useGraphs = window.location?.href?.includes("graphs=true");
+const geojson = new GeoJSON();
 
 function RealtimeLayer(props: Partial<RealtimeLayerOptions>) {
   const {
@@ -41,7 +44,6 @@ function RealtimeLayer(props: Partial<RealtimeLayerOptions>) {
     setIsFollowing,
     setIsTracking,
     setRealtimeLayer,
-    stopSequence,
     tenant,
     trainId,
   } = useMapContext();
@@ -113,10 +115,10 @@ function RealtimeLayer(props: Partial<RealtimeLayerOptions>) {
 
   // Behavior when vehicle is selected or not.
   useEffect(() => {
-    if (!stopSequence) {
+    if (!trainId) {
       setIsFollowing(false);
     }
-  }, [stopSequence, setIsFollowing]);
+  }, [trainId, setIsFollowing]);
 
   // Behavior when user tracking is activated or not.
   useEffect(() => {
@@ -151,6 +153,8 @@ function RealtimeLayer(props: Partial<RealtimeLayerOptions>) {
 
     if (layer) {
       layer.engine.useThrottle = !isFollowing;
+      // We deactivate the bbox on moveend when following to have smoother experience.
+      // The correct bbox will be set later by getting the full trajectory.
       layer.engine.isUpdateBboxOnMoveEnd = !isFollowing;
       // layer.useRequestAnimationFrame = isFollowing;
       layer.allowRenderWhenAnimating = !!isFollowing;
@@ -167,6 +171,27 @@ function RealtimeLayer(props: Partial<RealtimeLayerOptions>) {
       if (!vehicle) {
         const message = await layer.api.getTrajectory(trainId, layer.mode);
         vehicle = message?.content;
+
+        // We get the fulltrajectory to set the api bbox correctly.
+        const fullMessage = await layer.api.getFullTrajectory(
+          trainId,
+          layer.mode,
+          undefined,
+        );
+        if (fullMessage?.content) {
+          try {
+            const features = geojson.readFeatures(fullMessage.content);
+            const extent = new Vector({ features }).getExtent();
+            layer.api.bbox = [...extent, ...layer.api.bbox.slice(4)];
+          } catch (err) {
+            // eslint-disable-next-line no-console
+            console.warn(
+              "Error parsing full trajectory feature:",
+              err,
+              fullMessage?.content,
+            );
+          }
+        }
       }
 
       const success = await centerOnVehicle(vehicle, map, TRACKING_ZOOM);
@@ -174,7 +199,11 @@ function RealtimeLayer(props: Partial<RealtimeLayerOptions>) {
       // Once the map is zoomed on the vehicle we follow him, only recenter , no zoom changes.
       if (success === true) {
         interval = setInterval(() => {
-          void centerOnVehicle(layer?.trajectories?.[trainId], map);
+          void centerOnVehicle(
+            layer?.trajectories?.[trainId],
+            map,
+            TRACKING_ZOOM,
+          );
         }, 1000);
       }
     };

@@ -8,6 +8,7 @@ const centerOnVehicle = async (
   vehicle: RealtimeTrajectory,
   map: Map,
   targetZoom = 0,
+  isOverlayOpen = true,
 ) => {
   if (!vehicle) {
     return Promise.reject(new Error("No vehicle provided"));
@@ -21,7 +22,7 @@ const centerOnVehicle = async (
   const zoom = targetZoom || view.getZoom();
   const resolution = zoom > 0 ? view.getResolutionForZoom(zoom) : undefined;
 
-  let center = coordinate;
+  let center = [...coordinate];
   if (!center && geometry) {
     const { coord } = getVehiclePosition(Date.now(), vehicle, true);
     center = coord as [number, number];
@@ -29,7 +30,13 @@ const centerOnVehicle = async (
   if (!center) {
     return Promise.reject(new Error("No center found"));
   }
+  if (isOverlayOpen) {
+    // Adjust center to take in account the opened overlay.
+    center[0] -= (320 / 2) * resolution; // shift right by 400px
+    // console.log(center);
+  }
 
+  // Shift of 150px to the left and 50px to the top.
   view.cancelAnimations();
 
   const promise = new Promise((resolve) => {

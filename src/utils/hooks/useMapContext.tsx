@@ -99,12 +99,10 @@ export type MapContextType = {
   setStation: (station?: RealtimeStation) => void;
   setStationId: (stationId?: RealtimeStationId | string) => void;
   setStationsLayer: (stationsLayer?: MaplibreStyleLayer) => void;
-  setStopSequence: (stopSequence?: RealtimeStopSequence) => void;
   setTrainId: (trainId?: RealtimeTrainId) => void;
   station: RealtimeStation;
   stationId: RealtimeStationId | string;
   stationsLayer: MaplibreStyleLayer;
-  stopSequence: RealtimeStopSequence;
   trainId: RealtimeTrainId;
 } & MobilityMapProps;
 
@@ -150,7 +148,6 @@ export const MapContext = createContext<MapContextType>({
   setStation: (station?: RealtimeStation) => {},
   setStationId: (stationId?: RealtimeStationId) => {},
   setStationsLayer: (stationsLayer?: MaplibreStyleLayer) => {},
-  setStopSequence: (stopSequence?: RealtimeStopSequence) => {},
   setTrainId: (trainId?: RealtimeTrainId) => {},
 } as MapContextType);
 
