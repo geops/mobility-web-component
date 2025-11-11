@@ -23,7 +23,7 @@ const centerOnVehicle = async (
   const resolution = zoom > 0 ? view.getResolutionForZoom(zoom) : undefined;
 
   let center = coordinate ? [...coordinate] : null;
-  if (!coordinate && geometry) {
+  if (!center && geometry) {
     const { coord } = getVehiclePosition(Date.now(), vehicle, true);
     center = coord ? [...coord] : null;
   }

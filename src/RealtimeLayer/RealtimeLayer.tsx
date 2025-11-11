@@ -223,7 +223,7 @@ function RealtimeLayer(props: Partial<RealtimeLayerOptions>) {
     }
   }, [map, trainId, layer]);
 
-  // Subscribe to the stop sequence of the selected vehicle.
+  // Subscribe to the full trajectory of the selected vehicle.
   useEffect(() => {
     if (!trainId || !layer?.api) {
       return;
