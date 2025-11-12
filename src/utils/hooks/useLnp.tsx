@@ -21,7 +21,7 @@ export interface LnpLineInfo {
 
 export interface LnpStopInfo {
   codes: string[];
-  coordinate: [number, number];
+  coordinates: [number, number];
   external_id: string;
   importance: number;
   long_name: string;

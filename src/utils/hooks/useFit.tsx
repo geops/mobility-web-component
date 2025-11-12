@@ -35,7 +35,7 @@ function useFit() {
         return;
       }
 
-      const coordinate = (obj as LnpStopInfo)?.coordinate;
+      const coordinate = (obj as LnpStopInfo)?.coordinates;
       if (coordinate) {
         const feature = new Feature(new Point(coordinate));
         fitOnFeatures.current([feature], willOverlayOpen);
