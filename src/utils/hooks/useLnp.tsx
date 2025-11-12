@@ -129,9 +129,17 @@ export function useLnpStopInfo(text: string): LnpStopInfo {
   }
 
   return Object.values(stationsInfos).find((info) => {
-    return ["id", "external_id", "short_name", "long_name"].find((key) => {
-      return !!info[key] && info[key].toLowerCase() === text.toLowerCase();
-    });
+    return (
+      ["id", "external_id", "short_name", "long_name"].find((key) => {
+        return !!info[key] && info[key].toLowerCase() === text.toLowerCase();
+      }) ||
+      info?.codes?.find((code) => {
+        return (
+          code.toLowerCase() === text.toLowerCase() ||
+          code.split(":")[1]?.toLowerCase() === text.toLowerCase()
+        );
+      })
+    );
   });
 }
 

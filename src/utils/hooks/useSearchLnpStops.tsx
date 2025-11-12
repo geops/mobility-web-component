@@ -18,7 +18,13 @@ function useSearchLnpStops(query: string): SearchResponse<LnpStopInfo> {
       return (
         item?.short_name?.toLowerCase().includes(query.toLowerCase()) ||
         item?.long_name?.toLowerCase().includes(query.toLowerCase()) ||
-        item?.external_id?.toLowerCase().includes(query.toLowerCase())
+        item?.external_id?.toLowerCase().includes(query.toLowerCase()) ||
+        item?.codes?.find((code) => {
+          return (
+            code.toLowerCase() === query.toLowerCase() ||
+            code.split(":")[1]?.toLowerCase() === query.toLowerCase()
+          );
+        })
       );
     });
   }, [hasLnp, infos, query]);
