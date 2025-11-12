@@ -36,10 +36,8 @@ function SearchHeadless({ ...props }: SearchProps) {
   const onSelectStop = useCallback(
     (stop: StopsFeature) => {
       setStationId(stop.properties.uid);
-      if (tenant) {
-        // It means that the station wil have informations
-        fit.current(stop, true);
-      }
+      // It means that the station wil have informations
+      fit.current(stop, !!tenant);
     },
     [fit, setStationId, tenant],
   );
