@@ -4,7 +4,7 @@ import SearchLinesResult from "../SearchLinesResult";
 import SearchLinesResults from "../SearchLinesResults";
 import SearchStopsResult from "../SearchStopsResult";
 import SearchStopsResults from "../SearchStopsResults";
-import centerOnStation from "../utils/centerOnStation";
+import useFit from "../utils/hooks/useFit";
 import useMapContext from "../utils/hooks/useMapContext";
 
 import { SearchBase } from ".";
@@ -30,21 +30,26 @@ export type SearchProps = {
  * The search logic. To modifiy default classNames look the Search class.
  */
 function SearchHeadless({ ...props }: SearchProps) {
-  const { map, setLinesIds, setStationId } = useMapContext();
+  const { setLinesIds, setStationId, tenant } = useMapContext();
+  const fit = useFit();
 
   const onSelectStop = useCallback(
     (stop: StopsFeature) => {
       setStationId(stop.properties.uid);
-      centerOnStation(stop, map);
+      if (tenant) {
+        // It means that the station wil have informations
+        fit.current(stop, true);
+      }
     },
-    [map, setStationId],
+    [fit, setStationId, tenant],
   );
 
   const onSelectLine = useCallback(
     (line: LnpLineInfo) => {
       setLinesIds([line.external_id]);
+      fit.current(line, true);
     },
-    [setLinesIds],
+    [fit, setLinesIds],
   );
 
   return (

@@ -1,12 +1,9 @@
 import { useCallback, useEffect } from "preact/hooks";
 
-import useFitOnFeatures from "../utils/hooks/useFitOnFeatures";
+import useFit from "../utils/hooks/useFit";
 import useLnpLineInfo, { useLnpStopInfo } from "../utils/hooks/useLnp";
 import useMapContext from "../utils/hooks/useMapContext";
 import useRealtimeRenderedTrajectories from "../utils/hooks/useRealtimeRenderedTrajectory";
-import useSearchStops from "../utils/hooks/useSearchStops";
-
-import type { GeoJSONFeature } from "ol/format/GeoJSON";
 
 /**
  * This component is responsible for updating the layout state in the context.
@@ -77,8 +74,7 @@ function LayoutState() {
   const lineInfo = useLnpLineInfo(lineid);
   const stopInfo = useLnpStopInfo(stationid);
   const trainInfo = useRealtimeRenderedTrajectories(trainid);
-  const stopForCoordinate = useSearchStops(stationid);
-  const fitOnFeatures = useFitOnFeatures();
+  const fit = useFit();
 
   useEffect(() => {
     setHasStations(!!tenant);
@@ -142,22 +138,8 @@ function LayoutState() {
 
   // Zoom when linesids attribute changes
   useEffect(() => {
-    // @ts-expect-error not implemented yet
-    const extent = lineInfo?.extent as [number, number, number, number];
-    if (extent) {
-      const feature = {
-        geometry: {
-          coordinates: [
-            [extent[0], extent[1]],
-            [extent[2], extent[3]],
-          ],
-          type: "LineString",
-        },
-        type: "Feature",
-      };
-      fitOnFeatures.current([feature] as GeoJSONFeature[]);
-    }
-  }, [lineInfo, fitOnFeatures]);
+    fit.current(lineInfo, true);
+  }, [lineInfo, fit]);
 
   useEffect(() => {
     setStationId(stopInfo?.external_id);
@@ -165,13 +147,8 @@ function LayoutState() {
 
   // Center and zoom when stationid attribute changes
   useEffect(() => {
-    const result = (stopForCoordinate?.results || []).find((stop) => {
-      return stop.properties.uid === stopInfo?.external_id;
-    });
-    if (result) {
-      fitOnFeatures.current([result] as GeoJSONFeature[]);
-    }
-  }, [stopInfo, fitOnFeatures, stopForCoordinate.results]);
+    fit.current(stopInfo, true);
+  }, [stopInfo, fit]);
 
   useEffect(() => {
     setNotificationId(notificationid);

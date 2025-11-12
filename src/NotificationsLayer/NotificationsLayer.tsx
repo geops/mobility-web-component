@@ -1,6 +1,7 @@
 import { MocoLayer } from "mobility-toolbox-js/ol";
+import { unByKey } from "ol/Observable";
 import { memo } from "preact/compat";
-import { useEffect, useMemo } from "preact/hooks";
+import { useEffect, useMemo, useState } from "preact/hooks";
 
 import { LAYER_NAME_NOTIFICATIONS } from "../utils/constants";
 import useMapContext from "../utils/hooks/useMapContext";
@@ -11,6 +12,7 @@ function NotificationsLayer(props?: Partial<MocoLayerOptions>) {
   const {
     apikey,
     baseLayer,
+    linesNetworkPlanLayer,
     map,
     notificationat,
     notificationtenant,
@@ -18,6 +20,9 @@ function NotificationsLayer(props?: Partial<MocoLayerOptions>) {
     previewNotifications,
     setNotificationsLayer,
   } = useMapContext();
+  const [isLnpVisible, setIsLnpVisible] = useState(
+    !!linesNetworkPlanLayer?.getVisible(),
+  );
 
   const layer = useMemo(() => {
     if (!baseLayer) {
@@ -42,12 +47,12 @@ function NotificationsLayer(props?: Partial<MocoLayerOptions>) {
     }
     return mocoLayer;
   }, [
-    apikey,
     baseLayer,
+    apikey,
     notificationat,
+    previewNotifications,
     notificationtenant,
     notificationurl,
-    previewNotifications,
     props,
   ]);
 
@@ -65,6 +70,45 @@ function NotificationsLayer(props?: Partial<MocoLayerOptions>) {
       map.removeLayer(layer);
     };
   }, [map, layer]);
+
+  // Watch lnp visibility
+  useEffect(() => {
+    const key = linesNetworkPlanLayer?.on("change:visible", () => {
+      const visible = linesNetworkPlanLayer.getVisible();
+      setIsLnpVisible(visible);
+    });
+    setIsLnpVisible(linesNetworkPlanLayer?.getVisible() || false);
+    return () => {
+      unByKey(key);
+    };
+  }, [linesNetworkPlanLayer]);
+
+  // Change the layersFilter based on lnp visibility
+  // Moco layers must de hidden by default otherwise, on load, everything is displayed
+  useEffect(() => {
+    if (!layer) {
+      return;
+    }
+    const visible = layer.getVisible();
+    if (visible) {
+      layer.setVisible(false);
+    }
+
+    if (isLnpVisible) {
+      layer.layersFilter = (layerSpec) => {
+        return layerSpec.metadata?.["general.filter"] === "moco.lnp";
+      };
+    } else {
+      layer.layersFilter = (layerSpec) => {
+        return layerSpec.metadata?.["general.filter"] === "moco";
+      };
+    }
+
+    layer.setVisible(visible);
+    return () => {
+      layer.applyLayoutVisibility();
+    };
+  }, [isLnpVisible, layer, linesNetworkPlanLayer]);
 
   return null;
 }

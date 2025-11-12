@@ -12,6 +12,7 @@ const geojson = new GeoJSON();
 
 export type FitOnFeatures = (
   features: (Feature | GeoJSONFeature)[],
+  willOverlayOpen?: boolean,
   map?: Map,
 ) => void;
 
@@ -28,6 +29,7 @@ const useFitOnFeatures = () => {
   useEffect(() => {
     fitOnFeatures.current = (
       features: (Feature | GeoJSONFeature)[],
+      willOverlayOpen = false,
       map?: Map,
     ) => {
       if ((!map && !contextMap) || !features?.length) {
@@ -37,7 +39,7 @@ const useFitOnFeatures = () => {
 
       // Convert to ol features if GeoJSON
       const geoJSONFeature = features?.[0] as GeoJSONFeature;
-      if (geoJSONFeature?.properties && geoJSONFeature?.type === "Feature") {
+      if (geoJSONFeature?.geometry && geoJSONFeature?.type === "Feature") {
         // Single feature case
         feats = geojson.readFeatures(
           {
@@ -56,7 +58,12 @@ const useFitOnFeatures = () => {
           extent[0] === extent[2] || extent[1] === extent[3]
             ? FIT_ON_FEATURES_MAX_ZOOM_POINT
             : undefined,
-        padding: [100, 100, 100, isOverlayOpenRef.current ? 400 : 100],
+        padding: [
+          50,
+          50,
+          50,
+          willOverlayOpen || isOverlayOpenRef.current ? 350 : 50,
+        ],
       });
       return () => {
         mapToUse?.getView().cancelAnimations();

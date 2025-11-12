@@ -8,6 +8,7 @@ import type { VectorTileSource } from "maplibre-gl";
 
 export interface LnpLineInfo {
   color: string;
+  extent: [number, number, number, number];
   external_id: string;
   id: string;
   long_name: string;
@@ -19,6 +20,7 @@ export interface LnpLineInfo {
 }
 
 export interface LnpStopInfo {
+  coordinate: [number, number];
   external_id: string;
   importance: number;
   long_name: string;
