@@ -20,11 +20,13 @@ export interface LnpLineInfo {
 }
 
 export interface LnpStopInfo {
+  codes: string[];
   coordinate: [number, number];
   external_id: string;
   importance: number;
   long_name: string;
   short_name: string;
+  tralis_network: string;
   visibility_level: number;
 }
 
