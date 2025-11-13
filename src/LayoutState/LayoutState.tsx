@@ -3,7 +3,7 @@ import { useCallback, useEffect } from "preact/hooks";
 import useFit from "../utils/hooks/useFit";
 import useLnpLineInfo, { useLnpStopInfo } from "../utils/hooks/useLnp";
 import useMapContext from "../utils/hooks/useMapContext";
-import useRealtimeRenderedTrajectories from "../utils/hooks/useRealtimeRenderedTrajectory";
+import useRealtimeTrainByRouteIdentifier from "../utils/hooks/useRealtimeTrainsByRouteIdentifier";
 
 /**
  * This component is responsible for updating the layout state in the context.
@@ -73,7 +73,7 @@ function LayoutState() {
 
   const lineInfo = useLnpLineInfo(lineid);
   const stopInfo = useLnpStopInfo(stationid);
-  const trainInfo = useRealtimeRenderedTrajectories(trainid);
+  const trainInfo = useRealtimeTrainByRouteIdentifier(trainid);
   const fit = useFit();
 
   useEffect(() => {
@@ -155,8 +155,13 @@ function LayoutState() {
   }, [notificationid, setNotificationId]);
 
   useEffect(() => {
-    setTrainId(trainInfo?.properties?.train_id);
+    setTrainId(trainInfo?.train_id);
   }, [setTrainId, trainInfo]);
+
+  // Center and zoom when trainid attribute changes
+  useEffect(() => {
+    fit.current(trainInfo, true);
+  }, [trainInfo, fit]);
 
   // Close all menus
   const closeMenus = useCallback(() => {
