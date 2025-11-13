@@ -56,6 +56,7 @@ export type MobilityMapAttributeName =
   | "queryablelayers"
   | "realtime"
   | "realtimebboxparameters"
+  | "realtimeresturl"
   | "realtimetenant"
   | "realtimeurl"
   | "search"
@@ -291,6 +292,12 @@ where:
     description:
       "A space separated list of parameters to add to the realtime BBOX request to define custom behavior.<br/>Ex: graph=XXX line_tags=XXX.",
     public: true,
+  },
+  realtimeresturl: {
+    defaultValue: "https://api.geops.io/tracker-http/v1/",
+    // defaultValue: "https://tralis-tracker-api.geops.io/api/v1/",
+    description: `The ${geopsRealtimeApiLink} REST API url to use for fetching infos about realtime data.`,
+    public: false,
   },
   realtimetenant: {
     description: `The ${geopsRealtimeApiLink} tenant to get the realtime data from.`,

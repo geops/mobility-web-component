@@ -4,10 +4,14 @@ import SearchLinesResult from "../SearchLinesResult";
 import SearchLinesResults from "../SearchLinesResults";
 import SearchStopsResult from "../SearchStopsResult";
 import SearchStopsResults from "../SearchStopsResults";
+import SearchTrainsResult from "../SearchTrainsResult";
+import SearchTrainsResults from "../SearchTrainsResults";
 import useFit from "../utils/hooks/useFit";
 import useMapContext from "../utils/hooks/useMapContext";
 
 import { SearchBase } from ".";
+
+import type { RealtimeRouteIdentifierMatch } from "mobility-toolbox-js/types";
 
 import type { IconButtonProps } from "../ui/IconButton/IconButton";
 import type { InputProps } from "../ui/Input/Input";
@@ -30,7 +34,7 @@ export type SearchProps = {
  * The search logic. To modifiy default classNames look the Search class.
  */
 function SearchHeadless({ ...props }: SearchProps) {
-  const { setLinesIds, setStationId, tenant } = useMapContext();
+  const { setLinesIds, setStationId, setTrainId, tenant } = useMapContext();
   const fit = useFit();
 
   const onSelectStop = useCallback(
@@ -50,6 +54,14 @@ function SearchHeadless({ ...props }: SearchProps) {
     [fit, setLinesIds],
   );
 
+  const onSelectTrain = useCallback(
+    (match: RealtimeRouteIdentifierMatch) => {
+      setTrainId(match.trains[0].train_id);
+      fit.current(match, true);
+    },
+    [fit, setTrainId],
+  );
+
   return (
     <SearchBase {...props}>
       <SearchStopsResults>
@@ -58,6 +70,9 @@ function SearchHeadless({ ...props }: SearchProps) {
       <SearchLinesResults>
         <SearchLinesResult onSelectItem={onSelectLine} />
       </SearchLinesResults>
+      <SearchTrainsResults>
+        <SearchTrainsResult onSelectItem={onSelectTrain} />
+      </SearchTrainsResults>
     </SearchBase>
   );
 }
