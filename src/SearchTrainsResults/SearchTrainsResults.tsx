@@ -32,7 +32,7 @@ function SearchTrainsResults({
 
   const onSelectResult = useCallback(
     (item: RealtimeRouteIdentifierMatch) => {
-      setSelectedQuery(item.trains[0].train_id);
+      setSelectedQuery(item.route_identifier);
       setOpen(false);
     },
     [setOpen, setSelectedQuery],
