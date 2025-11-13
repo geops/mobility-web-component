@@ -11,16 +11,20 @@ function useRealtimeTrainByRouteIdentifier(
     useMapContext();
   const [train, setTrain] = useState<RealtimeTrainDetail>();
 
+  const tenantMemo = useMemo(() => {
+    return realtimetenant || tenant;
+  }, [realtimetenant, tenant]);
+
   const api = useMemo(() => {
-    if (!apikey || !(realtimetenant && tenant) || !hasRealtime) {
+    if (!apikey || !tenantMemo || !hasRealtime) {
       return null;
     }
     return new RealtimeRestAPI({
       apiKey: apikey,
-      tenant: realtimetenant || tenant,
+      tenant: tenantMemo,
       url: realtimeresturl,
     });
-  }, [apikey, realtimetenant, hasRealtime, tenant, realtimeresturl]);
+  }, [apikey, tenantMemo, hasRealtime, realtimeresturl]);
 
   useEffect(() => {
     if (!api || !routeIdentifier) {

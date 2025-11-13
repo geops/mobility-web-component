@@ -19,16 +19,20 @@ function useSearchTrains(
   >();
   const [isLoading, setIsLoading] = useState(false);
 
+  const tenantMemo = useMemo(() => {
+    return realtimetenant || tenant;
+  }, [realtimetenant, tenant]);
+
   const api = useMemo(() => {
-    if (!apikey || !(realtimetenant && tenant) || !hasRealtime) {
+    if (!apikey || !tenantMemo || !hasRealtime) {
       return null;
     }
     return new RealtimeRestAPI({
       apiKey: apikey,
-      tenant: realtimetenant || tenant,
+      tenant: tenantMemo,
       url: realtimeresturl,
     });
-  }, [apikey, realtimetenant, tenant, hasRealtime, realtimeresturl]);
+  }, [apikey, tenantMemo, hasRealtime, realtimeresturl]);
 
   const debouncedSearch = useMemo(() => {
     let abortCtrl: AbortController | undefined;
