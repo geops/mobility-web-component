@@ -7,20 +7,20 @@ import useMapContext from "./useMapContext";
 function useRealtimeTrainByRouteIdentifier(
   routeIdentifier: string,
 ): RealtimeTrainDetail {
-  const { apikey, hasRealtime, realtimeresturl, realtimetenant } =
+  const { apikey, hasRealtime, realtimeresturl, realtimetenant, tenant } =
     useMapContext();
   const [train, setTrain] = useState<RealtimeTrainDetail>();
 
   const api = useMemo(() => {
-    if (!apikey || !realtimetenant || !hasRealtime) {
+    if (!apikey || !(realtimetenant && tenant) || !hasRealtime) {
       return null;
     }
     return new RealtimeRestAPI({
       apiKey: apikey,
-      tenant: realtimetenant,
+      tenant: realtimetenant || tenant,
       url: realtimeresturl,
     });
-  }, [apikey, realtimetenant, realtimeresturl, hasRealtime]);
+  }, [apikey, realtimetenant, hasRealtime, tenant, realtimeresturl]);
 
   useEffect(() => {
     if (!api || !routeIdentifier) {

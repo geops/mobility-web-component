@@ -11,7 +11,7 @@ import type { SearchResponse } from "./useSearchStops";
 function useSearchTrains(
   query: string,
 ): SearchResponse<RealtimeRouteIdentifierMatch> {
-  const { apikey, hasRealtime, realtimeresturl, realtimetenant } =
+  const { apikey, hasRealtime, realtimeresturl, realtimetenant, tenant } =
     useMapContext();
 
   const [results, setResults] = useState<
@@ -20,15 +20,15 @@ function useSearchTrains(
   const [isLoading, setIsLoading] = useState(false);
 
   const api = useMemo(() => {
-    if (!apikey || !realtimetenant || !hasRealtime) {
+    if (!apikey || !(realtimetenant && tenant) || !hasRealtime) {
       return null;
     }
     return new RealtimeRestAPI({
       apiKey: apikey,
-      tenant: realtimetenant,
+      tenant: realtimetenant || tenant,
       url: realtimeresturl,
     });
-  }, [apikey, realtimetenant, realtimeresturl, hasRealtime]);
+  }, [apikey, realtimetenant, tenant, hasRealtime, realtimeresturl]);
 
   const debouncedSearch = useMemo(() => {
     let abortCtrl: AbortController | undefined;
