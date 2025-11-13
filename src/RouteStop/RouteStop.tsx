@@ -92,7 +92,7 @@ function RouteStop({
             <RouteStopTime className="ml-4 flex w-10 shrink-0 flex-col justify-center text-xs" />
             <RouteStopDelay className="flex w-8 shrink-0 flex-col justify-center text-[0.6rem]" />
             <RouteStopProgress className="relative flex w-8 shrink-0 items-center" />
-            <RouteStopStation className="flex grow flex-col items-start justify-center pr-2 text-sm font-medium" />
+            <RouteStopStation className="flex grow items-center justify-center pr-2 text-sm font-medium" />
           </>
         )}
       </button>

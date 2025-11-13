@@ -1,15 +1,16 @@
 import { RealtimeRestAPI } from "mobility-toolbox-js/ol";
-import { type RealtimeTrainDetail } from "mobility-toolbox-js/types";
 import { useEffect, useMemo, useState } from "preact/hooks";
 
 import useMapContext from "./useMapContext";
 
+import type { RealtimeRouteIdentifierMatch } from "mobility-toolbox-js/types";
+
 function useRealtimeTrainByRouteIdentifier(
   routeIdentifier: string,
-): RealtimeTrainDetail {
+): RealtimeRouteIdentifierMatch | undefined {
   const { apikey, hasRealtime, realtimeresturl, realtimetenant, tenant } =
     useMapContext();
-  const [train, setTrain] = useState<RealtimeTrainDetail>();
+  const [train, setTrain] = useState<RealtimeRouteIdentifierMatch>();
 
   const tenantMemo = useMemo(() => {
     return realtimetenant || tenant;
@@ -43,7 +44,7 @@ function useRealtimeTrainByRouteIdentifier(
       )
       .then((res) => {
         if (res.matches.length > 0) {
-          setTrain(res.matches[0].trains[0]);
+          setTrain(res.matches[0]);
         } else {
           setTrain(undefined);
         }

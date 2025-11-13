@@ -76,10 +76,7 @@ function SearchTrainsResults({
       >
         {results.map((item: RealtimeRouteIdentifierMatch) => {
           return (
-            <SearchResult
-              className={resultClassName}
-              key={item.trains[0].train_id}
-            >
+            <SearchResult className={resultClassName} key={item.train_id}>
               {toChildArray(children).map(
                 (
                   child: ReactElement<

@@ -5,10 +5,7 @@ import { useEffect, useRef } from "preact/hooks";
 
 import useFitOnFeatures from "./useFitOnFeatures";
 
-import type {
-  RealtimeRouteIdentifierMatch,
-  RealtimeTrainDetail,
-} from "mobility-toolbox-js/types";
+import type { RealtimeRouteIdentifierMatch } from "mobility-toolbox-js/types";
 import type { GeoJSONFeature } from "ol/format/GeoJSON";
 
 import type { LnpLineInfo, LnpStopInfo } from "./useLnp";
@@ -20,7 +17,6 @@ export type FitObject =
   | LnpLineInfo
   | LnpStopInfo
   | RealtimeRouteIdentifierMatch
-  | RealtimeTrainDetail
   | StopsFeature;
 
 function useFit() {
@@ -36,17 +32,9 @@ function useFit() {
         fitOnFeatures.current([obj as GeoJSONFeature], willOverlayOpen);
         return;
       }
-      let extent =
-        (obj as LnpLineInfo)?.extent || (obj as RealtimeTrainDetail)?.bounds;
-
-      if ((obj as RealtimeRouteIdentifierMatch)?.trains?.length) {
-        extent = (obj as RealtimeRouteIdentifierMatch).trains[0].bounds as [
-          number,
-          number,
-          number,
-          number,
-        ];
-      }
+      const extent =
+        (obj as LnpLineInfo)?.extent ||
+        (obj as RealtimeRouteIdentifierMatch)?.bounds;
 
       if (extent) {
         const feature = new Feature(fromExtent(extent));

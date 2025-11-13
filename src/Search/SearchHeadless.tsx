@@ -56,7 +56,7 @@ function SearchHeadless({ ...props }: SearchProps) {
 
   const onSelectTrain = useCallback(
     (match: RealtimeRouteIdentifierMatch) => {
-      setTrainId(match.trains[0].train_id);
+      setTrainId(match.train_id);
       fit.current(match, true);
     },
     [fit, setTrainId],

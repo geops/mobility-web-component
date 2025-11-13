@@ -33,8 +33,8 @@ function SearchTrainsResult({
         onSelectItem?.(item, evt);
       }}
     >
-      <RouteIcon line={item.trains[0].line}></RouteIcon>
-      <div className="grow">{`${item.trains[0].line?.name} (${item.route_identifier})`}</div>
+      <RouteIcon line={item.line}></RouteIcon>
+      <div className="grow">{`${item.destination} (${item.route_identifier})`}</div>
     </button>
   );
 }
