@@ -55,7 +55,7 @@ function SingleClickListener({
         const stationsFeatures = featuresInfoStations?.features || [];
 
         const [stationFeature] = stationsFeatures.filter((feat) => {
-          let found = true;
+          let found = false;
           if (mots?.split(",")?.length > 0) {
             found = !!mots.split(",").find((mot) => {
               const hasMot = feat.get(mot.trim().toLowerCase());
@@ -64,14 +64,10 @@ function SingleClickListener({
               }
             });
           }
-          // Travic stations have a tralis_network property and mots property
-          if (found && feat.get("tralis_network")) {
-            return feat.get("tralis_network").includes(tenant);
-          }
 
-          // We move the external_id to uid to be consistent across all stations (lnp and others)
-          if (!feat.get("uid") && feat.get("external_id")) {
-            feat.set("uid", feat.get("external_id"));
+          // Travic stations have a tralis_network property and mots property
+          if (found) {
+            return !!feat.get("tralis_network")?.includes(tenant);
           }
 
           // LNP stations have network property with CamelCase value like "Trenord"

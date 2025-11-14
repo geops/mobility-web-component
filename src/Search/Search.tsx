@@ -23,7 +23,7 @@ function Search({
   return (
     <SearchHeadless
       childrenContainerClassName={twMerge(
-        "max-h-[300px] rounded-b-2xl bg-white shadow overflow-hidden",
+        "max-h-[400px] rounded-b-2xl bg-white shadow overflow-hidden",
         childrenContainerClassName,
       )}
       className={twMerge(
@@ -36,7 +36,7 @@ function Search({
         resultClassName,
       )}
       resultsContainerClassName={twMerge(
-        "min-h-[100px] max-h-[200px] border border-t-0",
+        "min-h-[50px] max-h-[200px] border border-t-0",
         resultsContainerClassName,
       )}
       withResultsClassName={twMerge(
