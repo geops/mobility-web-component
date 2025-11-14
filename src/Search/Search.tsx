@@ -27,7 +27,7 @@ function Search({
         childrenContainerClassName,
       )}
       className={twMerge(
-        "border-grey @container m-0 h-[48px] gap-2 rounded-2xl border p-2 text-base",
+        "border-grey @container m-0 h-[48px] rounded-2xl border text-base",
         className,
       )}
       inputContainerClassName={twMerge("border-none", inputContainerClassName)}

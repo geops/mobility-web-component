@@ -54,7 +54,7 @@ function InputSearch({
     <>
       <div
         className={twMerge(
-          "flex h-16 items-center gap-4 rounded-md bg-white p-4 pt-3.5 shadow",
+          "flex h-12 items-center gap-1 rounded-md bg-white p-3 shadow",
           className,
           withResultsClassName,
         )}
@@ -70,7 +70,7 @@ function InputSearch({
         </div>
         <div
           className={twMerge(
-            "@container/inputsearch flex grow items-center gap-2 border-b-2 border-solid",
+            "@container/inputsearch relative flex grow items-center gap-2 border-b-2 border-solid",
             inputContainerClassName,
           )}
         >
@@ -79,6 +79,7 @@ function InputSearch({
             className={twMerge(
               "h-8 w-1 grow overflow-hidden text-ellipsis placeholder:text-zinc-400",
               inputClassName,
+              inputProps?.value ? "pr-4" : "",
             )}
             type="text"
             {...(inputProps || {})}
@@ -86,7 +87,7 @@ function InputSearch({
           {!!inputProps.value && (
             <IconButton
               className={twMerge(
-                "flex size-4 items-center rounded-none border-none bg-transparent p-0 shadow-none",
+                "absolute right-0 flex h-full w-6 items-center rounded-none border-none bg-transparent p-0 px-1 shadow-none",
                 cancelButtonClassName,
               )}
               title={t("search_input_cancel")}
