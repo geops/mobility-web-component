@@ -22,6 +22,7 @@ function SingleClickListener({
 }: SingleClickListenerProps) {
   const {
     map,
+    mots,
     queryablelayers,
     setFeaturesInfos,
     setFeaturesInfosHovered,
@@ -54,9 +55,17 @@ function SingleClickListener({
         const stationsFeatures = featuresInfoStations?.features || [];
 
         const [stationFeature] = stationsFeatures.filter((feat) => {
-          // TODO: think how to do better. LNP stations should have a tralis_network property?
-          // travic stations has a tralis_network property
-          if (feat.get("tralis_network")) {
+          let found = true;
+          if (mots?.split(",")?.length > 0) {
+            found = !!mots.split(",").find((mot) => {
+              const hasMot = feat.get(mot.trim().toLowerCase());
+              if (hasMot === 1) {
+                return true;
+              }
+            });
+          }
+          // Travic stations have a tralis_network property and mots property
+          if (found && feat.get("tralis_network")) {
             return feat.get("tralis_network").includes(tenant);
           }
 
@@ -65,8 +74,11 @@ function SingleClickListener({
             feat.set("uid", feat.get("external_id"));
           }
 
-          // LNP stations have no tralis_network property
-          return true;
+          // LNP stations have network property with CamelCase value like "Trenord"
+          if (feat.get("network")) {
+            return feat.get("network").toLowerCase().includes(tenant);
+          }
+          return found;
         });
 
         // Replace the features clicked in the stations layer by the filtered one
@@ -79,7 +91,7 @@ function SingleClickListener({
 
       return featuresInfos;
     },
-    [queryablelayers, stationsLayer, tenant],
+    [mots, queryablelayers, stationsLayer, tenant],
   );
 
   const onPointerMove = useCallback(
