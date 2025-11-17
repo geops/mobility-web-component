@@ -110,6 +110,7 @@ function MapLayout({
                 )}
               >
                 <Search
+                  autofocus
                   className={
                     "@container @sm/main:gap-4 @sm/main:rounded-l-none @sm/main:rounded-r-2xl"
                   }

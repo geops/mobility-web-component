@@ -1,5 +1,11 @@
 import { memo } from "preact/compat";
-import { useCallback, useMemo, useRef, useState } from "preact/hooks";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "preact/hooks";
 
 import InputSearch from "../ui/InputSearch";
 import useI18n from "../utils/hooks/useI18n";
@@ -12,6 +18,7 @@ import type { InputProps } from "../ui/Input/Input";
 import type { InputSearchProps } from "../ui/InputSearch/InputSearch";
 
 export type SearchBaseProps = {
+  autofocus?: boolean;
   cancelButtonProps?: IconButtonProps;
   childrenContainerClassName?: string;
   inputProps?: InputProps;
@@ -48,6 +55,7 @@ export const SearchContext = createContext<null | SearchContextType>({
 });
 
 function SearchBase({
+  autofocus,
   cancelButtonProps,
   children,
   childrenContainerClassName,
@@ -65,6 +73,15 @@ function SearchBase({
   const [showResults, setShowResults] = useState(false);
   const [open, setOpen] = useState(false);
   const resultsBySearchRef = useRef<Record<string, unknown[]>>({});
+
+  // Autofocus the input
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (autofocus && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [autofocus]);
 
   const setResults = useCallback(
     (id: string, results: unknown[]) => {
@@ -94,6 +111,7 @@ function SearchBase({
   const inputPropss: InputProps = useMemo(() => {
     return {
       placeholder: t("search_placeholder"),
+      ref: inputRef,
       ...(inputProps || {}),
       onChange: (evt: TargetedInputEvent<HTMLInputElement>) => {
         setQuery((evt.target as HTMLInputElement).value);
