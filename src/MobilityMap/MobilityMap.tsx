@@ -1,8 +1,9 @@
 import { memo } from "preact/compat";
-import { useEffect, useMemo, useRef, useState } from "preact/hooks";
+import { useMemo, useRef, useState } from "preact/hooks";
 
 import BaseLayer from "../BaseLayer";
 import FeaturesInfosListener from "../FeaturesInfosListener";
+import I18n from "../I18n";
 import LayoutState from "../LayoutState";
 import LinesNetworkPlanLayer from "../LinesNetworkPlanLayer";
 import LinesNetworkPlanLayerHighlight from "../LinesNetworkPlanLayerHighlight";
@@ -14,10 +15,8 @@ import Permalink from "../Permalink";
 import RealtimeLayer from "../RealtimeLayer";
 import SingleClickListener from "../SingleClickListener";
 import StationsLayer from "../StationsLayer";
-import { I18nContext } from "../utils/hooks/useI18n";
 import useInitialLayersVisiblity from "../utils/hooks/useInitialLayersVisiblity";
 import { MapContext } from "../utils/hooks/useMapContext";
-import i18n from "../utils/i18n";
 import WindowMessageListener from "../WindowMessageListener";
 
 import MobilityMapAttributes from "./MobilityMapAttributes";
@@ -234,12 +233,8 @@ function MobilityMap(props: MobilityMapProps) {
     trainId,
   ]);
 
-  useEffect(() => {
-    i18n.locale(lang);
-  }, [lang]);
-
   return (
-    <I18nContext.Provider value={i18n}>
+    <I18n locale={lang}>
       {/* There is a bug in tailwindcss@4 , variables are not imported in the shadow dom
       see  https://github.com/tailwindlabs/tailwindcss/issues/15005*/}
       <style>
@@ -319,7 +314,7 @@ function MobilityMap(props: MobilityMapProps) {
           <MapLayout />
         </div>
       </MapContext.Provider>
-    </I18nContext.Provider>
+    </I18n>
   );
 }
 

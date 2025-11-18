@@ -9,6 +9,7 @@ export type MobilitySearchAttributeName =
   | "countrycode"
   | "event"
   | "field"
+  | "lang"
   | "limit"
   | "mots"
   | "onselect"
@@ -42,6 +43,12 @@ const attrs: MobilitySearchAttributes = {
   },
   field: {
     description: `Which field to look up, default all of them, Possible values:id, name, coords. See the ${geopsStopsApiLink} documentation.`,
+    public: true,
+  },
+  lang: {
+    defaultValue: "en",
+    description:
+      "The language to use for the search input texts. Supported languages are : de, en, fr, it.",
     public: true,
   },
   limit: {

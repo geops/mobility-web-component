@@ -1,9 +1,10 @@
 import { createContext } from "preact";
 import { useContext } from "preact/hooks";
 
-import type { Rosetta } from "rosetta";
-
-export type I18NContextType = Rosetta<Record<string, string>>;
+export interface I18NContextType {
+  locale(lang?: string): void;
+  t: (id: string, templateValues?: Record<string, string>) => string;
+}
 
 export const I18nContext = createContext<I18NContextType>({
   t: (id: string, templateValues?: Record<string, string>) => {

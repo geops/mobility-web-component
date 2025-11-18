@@ -1,8 +1,7 @@
 import { memo } from "preact/compat";
 
+import I18n from "../I18n";
 import StopsSearch from "../StopsSearch/StopsSearch";
-import { I18nContext } from "../utils/hooks/useI18n";
-import i18n from "../utils/i18n";
 
 import MobilitySearchAttributes from "./MobilitySearchAttributes";
 
@@ -14,11 +13,12 @@ import type { StopsSearchProps } from "../StopsSearch/StopsSearch";
 export type MobilitySearchProps = StopsSearchProps;
 
 function MobilitySearch(props: MobilitySearchProps) {
+  const { lang } = props;
   return (
-    <I18nContext.Provider value={i18n}>
+    <I18n lang={lang}>
       <style>{tailwind}</style>
       <StopsSearch {...props} />
-    </I18nContext.Provider>
+    </I18n>
   );
 }
 

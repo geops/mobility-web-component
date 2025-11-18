@@ -36,6 +36,7 @@ export type StopsSearchProps = {
   field?: string;
   inputClassName?: string;
   inputContainerClassName?: string;
+  lang?: string;
   limit?: number;
   mots?: string;
   onselect?: (arg: StopsFeature) => void;
@@ -70,6 +71,7 @@ function StopsSearch({
   field,
   inputClassName,
   inputContainerClassName,
+  lang,
   limit,
   mots,
   onselect,
@@ -97,6 +99,7 @@ function StopsSearch({
         countrycode,
         event,
         field,
+        lang,
         limit,
         mots,
         onselect,
@@ -119,6 +122,7 @@ function StopsSearch({
     prefagencies,
     reflocation,
     url,
+    lang,
   ]);
 
   const api: StopsAPI = useMemo(() => {
