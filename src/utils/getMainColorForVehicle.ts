@@ -15,7 +15,6 @@ import type {
 const getMainColorForVehicle = (object: unknown = null): string => {
   let color =
     (object as RealtimeTrajectory)?.properties?.line?.color ||
-    // @ts-expect-error bad type definition
     (object as RealtimeStopSequence)?.line?.color ||
     (object as RealtimeLine)?.color;
 
