@@ -65,6 +65,11 @@ function SingleClickListener({
             });
           }
 
+          // We move the external_id to uid to be consistent across all stations (lnp and others)
+          if (!feat.get("uid") && feat.get("external_id")) {
+            feat.set("uid", feat.get("external_id"));
+          }
+
           // Travic stations have a tralis_network property and mots property
           if (found) {
             return !!feat.get("tralis_network")?.includes(tenant);
