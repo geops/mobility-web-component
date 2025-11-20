@@ -79,7 +79,7 @@ function EmbedNavigation({
       >
         <div
           className={twMerge(
-            "flex flex-col items-center gap-2 rounded-2xl bg-white p-4",
+            "flex flex-col items-center gap-2 rounded-2xl bg-white p-10 shadow-lg",
             contentClassName,
           )}
         >
