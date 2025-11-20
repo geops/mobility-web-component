@@ -8,7 +8,20 @@ import useMapContext from "../utils/hooks/useMapContext";
 
 import DragPanWarning from "./DragPanWarning";
 
-function EmbedNavigation({ elementClassName }: { elementClassName?: string }) {
+import type { HTMLAttributes, PreactDOMAttributes } from "preact";
+
+export type EmbedNavigationProps = {
+  contentClassName?: string;
+  elementClassName?: string;
+  iconProps?: React.SVGProps<SVGSVGElement>;
+} & HTMLAttributes<HTMLDivElement> &
+  PreactDOMAttributes;
+
+function EmbedNavigation({
+  contentClassName,
+  elementClassName,
+  iconProps,
+}: EmbedNavigationProps) {
   const { t } = useI18n();
   const { isEmbed, map } = useMapContext();
   const [target, setTarget] = useState(null);
@@ -56,7 +69,7 @@ function EmbedNavigation({ elementClassName }: { elementClassName?: string }) {
     >
       <div
         className={twMerge(
-          "absolute inset-0 z-100000 flex h-full w-full flex-col items-center justify-center bg-black/80 font-bold text-white",
+          "absolute inset-0 z-100000 flex h-full w-full flex-col items-center justify-center font-bold",
           elementClassName,
           "hidden",
         )}
@@ -64,8 +77,15 @@ function EmbedNavigation({ elementClassName }: { elementClassName?: string }) {
           return setElement(node);
         }}
       >
-        <TouchFingers height="48" width="48"></TouchFingers>
-        <p>{t("use_2_fingers")}</p>
+        <div
+          className={twMerge(
+            "flex flex-col items-center gap-2 rounded-2xl bg-white p-4",
+            contentClassName,
+          )}
+        >
+          <TouchFingers height="48" width="48" {...iconProps}></TouchFingers>
+          <p>{t("use_2_fingers")}</p>
+        </div>
       </div>
     </div>
   );
