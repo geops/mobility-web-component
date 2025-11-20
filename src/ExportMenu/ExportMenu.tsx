@@ -102,12 +102,9 @@ function ExportMenu({ ...props }: ExportMenuButtonProps) {
             }, 1000);
           }}
         >
-          {/* eslint-disable-next-line no-nested-ternary */}
-          {isExporting
-            ? t("exporting")
-            : isExportingError
-              ? t("error")
-              : t("download")}
+          {isExporting && t("exporting")}
+          {!isExporting && isExportingError && t("error")}
+          {!isExporting && !isExportingError && t("download")}
         </Button>
       </div>
     </div>

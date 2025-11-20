@@ -14,12 +14,7 @@ export type OverlayDetailsHeaderProps = {
   layer?: BaseLayer;
 } & OverlayHeaderProps;
 
-function OverlayDetailsHeader({
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  feature,
-  layer,
-  ...props
-}: OverlayDetailsHeaderProps) {
+function OverlayDetailsHeader({ layer, ...props }: OverlayDetailsHeaderProps) {
   const { t } = useI18n();
   const layerConfig = useLayerConfig(layer?.get("name"));
   if (!layer) {
