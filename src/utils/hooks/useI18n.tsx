@@ -2,7 +2,7 @@ import { createContext } from "preact";
 import { useContext } from "preact/hooks";
 
 export interface I18NContextType {
-  locale(lang?: string): void;
+  locale(lang?: string): string;
   t: (id: string, templateValues?: Record<string, string>) => string;
 }
 
