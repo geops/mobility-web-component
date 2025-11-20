@@ -284,14 +284,7 @@ function LayoutState() {
       setLinesIds(null);
       setNotificationId(null);
     }
-  }, [
-    setFeaturesInfos,
-    closeMenus,
-    setLinesIds,
-    setNotificationId,
-    setTrainId,
-    stationId,
-  ]);
+  }, [closeMenus, setLinesIds, setNotificationId, setTrainId, stationId]);
 
   useEffect(() => {
     if (trainId) {
@@ -302,14 +295,7 @@ function LayoutState() {
       setLinesIds(null);
       setNotificationId(null);
     }
-  }, [
-    closeMenus,
-    setFeaturesInfos,
-    setLinesIds,
-    setNotificationId,
-    setStationId,
-    trainId,
-  ]);
+  }, [closeMenus, setLinesIds, setNotificationId, setStationId, trainId]);
 
   useEffect(() => {
     if (notificationId) {
@@ -320,15 +306,7 @@ function LayoutState() {
       setLinesIds(null);
       setTrainId(null);
     }
-  }, [
-    closeMenus,
-    notificationId,
-    setFeaturesInfos,
-    setLinesIds,
-    setNotificationId,
-    setStationId,
-    setTrainId,
-  ]);
+  }, [closeMenus, notificationId, setLinesIds, setStationId, setTrainId]);
 
   useEffect(() => {
     if (linesIds?.length) {
@@ -340,12 +318,8 @@ function LayoutState() {
       setTrainId(null);
     }
   }, [
-    linesIds?.length,
-    notificationId,
-    setFeaturesInfos,
     closeMenus,
-
-    setLinesIds,
+    linesIds?.length,
     setNotificationId,
     setStationId,
     setTrainId,

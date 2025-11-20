@@ -11,6 +11,7 @@ function FeaturesInfosListener() {
     featuresInfos,
     featuresInfosHovered,
     linesNetworkPlanLayer,
+    notificationsLayer,
     realtimeLayer,
     setLinesIds,
     setSelectedFeature,
@@ -33,6 +34,11 @@ function FeaturesInfosListener() {
     const [realtimeFeature] =
       featuresInfos?.find((info) => {
         return info.layer === realtimeLayer;
+      })?.features || [];
+
+    const [notificationFeature] =
+      featuresInfos?.find((info) => {
+        return info.layer === notificationsLayer;
       })?.features || [];
 
     const [stationFeature] =
@@ -59,24 +65,28 @@ function FeaturesInfosListener() {
         return info.features;
       }) || [];
 
-    if (realtimeFeature || stationFeature || !features.length) {
-      setSelectedFeature(realtimeFeature || stationFeature || null);
-      setSelectedFeatures(
-        realtimeFeature || stationFeature
-          ? [realtimeFeature || stationFeature]
-          : [],
-      );
+    const priorityFeature =
+      realtimeFeature || notificationFeature || stationFeature;
+
+    // TODO this if/else must be refactored. We should not have to do setLinesIds here
+    if (priorityFeature) {
+      setSelectedFeature(priorityFeature);
+      setSelectedFeatures([priorityFeature]);
+      setLinesIds(null);
+    } else if (!features.length) {
+      setSelectedFeature(null);
+      setSelectedFeatures([]);
+      setLinesIds(null);
     } else {
       setSelectedFeatures(features);
-      setSelectedFeature(realtimeFeature || stationFeature || features[0]);
-      if (linesIds.length) {
-        setLinesIds(linesIds?.length ? linesIds : null);
-      }
+      setSelectedFeature(features[0]);
+      setLinesIds(linesIds?.length ? linesIds : null);
     }
   }, [
     featuresInfos,
     linesNetworkPlanLayer,
     realtimeLayer,
+    notificationsLayer,
     setLinesIds,
     setSelectedFeature,
     setSelectedFeatures,
