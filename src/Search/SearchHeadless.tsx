@@ -41,7 +41,7 @@ function SearchHeadless({ ...props }: SearchProps) {
     (stop: StopsFeature) => {
       setStationId(stop.properties.uid);
       // It means that the station wil have informations
-      fit.current(stop, !!tenant);
+      fit.current?.(stop, !!tenant);
     },
     [fit, setStationId, tenant],
   );
@@ -49,7 +49,7 @@ function SearchHeadless({ ...props }: SearchProps) {
   const onSelectLine = useCallback(
     (line: LnpLineInfo) => {
       setLinesIds([line.external_id]);
-      fit.current(line, true);
+      fit.current?.(line, true);
     },
     [fit, setLinesIds],
   );
@@ -57,7 +57,7 @@ function SearchHeadless({ ...props }: SearchProps) {
   const onSelectTrain = useCallback(
     (match: RealtimeRouteIdentifierMatch) => {
       setTrainId(match.train_id);
-      fit.current(match, true);
+      fit.current?.(match, true);
     },
     [fit, setTrainId],
   );
