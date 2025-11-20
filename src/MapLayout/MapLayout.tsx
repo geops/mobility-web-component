@@ -96,9 +96,9 @@ function MapLayout({
                   : "",
               )}
             >
+              {hasLayerTree && <LayerTreeButton />}
               {hasPrint && <ExportMenuButton />}
               {hasShare && <ShareMenuButton />}
-              {hasLayerTree && <LayerTreeButton />}
               {hasSearch && <SearchButton />}
             </div>
 
