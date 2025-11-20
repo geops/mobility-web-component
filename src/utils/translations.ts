@@ -43,7 +43,7 @@ const translations: Translations = {
     share_email_send: "E-Mail senden",
     share_image_save: "Bild speichern",
     share_menu_title: "Teilen",
-    stops_search_placeholder: "Haltestellen suchen",
+    stops_search_placeholder: "Haltestelle suchen",
     use_2_fingers: "Benutzen Sie 2 Finger um die Karte zu bedienen.",
     zoomin: "Hineinzoomen",
     zoomout: "Herauszoomen",
