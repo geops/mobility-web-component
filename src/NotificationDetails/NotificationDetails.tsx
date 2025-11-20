@@ -145,14 +145,12 @@ function NotificationDetails({
             return (
               <div className={"text-base"} key={id}>
                 <div className="text-xs uppercase">{reasonsToDisplay}</div>
-                <h3 className="space-x-2 text-lg font-bold text-balance">
-                  <span
-                    className={"line-height-[1.3] inline-block align-middle"}
-                  >
+                <h3 className="space-x-2 text-lg leading-[1.3] font-bold text-balance">
+                  <span className={"inline-block align-middle"}>
                     <Warning />
                   </span>
                   <span
-                    className={"*:inline"}
+                    className={"align-middle *:inline"}
                     dangerouslySetInnerHTML={{
                       __html: textualContent?.summary,
                     }}
