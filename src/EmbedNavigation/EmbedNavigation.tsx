@@ -11,14 +11,13 @@ import DragPanWarning from "./DragPanWarning";
 import type { HTMLAttributes, PreactDOMAttributes } from "preact";
 
 export type EmbedNavigationProps = {
-  contentClassName?: string;
   elementClassName?: string;
   iconProps?: React.SVGProps<SVGSVGElement>;
 } & HTMLAttributes<HTMLDivElement> &
   PreactDOMAttributes;
 
 function EmbedNavigation({
-  contentClassName,
+  children,
   elementClassName,
   iconProps,
 }: EmbedNavigationProps) {
@@ -60,7 +59,6 @@ function EmbedNavigation({
       });
     };
   }, [map, target, isEmbed, element]);
-
   return (
     <div
       ref={(node) => {
@@ -69,7 +67,7 @@ function EmbedNavigation({
     >
       <div
         className={twMerge(
-          "absolute inset-0 z-100000 flex h-full w-full flex-col items-center justify-center font-bold",
+          "absolute inset-0 z-100000 flex flex-col items-center justify-center bg-black/60 p-6 font-bold text-white",
           elementClassName,
           "hidden",
         )}
@@ -77,15 +75,12 @@ function EmbedNavigation({
           return setElement(node);
         }}
       >
-        <div
-          className={twMerge(
-            "flex flex-col items-center gap-2 rounded-2xl bg-white p-10 shadow-lg",
-            contentClassName,
-          )}
-        >
-          <TouchFingers height="48" width="48" {...iconProps}></TouchFingers>
-          <p>{t("use_2_fingers")}</p>
-        </div>
+        {children || (
+          <>
+            <TouchFingers height="48" width="48" {...iconProps}></TouchFingers>
+            <p>{t("use_2_fingers")}</p>
+          </>
+        )}
       </div>
     </div>
   );
