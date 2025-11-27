@@ -3,7 +3,7 @@ import { unByKey } from "ol/Observable";
 import { memo } from "preact/compat";
 import { useEffect, useMemo, useState } from "preact/hooks";
 
-import { LAYER_NAME_NOTIFICATIONS } from "../utils/constants";
+import { LAYER_NAME_NOTIFICATIONS, MAX_EXTENT } from "../utils/constants";
 import useMapContext from "../utils/hooks/useMapContext";
 
 import type { MocoLayerOptions } from "mobility-toolbox-js/ol";
@@ -31,6 +31,7 @@ function NotificationsLayer(props?: Partial<MocoLayerOptions>) {
     const mocoLayer = new MocoLayer({
       apiKey: apikey,
       apiParameters: {
+        bbox: MAX_EXTENT,
         contentMedium: true,
       },
       date: notificationat ? new Date(notificationat) : undefined,
