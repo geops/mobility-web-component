@@ -331,10 +331,10 @@ function LayoutState() {
         (hasPrint && isExportMenuOpen) ||
         (hasLayerTree && isLayerTreeOpen) ||
         (hasShare && isShareMenuOpen) ||
-        (hasRealtime && !!trainId) ||
-        (tenant && !!stationId) ||
-        (hasLnp && !!linesIds) ||
-        (hasNotification && !!notificationId),
+        (hasDetails && hasRealtime && !!trainId) ||
+        (hasDetails && tenant && !!stationId) ||
+        (hasDetails && hasLnp && !!linesIds) ||
+        (hasDetails && hasNotification && !!notificationId),
     );
   }, [
     hasDetails,
