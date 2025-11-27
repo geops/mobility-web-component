@@ -129,7 +129,7 @@ function NotificationDetails({
               textualContent = textualContentMultilingual?.de;
             }
 
-            const pubLines =
+            let pubLines =
               publicationLines?.flatMap((publication) => {
                 return (
                   publication.lines?.map(({ name }) => {
@@ -137,10 +137,13 @@ function NotificationDetails({
                   }) || []
                 );
               }) || [];
+            pubLines = [...new Set(pubLines)]; // Remove duplicates
 
-            const stations = publicationStops.map((publication) => {
+            let stations = publicationStops.map((publication) => {
               return publication?.name || "";
             });
+
+            stations = [...new Set(stations)]; // Remove duplicates
 
             return (
               <div className={"text-base"} key={id}>
