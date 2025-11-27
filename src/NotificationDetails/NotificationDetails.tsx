@@ -233,7 +233,8 @@ function NotificationDetails({
                     <div>
                       {textualContentMultilingual.infoLinks.map(
                         ({ label, uri }) => {
-                          const title = label[locale()] || label.de || uri;
+                          const title =
+                            label?.[locale()] || label?.de || uri || "";
                           return (
                             <Link href={uri} key={uri} title={title}>
                               {title}
