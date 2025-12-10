@@ -11,7 +11,7 @@
     "@mui/material": "^6.1.10",
     "@mui/material-nextjs": "^6.1.9",
     "@mui/styles": "^6.1.10",
-    "next": "15.0.3",
+    "next": "15.5.7",
     "prismjs": "^1.29.0",
     "react": "^18",
     "react-dom": "^18",
