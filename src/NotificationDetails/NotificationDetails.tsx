@@ -3,6 +3,7 @@ import {
   type PublicationType,
   type TextualContentType,
 } from "mobility-toolbox-js/types";
+import { useMemo } from "preact/hooks";
 import { twMerge } from "tailwind-merge";
 
 import Warning from "../icons/Warning";
@@ -52,8 +53,22 @@ function NotificationDetails({
   feature: Feature;
 }) {
   const { locale, t } = useI18n();
-  const { notificationId } = useMapContext();
+  const { notificationId, notificationlang } = useMapContext();
   const situationParsed = useMocoSituation(notificationId);
+
+  // Define fallback languages from the notificationlang attribute
+  const fallbackLangs = useMemo(() => {
+    return (
+      notificationlang
+        ?.split(",")
+        .map((lang) => {
+          return lang.trim();
+        })
+        .filter((lang) => {
+          return lang !== locale();
+        }) || []
+    );
+  }, [locale, notificationlang]);
 
   // moco export v2
   let textualContentMultilingual: Partial<MultilingualTextualContentType> = {};
@@ -116,17 +131,28 @@ function NotificationDetails({
             textualContentMedium,
             textualContentSmall,
           }) => {
+            let localeToUse = locale();
+
             // Get the textual content in German
             textualContentMultilingual =
               textualContentLarge ||
               textualContentMedium ||
               textualContentSmall;
 
-            textualContent = textualContentMultilingual?.[locale()];
+            textualContent = textualContentMultilingual?.[localeToUse];
 
-            // Fallback to default language if there is not title in the current language
             if (!textualContent?.summary) {
-              textualContent = textualContentMultilingual?.de;
+              // Try to find textualContent with a title using fallback languages
+              // If we do notfind a fallback we stick to the current language.
+              for (const fallbackLang of fallbackLangs) {
+                const goodTextualContent =
+                  textualContentMultilingual?.[fallbackLang];
+                if (goodTextualContent?.summary) {
+                  localeToUse = fallbackLang;
+                  textualContent = goodTextualContent;
+                  break;
+                }
+              }
             }
 
             let pubLines =
@@ -236,8 +262,7 @@ function NotificationDetails({
                     <div>
                       {textualContentMultilingual.infoLinks.map(
                         ({ label, uri }) => {
-                          const title =
-                            label?.[locale()] || label?.de || uri || "";
+                          const title = label?.[localeToUse] || uri || "";
                           return (
                             <Link href={uri} key={uri} title={title}>
                               {title}

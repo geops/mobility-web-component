@@ -1,5 +1,4 @@
 //type: "checkbox" | "date" | "select" | "textfield";
-
 import {
   DEFAULT_QUERYABLE_LAYERS,
   DEFAULT_VISIBLE_LAYERS,
@@ -48,6 +47,7 @@ export type MobilityMapAttributeName =
   | "notification"
   | "notificationat"
   | "notificationid"
+  | "notificationlang"
   | "notificationtenant"
   | "notificationurl"
   | "permalink"
@@ -244,6 +244,12 @@ where:
   },
   notificationid: {
     description: `An id of a notification to show details of.`,
+    public: true,
+  },
+  notificationlang: {
+    defaultValue: "en,de,fr,it",
+    description:
+      "A comma separated list of languages supported by the notification, if a textual content is not available in the current lang it will try to display the content in one of these languages. Order is important. <br/>Supported languages are: en,de,fr,it",
     public: true,
   },
   notificationtenant: {
