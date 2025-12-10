@@ -85,6 +85,8 @@ function MobilityMap(props: MobilityMapProps) {
   const [trainId, setTrainId] = useState<RealtimeTrainId>();
   const [linesIds, setLinesIds] = useState<string[]>();
   const [notificationId, setNotificationId] = useState<string>();
+  const [notificationLangFallbacks, setNotificationLangFallbacks] =
+    useState<string[]>();
 
   const [featuresInfos, setFeaturesInfos] = useState<
     LayerGetFeatureInfoResponse[]
@@ -110,7 +112,6 @@ function MobilityMap(props: MobilityMapProps) {
     return {
       // MobilityMapProps
       ...props,
-      // MapContextProps
       baseLayer,
       featuresInfos,
       featuresInfosHovered,
@@ -140,6 +141,8 @@ function MobilityMap(props: MobilityMapProps) {
       map,
       mapsetLayer,
       notificationId,
+      // MapContextProps
+      notificationLangFallbacks,
       notificationsLayer,
       permalinkUrlSearchParams,
       previewNotifications,
@@ -175,6 +178,7 @@ function MobilityMap(props: MobilityMapProps) {
       setMap,
       setMapsetLayer,
       setNotificationId,
+      setNotificationLangFallbacks,
       setNotificationsLayer,
       setPermalinkUrlSearchParams,
       setPreviewNotifications,
@@ -221,6 +225,7 @@ function MobilityMap(props: MobilityMapProps) {
     map,
     mapsetLayer,
     notificationId,
+    notificationLangFallbacks,
     notificationsLayer,
     permalinkUrlSearchParams,
     previewNotifications,
