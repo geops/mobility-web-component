@@ -3,7 +3,6 @@ import {
   type PublicationType,
   type TextualContentType,
 } from "mobility-toolbox-js/types";
-import { useMemo } from "preact/hooks";
 import { twMerge } from "tailwind-merge";
 
 import Warning from "../icons/Warning";
@@ -53,22 +52,8 @@ function NotificationDetails({
   feature: Feature;
 }) {
   const { locale, t } = useI18n();
-  const { notificationId, notificationlang } = useMapContext();
+  const { notificationId, notificationLangFallbacks } = useMapContext();
   const situationParsed = useMocoSituation(notificationId);
-
-  // Define fallback languages from the notificationlang attribute
-  const fallbackLangs = useMemo(() => {
-    return (
-      notificationlang
-        ?.split(",")
-        .map((lang) => {
-          return lang.trim();
-        })
-        .filter((lang) => {
-          return lang !== locale();
-        }) || []
-    );
-  }, [locale, notificationlang]);
 
   // moco export v2
   let textualContentMultilingual: Partial<MultilingualTextualContentType> = {};
@@ -144,7 +129,7 @@ function NotificationDetails({
             if (!textualContent?.summary) {
               // Try to find textualContent with a title using fallback languages
               // If we do notfind a fallback we stick to the current language.
-              for (const fallbackLang of fallbackLangs) {
+              for (const fallbackLang of notificationLangFallbacks) {
                 const goodTextualContent =
                   textualContentMultilingual?.[fallbackLang];
                 if (goodTextualContent?.summary) {

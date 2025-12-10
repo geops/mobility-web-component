@@ -1,6 +1,7 @@
 import { useCallback, useEffect } from "preact/hooks";
 
 import useFit from "../utils/hooks/useFit";
+import useI18n from "../utils/hooks/useI18n";
 import useLnpLineInfo, { useLnpStopInfo } from "../utils/hooks/useLnp";
 import useMapContext from "../utils/hooks/useMapContext";
 import useRealtimeTrainByRouteIdentifier from "../utils/hooks/useRealtimeTrainsByRouteIdentifier";
@@ -32,6 +33,7 @@ function LayoutState() {
     notification,
     notificationid,
     notificationId,
+    notificationlang,
     permalink,
     previewNotifications,
     print,
@@ -60,6 +62,7 @@ function LayoutState() {
     setIsShareMenuOpen,
     setLinesIds,
     setNotificationId,
+    setNotificationLangFallbacks,
     setStationId,
     setTrainId,
     share,
@@ -75,6 +78,21 @@ function LayoutState() {
   const stopInfo = useLnpStopInfo(stationid);
   const trainInfo = useRealtimeTrainByRouteIdentifier(trainid);
   const fit = useFit();
+  const { locale } = useI18n();
+
+  // Define fallback languages from the notifications details
+  useEffect(() => {
+    const fallbackLangs =
+      notificationlang
+        ?.split(",")
+        .map((lang) => {
+          return lang.trim();
+        })
+        .filter((lang) => {
+          return lang !== locale();
+        }) || [];
+    setNotificationLangFallbacks(fallbackLangs);
+  }, [notificationlang, setNotificationLangFallbacks, locale]);
 
   useEffect(() => {
     setHasStations(!!tenant);

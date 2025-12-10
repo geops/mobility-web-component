@@ -51,6 +51,7 @@ export type MapContextType = {
   map: Map;
   mapsetLayer?: MapsetLayer;
   notificationId?: string;
+  notificationLangFallbacks: string[];
   notificationsLayer?: MocoLayer;
   permalinkUrlSearchParams: URLSearchParams;
   previewNotifications?: SituationType[];
@@ -88,6 +89,7 @@ export type MapContextType = {
   setMap: (map?: Map) => void;
   setMapsetLayer: (mapsetLayer?: MapsetLayer) => void;
   setNotificationId: (notificationId?: string) => void;
+  setNotificationLangFallbacks: (langs: string[]) => void;
   setNotificationsLayer: (notificationsLayer?: MocoLayer) => void;
   setPermalinkUrlSearchParams: (
     setPermalinkUrlSearchParams: URLSearchParams,
@@ -128,6 +130,7 @@ export const MapContext = createContext<MapContextType>({
   isSearchOpen: false,
   isShareMenuOpen: false,
   isTracking: false,
+  notificationLangFallbacks: [],
   selectedFeatures: [],
   setBaseLayer: (baseLayer?: MaplibreLayer) => {},
   setIsFollowing: (isFollowing: boolean) => {},
@@ -137,6 +140,7 @@ export const MapContext = createContext<MapContextType>({
   setMap: (map?: Map) => {},
   setMapsetLayer: (mapsetLayer?: MapsetLayer) => {},
   setNotificationId: (notificationId?: string) => {},
+  setNotificationLangFallbacks: (langs: string[]) => {},
   setNotificationsLayer: (notificationsLayer?: MocoLayer) => {},
   setPermalinkUrlSearchParams: (
     permalinkUrlSearchParams: URLSearchParams,
