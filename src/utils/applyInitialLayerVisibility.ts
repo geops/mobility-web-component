@@ -14,28 +14,10 @@ const applyInitialLayerVisibility = (
     const names = layersAttrValue?.split(",") || [];
     const name = layer.get("name");
     const shouldBeVisible = names.includes(name);
-    if (layer.getVisible() !== shouldBeVisible) {
+    // Visiblity of group are defined by their children, they should not appear in the permalink.
+    if (layer.getVisible() !== shouldBeVisible && !(layer as Group).getLayers) {
       layer.setVisible(shouldBeVisible);
-
-      if ((layer as Group).getLayers) {
-        (layer as Group)
-          .getLayers()
-          .getArray()
-          .forEach((subLayer) => {
-            subLayer.setVisible(shouldBeVisible);
-            // applyInitialLayerVisibility(layersAttrValue, subLayer);
-          });
-      }
     }
-  }
-  if ((layer as Group).getLayers) {
-    (layer as Group)
-      .getLayers()
-      .getArray()
-      .forEach((subLayer) => {
-        // subLayer.setVisible(false);
-        applyInitialLayerVisibility(layersAttrValue, subLayer);
-      });
   }
 };
 export default applyInitialLayerVisibility;

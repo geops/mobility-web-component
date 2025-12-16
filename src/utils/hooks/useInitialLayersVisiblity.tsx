@@ -7,6 +7,7 @@ import applyInitialLayerVisibility from "../applyInitialLayerVisibility";
 import useInitialPermalink from "./useInitialPermalink";
 
 import type { Map } from "ol";
+import type { Group } from "ol/layer";
 const useInitialLayersVisiblity = (
   map: Map,
   layers: string,
@@ -34,9 +35,30 @@ const useInitialLayersVisiblity = (
       isPermalinkAlreadyUsed.current = true;
     }
 
-    getLayersAsFlatArray(map.getLayers().getArray()).forEach((layer) => {
+    // We reverse the array to begin by the end of the tree (so the group layers are applied last)
+    const layersAsArray = getLayersAsFlatArray(map.getLayers().getArray());
+    layersAsArray.forEach((layer) => {
       applyInitialLayerVisibility(layersToUse, layer);
     });
+
+    // Hide group if there is no children visible
+    layersAsArray
+      .filter((l) => {
+        return (l as Group).getLayers;
+      })
+      .forEach((layer) => {
+        if (
+          layer.getVisible() &&
+          !(layer as Group)
+            .getLayers()
+            ?.getArray()
+            .some((l) => {
+              return l.getVisible();
+            })
+        ) {
+          layer.setVisible(false);
+        }
+      });
 
     const key = map.getLayers().on("add", (event) => {
       applyInitialLayerVisibility(layersToUse, event.element);
