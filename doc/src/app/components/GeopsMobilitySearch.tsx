@@ -5,5 +5,6 @@ const GeopsMobilitySearch = forwardRef(
     return <geops-mobility-search ref={ref} {...props}></geops-mobility-search>;
   },
 );
+GeopsMobilitySearch.displayName = "GeopsMobilitySearch";
 
 export default GeopsMobilitySearch;
