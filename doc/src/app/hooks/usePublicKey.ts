@@ -5,9 +5,7 @@ const usePublicKey = () => {
 
   useEffect(() => {
     const fetchPublicKey = async () => {
-      const response = await fetch(
-        "https://backend.developer.geops.io/publickey",
-      );
+      const response = await fetch("https://developer.geops.io/publickey");
       const data = await response.json();
       setPublicKey(data?.key);
     };

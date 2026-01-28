@@ -7,7 +7,9 @@ This project contains a set of web components allowing to use easily the [geOps 
 
 ## Demo
 
-You can see the web components in action  using the [demo app](https://mobility-web-component.geops.io/).
+You can see the web components in action using the [official website](https://mobility-web-component.geops.io/).
+
+The Vite build, used for development, is also deployed on [https://main-mobility-web-component.vercel.app/](https://main-mobility-web-component.vercel.app/).
 
 If supported, you can see the web-component in fullscreen mode using the URL parameter `fullscreen=true`:
 

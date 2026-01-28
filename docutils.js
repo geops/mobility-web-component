@@ -205,7 +205,7 @@ function applyPermalinkParameters(wc, attributes) {
 
   // Get an apikey if there is none defined
   if (!wc.getAttribute("apikey") && !attributes.apikey.defaultValue) {
-    fetch("https://backend.developer.geops.io/publickey")
+    fetch("https://developer.geops.io/publickey")
       .then((response) => {
         return response.json();
       })
