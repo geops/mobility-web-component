@@ -244,12 +244,17 @@ function NotificationDetails({
                     </div>
                   )}
                   {!!textualContentMultilingual?.infoLinks?.length && (
-                    <div>
+                    <div className={"space-y-1"}>
                       {textualContentMultilingual.infoLinks.map(
                         ({ label, uri }) => {
                           const title = label?.[localeToUse] || uri || "";
                           return (
-                            <Link href={uri} key={uri} title={title}>
+                            <Link
+                              className={"block"}
+                              href={uri}
+                              key={uri}
+                              title={title}
+                            >
                               {title}
                             </Link>
                           );

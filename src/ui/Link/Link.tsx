@@ -12,7 +12,7 @@ export type LinkProps = {
   PreactDOMAttributes;
 
 const baseClasses =
-  "my-1 flex items-center leading-[1.1] underline text-[14px] @sm/main:text-[16px] @md/main:text-[18px] items-center justify-left font-semibold";
+  "leading-[1.1] underline text-[14px] @sm/main:text-[16px] @md/main:text-[18px] font-semibold";
 
 export const themes = {
   primary: {
@@ -40,8 +40,8 @@ function Link({
 
   return (
     <a className={classes} rel="noreferrer" target="_blank" {...props}>
-      {children}
-      <ArrowUpRight />
+      <span>{children}</span>
+      <ArrowUpRight className="inline shrink-0" />
     </a>
   );
 }
