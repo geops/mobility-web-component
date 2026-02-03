@@ -8,6 +8,7 @@ import useMapContext from "../utils/hooks/useMapContext";
  */
 function FeaturesInfosListener() {
   const {
+    baseLayer,
     featuresInfos,
     featuresInfosHovered,
     linesNetworkPlanLayer,
@@ -27,8 +28,19 @@ function FeaturesInfosListener() {
       featuresInfosHovered?.find((info) => {
         return info.layer === realtimeLayer;
       })?.features || [];
-    realtimeLayer?.highlight(realtimeFeature);
-  }, [featuresInfosHovered, realtimeLayer]);
+
+    const [notificationFeature] =
+      featuresInfosHovered?.find((info) => {
+        return info.layer === notificationsLayer;
+      })?.features || [];
+
+    const priorityFeature = notificationFeature || realtimeFeature;
+    if (priorityFeature === realtimeFeature) {
+      realtimeLayer?.highlight(realtimeFeature);
+    } else {
+      realtimeLayer?.highlight(null);
+    }
+  }, [featuresInfosHovered, notificationsLayer, realtimeLayer]);
 
   useEffect(() => {
     const [realtimeFeature] =
@@ -66,7 +78,7 @@ function FeaturesInfosListener() {
       }) || [];
 
     const priorityFeature =
-      realtimeFeature || notificationFeature || stationFeature;
+      notificationFeature || realtimeFeature || stationFeature;
 
     // TODO this if/else must be refactored. We should not have to do setLinesIds here
     if (priorityFeature) {
@@ -83,6 +95,7 @@ function FeaturesInfosListener() {
       setLinesIds(linesIds?.length ? linesIds : null);
     }
   }, [
+    baseLayer?.mapLibreMap,
     featuresInfos,
     linesNetworkPlanLayer,
     realtimeLayer,
