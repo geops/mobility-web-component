@@ -79,7 +79,7 @@ const attrs: MobilityMapAttributes = {
     public: true,
   },
   baselayer: {
-    defaultValue: "travic_v2",
+    defaultValue: "travic_v2_moco",
     description: `The style's name from the ${geopsMapsApiLink}. <br/>Ex: base_dark_v2, base_bright_v2, ...`,
     public: true,
   },

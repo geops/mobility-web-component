@@ -3,9 +3,6 @@ import { useEffect, useMemo, useState } from "preact/hooks";
 
 import useMapContext from "../utils/hooks/useMapContext";
 
-// @ts-expect-error bad type definition
-import style from "./index.css";
-
 import type { CopyrightControlOptions } from "mobility-toolbox-js/ol/controls/CopyrightControl";
 import type { JSX, PreactDOMAttributes } from "preact";
 
@@ -47,9 +44,7 @@ function Copyright({ options, ...props }: CopyrightProps) {
         setTarget(node);
       }}
       {...props}
-    >
-      <style>{style}</style>
-    </div>
+    ></div>
   );
 }
 
