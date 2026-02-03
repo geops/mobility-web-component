@@ -28,7 +28,7 @@ const translations: Translations = {
     linesnetworkplan: "plan retea linii",
     no_details_available: "Keine Details verfügbar",
     no_stops_found: "Keine Haltestellen gefunden",
-    notifications: "notificari",
+    notifications: "Meldungen",
     permalink_input_hint:
       "Sie können auch den Link aus der Adresszeile des Browsers kopieren.",
     platform_ferry: "St.",
