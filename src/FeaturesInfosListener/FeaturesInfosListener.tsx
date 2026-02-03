@@ -34,7 +34,14 @@ function FeaturesInfosListener() {
         return info.layer === notificationsLayer;
       })?.features || [];
 
-    const priorityFeature = notificationFeature || realtimeFeature;
+    // We prioritize only symbol notifications, becaus ewe want to be able to click on trians on lines
+    const isSymbolNotification =
+      notificationFeature?.getGeometry()?.getType() === "Point";
+
+    const priorityFeature = isSymbolNotification
+      ? notificationFeature || realtimeFeature
+      : realtimeFeature || notificationFeature;
+
     if (priorityFeature === realtimeFeature) {
       realtimeLayer?.highlight(realtimeFeature);
     } else {
@@ -77,8 +84,15 @@ function FeaturesInfosListener() {
         return info.features;
       }) || [];
 
-    const priorityFeature =
-      notificationFeature || realtimeFeature || stationFeature;
+    // We prioritize only symbol notifications, becaus ewe want to be able to click on trians on lines
+    const isSymbolNotification =
+      notificationFeature?.getGeometry()?.getType() === "Point";
+
+    let priorityFeature = isSymbolNotification
+      ? notificationFeature || realtimeFeature
+      : realtimeFeature || notificationFeature;
+
+    priorityFeature = priorityFeature || stationFeature;
 
     // TODO this if/else must be refactored. We should not have to do setLinesIds here
     if (priorityFeature) {
