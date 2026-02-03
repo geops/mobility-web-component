@@ -1,10 +1,11 @@
 import { LAYERS_NAMES } from "./constants";
-
+import reasons from "./translationsReasons";
 export type Locale = "de" | "en" | "fr" | "it";
 export type Translations = Record<Locale, Record<string, string>>;
 
 const translations: Translations = {
   de: {
+    ...reasons.de,
     affected_lines: "Betroffene Linien",
     affected_stops: "Betroffene Haltestellen",
     all_line_stops: "Alle Haltestellen auf dieser Strecke",
@@ -49,6 +50,7 @@ const translations: Translations = {
     zoomout: "Herauszoomen",
   },
   en: {
+    ...reasons.en,
     affected_lines: "Affected lines",
     affected_stops: "Affected stops",
     all_line_stops: "All stops on this line",
@@ -90,6 +92,7 @@ const translations: Translations = {
     zoomout: "Zoom out",
   },
   fr: {
+    ...reasons.fr,
     affected_lines: "Lignes affectées",
     affected_stops: "Arrêts affectés",
     all_line_stops: "Tous les arrêts sur cette ligne",
@@ -131,6 +134,7 @@ const translations: Translations = {
     zoomout: "Dézoomer",
   },
   it: {
+    ...reasons.it,
     affected_lines: "Linee interessate",
     affected_stops: "Fermate interessate",
     all_line_stops: "Tutte le fermate su questa linea",

@@ -101,7 +101,7 @@ function NotificationDetails({
 
   // Display the reasons
   reasonsToDisplay = (situationParsed?.reasons || []).map(({ name }) => {
-    return name;
+    return name && t(name.replace(".", ""));
   });
 
   return (
