@@ -135,7 +135,6 @@ function WebComponentDoc({
         {...attributes}
         // @ts-expect-error - strange error
         ref={(node: HTMLElement) => {
-          // @ts-expect-error - strange error
           ref.current = node;
         }}
         {...compProps}
