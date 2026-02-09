@@ -94,13 +94,14 @@ function RealtimeLayer(props: Partial<RealtimeLayerOptions>) {
   }, [apikey, realtimeurl, realtimebboxparameters, mots, tenant, props]);
 
   useEffect(() => {
+    let key;
     if (!map || !layer) {
       return;
     }
     if (map.getView()?.getCenter()) {
       map.addLayer(layer);
     } else {
-      map.once("moveend", () => {
+      key = map.once("moveend", () => {
         map.addLayer(layer);
       });
     }
@@ -108,6 +109,9 @@ function RealtimeLayer(props: Partial<RealtimeLayerOptions>) {
     setRealtimeLayer(layer);
 
     return () => {
+      if (key) {
+        unByKey(key);
+      }
       map.removeLayer(layer);
       setRealtimeLayer(null);
     };
