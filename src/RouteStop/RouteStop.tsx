@@ -1,5 +1,6 @@
 import { memo } from "preact/compat";
 import { useEffect, useMemo, useState } from "preact/hooks";
+import { twMerge } from "tailwind-merge";
 
 import DebugStop from "../DebugStop/DebugStop";
 import RouteStopDelay from "../RouteStopDelay";
@@ -30,6 +31,7 @@ export type RouteScheduleStopProps = {
 
 function RouteStop({
   children,
+  className,
   classNameGreyOut = "text-gray-600",
   index,
   invertColor = false,
@@ -74,7 +76,10 @@ function RouteStop({
     <RouteStopContext.Provider value={routeStopState}>
       <button
         // max-h-[58px] because the svg showing the progress is 58px height.
-        className={`flex max-h-[58px] w-full scroll-mt-[50px] items-stretch rounded text-left hover:bg-slate-100 ${colorScheme}`}
+        className={twMerge(
+          `flex max-h-[58px] w-full scroll-mt-[50px] items-stretch rounded text-left hover:bg-slate-100 ${colorScheme}`,
+          className,
+        )}
         data-station-passed={status.isPassed} // Use for auto scroll
         onClick={() => {
           if (stop.coordinate) {
