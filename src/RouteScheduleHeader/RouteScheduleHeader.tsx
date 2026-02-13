@@ -1,10 +1,8 @@
 import { memo } from "preact/compat";
 
-import Tracking from "../icons/Tracking";
+import RouteFollowingButton from "../RouteFollowingButton/RouteFollowingButton";
 import RouteIcon from "../RouteIcon";
 import RouteInfos from "../RouteInfos";
-import IconButton from "../ui/IconButton";
-import useMapContext from "../utils/hooks/useMapContext";
 
 import type { RealtimeStopSequence } from "mobility-toolbox-js/types";
 
@@ -13,20 +11,11 @@ function RouteScheduleHeader({
 }: {
   stopSequence: RealtimeStopSequence;
 }) {
-  const { isFollowing, setIsFollowing } = useMapContext();
   return (
     <div className="flex items-center gap-x-4 bg-slate-100 p-4">
       <RouteIcon stopSequence={stopSequence} />
       <RouteInfos className="flex grow flex-col" stopSequence={stopSequence} />
-      <IconButton
-        className={`${isFollowing ? "animate-pulse" : ""}`}
-        onClick={() => {
-          setIsFollowing(!isFollowing);
-        }}
-        selected={isFollowing}
-      >
-        <Tracking />
-      </IconButton>
+      <RouteFollowingButton />
     </div>
   );
 }
