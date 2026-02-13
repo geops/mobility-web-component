@@ -1,6 +1,6 @@
 import { memo } from "preact/compat";
 
-import RouteFollowingButton from "../RouteFollowingButton/RouteFollowingButton";
+import RouteFollowingButton from "../RouteFollowingButton";
 import RouteIcon from "../RouteIcon";
 import RouteInfos from "../RouteInfos";
 
