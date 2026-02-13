@@ -1,5 +1,5 @@
 import { memo } from "preact/compat";
-import { useEffect, useRef } from "preact/hooks";
+import { useRef } from "preact/hooks";
 import { twMerge } from "tailwind-merge";
 
 import RouteScheduleFooter from "../RouteScheduleFooter";
@@ -8,6 +8,7 @@ import RouteStop from "../RouteStop";
 import ShadowOverflow from "../ShadowOverflow";
 import useMapContext from "../utils/hooks/useMapContext";
 import useRealtimeStopSequences from "../utils/hooks/useRealtimeStopSequences";
+import useScrollTo from "../utils/hooks/useScrollTo";
 
 import type { RealtimeStop } from "mobility-toolbox-js/types";
 import type { HTMLAttributes, PreactDOMAttributes } from "preact";
@@ -20,29 +21,9 @@ export type RouteScheduleProps = {
 function RouteSchedule({ className }: RouteScheduleProps) {
   const { trainId } = useMapContext();
   const stopSequences = useRealtimeStopSequences(trainId);
-  const ref = useRef();
+  const ref = useRef<HTMLDivElement>();
 
-  useEffect(() => {
-    const interval = window.setInterval(() => {
-      const elt = ref.current as HTMLDivElement;
-      if (!elt) {
-        return;
-      }
-      const nextStation = elt.querySelector("[data-station-passed=false]");
-      if (nextStation) {
-        // We use scrollTo avoid scrolling the entire window.
-        (nextStation.parentNode.parentNode as Element).scrollTo({
-          behavior: "smooth",
-          top: (nextStation as HTMLElement).offsetTop || 0,
-        });
-      }
-      clearInterval(interval);
-    }, 300);
-    return () => {
-      clearTimeout(interval);
-    };
-    // Scroll automatically when a new scroll infos is set.
-  }, [stopSequences]);
+  useScrollTo(ref, "[data-station-passed=false]", [stopSequences]);
 
   if (!stopSequences?.[0]) {
     return null;
@@ -51,8 +32,8 @@ function RouteSchedule({ className }: RouteScheduleProps) {
   return (
     <>
       <RouteScheduleHeader stopSequence={stopSequence} />
-      <ShadowOverflow>
-        <div className={twMerge("text-base", className)} ref={ref}>
+      <ShadowOverflow ref={ref}>
+        <div className={twMerge("text-base", className)}>
           {stopSequence.stations.map((stop: RealtimeStop, index: number) => {
             const { arrivalTime, departureTime, stationId, stationName } = stop;
             return (
