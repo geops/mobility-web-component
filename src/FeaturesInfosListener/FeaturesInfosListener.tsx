@@ -24,6 +24,11 @@ function FeaturesInfosListener() {
   } = useMapContext();
 
   useEffect(() => {
+    // We want to call this use effect only when a hover happened
+    // and a query has been done not when the component is mounted
+    if (!featuresInfosHovered?.length) {
+      return;
+    }
     const [realtimeFeature] =
       featuresInfosHovered?.find((info) => {
         return info.layer === realtimeLayer;
@@ -34,7 +39,7 @@ function FeaturesInfosListener() {
         return info.layer === notificationsLayer;
       })?.features || [];
 
-    // We prioritize only symbol notifications, becaus ewe want to be able to click on trians on lines
+    // We prioritize only symbol notifications, because we want to be able to click on trains on lines
     const isSymbolNotification =
       notificationFeature?.getGeometry()?.getType() === "Point";
 
@@ -50,6 +55,12 @@ function FeaturesInfosListener() {
   }, [featuresInfosHovered, notificationsLayer, realtimeLayer]);
 
   useEffect(() => {
+    // We want to call this use effect only when a click happened
+    // and a query has been done not when the component is mounted
+    if (!featuresInfos?.length) {
+      return;
+    }
+
     const [realtimeFeature] =
       featuresInfos?.find((info) => {
         return info.layer === realtimeLayer;
@@ -84,7 +95,7 @@ function FeaturesInfosListener() {
         return info.features;
       }) || [];
 
-    // We prioritize only symbol notifications, becaus ewe want to be able to click on trians on lines
+    // We prioritize only symbol notifications, because we want to be able to click on trains on lines
     const isSymbolNotification =
       notificationFeature?.getGeometry()?.getType() === "Point";
 

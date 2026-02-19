@@ -108,7 +108,7 @@ function useLnpLineInfo(text: string): LnpLineInfo {
 
   return Object.values(linesInfos).find((info) => {
     return ["id", "external_id", "short_name", "long_name"].find((key) => {
-      return !!info[key] && info[key] === text;
+      return !!info[key] && info[key].toLowerCase() === text.toLowerCase();
     });
   });
 }
