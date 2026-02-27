@@ -58,6 +58,9 @@ function FeaturesInfosListener() {
     // We want to call this use effect only when a click happened
     // and a query has been done not when the component is mounted
     if (!featuresInfos?.length) {
+      // Reinitialize selected features
+      setSelectedFeature(null);
+      setSelectedFeatures([]);
       return;
     }
 

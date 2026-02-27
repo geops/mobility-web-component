@@ -29,7 +29,7 @@ function Overlay({
   if (!hasChildren) {
     return null;
   }
-
+  console.log("has children", hasChildren, children);
   return (
     <div
       className={

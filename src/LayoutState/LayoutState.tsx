@@ -344,11 +344,21 @@ function LayoutState() {
   ]);
 
   useEffect(() => {
+    console.log("Update isOverlayOpen", {
+      hasDetails,
+      hasLayerTree,
+      hasPrint,
+      hasShare,
+      isExportMenuOpen,
+      isLayerTreeOpen,
+      isShareMenuOpen,
+      selectedFeature,
+    });
     setIsOverlayOpen(
-      (hasDetails && !!selectedFeature) ||
-        (hasPrint && isExportMenuOpen) ||
+      (hasPrint && isExportMenuOpen) ||
         (hasLayerTree && isLayerTreeOpen) ||
         (hasShare && isShareMenuOpen) ||
+        (hasDetails && !!selectedFeature) || // For custom layers details.
         (hasDetails && hasRealtime && !!trainId) ||
         (hasDetails && tenant && !!stationId) ||
         (hasDetails && hasLnp && !!linesIds) ||
