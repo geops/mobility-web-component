@@ -11,6 +11,7 @@ import Link from "../ui/Link";
 import useI18n from "../utils/hooks/useI18n";
 import useMapContext from "../utils/hooks/useMapContext";
 import useMocoSituation from "../utils/hooks/useMocoSituation";
+import mergePublications from "../utils/mergePublications";
 
 import type {
   MultilingualTextualContentType,
@@ -18,8 +19,6 @@ import type {
   RealtimeMot,
 } from "mobility-toolbox-js/types";
 import type { Feature } from "ol";
-import { merge } from "lodash";
-import mergePublications from "../utils/mergePublications";
 
 const toShortDate = (date: Date, showTime, showYear?: boolean) => {
   const time = date.toLocaleTimeString(["de"], {

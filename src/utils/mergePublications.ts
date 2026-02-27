@@ -1,4 +1,4 @@
-import { PublicationType } from "mobility-toolbox-js/types";
+import type { PublicationType } from "mobility-toolbox-js/types";
 
 /**
  * When imported from external source, some publication have the same publication
