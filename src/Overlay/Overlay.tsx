@@ -29,7 +29,7 @@ function Overlay({
   if (!hasChildren) {
     return null;
   }
-  console.log("has children", hasChildren, children);
+
   return (
     <div
       className={
@@ -39,25 +39,21 @@ function Overlay({
         className)
       }
     >
-      {hasChildren && (
-        <>
-          <ScrollableHandler
-            className="absolute inset-0 flex h-[65px] touch-none justify-center @lg/main:hidden"
-            style={{ width: "100%" }}
-            {...ScrollableHandlerProps}
-          >
-            <div
-              className="m-2 mr-[-60px] bg-gray-300"
-              style={{
-                borderRadius: 2,
-                height: 4,
-                width: 32,
-              }}
-            />
-          </ScrollableHandler>
-          {children}
-        </>
-      )}
+      <ScrollableHandler
+        className="absolute inset-0 flex h-[65px] touch-none justify-center @lg/main:hidden"
+        style={{ width: "100%" }}
+        {...ScrollableHandlerProps}
+      >
+        <div
+          className="m-2 mr-[-60px] bg-gray-300"
+          style={{
+            borderRadius: 2,
+            height: 4,
+            width: 32,
+          }}
+        />
+      </ScrollableHandler>
+      {children}
     </div>
   );
 }

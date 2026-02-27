@@ -344,16 +344,6 @@ function LayoutState() {
   ]);
 
   useEffect(() => {
-    console.log("Update isOverlayOpen", {
-      hasDetails,
-      hasLayerTree,
-      hasPrint,
-      hasShare,
-      isExportMenuOpen,
-      isLayerTreeOpen,
-      isShareMenuOpen,
-      selectedFeature,
-    });
     setIsOverlayOpen(
       (hasPrint && isExportMenuOpen) ||
         (hasLayerTree && isLayerTreeOpen) ||
