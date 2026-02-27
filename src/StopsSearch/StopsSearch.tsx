@@ -292,7 +292,7 @@ function StopsSearch({
             resultsContainerClassName,
           )}
         >
-          {results && results.length === 0 && (
+          {!!results?.length && (
             <div
               className={twMerge(
                 "flex grow gap-3 border border-solid p-3 pt-2 text-zinc-400",
