@@ -18,6 +18,8 @@ import type {
   RealtimeMot,
 } from "mobility-toolbox-js/types";
 import type { Feature } from "ol";
+import { merge } from "lodash";
+import mergePublications from "../utils/mergePublications";
 
 const toShortDate = (date: Date, showTime, showYear?: boolean) => {
   const time = date.toLocaleTimeString(["de"], {
@@ -87,6 +89,9 @@ function NotificationDetails({
         return startT <= now && now <= endT;
       });
     }) || [];
+
+  // Merge similar publications
+  publicationsToDisplay = mergePublications(publicationsToDisplay);
 
   // Display the current and next affected time intervals not the one in the past
   timeIntervalsToDisplay =
