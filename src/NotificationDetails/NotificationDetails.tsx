@@ -128,11 +128,19 @@ function NotificationDetails({
               textualContentMedium ||
               textualContentSmall;
 
+            // We use a supported language by the notification.
+            if (
+              !!notificationLangFallbacks?.length &&
+              !notificationLangFallbacks.includes(localeToUse)
+            ) {
+              localeToUse = notificationLangFallbacks[0];
+            }
+
             textualContent = textualContentMultilingual?.[localeToUse];
 
             if (!textualContent?.summary) {
               // Try to find textualContent with a title using fallback languages
-              // If we do notfind a fallback we stick to the current language.
+              // If we do not find a fallback we stick to the current language.
               for (const fallbackLang of notificationLangFallbacks) {
                 const goodTextualContent =
                   textualContentMultilingual?.[fallbackLang];
