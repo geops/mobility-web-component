@@ -8613,10 +8613,10 @@ mlly@^1.7.4:
     pkg-types "^1.3.1"
     ufo "^1.6.1"
 
-mobility-toolbox-js@3.6.9:
-  version "3.6.9"
-  resolved "https://registry.yarnpkg.com/mobility-toolbox-js/-/mobility-toolbox-js-3.6.9.tgz#8d4739314a193865bb041dca660307eec06fdf65"
-  integrity sha512-uE7e5p6RRFcnfa9g5H9Nk1lhEGx0L/mf+EszYFEiTWOL5yLWOJdi03n6UiIdxKyfjJuQ9EuX76F4RScmRSxDpQ==
+mobility-toolbox-js@3.6.10:
+  version "3.6.10"
+  resolved "https://registry.yarnpkg.com/mobility-toolbox-js/-/mobility-toolbox-js-3.6.10.tgz#ae5fec4200647f4bc9e0e119d32a9c068a3ad061"
+  integrity sha512-HstjB6lSUnZ/WeAASyxXk+iGezP/uHfcwK8qFghHg28HAdvFZBxqyoVPD+8lbvad0xRU9Ms10IuUljO9tkI3rQ==
   dependencies:
     "@geoblocks/ol-maplibre-layer" "^1.0.3"
     "@turf/helpers" "7.3.2"
