@@ -114,6 +114,7 @@ function NotificationDetails({
         {publicationsToDisplay?.map(
           ({
             id,
+            infoLinks,
             publicationLines,
             publicationStops,
             textualContentLarge,
@@ -239,39 +240,21 @@ function NotificationDetails({
                       }}
                     />
                   )}
-                  {!!textualContentMultilingual?.images?.length && (
-                    <div className="flex flex-wrap gap-2">
-                      {textualContentMultilingual.images.map(
-                        ({ image: { absoluteUrl, label } }) => {
-                          return (
-                            <img
-                              alt={label}
-                              key={absoluteUrl + label}
-                              src={absoluteUrl}
-                              title={label}
-                            />
-                          );
-                        },
-                      )}
-                    </div>
-                  )}
-                  {!!textualContentMultilingual?.infoLinks?.length && (
+                  {!!infoLinks?.length && (
                     <div className={"space-y-1"}>
-                      {textualContentMultilingual.infoLinks.map(
-                        ({ label, uri }) => {
-                          const title = label?.[localeToUse] || uri || "";
-                          return (
-                            <Link
-                              className={"block"}
-                              href={uri}
-                              key={uri}
-                              title={title}
-                            >
-                              {title}
-                            </Link>
-                          );
-                        },
-                      )}
+                      {infoLinks.map(({ label, uri }) => {
+                        const title = label?.[localeToUse] || uri || "";
+                        return (
+                          <Link
+                            className={"block"}
+                            href={uri}
+                            key={uri}
+                            title={title}
+                          >
+                            {title}
+                          </Link>
+                        );
+                      })}
                     </div>
                   )}
                   {!!pubLines?.length && (
