@@ -62,7 +62,7 @@ function LayoutState() {
     setIsShareMenuOpen,
     setLinesIds,
     setNotificationId,
-    setNotificationLangFallbacks,
+    setNotificationSupportedLanguages,
     setStationId,
     setTrainId,
     share,
@@ -91,8 +91,8 @@ function LayoutState() {
         .filter((lang) => {
           return lang !== locale();
         }) || [];
-    setNotificationLangFallbacks(fallbackLangs);
-  }, [notificationlang, setNotificationLangFallbacks, locale]);
+    setNotificationSupportedLanguages(fallbackLangs);
+  }, [notificationlang, setNotificationSupportedLanguages, locale]);
 
   useEffect(() => {
     setHasStations(!!tenant);

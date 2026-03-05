@@ -53,7 +53,7 @@ function NotificationDetails({
   feature: Feature;
 }) {
   const { locale, t } = useI18n();
-  const { notificationId, notificationLangFallbacks } = useMapContext();
+  const { notificationId, notificationSupportedLanguages } = useMapContext();
   const situationParsed = useMocoSituation(notificationId);
 
   // moco export v2
@@ -124,10 +124,10 @@ function NotificationDetails({
 
             // We use a supported language by the notification.
             if (
-              !!notificationLangFallbacks?.length &&
-              !notificationLangFallbacks.includes(localeToUse)
+              !!notificationSupportedLanguages?.length &&
+              !notificationSupportedLanguages.includes(localeToUse)
             ) {
-              localeToUse = notificationLangFallbacks[0];
+              localeToUse = notificationSupportedLanguages[0];
             }
 
             // Get the textual content in German
@@ -141,7 +141,7 @@ function NotificationDetails({
             if (!textualContent?.summary) {
               // Try to find textualContent with a title using fallback languages
               // If we do not find a fallback we stick to the current language.
-              for (const fallbackLang of notificationLangFallbacks) {
+              for (const fallbackLang of notificationSupportedLanguages) {
                 const goodTextualContent =
                   textualContentMultilingual?.[fallbackLang];
                 if (goodTextualContent?.summary) {
