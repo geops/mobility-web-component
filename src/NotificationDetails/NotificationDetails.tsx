@@ -122,12 +122,6 @@ function NotificationDetails({
           }) => {
             let localeToUse = locale();
 
-            // Get the textual content in German
-            textualContentMultilingual =
-              textualContentLarge ||
-              textualContentMedium ||
-              textualContentSmall;
-
             // We use a supported language by the notification.
             if (
               !!notificationLangFallbacks?.length &&
@@ -135,6 +129,12 @@ function NotificationDetails({
             ) {
               localeToUse = notificationLangFallbacks[0];
             }
+
+            // Get the textual content in German
+            textualContentMultilingual =
+              textualContentLarge ||
+              textualContentMedium ||
+              textualContentSmall;
 
             textualContent = textualContentMultilingual?.[localeToUse];
 
