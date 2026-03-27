@@ -4,7 +4,6 @@ import { sassPlugin } from "esbuild-sass-plugin";
 const ctx = await esbuild.context({
   bundle: true,
   entryPoints: ["./src/index.js", "./src/indexDoc.js"],
-  external: ["mapbox-gl"],
   loader: {
     ".png": "dataurl",
     ".svg": "dataurl",
