@@ -9,7 +9,9 @@ await esbuild.build({
     ".svg": "dataurl",
   },
   minify: true,
-  outdir: "./",
+  splitting: true,
+  format: "esm",
+  outdir: "dist",
   plugins: [sassPlugin({ type: "css-text" })],
-  sourcemap: false,
+  sourcemap: true,
 });

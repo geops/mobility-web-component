@@ -8,9 +8,12 @@ const ctx = await esbuild.context({
     ".png": "dataurl",
     ".svg": "dataurl",
   },
-  outdir: "./",
+  outdir: "dist",
   plugins: [sassPlugin({ type: "css-text" })],
   sourcemap: true,
+  splitting: true,
+  format: "esm",
+  minify: true,
 });
 
 const { host, port } = await ctx.serve({
