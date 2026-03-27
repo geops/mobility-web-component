@@ -5,7 +5,8 @@ const config = {
     "git add",
     "yarn test --bail --passWithNoTests --findRelatedTests",
   ],
-  "package.json": ["fixpack", "git add"],
+  "package.json": ["fixpack"],
+  "src/**/*.svg": ["svgo"],
   // "src/**/*.{css,scss}": ["stylelint --fix --allow-empty-input"],
 };
 
