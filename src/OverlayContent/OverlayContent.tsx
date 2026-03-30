@@ -1,6 +1,7 @@
 import { lazy, Suspense } from "preact/compat";
 import { twMerge } from "tailwind-merge";
 
+import Loading from "../icons/Loading";
 import LayerTreeMenu from "../LayerTreeMenu";
 import OverlayDetails from "../OverlayDetails";
 import OverlayHeader from "../OverlayHeader";
@@ -50,7 +51,14 @@ function OverlayContent({
             }}
             title={t("print_menu_title")}
           ></OverlayHeader>
-          <Suspense fallback={<div>Loading...</div>}>
+
+          <Suspense
+            fallback={
+              <div className={"flex w-full items-center justify-start p-4"}>
+                <Loading />
+              </div>
+            }
+          >
             <LazyExportMenu
               className={twMerge(contentClassName, "flex flex-col gap-4 p-4")}
             />
