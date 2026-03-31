@@ -1,1 +1,0 @@
-Folder that contains all static files.
