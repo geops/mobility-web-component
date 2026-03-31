@@ -58,7 +58,7 @@
   },
   "scripts": {
     "analyze": "esbuild-analyzer . --port 8888",
-    "build": "rm -rf dist/* && yarn build:css && yarn build:js && rm -rf doc/public/* && cp dist/* doc/public/",
+    "build": "rm -rf dist/* && yarn build:css && yarn build:js && rm -rf doc/public/*.js* && cp dist/* doc/public/",
     "build:css": "yarn tailwind:component && yarn tailwind:website",
     "build:js": "node scripts/build.mjs",
     "cp": "generact --root src",
