@@ -1,6 +1,7 @@
+import { lazy, Suspense } from "preact/compat";
 import { twMerge } from "tailwind-merge";
 
-import ExportMenu from "../ExportMenu";
+import Loading from "../icons/Loading";
 import LayerTreeMenu from "../LayerTreeMenu";
 import OverlayDetails from "../OverlayDetails";
 import OverlayHeader from "../OverlayHeader";
@@ -10,6 +11,9 @@ import useI18n from "../utils/hooks/useI18n";
 import useMapContext from "../utils/hooks/useMapContext";
 
 const contentClassName = `relative h-full overflow-x-hidden overflow-y-auto text-base bg-white`;
+const LazyExportMenu = lazy(() => {
+  return import("../ExportMenu");
+});
 
 function OverlayContent({
   hasDetails,
@@ -47,9 +51,18 @@ function OverlayContent({
             }}
             title={t("print_menu_title")}
           ></OverlayHeader>
-          <ExportMenu
-            className={twMerge(contentClassName, "flex flex-col gap-4 p-4")}
-          />
+
+          <Suspense
+            fallback={
+              <div className={"flex w-full items-center justify-start p-4"}>
+                <Loading />
+              </div>
+            }
+          >
+            <LazyExportMenu
+              className={twMerge(contentClassName, "flex flex-col gap-4 p-4")}
+            />
+          </Suspense>
         </>
       )}
       {hasLayerTree && isLayerTreeOpen && (

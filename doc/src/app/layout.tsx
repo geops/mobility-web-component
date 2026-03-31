@@ -45,8 +45,8 @@ export default function RootLayout({
             <Footer />
           </ThemeProvider>
         </AppRouterCacheProvider>
-        <Script src="index.js" />
-        <Script src="indexDoc.js" />
+        <Script type="module" src="index.js" />
+        <Script type="module" src="indexDoc.js" />
       </body>
     </html>
   );

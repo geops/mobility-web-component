@@ -2,10 +2,10 @@
   "name": "@geops/mobility-web-component",
   "license": "UNLICENSED",
   "description": "Web components in the domains of mobility and logistics.",
-  "version": "0.1.11-beta.0",
+  "version": "0.1.11-beta.1",
   "homepage": "https://mobility-web-component.geops.io/",
   "type": "module",
-  "main": "index.js",
+  "main": "dist/index.js",
   "dependencies": {
     "jspdf": "^4.2.0",
     "lodash.debounce": "^4.0.8",
@@ -59,7 +59,7 @@
   },
   "scripts": {
     "analyze": "esbuild-analyzer . --port 8888",
-    "build": "yarn build:css && yarn build:js && cp index*.js* doc/public/",
+    "build": "rm -rf dist/* && yarn build:css && yarn build:js && rm -rf doc/public/*.js* && cp dist/* doc/public/",
     "build:css": "yarn tailwind:component && yarn tailwind:website",
     "build:js": "node scripts/build.mjs",
     "cp": "generact --root src",

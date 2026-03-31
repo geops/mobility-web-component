@@ -1,13 +1,13 @@
 node_modules
 
 # esbuild output files
-/index.js
-/index.js.map
-/index.css
-index.css.map
-/indexDoc.js
-/indexDoc.js.map
+dist
+doc/public/*.js*
+build
+backup
 
 # Tailwind CSS ouput file
 /output.css
 /src/style.css
+
+.vscode
