@@ -13,7 +13,7 @@ const ctx = await esbuild.context({
   sourcemap: true,
   splitting: true,
   format: "esm",
-  minify: true,
+  // minify: true,
 });
 
 const { host, port } = await ctx.serve({

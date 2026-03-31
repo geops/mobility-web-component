@@ -13,5 +13,5 @@ await esbuild.build({
   format: "esm",
   outdir: "dist",
   plugins: [sassPlugin({ type: "css-text" })],
-  sourcemap: true,
+  sourcemap: false,
 });
