@@ -10,7 +10,7 @@
     "jspdf": "^4.2.0",
     "lodash.debounce": "^4.0.8",
     "maplibre-gl": "5.24.0",
-    "mobility-toolbox-js": "3.6.12",
+    "mobility-toolbox-js": "3.6.12@beta",
     "ol": "^10.9.0",
     "preact": "^10.29.1",
     "preact-custom-element": "^4.6.0",

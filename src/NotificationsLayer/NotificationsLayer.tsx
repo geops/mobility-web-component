@@ -34,6 +34,8 @@ function NotificationsLayer(props?: Partial<MocoLayerOptions>) {
         bbox: MAX_EXTENT,
         contentMedium: true,
       },
+      loadAll: false,
+      loadByZoom: !previewNotifications,
       maplibreLayer: baseLayer,
       name: LAYER_NAME_NOTIFICATIONS,
       publicAt: notificationat ? new Date(notificationat) : undefined,
@@ -41,7 +43,6 @@ function NotificationsLayer(props?: Partial<MocoLayerOptions>) {
       tenant: notificationtenant,
       url: notificationurl,
       ...(props || {}),
-      loadAll: !previewNotifications,
     });
     if (!!previewNotifications && !mocoLayer.getVisible()) {
       mocoLayer.setVisible(true);
