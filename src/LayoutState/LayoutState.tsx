@@ -82,16 +82,11 @@ function LayoutState() {
 
   // Define fallback languages from the notifications details
   useEffect(() => {
-    const fallbackLangs =
-      notificationlang
-        ?.split(",")
-        .map((lang) => {
-          return lang.trim();
-        })
-        .filter((lang) => {
-          return lang !== locale();
-        }) || [];
-    setNotificationSupportedLanguages(fallbackLangs);
+    const langs =
+      notificationlang?.split(",").map((lang) => {
+        return lang.trim();
+      }) || [];
+    setNotificationSupportedLanguages(langs);
   }, [notificationlang, setNotificationSupportedLanguages, locale]);
 
   useEffect(() => {

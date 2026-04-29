@@ -140,9 +140,15 @@ function NotificationDetails({
             textualContent = textualContentMultilingual?.[localeToUse];
 
             if (!textualContent?.summary) {
+              // Keep only fallback languages that are different from the current locale to avoid unnecessary fallback
+              const fallbackLangs =
+                notificationSupportedLanguages?.filter((lang) => {
+                  return lang !== localeToUse;
+                }) || [];
+
               // Try to find textualContent with a title using fallback languages
               // If we do not find a fallback we stick to the current language.
-              for (const fallbackLang of notificationSupportedLanguages) {
+              for (const fallbackLang of fallbackLangs) {
                 const goodTextualContent =
                   textualContentMultilingual?.[fallbackLang];
                 if (goodTextualContent?.summary) {

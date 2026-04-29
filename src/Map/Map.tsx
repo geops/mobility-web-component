@@ -9,6 +9,7 @@ import useMapContext from "../utils/hooks/useMapContext";
 // @ts-expect-error bad type definition
 import olStyle from "ol/ol.css";
 
+import type { EventsKey } from "ol/events";
 import type { JSX, PreactDOMAttributes } from "preact";
 
 import type { MobilityMapProps } from "../MobilityMap/MobilityMap";
@@ -75,18 +76,6 @@ function Map({ children, ...props }: RealtimeMapProps) {
   }, [setMap]);
 
   useEffect(() => {
-    if (!map || !extent) {
-      return;
-    }
-    const bbox = extent.split(",").map((c) => {
-      return parseFloat(c);
-    });
-    if (bbox) {
-      map.getView().fit(bbox);
-    }
-  }, [map, extent]);
-
-  useEffect(() => {
     if (!map || !center) {
       return;
     }
@@ -107,6 +96,40 @@ function Map({ children, ...props }: RealtimeMapProps) {
       map.getView().setZoom(number);
     }
   }, [map, zoom]);
+
+  useEffect(() => {
+    let key: EventsKey;
+    if (!map || !extent) {
+      return;
+    }
+    if (
+      map.getSize() === undefined ||
+      map.getSize()?.[0] === 0 ||
+      map.getSize()?.[1] === 0
+    ) {
+      key = map.once("change:size", () => {
+        const bbox = extent.split(",").map((c) => {
+          return parseFloat(c);
+        });
+        if (bbox) {
+          map.getView().fit(bbox);
+        }
+      });
+    } else {
+      const bbox = extent.split(",").map((c) => {
+        return parseFloat(c);
+      });
+      if (bbox) {
+        map.getView().fit(bbox);
+      }
+    }
+
+    return () => {
+      if (key) {
+        unByKey(key);
+      }
+    };
+  }, [map, extent]);
 
   useEffect(() => {
     if (!map) {
