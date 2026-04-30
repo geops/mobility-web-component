@@ -205,7 +205,7 @@ function NotificationDetails({
                     const isEndCurrentYear =
                       new Date().getFullYear() ===
                       new Date(endTime).getFullYear();
-                    const isEndInfinite = endTime.includes("2500");
+                    const isEndInfinite = !endTime || endTime.includes("2500");
 
                     return (
                       <div
@@ -213,20 +213,26 @@ function NotificationDetails({
                         key={startTime}
                       >
                         <span>
-                          {t("from_to", {
-                            from: toShortDate(
-                              new Date(startTime),
-                              !hasDailyTime,
-                              !isStartCurrentYear,
-                            ),
-                            to: !isEndInfinite
-                              ? toShortDate(
+                          {isEndInfinite
+                            ? t("from", {
+                                from: toShortDate(
+                                  new Date(startTime),
+                                  !hasDailyTime,
+                                  !isStartCurrentYear,
+                                ),
+                              })
+                            : t("from_to", {
+                                from: toShortDate(
+                                  new Date(startTime),
+                                  !hasDailyTime,
+                                  !isStartCurrentYear,
+                                ),
+                                to: toShortDate(
                                   new Date(endTime),
                                   !hasDailyTime,
                                   !isEndCurrentYear,
-                                )
-                              : undefined,
-                          })}
+                                ),
+                              })}
                         </span>
                         {hasDailyTime && (
                           <span>{` (${t("daily_from_to", {
