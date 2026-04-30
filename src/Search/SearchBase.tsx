@@ -44,7 +44,7 @@ export interface SearchContextType {
   setSelectedQuery: (query: string) => void;
 }
 
-export const SearchContext = createContext<null | SearchContextType>({
+export const SearchContext = createContext<SearchContextType>({
   open: false,
   query: "",
   selectedQuery: "",
@@ -145,8 +145,8 @@ function SearchBase({
         withResultsClassName={showResults ? withResultsClassName : ""}
       >
         <div className={twMerge("flex flex-col", childrenContainerClassName)}>
-          {toChildArray(children)?.map((child: ReactElement) => {
-            return cloneElement(child, {
+          {toChildArray(children)?.map((child) => {
+            return cloneElement(child as ReactElement, {
               resultClassName,
               resultsClassName,
               resultsContainerClassName,

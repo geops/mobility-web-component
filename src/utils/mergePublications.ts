@@ -44,6 +44,7 @@ const mergePublications = (
   } catch (error) {
     // JSON parsing could failed, we log the error and return the non merged
     // publications to avoid breaking the display
+    // eslint-disable-next-line no-console
     console.error("Error merging publications", error);
     return publications;
   }

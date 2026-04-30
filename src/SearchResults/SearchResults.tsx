@@ -31,7 +31,7 @@ function SearchResults<T>({
   children,
   className,
   resultsClassName,
-  searchResponse,
+  searchResponse = {} as SearchResponse<T>,
   ...props
 }: SearchResultsProps<T>) {
   const { t } = useI18n();
@@ -48,13 +48,13 @@ function SearchResults<T>({
     };
   }, [searchResponse, id, setResults]);
 
-  if (!(searchResponse?.results?.length >= 0)) {
+  if (!((searchResponse?.results?.length ?? 0) >= 0)) {
     return null;
   }
 
   return (
     <div className={twMerge("flex grow overflow-hidden", className)} {...props}>
-      {searchResponse.results.length === 0 && (
+      {searchResponse?.results?.length === 0 && (
         <div
           className={twMerge(
             "flex grow gap-3 border border-solid p-3 pt-2 text-zinc-400",
@@ -66,7 +66,7 @@ function SearchResults<T>({
           <div>{t("search_no_results")}</div>
         </div>
       )}
-      {searchResponse.results.length > 0 && (
+      {(searchResponse?.results?.length || 0) > 0 && (
         <ul
           className={twMerge("grow overflow-y-auto", resultsClassName)}
           style={{ border: 1 }} // without this th ul is displayed 1 px on the right

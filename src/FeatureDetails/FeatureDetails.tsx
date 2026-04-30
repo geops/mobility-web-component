@@ -6,7 +6,7 @@ import RouteSchedule from "../RouteSchedule";
 import Station from "../Station";
 import useMapContext from "../utils/hooks/useMapContext";
 
-import type { FeatureInfo } from "mobility-toolbox-js/common/typedefs";
+import type { LayerGetFeatureInfoResponse } from "mobility-toolbox-js/types";
 import type { Feature } from "ol";
 import type BaseLayer from "ol/layer/Base";
 
@@ -14,7 +14,7 @@ const contentClassName = ""; //`h-full overflow-x-hidden text-base bg-white`;
 
 export interface FeatureDetailsProps {
   feature?: Feature;
-  featuresInfo?: FeatureInfo;
+  featuresInfo?: LayerGetFeatureInfoResponse;
   layer?: BaseLayer;
 }
 
@@ -53,7 +53,8 @@ function FeatureDetails({ feature, featuresInfo, layer }: FeatureDetailsProps) {
         )}
       {!!notificationsLayer &&
         layer === notificationsLayer &&
-        notificationId && (
+        notificationId &&
+        feature && (
           <NotificationDetails className={contentClassName} feature={feature} />
         )}
     </>

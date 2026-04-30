@@ -7,17 +7,17 @@ export type DebugStopProps = JSX.HTMLAttributes<HTMLDivElement> &
   PreactDOMAttributes;
 
 function DebugStop(props: DebugStopProps) {
-  const { status, stop } = useRouteStop();
+  const { status = {}, stop } = useRouteStop();
   const debug = useDebug();
 
-  if (!debug) {
+  if (!debug || !stop) {
     return null;
   }
 
   return (
     <div className="p-4 text-left text-xs" {...props}>
       <div>
-        State: <b>{stop.state}</b> (isPassed: {`${status.isPassed}`})
+        State: <b>{stop.state}</b> (isPassed: {`${status?.isPassed}`})
         (cancelled: {`${stop.cancelled}`})
       </div>
       <div>

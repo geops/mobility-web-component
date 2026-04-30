@@ -20,7 +20,7 @@ import type {
 } from "mobility-toolbox-js/types";
 import type { Feature } from "ol";
 
-const toShortDate = (date: Date, showTime, showYear?: boolean) => {
+const toShortDate = (date: Date, showTime: string, showYear?: boolean) => {
   const time = date.toLocaleTimeString(["de"], {
     hour: "2-digit",
     minute: "2-digit",

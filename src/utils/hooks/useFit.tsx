@@ -25,11 +25,8 @@ function useFit() {
 
   useEffect(() => {
     fit.current = (obj: FitObject, willOverlayOpen = false) => {
-      if (
-        (obj as StopsFeature)?.type === "Feature" &&
-        (obj as StopsFeature).geometry
-      ) {
-        fitOnFeatures.current([obj as GeoJSONFeature], willOverlayOpen);
+      if (obj?.type === "Feature" && obj.geometry) {
+        fitOnFeatures.current?.([obj as GeoJSONFeature], willOverlayOpen);
         return;
       }
       const extent =
@@ -38,14 +35,14 @@ function useFit() {
 
       if (extent) {
         const feature = new Feature(fromExtent(extent));
-        fitOnFeatures.current([feature], willOverlayOpen);
+        fitOnFeatures.current?.([feature], willOverlayOpen);
         return;
       }
 
       const coordinate = (obj as LnpStopInfo)?.coordinates;
       if (coordinate) {
         const feature = new Feature(new Point(coordinate));
-        fitOnFeatures.current([feature], willOverlayOpen);
+        fitOnFeatures.current?.([feature], willOverlayOpen);
         return;
       }
     };
