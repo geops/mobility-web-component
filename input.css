@@ -33,8 +33,3 @@
 ::-webkit-scrollbar-track {
   background: transparent;
 }
-
-ul {
-  list-style: disc;
-  padding-left: 1.5rem;
-}

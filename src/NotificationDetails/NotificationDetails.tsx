@@ -176,7 +176,10 @@ function NotificationDetails({
             stations = [...new Set(stations)]; // Remove duplicates
 
             return (
-              <div className={"text-base"} key={id}>
+              <div
+                className={"text-base [&_ul]:list-disc [&_ul]:pl-6"}
+                key={id}
+              >
                 <div className="text-xs uppercase">{reasonsToDisplay}</div>
                 <h3 className="space-x-2 text-lg leading-[1.3] font-bold text-balance">
                   <span className={"inline-block align-middle"}>
