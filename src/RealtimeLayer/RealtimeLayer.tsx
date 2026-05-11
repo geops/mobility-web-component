@@ -18,7 +18,7 @@ import getTextFontForVehicle from "../utils/getTextFontForVehicle";
 import getTextForVehicle from "../utils/getTextForVehicle";
 import useMapContext from "../utils/hooks/useMapContext";
 
-import type { RealtimeLayerOptions } from "mobility-toolbox-js/ol/layers/RealtimeLayer";
+import type { RealtimeLayerOptions } from "mobility-toolbox-js/ol";
 import type {
   RealtimeMot,
   RealtimeTrainId,
