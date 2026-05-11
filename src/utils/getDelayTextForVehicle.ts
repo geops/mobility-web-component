@@ -8,9 +8,9 @@ import type { RealtimeTrajectory, ViewState } from "mobility-toolbox-js/types";
  * the map have the same values.
  */
 const getDelayTextForVehicle = (
-  trajectory: RealtimeTrajectory,
-  viewState: ViewState,
-  delayInMs: number,
+  trajectory?: null | RealtimeTrajectory,
+  viewState?: null | ViewState,
+  delayInMs?: null | number,
   cancelled = false,
 ): string => {
   if (cancelled) {

@@ -11,7 +11,7 @@ const pad = (integer: number) => {
  * @param {Number} timeInMs Time in milliseconds.
  * @ignore
  */
-const getHoursAndMinutes = (timeInMs: number) => {
+const getHoursAndMinutes = (timeInMs?: null | number) => {
   if (!timeInMs || timeInMs <= 0) {
     return "";
   }

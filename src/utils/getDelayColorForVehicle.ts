@@ -7,9 +7,9 @@ import type { ViewState } from "mobility-toolbox-js/types";
  * This function is used to have the same color on the map and on other components.
  */
 const getDelayColorForVehicle = (
-  object?: unknown,
-  viewState?: ViewState,
-  delayInMs?: number,
+  object?: null | unknown,
+  viewState?: null | ViewState,
+  delayInMs?: null | number,
   cancelled?: boolean,
   isDelayText?: boolean,
 ): string => {
@@ -18,7 +18,7 @@ const getDelayColorForVehicle = (
       ? "#dc2626" // "text-red-600";
       : "#a0a0a0"; // gray
   }
-  if (delayInMs === null) {
+  if (delayInMs === null || delayInMs === undefined) {
     return "#a0a0a0";
   }
   return getDelayColor(delayInMs);

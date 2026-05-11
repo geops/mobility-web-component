@@ -32,8 +32,10 @@ describe("getDelayColorForVehicle", () => {
   });
 
   it("returns red", () => {
-    expect(getDelayColorForVehicle(null, null, 10 * 60 * 1000)).toBe("#dc2626");
-    expect(getDelayColorForVehicle(null, null, 180 * 60 * 1000)).toBe(
+    expect(getDelayColorForVehicle(null, undefined, 10 * 60 * 1000)).toBe(
+      "#dc2626",
+    );
+    expect(getDelayColorForVehicle(null, undefined, 180 * 60 * 1000)).toBe(
       "#dc2626",
     );
   });

@@ -11,7 +11,10 @@
  * @param params - An object containing the parameters to replace in the template
  * @returns The url with the parameters replaced
  */
-function getUrlFromTemplate(template: string, params: URLSearchParams): string {
+function getUrlFromTemplate(
+  template?: null | string,
+  params?: null | URLSearchParams,
+): string {
   let tpl = template || "";
   params?.forEach((value, key) => {
     tpl = tpl.replace(`{{${key}}}`, value);

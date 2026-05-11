@@ -13,8 +13,8 @@ const geopsMapsetApiLink = `<a href="https://geops.com/en/solution/mapset">geOps
 const geopsRealtimeApiLink = `<a href="https://developer.geops.io/apis/realtime">geOps Realtime API</a>`;
 
 export interface WebComponentAttributeDoc {
-  defaultValue?: string;
-  description: string;
+  defaultValue?: null | string;
+  description?: null | string;
   public?: boolean;
   type?: "boolean" | undefined;
 }

@@ -1,4 +1,7 @@
-import type { RealtimeStopSequence } from "mobility-toolbox-js/types";
+import type {
+  RealtimeStop,
+  RealtimeStopSequence,
+} from "mobility-toolbox-js/types";
 
 export interface StopStatus {
   isBoarding?: boolean;
@@ -15,7 +18,12 @@ export interface StopStatus {
   progress?: number;
 }
 
-const getBasicStatus = (stop, currTime, previousStop, nextStop) => {
+const getBasicStatus = (
+  stop: RealtimeStop,
+  currTime: number,
+  previousStop: null | RealtimeStop,
+  nextStop: null | RealtimeStop,
+) => {
   let topBoundary = stop.arrivalTime;
   let bottomBoundary = stop.arrivalTime;
 
@@ -142,7 +150,10 @@ const getStopStatus = (
   // For SBAHNMW-210
   // If some data (arrivalTime or state) from backend are wrong, 2 stops have the progress bar.
   // So to avoid double progress display, we force the isPassed value to true.
-  if (progress > 50 && getStopStatus(stopSequence, index + 1).progress > 0) {
+  if (
+    progress > 50 &&
+    (getStopStatus(stopSequence, index + 1).progress ?? 0) > 0
+  ) {
     progress = 100;
     isLeft = true;
     isPassed = true;

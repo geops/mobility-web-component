@@ -81,7 +81,7 @@ describe("mergePublications", () => {
           },
         },
       },
-    ] as PublicationType[];
+    ] as unknown as PublicationType[];
     const merged = mergePublications(publications);
     expect(merged).toHaveLength(1);
     expect(merged[0].publicationLines).toHaveLength(2);

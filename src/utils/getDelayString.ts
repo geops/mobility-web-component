@@ -3,8 +3,8 @@
  * @param {Number} timeInMs Delay time in milliseconds.
  * @ignore
  */
-const getDelayString = (delayInMs: number) => {
-  let timeInMs = delayInMs;
+const getDelayString = (delayInMs?: null | number) => {
+  let timeInMs = delayInMs ?? 0;
   if (timeInMs < 0) {
     timeInMs = 0;
   }

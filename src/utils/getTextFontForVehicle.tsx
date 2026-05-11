@@ -5,8 +5,8 @@ import type { ViewState } from "mobility-toolbox-js/types";
  * This function is used to have the same font on the map and on other components.
  */
 const getTextFontForVehicle = (
-  object?: unknown,
-  viewState?: ViewState,
+  object?: null | unknown,
+  viewState?: null | ViewState,
   fontSize?: number,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   text?: string,

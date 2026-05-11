@@ -24,7 +24,8 @@ const getMainColorForVehicle = (object: unknown = null): string => {
       (object as RealtimeStopSequence)?.type;
 
     if (!type) {
-      let typeNumber: number = (object as RealtimeStopSequence)?.vehicleType;
+      let typeNumber: number | undefined = (object as RealtimeStopSequence)
+        ?.vehicleType;
 
       if (!Number.isFinite(typeNumber)) {
         typeNumber = (object as RealtimeDeparture)?.train_type;
