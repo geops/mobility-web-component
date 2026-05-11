@@ -59,8 +59,7 @@ function NotificationDetails({
   // moco export v2
   let textualContentMultilingual: Partial<MultilingualTextualContentType> = {};
   let textualContent: Partial<TextualContentType> = {};
-  let timeIntervalsToDisplay = [];
-  let publicationsToDisplay: PublicationType[] = [];
+  let timeIntervalsToDisplay: AffectedTimeIntervalType[] = [];
   let reasonsToDisplay: string[] = [];
 
   // const situationParsed: SituationType = JSON.parse(situation) || {};
@@ -68,7 +67,7 @@ function NotificationDetails({
     situationParsed?.publications || [];
 
   // Find the current publication(s) at the current date
-  publicationsToDisplay =
+  let publicationsToDisplay: PublicationType[] =
     publicationsArr?.filter(({ publicationWindows }) => {
       // In some cases publicationWindows can be undefined here but defined at the
       // root of the object so we apply the root publicationWindows to all publications with empty one
