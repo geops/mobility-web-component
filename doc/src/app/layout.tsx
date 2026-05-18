@@ -45,8 +45,10 @@ export default function RootLayout({
             <Footer />
           </ThemeProvider>
         </AppRouterCacheProvider>
-        <Script type="module" src="index.js" />
-        <Script type="module" src="indexDoc.js" />
+        {/* Load the component script before the page becomes interactive to ensure the component is ready when used.
+        it avoid "blank page" issue when the file is cached */}
+        <Script type="module" src="index.js" strategy="beforeInteractive" />
+        <Script type="module" src="indexDoc.js" strategy="beforeInteractive" />
       </body>
     </html>
   );
