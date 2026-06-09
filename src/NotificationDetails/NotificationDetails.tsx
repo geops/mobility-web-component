@@ -187,7 +187,7 @@ function NotificationDetails({
                   <span
                     className={"align-middle *:inline"}
                     dangerouslySetInnerHTML={{
-                      __html: textualContent?.summary,
+                      __html: textualContent?.summary || "",
                     }}
                   ></span>
                 </h3>
