@@ -20,7 +20,7 @@ export enum SelectionType {
 
 export type TreeItemProps = {
   childContainerClassName?: string;
-  childItems: TreeItemProps[];
+  childItems?: TreeItemProps[];
   className?: string;
   Icon?: (props: SVGProps<SVGSVGElement>) => preact.JSX.Element;
   id: string;

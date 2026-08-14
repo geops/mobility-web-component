@@ -144,7 +144,10 @@ const updateParentNodes = (node) => {
   }
 };
 
-function layersTreeReducer(state = ROOT, action) {
+function layersTreeReducer(
+  state = ROOT,
+  action: { payload: unknown; type: string },
+) {
   switch (action.type) {
     case "INIT":
       return initTree(action.payload);

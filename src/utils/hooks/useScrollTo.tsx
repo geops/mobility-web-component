@@ -29,7 +29,7 @@ function useScrollTo(
         console.error("Error while scrolling to element", err);
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line @eslint-react/exhaustive-deps, react-hooks/exhaustive-deps
   }, [...dependenciesArray]);
 }
 

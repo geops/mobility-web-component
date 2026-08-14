@@ -22,42 +22,43 @@ import type { Feature, Map } from "ol";
 import type { MobilityMapProps } from "../../MobilityMap/MobilityMap";
 
 export type MapContextType = {
-  baseLayer: MaplibreLayer;
-  featuresInfos: LayerGetFeatureInfoResponse[];
-  featuresInfosHovered: LayerGetFeatureInfoResponse[];
-  hasDetails: boolean;
-  hasGeolocation: boolean;
-  hasLayerTree: boolean;
-  hasLnp: boolean;
-  hasMapset: boolean;
-  hasNotification: boolean;
-  hasPermalink: boolean;
-  hasPrint: boolean;
-  hasRealtime: boolean;
-  hasSearch: boolean;
-  hasShare: boolean;
-  hasStations: boolean;
-  hasToolbar: boolean;
-  isEmbed: boolean;
-  isExportMenuOpen: boolean;
-  isFollowing: boolean;
-  isLayerTreeOpen: boolean;
-  isOverlayOpen: boolean;
-  isSearchOpen: boolean;
-  isShareMenuOpen: boolean;
-  isTracking: boolean;
-  linesIds: string[];
-  linesNetworkPlanLayer: MaplibreStyleLayer;
-  map: Map;
+  baseLayer?: MaplibreLayer;
+  defaultProps?: Partial<MobilityMapProps>;
+  featuresInfos?: LayerGetFeatureInfoResponse[];
+  featuresInfosHovered?: LayerGetFeatureInfoResponse[];
+  hasDetails?: boolean;
+  hasGeolocation?: boolean;
+  hasLayerTree?: boolean;
+  hasLnp?: boolean;
+  hasMapset?: boolean;
+  hasNotification?: boolean;
+  hasPermalink?: boolean;
+  hasPrint?: boolean;
+  hasRealtime?: boolean;
+  hasSearch?: boolean;
+  hasShare?: boolean;
+  hasStations?: boolean;
+  hasToolbar?: boolean;
+  isEmbed?: boolean;
+  isExportMenuOpen?: boolean;
+  isFollowing?: boolean;
+  isLayerTreeOpen?: boolean;
+  isOverlayOpen?: boolean;
+  isSearchOpen?: boolean;
+  isShareMenuOpen?: boolean;
+  isTracking?: boolean;
+  linesIds?: string[];
+  linesNetworkPlanLayer?: MaplibreStyleLayer;
+  map?: Map;
   mapsetLayer?: MapsetLayer;
   notificationId?: string;
   notificationsLayer?: MocoLayer;
-  notificationSupportedLanguages: string[];
-  permalinkUrlSearchParams: URLSearchParams;
+  notificationSupportedLanguages?: string[];
+  permalinkUrlSearchParams?: URLSearchParams;
   previewNotifications?: SituationType[];
-  realtimeLayer: RealtimeLayer;
-  selectedFeature: Feature;
-  selectedFeatures: Feature[];
+  realtimeLayer?: RealtimeLayer;
+  selectedFeature?: Feature;
+  selectedFeatures?: Feature[];
   setBaseLayer: (baseLayer: MaplibreLayer) => void;
   setFeaturesInfos: (featuresInfos: LayerGetFeatureInfoResponse[]) => void;
   setFeaturesInfosHovered: (
@@ -99,61 +100,66 @@ export type MapContextType = {
   setSelectedFeature: (feature: Feature) => void;
   setSelectedFeatures: (features: Feature[]) => void;
   setStation: (station?: RealtimeStation) => void;
-  setStationId: (stationId?: RealtimeStationId | string) => void;
+  setStationId: (stationId?: RealtimeStationId) => void;
   setStationsLayer: (stationsLayer?: MaplibreStyleLayer) => void;
   setTrainId: (trainId?: RealtimeTrainId) => void;
-  station: RealtimeStation;
-  stationId: RealtimeStationId | string;
-  stationsLayer: MaplibreStyleLayer;
-  trainId: RealtimeTrainId;
+  station?: RealtimeStation;
+  stationId?: RealtimeStationId;
+  stationsLayer?: MaplibreStyleLayer;
+  trainId?: RealtimeTrainId;
 } & MobilityMapProps;
 
-export const MapContext = createContext<MapContextType>({
-  hasDetails: false,
-  hasGeolocation: false,
-  hasLayerTree: false,
-  hasLnp: false,
-  hasMapset: false,
-  hasNotification: false,
-  hasPermalink: false,
-  hasPrint: false,
-  hasRealtime: false,
-  hasSearch: false,
-  hasShare: false,
-  hasStations: false,
-  hasToolbar: true,
-  isEmbed: false,
-  isExportMenuOpen: false,
-  isFollowing: false,
-  isLayerTreeOpen: false,
-  isOverlayOpen: false,
-  isSearchOpen: false,
-  isShareMenuOpen: false,
-  isTracking: false,
-  notificationSupportedLanguages: [],
-  selectedFeatures: [],
-  setBaseLayer: (baseLayer?: MaplibreLayer) => {},
-  setIsFollowing: (isFollowing: boolean) => {},
-  setIsTracking: (isTracking: boolean) => {},
-  setLinesIds: (linesIds: string[]) => {},
-  setLinesNetworkPlanLayer: (linesNetworkPlanLayer: MaplibreStyleLayer) => {},
-  setMap: (map?: Map) => {},
-  setMapsetLayer: (mapsetLayer?: MapsetLayer) => {},
-  setNotificationId: (notificationId?: string) => {},
-  setNotificationsLayer: (notificationsLayer?: MocoLayer) => {},
-  setNotificationSupportedLanguages: (langs: string[]) => {},
-  setPermalinkUrlSearchParams: (
-    permalinkUrlSearchParams: URLSearchParams,
+// Set default values for setters to avoid having to check if they exist before calling them
+const defaultState: Partial<MapContextType> = {
+  setBaseLayer: (_baseLayer?: MaplibreLayer) => {},
+  setFeaturesInfos: (_featuresInfos: LayerGetFeatureInfoResponse[]) => {},
+  setFeaturesInfosHovered: (
+    _featuresInfos: LayerGetFeatureInfoResponse[],
   ) => {},
-  setPreviewNotifications: (previewNotifications?: SituationType[]) => {},
-  setRealtimeLayer: (realtimeLayer?: RealtimeLayer) => {},
-  setSelectedFeature: (feature: Feature) => {},
-  setSelectedFeatures: (features: Feature[]) => {},
-  setStation: (station?: RealtimeStation) => {},
-  setStationId: (stationId?: RealtimeStationId) => {},
-  setStationsLayer: (stationsLayer?: MaplibreStyleLayer) => {},
-  setTrainId: (trainId?: RealtimeTrainId) => {},
-} as MapContextType);
+  setHasDetails: (_hasDetails: boolean) => {},
+  setHasGeolocation: (_hasGeolocation: boolean) => {},
+  setHasLayerTree: (_hasLayerTree: boolean) => {},
+  setHasLnp: (_hasLnp: boolean) => {},
+  setHasMapset: (_hasMapset: boolean) => {},
+  setHasNotification: (_hasNotification: boolean) => {},
+  setHasPermalink: (_hasPermalink: boolean) => {},
+  setHasPrint: (_hasPrint: boolean) => {},
+  setHasRealtime: (_hasRealtime: boolean) => {},
+  setHasSearch: (_hasSearch: boolean) => {},
+  setHasShare: (_hasShare: boolean) => {},
+  setHasStations: (_hasStations: boolean) => {},
+  setHasToolbar: (_hasToolbar: boolean) => {},
+  setIsEmbed: (_isEmbed: boolean) => {},
+  setIsExportMenuOpen: (_isExportMenuOpen: boolean) => {},
+  setIsFollowing: (_isFollowing: boolean) => {},
+  setIsLayerTreeOpen: (_isLayerTreeOpen: boolean) => {},
+  setIsOverlayOpen: (_isOverlayOpen: boolean) => {},
+  setIsSearchOpen: (_isSearchOpen: boolean) => {},
+  setIsShareMenuOpen: (_isShareMenuOpen: boolean) => {},
+  setIsTracking: (_isTracking: boolean) => {},
+  setLinesIds: (_linesIds: string[]) => {},
+  setLinesNetworkPlanLayer: (_layer?: MaplibreStyleLayer) => {},
+  setMap: (_map?: Map) => {},
+  setMapsetLayer: (_mapsetLayer?: MapsetLayer) => {},
+  setNotificationId: (_notificationId?: string) => {},
+  setNotificationsLayer: (_notificationsLayer?: MocoLayer) => {},
+  setNotificationSupportedLanguages: (_langs: string[]) => {},
+  setPermalinkUrlSearchParams: (
+    _setPermalinkUrlSearchParams: URLSearchParams,
+  ) => {},
+  setPreviewNotifications: (_setPreviewNotifications?: SituationType[]) => {},
+  setRealtimeLayer: (_realtimeLayer?: RealtimeLayer) => {},
+  setSelectedFeature: (_feature: Feature) => {},
+  setSelectedFeatures: (_features: Feature[]) => {},
+  setStation: (_station?: RealtimeStation) => {},
+  setStationId: (_stationId?: RealtimeStationId) => {},
+  setStationsLayer: (_stationsLayer?: MaplibreStyleLayer) => {},
+  setTrainId: (_trainId?: RealtimeTrainId) => {},
+};
+
+export const MapContext = createContext<MapContextType>(
+  defaultState as MapContextType,
+);
 
 const useMapContext = (): MapContextType => {
   const context = useContext<MapContextType>(MapContext);

@@ -4,7 +4,7 @@ import { useEffect, useMemo } from "preact/hooks";
 
 import useMapContext from "../utils/hooks/useMapContext";
 
-import type { MaplibreLayerOptions } from "mobility-toolbox-js/ol/layers/MaplibreLayer";
+import type { MaplibreLayerOptions } from "mobility-toolbox-js/ol";
 
 export type BaseLayerProps = MaplibreLayerOptions;
 

@@ -21,9 +21,7 @@ import WindowMessageListener from "../WindowMessageListener";
 
 import MobilityMapAttributes from "./MobilityMapAttributes";
 
-// @ts-expect-error bad type definition
 import tailwind from "../style.css";
-// @ts-expect-error bad type definition
 import style from "./index.css";
 
 import type { MapsetLayer as MtbMapsetLayer } from "mobility-toolbox-js/ol";
@@ -49,7 +47,11 @@ export type MobilityMapProps = Record<
   null | string | undefined
 >;
 
-function MobilityMap(props: MobilityMapProps) {
+function MobilityMap(
+  props: {
+    defaultProps: Partial<MobilityMapProps>;
+  } & MobilityMapProps,
+) {
   const eventNodeRef = useRef<HTMLDivElement>();
   const [baseLayer, setBaseLayer] = useState<MaplibreLayer>();
   const [isFollowing, setIsFollowing] = useState<boolean>(false);
@@ -326,13 +328,15 @@ function MobilityMap(props: MobilityMapProps) {
 const MemoMobilityMap = memo(MobilityMap);
 
 // We creates a wrapper to inject the default props values from MobilityMapAttributes.
-const defaultProps: Partial<MobilityMapProps> = {};
+export const defaultProps: Partial<MobilityMapProps> = {};
 Object.entries(MobilityMapAttributes).forEach(([key]) => {
   defaultProps[key] = MobilityMapAttributes[key].defaultValue || null;
 });
 
 function MobilityMapWithDefaultProps(props: MobilityMapProps) {
-  return <MemoMobilityMap {...defaultProps} {...props} />;
+  return (
+    <MemoMobilityMap defaultProps={defaultProps} {...defaultProps} {...props} />
+  );
 }
 
 export default memo(MobilityMapWithDefaultProps);

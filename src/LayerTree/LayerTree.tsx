@@ -42,9 +42,9 @@ function LayerTree({
           {layers.map((item) => {
             return (
               <TreeItem
+                key={item.id}
                 {...(treeItemProps || {})}
                 className={twMerge("w-full", treeItemProps?.className)}
-                key={item.id}
                 {...item}
               />
             );

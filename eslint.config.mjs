@@ -1,4 +1,4 @@
-import flat from "@geops/eslint-config-react/flat";
+import flat from "@geops/eslint-config-react";
 
 // tailwind@4 only supported in beta channel
 // import tailwind from "eslint-plugin-tailwindcss";

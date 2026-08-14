@@ -6,7 +6,6 @@ import { useEffect, useMemo, useRef } from "preact/hooks";
 import useInitialPermalink from "../utils/hooks/useInitialPermalink";
 import useMapContext from "../utils/hooks/useMapContext";
 
-// @ts-expect-error bad type definition
 import olStyle from "ol/ol.css";
 
 import type { EventsKey } from "ol/events";
@@ -18,7 +17,7 @@ export type RealtimeMapProps = JSX.HTMLAttributes<HTMLDivElement> &
   PreactDOMAttributes;
 
 function Map({ children, ...props }: RealtimeMapProps) {
-  const mapRef = useRef();
+  const mapRef = useRef<HTMLDivElement>(null);
   const { center, extent, map, maxextent, maxzoom, minzoom, setMap, zoom } =
     useMapContext();
 
@@ -88,9 +87,10 @@ function Map({ children, ...props }: RealtimeMapProps) {
   }, [map, center]);
 
   useEffect(() => {
-    if (!map) {
+    if (!map || zoom == null || zoom === undefined) {
       return;
     }
+
     const number = parseFloat(zoom);
     if (number) {
       map.getView().setZoom(number);
@@ -102,6 +102,7 @@ function Map({ children, ...props }: RealtimeMapProps) {
     if (!map || !extent) {
       return;
     }
+
     if (
       map.getSize() === undefined ||
       map.getSize()?.[0] === 0 ||
@@ -132,20 +133,20 @@ function Map({ children, ...props }: RealtimeMapProps) {
   }, [map, extent]);
 
   useEffect(() => {
-    if (!map) {
+    if (!map || maxzoom == null || maxzoom === undefined) {
       return;
     }
-    const number = parseFloat(maxzoom);
+    const number = parseFloat(`${maxzoom}`);
     if (number) {
       map.getView().setMaxZoom(number);
     }
   }, [map, maxzoom]);
 
   useEffect(() => {
-    if (!map) {
+    if (!map || minzoom == null || minzoom === undefined) {
       return;
     }
-    const number = parseFloat(minzoom);
+    const number = parseFloat(`${minzoom}`);
     if (number) {
       map.getView().setMinZoom(number);
     }
@@ -157,7 +158,7 @@ function Map({ children, ...props }: RealtimeMapProps) {
   useEffect(() => {
     const curr = propsFromPermalinkRef.current;
     const mapView = map?.getView();
-    if (mapView && curr.center) {
+    if (mapView && curr?.center) {
       mapView.setCenter(
         curr.center.split(",").map((c) => {
           return parseFloat(c);
@@ -165,7 +166,7 @@ function Map({ children, ...props }: RealtimeMapProps) {
       );
     }
 
-    if (mapView && curr.zoom) {
+    if (mapView && curr?.zoom) {
       mapView.setZoom(parseFloat(curr.zoom));
     }
   }, [map]);

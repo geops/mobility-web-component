@@ -23,8 +23,8 @@ function EmbedNavigation({
 }: EmbedNavigationProps) {
   const { t } = useI18n();
   const { isEmbed, map } = useMapContext();
-  const [target, setTarget] = useState(null);
-  const [element, setElement] = useState(null);
+  const [target, setTarget] = useState<HTMLDivElement | null>(null);
+  const [element, setElement] = useState<HTMLDivElement | null>(null);
 
   useEffect(() => {
     let dragPanWarningControl = null;
