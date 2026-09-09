@@ -9,7 +9,7 @@
   "dependencies": {
     "jspdf": "^4.2.0",
     "lodash.debounce": "^4.0.8",
-    "maplibre-gl": "5.24.0",
+    "maplibre-gl": "6.4.1",
     "mobility-toolbox-js": "3.6.13",
     "ol": "^10.9.0",
     "preact": "^10.29.2",
